@@ -257,7 +257,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'All Agents',
-                    'url'  => '/#',
+                    'url'  => '/agents',
                 ],
                 [
                     'text' => 'Add New',
