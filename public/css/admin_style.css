@@ -3,6 +3,9 @@
 body {
 	font-family: "Poppins", sans-serif !important;
 }
+.main-sidebar a.brand-link {
+    border-color: rgba(255,255,255,.05);
+}
 .cstm-sidebar {
     padding: unset;
 }
