@@ -26,6 +26,10 @@ Route::get('/booths', function () {
     return view('booths');
 });
 
+Route::get('/winners', function () {
+    return view('winners');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

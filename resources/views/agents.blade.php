@@ -104,7 +104,7 @@
 		
 		<div class="cstm-table-footer flex-between">
 			<div>
-				<input type="text" class="datepicker cstm-input">
+				<input type="text" class="datepicker cstm-input" placeholder="Date">
 				<button class="cstm-btn small ml-1">Filter</button>
 			</div>
 			<div>

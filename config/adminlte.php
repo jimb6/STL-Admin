@@ -292,7 +292,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'All Winners',
-                    'url'  => '/#',
+                    'url'  => '/winners',
                 ],
                 [
                     'text' => 'Add Result',
