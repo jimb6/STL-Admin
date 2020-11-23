@@ -295,13 +295,15 @@ input.datepicker {
     transition-duration: 300ms;
 }
 .cstm-form form>.input-item>input,
-.cstm-form form>div>.cstm-radio{
+.cstm-form form>div>.cstm-radio,
+.cstm-form form>.input-item.input-field{
     width: 100%;
     border-radius: 50px;
     padding: 10px 10px 10px 50px;
     border: 1px solid #aaa;
     outline: none;
-    transition-duration: 300ms
+    transition-duration: 300ms;
+    font-size: unset;
 }
 .cstm-form form>div>.no-border {
 	border: none;
@@ -309,7 +311,8 @@ input.datepicker {
 .cstm-form form>div>input:focus {
 	border-color: #222;
 }
-.cstm-form form>div>input:focus + i {
+.cstm-form form>div>input:focus + i,
+.cstm-form form>div>select:focus + i {
 	color: #222;
 }
 .cstm-form input[type="submit"] {

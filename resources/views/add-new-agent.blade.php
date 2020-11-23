@@ -27,11 +27,11 @@
 						<i class="fas fa-map-marker-alt"></i>
 					</div>
 					<div class="input-item">
-						<input type="number" name="contact_number" placeholder="Contact Number">
+						<input type="text" name="contact_number" placeholder="Contact Number">
 						<i class="fas fa-phone-alt"></i>
 					</div>
 					<div class="input-item">
-						<input type="text" name="age" placeholder="Age">
+						<input type="number" name="age" placeholder="Age">
 						<i class="far fa-calendar"></i>
 					</div>
 					<div class="input-item">

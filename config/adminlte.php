@@ -296,7 +296,7 @@ return [
                 ],
                 [
                     'text' => 'Add Result',
-                    'url'  => '/#',
+                    'url'  => '/add-new-result',
                 ],
             ]
         ],

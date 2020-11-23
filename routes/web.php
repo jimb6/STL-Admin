@@ -38,6 +38,10 @@ Route::get('/add-new-booth', function () {
     return view('add-new-booth');
 });
 
+Route::get('/add-new-result', function () {
+    return view('add-new-result');
+});
+
 Auth::routes();
 
 
