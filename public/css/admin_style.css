@@ -29,7 +29,6 @@ span.no {
 
 
 /* SIDEBAR */
-
 .content-wrapper {
     background: #f1faee;
 }
@@ -130,13 +129,6 @@ aside.main-sidebar.sidebar-dark-danger.elevation-4 {
 .cstm-search p {
 	margin-right: 10px;
 }
-input.cstm-input {
-	border-radius: 50px;
-	padding: 6px 15px;
-	border: 1px solid #222;
-	outline: none;
-	font-size: 12px;
-}
 .cstm-row.col2>div {
     width: 50%;
 }
@@ -146,20 +138,21 @@ input.cstm-input {
     padding: 12px 18px;
     height: fit-content;
     text-transform: uppercase;
-    color: #222;
-    border: 1px solid #222;
+    color: #aaa;
+    border: 1px solid #aaa;
     font-size: 14px;
     transition-duration: 300ms;
     outline: none !important;
+    background: transparent;
 }
 .cstm-btn.small {
 	padding: 6px 12px;
 	font-size: 12px;
 }
 .cstm-btn:hover {
-    background: #376E37;
+    background: #e63946;
     color: #fff;
-    border-color: #376E37;
+    border-color: #e63946;
 }
 .cstm-display {
 	width: 100%;
@@ -231,7 +224,37 @@ table.dataTable>thead .sorting_desc_disabled:after {
 .cstm-display #cstm-table_filter {
     display: none;
 }
-.cstm-table-footer{
+.cstm-table-filter{
     text-align: right;
-    padding: 10px 0;
+    padding: 20px 0 10px 0;
+}
+input.cstm-input {
+	border-radius: 50px;
+	padding: 6px 15px;
+    border: none;
+    border: 1px solid #ddd;
+    outline: none;
+    font-size: 14px;
+}
+
+input.datepicker {
+	padding: 6px 0;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+}
+.input-field input {
+    font-size: 14px !important;
+}
+.input-field input,
+input.datepicker {
+    font-weight: 600;
+}
+.input-field .selected {
+    background: #1D3557 !important;
+}
+.select-wrapper svg {
+    opacity: .5;
 }
