@@ -14,33 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/agents', function () {
-    return view('agents');
-});
-
-Route::get('/booths', function () {
-    return view('booths');
-});
-
-Route::get('/winners', function () {
-    return view('winners');
-});
-
-Route::get('/add-new-agent', function () {
-    return view('add-new-agent');
-});
-
-Route::get('/add-new-booth', function () {
-    return view('add-new-booth');
-});
-
-Route::get('/add-new-result', function () {
-    return view('add-new-result');
-});
 
 Auth::routes();
 
@@ -67,6 +41,18 @@ Route::middleware('auth')->group(function () {
 
         Route::get('winners', function () {
             return view('winners');
+        });
+
+        Route::get('/add-new-result', function () {
+            return view('add-new-result');
+        });
+
+        Route::get('/add-new-booth', function () {
+            return view('add-new-booth');
+        });
+
+        Route::get('/add-new-agent', function () {
+            return view('add-new-agent');
         });
     });
 });

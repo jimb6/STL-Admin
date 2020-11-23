@@ -261,7 +261,7 @@ return [
                 ],
                 [
                     'text' => 'Add New',
-                    'url'  => '/add-new-agent',
+                    'url'  => '/admin/add-new-agent',
                 ],
             ]
 
@@ -279,7 +279,7 @@ return [
                 ],
                 [
                     'text' => 'Add New',
-                    'url'  => '/add-new-booth',
+                    'url'  => '/admin/add-new-booth',
                 ],
             ]
         ],
@@ -296,7 +296,7 @@ return [
                 ],
                 [
                     'text' => 'Add Result',
-                    'url'  => '/add-new-result',
+                    'url'  => '/admin/add-new-result',
                 ],
             ]
         ],
