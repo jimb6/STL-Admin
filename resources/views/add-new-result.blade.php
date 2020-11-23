@@ -19,26 +19,26 @@
 						<i class="fas fa-trophy"></i>
 					</div>
 					<div class="input-field s12 py-0 input-item">
-						<select class="cstm-select">
+						<select class="cstm-select" name="game-category">
 							<option value="" disabled selected>Game Type</option>
-							<option value="1">STL 2D</option>
-							<option value="2">STL 3D</option>
-							<option value="3">STL 4D</option>
-							<option value="4">STL Pares</option>
-							<option value="5">STL Pick 3</option>
+							<option value="STL 2D">STL 2D</option>
+							<option value="STL 3D">STL 3D</option>
+							<option value="STL 4D">STL 4D</option>
+							<option value="STL Pares">STL Pares</option>
+							<option value="STL Pick 3">STL Pick 3</option>
 						</select>
 						<i class="fas fa-puzzle-piece"></i>
 					</div>
 					<div class="input-item">
-						<input type="text" class="datepicker mr-4" placeholder="Date">
+						<input type="text" class="datepicker mr-4" placeholder="Date" name="date">
 						<i class="far fa-calendar-alt"></i>
 					</div>
 					<div class="input-field s12 py-0 input-item">
-						<select class="cstm-select">
+						<select class="cstm-select" name="draw-time">
 							<option value="" disabled selected>Draw Time</option>
-							<option value="1">2PM</option>
-							<option value="2">5PM</option>
-							<option value="3">9PM</option>
+							<option value="2PM">2PM</option>
+							<option value="5PM">5PM</option>
+							<option value="9PM">9PM</option>
 						</select>
 						<i class="far fa-clock"></i>
 					</div>
