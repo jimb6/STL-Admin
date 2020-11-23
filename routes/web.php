@@ -34,6 +34,10 @@ Route::get('/add-new-agent', function () {
     return view('add-new-agent');
 });
 
+Route::get('/add-new-booth', function () {
+    return view('add-new-booth');
+});
+
 Auth::routes();
 
 

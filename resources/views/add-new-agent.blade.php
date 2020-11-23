@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="cstm-container add-new-agents fit-modal">
+<div class="cstm-container add-new-agent fit-modal">
 	<section>
 		<div class="cstm-row cstm-heading">
 			<div class="flex-center">
@@ -53,12 +53,4 @@
 		</div>
 	</section>
 </div>
-
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('select.cstm-select').formSelect();
-		$('.datepicker').datepicker();
-	});
-</script>
 @stop
