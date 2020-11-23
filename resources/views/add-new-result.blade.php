@@ -19,7 +19,7 @@
 						<i class="fas fa-trophy"></i>
 					</div>
 					<div class="input-field s12 py-0 input-item">
-						<select class="cstm-select" name="game-category">
+						<select class="cstm-select" name="game-category" required>
 							<option value="" disabled selected>Game Type</option>
 							<option value="STL 2D">STL 2D</option>
 							<option value="STL 3D">STL 3D</option>
@@ -30,11 +30,11 @@
 						<i class="fas fa-puzzle-piece"></i>
 					</div>
 					<div class="input-item">
-						<input type="text" class="datepicker mr-4" placeholder="Date" name="date">
+						<input type="text" class="datepicker mr-4" placeholder="Date" name="date" required>
 						<i class="far fa-calendar-alt"></i>
 					</div>
 					<div class="input-field s12 py-0 input-item">
-						<select class="cstm-select" name="draw-time">
+						<select class="cstm-select" name="draw-time" required>
 							<option value="" disabled selected>Draw Time</option>
 							<option value="2PM">2PM</option>
 							<option value="5PM">5PM</option>
@@ -43,7 +43,7 @@
 						<i class="far fa-clock"></i>
 					</div>
 					<div class="input-item">
-						<input type="text" name="combination" placeholder="Combination">
+						<input type="text" name="combination" placeholder="Combination" required>
 						<i class="fas fa-hashtag"></i>
 					</div>
 
