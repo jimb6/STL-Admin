@@ -30,6 +30,10 @@ Route::get('/winners', function () {
     return view('winners');
 });
 
+Route::get('/add-new-agent', function () {
+    return view('add-new-agent');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

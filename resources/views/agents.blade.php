@@ -43,7 +43,7 @@
 						</tr>";
 		}
 		echo $output;
-	}
+	}	
 ?>
 
 <div class="cstm-container agents fit-modal">

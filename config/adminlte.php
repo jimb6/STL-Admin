@@ -261,7 +261,7 @@ return [
                 ],
                 [
                     'text' => 'Add New',
-                    'url'  => '/#',
+                    'url'  => '/add-new-agent',
                 ],
             ]
 
