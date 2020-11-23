@@ -32,8 +32,29 @@ Route::get('/winners', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/profile', function () {
-    return view('admin/profile');
+//Route::get('/profile', function () {
+//    return view('admin/profile');
+//});
+
+Route::middleware('auth')->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+        Route::get('user/profile', function () {
+            return view('admin/profile');
+        });
+
+        Route::get('agents', function () {
+            return view('agents');
+        });
+
+        Route::get('booths', function () {
+            return view('booths');
+        });
+
+        Route::get('winners', function () {
+            return view('winners');
+        });
+    });
 });

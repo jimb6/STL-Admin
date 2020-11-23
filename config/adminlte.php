@@ -243,7 +243,7 @@ return [
 //        ],
         [
             'text'        => 'Dashboard',
-            'url'         => '/home',
+            'url'         => '/admin/home',
             'icon'        => 'fas fa-tachometer-alt',
             'label_color' => 'success',
             'classes' => '',
@@ -257,7 +257,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'All Agents',
-                    'url'  => '/agents',
+                    'url'  => '/admin/agents',
                 ],
                 [
                     'text' => 'Add New',
@@ -275,7 +275,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'All Booths',
-                    'url'  => '/booths',
+                    'url'  => '/admin/booths',
                 ],
                 [
                     'text' => 'Add New',
@@ -292,7 +292,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'All Winners',
-                    'url'  => '/winners',
+                    'url'  => '/admin/winners',
                 ],
                 [
                     'text' => 'Add Result',
@@ -335,7 +335,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Profile',
-                    'url'  => '/#',
+                    'url'  => '/admin/user/profile',
                 ],
                 [
                     'text' => 'Logout',
