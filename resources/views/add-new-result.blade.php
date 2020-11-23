@@ -59,6 +59,37 @@
 	$(document).ready(function() {
 		$('select.cstm-select').formSelect();
 		$('.datepicker').datepicker();
+
+		function getParams(url) {
+			var params = {};
+			var parser = document.createElement('a');
+			parser.href = url;
+			var query = parser.search.substring(1);
+			var vars = query.split('&');
+			for (var i = 0; i < vars.length; i++) {
+				var pair = vars[i].split('=');
+				params[pair[0]] = decodeURIComponent(pair[1]);
+			}
+			return params;
+		};
+		function countObj(obj) {
+	        var size = 0, key;
+	        for (key in obj) {
+	            if (obj.hasOwnProperty(key)) size++;
+	        }
+	        return size;
+	    };
+		function displayMessage(){
+			let results = getParams(window.location.href);
+			if ( countObj(results) == 5 ) {
+				toastr.success("Result Added Successfully!");
+			}
+			if ( count(results) != 0 ) {
+				toastr.error("Failed to Add Result");
+			}
+		}
+		displayMessage();
+	    
 	});
 </script>
 @stop
