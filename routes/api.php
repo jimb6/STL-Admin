@@ -17,23 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
+//Auth::routes();
 Route::group([
     'prefix' => '/v1/agent'
 ], function () {
     Route::post('login', [AgentLoginController::class, 'login']);
-    Route::group([
-        'middleware' => 'auth:agent'
-    ], function() {
-        Route::get('/check-account', [AgentController::class, 'index']);
-//        Route::get('logout', 'API\v1\AccountController@logout');
-//        Route::get('info/', 'API\v1\AccountController@user');
-//        Route::get('class/{sy}/{term}', 'API\v1\StudentController@myClassSchedule');
-//        Route::get('academic-records/{sy}/{term}', 'API\v1\StudentController@academicRecords');
-//        Route::get('grades/{sy}/{term}', 'API\v1\StudentController@myGrades');
-//        Route::get('assessment/{sy}/{term}', 'API\v1\StudentController@myAssessment');
-//        Route::get('ledger', 'API\v1\StudentController@myLedger');
-//        Route::get('test', 'API\v1\StudentController@test');
+
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('/users', [AgentController::class,'index']);
     });
 });
+
+
+
 

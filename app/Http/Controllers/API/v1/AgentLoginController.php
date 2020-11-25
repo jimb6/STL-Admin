@@ -38,9 +38,7 @@ class AgentLoginController extends Controller
         Log::info('Generating Api Token...');
 
         $user = $request->user('agent');
-        $accessToken = $user->createToken( $request->input('username'));
-        $token = $accessToken->token;
-        $token->save();
+        $accessToken = $user->createToken( request('username'))->plainTextToken;
         Log::info('Access token generated: ');
         Log::info('Returning Data...');
         return response([
@@ -51,7 +49,7 @@ class AgentLoginController extends Controller
                     'agent_sex' => $user->sex,
                     'agent_age' => $user->age,
                     'address' => $user->address,
-                    'access_token' => $accessToken->accessToken,
+                    'access_token' => $accessToken,
                     'token_type' => 'Bearer'],
             'messages' => [
                 'text' => 'You are now connected!'],
@@ -70,7 +68,7 @@ class AgentLoginController extends Controller
     {
 
         return response()->json([
-            'message' => Auth::guard('admin')->check()
+            'message' => Auth::guard('agent')->check()
         ]);
     }
 
