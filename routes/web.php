@@ -19,9 +19,13 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 
-//Route::get('/profile', function () {
-//    return view('admin/profile');
-//});
+Route::get('/', function () {
+    return redirect()->route('home');
+});
+
+Route::get('/testing-page', function(){
+    return view('test');
+})->name('test');
 
 Route::middleware('auth')->group(function () {
     Route::prefix('admin')->group(function () {

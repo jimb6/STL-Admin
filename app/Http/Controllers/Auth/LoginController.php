@@ -42,13 +42,11 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         //
-        return redirect()->route('home');
     }
 
     protected function loggedOut(Request $request)
     {
         //
-        return redirect()->route('home');
     }
 
 
