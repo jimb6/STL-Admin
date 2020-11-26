@@ -27,7 +27,7 @@ class AgentFactory extends Factory
             'agent_code' => 'AGNT-'.$this->faker->uuid(),
             'agent_name' => $this->faker->name(),
             'address' => $this->faker->address(),
-            'contact_number' => $this->faker->randomElement(['+63 9120584582','+63 9187043377']),
+            'contact_number' => $this->faker->phoneNumber(),
             'age' => $this->faker->numberBetween(21, 60),
             'sex' => $this->faker->randomElement([true, false]),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password

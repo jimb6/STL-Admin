@@ -1,15 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\API\v1;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GameCategory extends Model
+class Transaction extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'name'
-    ];
 }

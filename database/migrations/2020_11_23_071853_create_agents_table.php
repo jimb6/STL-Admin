@@ -19,9 +19,10 @@ class CreateAgentsTable extends Migration
             $table->string('agent_name');
             $table->string('password');
             $table->text('address');
-            $table->string('contact_number');
+            $table->string('contact_number')->unique();
             $table->integer('age');
             $table->boolean('sex');
+            $table->string('api_token', 60)->unique()->nullable();
             $table->timestamps();
         });
     }

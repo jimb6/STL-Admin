@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDrawPeriodsTable extends Migration
+class CreateTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateDrawPeriodsTable extends Migration
      */
     public function up()
     {
-        Schema::create('draw_periods', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->time('draw_time');
+            $table->softDeletes();
+            $table->string('transaction_code', 60)->unique();
+            $table->date('transaction_date');
+            $table->integer('agent_id')->unsigned()->index();
+            $table->integer('booth_id')->unsigned()->index();
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateDrawPeriodsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('draw_periods');
+        Schema::dropIfExists('transactions');
     }
 }

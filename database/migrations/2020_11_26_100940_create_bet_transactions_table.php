@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDrawPeriodsTable extends Migration
+class CreateBetTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CreateDrawPeriodsTable extends Migration
      */
     public function up()
     {
-        Schema::create('draw_periods', function (Blueprint $table) {
+        Schema::create('bet_transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->time('draw_time');
+            $table->softDeletes();
+            $table->string('transaction_code');
+            $table->string('game_category');
+            $table->string('draw_period');
+            $table->string('combination');
+            $table->double('amount');
             $table->timestamps();
         });
     }
@@ -28,6 +32,6 @@ class CreateDrawPeriodsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('draw_periods');
+        Schema::dropIfExists('bet_transactions');
     }
 }

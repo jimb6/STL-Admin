@@ -13,7 +13,6 @@ class AgentLoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        $this->middleware('guest:agent')->except('logout');
     }
 
     public function login(Request $request)
@@ -38,12 +37,14 @@ class AgentLoginController extends Controller
         Log::info('Generating Api Token...');
 
         $user = $request->user('agent');
-        $accessToken = $user->createToken( request('username'))->plainTextToken;
+        $accessToken = $user->createToken(request('username'))->plainTextToken;
         Log::info('Access token generated: ');
         Log::info('Returning Data...');
         return response([
             'set_attributes' =>
-                ['agent_name' => $user->agent_name,
+                [
+                    'agent_id' => $user->id,
+                    'agent_name' => $user->agent_name,
                     'agent_code' => $user->agent_code,
                     'agent_contact' => $user->contact_number,
                     'agent_sex' => $user->sex,
@@ -71,7 +72,6 @@ class AgentLoginController extends Controller
             'message' => Auth::guard('agent')->check()
         ]);
     }
-
 
 
     public function index(Request $request)

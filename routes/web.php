@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 
 Route::get('/', function () {
@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('agents', function () {
             return view('agents');
-        });
+        })->name('view.agents');
 
         Route::get('booths', function () {
             return view('booths');

@@ -10,7 +10,7 @@ class AgentController extends Controller
     //
     public function __construct()
     {
-        $this->middleware('agent');
+        $this->middleware('auth');
     }
 
     public function index()
@@ -29,8 +29,6 @@ class AgentController extends Controller
         $request->validate([
             'name' => 'required|max:255',
         ]);
-
-
 
         $player = Agent::create($request->all());
         $player->save($request);

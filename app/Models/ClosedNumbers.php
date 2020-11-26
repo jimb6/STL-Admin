@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GameCategory extends Model
+class ClosedNumbers extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'number_value', 'closed_by'
     ];
 }
