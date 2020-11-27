@@ -14,8 +14,8 @@ return [
     |
     */
 
-    'title' => 'STL - ADMIN',
-    'title_prefix' => 'Dav Or',
+    'title' => 'STL Administrator',
+    'title_prefix' => 'DAVOR | ',
     'title_postfix' => '',
 
     /*
@@ -242,77 +242,172 @@ return [
 //            'can'  => 'manage-blog',
 //        ],
         [
-            'text'        => 'DASHBOARD',
-            'url'         => '/home',
+            'text'        => 'Dashboard',
+            'url'         => '/admin/home',
             'icon'        => 'fas fa-tachometer-alt',
             'label_color' => 'success',
             'classes' => '',
         ],
-        ['header' => 'account_settings'],
         [
-            'text' => 'profile',
-            'url'  => 'profile',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
+            'text'        => 'Agents',
+            // 'url'         => '/#',
+            'icon'        => 'fas fa-users',
+            'label_color' => 'success',
+            'classes' => '',
             'submenu' => [
                 [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text' => 'All Agents',
+                    'url'  => '/admin/agents',
                 ],
                 [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
+                    'text' => 'Add New',
+                    'url'  => '/admin/add-new-agent',
+                ],
+            ]
+
+        ],
+        [
+            'text'        => 'Booths',
+            // 'url'         => '/#',
+            'icon'        => 'fas fa-store',
+            'label_color' => 'success',
+            'classes' => '',
+            'submenu' => [
+                [
+                    'text' => 'All Booths',
+                    'url'  => '/admin/booths',
                 ],
                 [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text' => 'Add New',
+                    'url'  => '/admin/add-new-booth',
                 ],
-            ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
+            ]
         ],
         [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
+            'text'        => 'Winners',
+            // 'url'         => '/#',
+            'icon'        => 'fas fa-trophy',
+            'label_color' => 'success',
+            'classes' => '',
+            'submenu' => [
+                [
+                    'text' => 'All Winners',
+                    'url'  => '/admin/winners',
+                ],
+                [
+                    'text' => 'Add Result',
+                    'url'  => '/admin/add-new-result',
+                ],
+            ]
         ],
         [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
+            'text'        => 'Bets',
+            // 'url'         => '/#',
+            'icon'        => 'fas fa-coins',
+            'label_color' => 'success',
+            'classes' => '',
+            'submenu' => [
+                [
+                    'text' => 'All Bets',
+                    'url'  => '/#',
+                ],
+            ]
         ],
+        [
+            'text'        => 'Collections',
+            // 'url'         => '/#',
+            'icon'        => 'fas fa-briefcase',
+            'label_color' => 'success',
+            'classes' => '',
+            'submenu' => [
+                [
+                    'text' => 'All Collections',
+                    'url'  => '/#',
+                ],
+            ]
+        ],
+        [
+            'text'        => 'Account',
+            // 'url'         => '/#',
+            'icon'        => 'fas fa-user-lock',
+            'label_color' => 'success',
+            'classes' => '',
+            'submenu' => [
+                [
+                    'text' => 'Profile',
+                    'url'  => '/admin/user/profile',
+                ],
+                [
+                    'text' => 'Logout',
+                    'url'  => '/#',
+                ],
+            ]
+        ],
+        // ['header' => 'account_settings'],
+        // [
+        //     'text' => 'profile',
+        //     'url'  => 'profile',
+        //     'icon' => 'fas fa-fw fa-user',
+        // ],
+        // [
+        //     'text' => 'change_password',
+        //     'url'  => 'admin/settings',
+        //     'icon' => 'fas fa-fw fa-lock',
+        // ],
+        // [
+        //     'text'    => 'multilevel',
+        //     'icon'    => 'fas fa-fw fa-share',
+        //     'submenu' => [
+        //         [
+        //             'text' => 'level_one',
+        //             'url'  => '#',
+        //         ],
+        //         [
+        //             'text'    => 'level_one',
+        //             'url'     => '#',
+        //             'submenu' => [
+        //                 [
+        //                     'text' => 'level_two',
+        //                     'url'  => '#',
+        //                 ],
+        //                 [
+        //                     'text'    => 'level_two',
+        //                     'url'     => '#',
+        //                     'submenu' => [
+        //                         [
+        //                             'text' => 'level_three',
+        //                             'url'  => '#',
+        //                         ],
+        //                         [
+        //                             'text' => 'level_three',
+        //                             'url'  => '#',
+        //                         ],
+        //                     ],
+        //                 ],
+        //             ],
+        //         ],
+        //         [
+        //             'text' => 'level_one',
+        //             'url'  => '#',
+        //         ],
+        //     ],
+        // ],
+        // ['header' => 'labels'],
+        // [
+        //     'text'       => 'important',
+        //     'icon_color' => 'red',
+        //     'url'        => '#',
+        // ],
+        // [
+        //     'text'       => 'warning',
+        //     'icon_color' => 'yellow',
+        //     'url'        => '#',
+        // ],
+        // [
+        //     'text'       => 'information',
+        //     'icon_color' => 'cyan',
+        //     'url'        => '#',
+        // ],
     ],
 
     /*
@@ -351,21 +446,21 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
                 ],
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
                 ],
             ],

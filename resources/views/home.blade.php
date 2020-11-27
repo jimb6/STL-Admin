@@ -1,5 +1,6 @@
 @extends('adminlte::page')
 
+
 @section('content')
 
     <div class="row">
@@ -12,9 +13,7 @@
                     <div class="progress">
                         <div class="progress-bar bg-info" style="width: 87.5%"></div>
                     </div>
-                    <span class="progress-description">
-          87.5% Active booths in your administration
-        </span>
+                    <span class="progress-description"> 87.5% Active booths in your administration </span>
                 </div>
             </div>
         </div>
