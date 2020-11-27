@@ -15,7 +15,7 @@ class CreateAgentsTable extends Migration
     {
         Schema::create('agents', function (Blueprint $table) {
             $table->id();
-            $table->string('agent_code')->unique();
+            $table->softDeletes();
             $table->string('agent_name');
             $table->string('password');
             $table->text('address');

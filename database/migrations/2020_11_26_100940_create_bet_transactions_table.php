@@ -16,9 +16,9 @@ class CreateBetTransactionsTable extends Migration
         Schema::create('bet_transactions', function (Blueprint $table) {
             $table->id();
             $table->softDeletes();
-            $table->string('transaction_code');
-            $table->string('game_category');
-            $table->string('draw_period');
+            $table->integer('transaction_id')->unsigned()->index();
+            $table->integer('game_category_id')->unsigned()->index();
+            $table->integer('draw_period_id')->unsigned()->index();
             $table->string('combination');
             $table->double('amount');
             $table->timestamps();

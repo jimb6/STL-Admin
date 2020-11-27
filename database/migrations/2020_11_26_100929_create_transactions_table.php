@@ -16,7 +16,6 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->softDeletes();
-            $table->string('transaction_code', 60)->unique();
             $table->date('transaction_date');
             $table->integer('agent_id')->unsigned()->index();
             $table->integer('booth_id')->unsigned()->index();

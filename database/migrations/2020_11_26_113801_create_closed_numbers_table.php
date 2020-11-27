@@ -15,8 +15,11 @@ class CreateClosedNumbersTable extends Migration
     {
         Schema::create('closed_numbers', function (Blueprint $table) {
             $table->id();
+            $table->softDeletes();
             $table->string('number_value')->unique();
             $table->string('closed_by');
+            $table->integer('draw_period_id')->unsigned()->index();
+            $table->integer('game_category_id')->unsigned()->index();
             $table->timestamps();
         });
     }

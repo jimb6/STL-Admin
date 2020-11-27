@@ -30,9 +30,7 @@ class BetTransactionController extends Controller
             [
                 'booth_id' => 'required',
                 'agent_id' => 'required',
-                'booth_code' => 'required',
                 'agent_name' => 'required',
-                'agent_code' => 'required',
                 'transactions' => 'required | array | min:1 | max:10',
                 'transaction_date' => 'required|date|after:yesterday|before:tomorrow',
                 'transactions.*.*' => 'required',
@@ -53,16 +51,15 @@ class BetTransactionController extends Controller
             //Validation of request
             return $request->wantsJson() ? new JsonResponse(['message' => 'Transaction failed!', 'closed_numbers' => $hasCloseNumber], 200) : view('home');
         }
-        $transactionCode = Str::orderedUuid();
-        Transaction::insert([
-            'transaction_code' => $transactionCode,
+//        $transactionCode = Str::orderedUuid();
+        $transaction = Transaction::create([
             'agent_id' => $agent_id,
             'booth_id' => $booth_id,
             'transaction_date' => $tran_date]);
 
         foreach ($bets as $bet) {
             BetTransaction::insert([
-                'transaction_code' => $transactionCode,
+                'transaction_id' => $transaction->id,
                 'game_category' => $bet['game_category'],
                 'draw_period' => $bet['draw_period'],
                 'combination' => $bet['combination'],
@@ -70,12 +67,15 @@ class BetTransactionController extends Controller
             ]);
         }
 
-        return $request->wantsJson() ? new JsonResponse(['transaction_code' => $transactionCode, 'success' => 'Transaction granted!', 'data' => $bets], 200) : view('home');
-
+//        Encrypt the transaction ID so that it would be more safer....
+        $encryptedKey = \Crypt::encrypt($transaction->id);
+        return $request->wantsJson() ? new JsonResponse(['transaction_code' => $encryptedKey, 'success' => 'Transaction granted!', 'data' => $bets], 200) : view('home');
     }
 
     public function validateTransaction(Request $request)
     {
-        return Transaction::where('transaction_code', request('transaction_code'))->get();
+
+        $decryptedKey = \Crypt::decrypt(request('transaction_code'));
+        return Transaction::with(['bets', 'agent', 'booth'])->where('id', $decryptedKey)->get();
     }
 }

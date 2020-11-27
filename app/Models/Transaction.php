@@ -17,4 +17,16 @@ class Transaction extends Model
     {
         return $this->hasMany('App\Models\BetTransaction');
     }
+
+    public function agent()
+    {
+        return $this->belongsTo('App\Models\Agent');
+    }
+
+    public function booth()
+    {
+        return $this->belongsTo('App\Models\Booth');
+    }
+
+
 }
