@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b3487cc3-9b60-4260-a8ef-ff874de3b72e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,7 +156,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/database/seeders" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -171,6 +171,7 @@
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\views" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database\seeders" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database\factories" />
     </key>
@@ -209,10 +210,10 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="723" y="322" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1606110338613">
+    <state x="723" y="322" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1606549264779">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="723" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1606110338613" />
+    <state x="723" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1606549264779" />
     <state x="765" y="202" key="#com.intellij.ide.util.MemberChooser" timestamp="1606386134946">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
