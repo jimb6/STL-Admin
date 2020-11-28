@@ -14,7 +14,7 @@ class GameCategoriesInGamePeriod extends Migration
     public function up()
     {
         Schema::create('game_policies', function (Blueprint $table) {
-            $table->id();
+            $table->primary(['game_category_id', 'draw_period_id'], 'id');
             $table->integer('game_category_id')->unsigned()->index();
             $table->integer('draw_period_id')->unsigned()->index();
             $table->softDeletes();

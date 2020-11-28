@@ -19,6 +19,7 @@ class CreateGameConfigurationsTable extends Migration
             $table->integer('limit_per_set');
             $table->boolean('has_repetition');
             $table->string('number_format');
+            $table->string('days_availability');
             $table->timestamps();
         });
     }
