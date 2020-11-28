@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b3487cc3-9b60-4260-a8ef-ff874de3b72e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BetTransactionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BetTransactionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/BetTransactionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/BetTransactionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_27_165237_create_game_configurations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_11_27_165237_create_game_configurations_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_27_172709_game_categories_in_game_period.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_11_27_172709_game_categories_in_game_period.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,6 +142,7 @@
       <path value="$PROJECT_DIR$/vendor/paragonie/random_compat" />
       <path value="$PROJECT_DIR$/vendor/pusher/pusher-php-server" />
       <path value="$PROJECT_DIR$/vendor/livewire/livewire" />
+      <path value="$PROJECT_DIR$/vendor/spatie/laravel-permission" />
     </include_path>
   </component>
   <component name="ProjectId" id="1kfbCnsxbKxFVU2T4pWz23GNJRo" />
@@ -158,7 +156,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/database/factories" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/database/seeders" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -167,13 +165,14 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database\factories" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database\factories" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database\BoothFactory" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\views" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database\seeders" />
+      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database\factories" />
     </key>
   </component>
   <component name="RunManager">
@@ -202,7 +201,7 @@
       <workItem from="1606354080700" duration="28264000" />
       <workItem from="1606436244352" duration="4602000" />
       <workItem from="1606440996086" duration="21504000" />
-      <workItem from="1606529639940" duration="310000" />
+      <workItem from="1606529639940" duration="8454000" />
     </task>
     <servers />
   </component>
@@ -234,10 +233,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="736" y="432" key="ComposerInitDialogKey/0.0.1920.1040@0.0.1920.1040" timestamp="1606110007718" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1606276281220">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1606534567468">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1606276281220" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1606534567468" />
     <state x="794" y="443" key="NewPhpFileDialog" timestamp="1606443416342">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
