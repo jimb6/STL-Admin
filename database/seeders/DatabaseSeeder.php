@@ -19,5 +19,8 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
         Agent::factory(1000)->create();
         Booth::factory(1000)->create();
+        $this->call([
+           PermissionSeeder::class
+        ]);
     }
 }
