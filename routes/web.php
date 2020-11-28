@@ -19,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 Auth::routes(['register' => false]);
 
 
+Route::get('/home', function () {
+    return redirect()->route('home');
+});
+
 Route::get('/', function () {
     return redirect()->route('home');
 });
@@ -26,6 +30,14 @@ Route::get('/', function () {
 Route::get('/testing-page', function(){
     return view('test');
 })->name('test');
+
+//Temporary.....
+
+//Route::get('/', 'ChatsController@index')->name('home');
+//Route::get('messages', 'ChatsController@fetchMessages');
+//Route::post('messages', 'ChatsController@sendMessage');
+
+//End of temporary ....
 
 Route::middleware('auth')->group(function () {
     Route::prefix('admin')->group(function () {

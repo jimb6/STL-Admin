@@ -17,6 +17,7 @@ class CreateDrawPeriodsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->time('draw_time');
+            $table->integer('game_types_id')->unsigned()->index();
             $table->timestamps();
         });
     }

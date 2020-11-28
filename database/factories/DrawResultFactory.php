@@ -1,18 +1,18 @@
 <?php
 
-namespace Database\Factories\API\v1;
+namespace Database\Factories;
 
-use App\Models\API\v1\Transaction;
+use App\Models\DrawResult;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TransactionFactory extends Factory
+class DrawResultFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Transaction::class;
+    protected $model = DrawResult::class;
 
     /**
      * Define the model's default state.

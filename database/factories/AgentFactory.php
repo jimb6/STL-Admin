@@ -24,7 +24,6 @@ class AgentFactory extends Factory
     public function definition()
     {
         return [
-            'agent_code' => 'AGNT-'.$this->faker->uuid(),
             'agent_name' => $this->faker->name(),
             'address' => $this->faker->address(),
             'contact_number' => $this->faker->phoneNumber(),

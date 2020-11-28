@@ -16,6 +16,8 @@ class CreateGameCategoriesTable extends Migration
         Schema::create('game_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->integer('game_configuration_id')->unsigned()->index();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

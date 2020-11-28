@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return 'profile/username';
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }
