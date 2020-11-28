@@ -41,7 +41,7 @@ class AgentLoginController extends Controller
         Log::info('Access token generated: ');
         Log::info('Returning Data...');
         return response([
-            'set_attributes' =>
+            'agent' =>
                 [
                     'agent_id' => $user->id,
                     'agent_name' => $user->agent_name,

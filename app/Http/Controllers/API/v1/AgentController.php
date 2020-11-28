@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agent;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Laravel\Sanctum\Sanctum;
 
 class AgentController extends Controller
 {
@@ -14,13 +16,13 @@ class AgentController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['sanctum','auth']);
+
     }
 
 
     public function index()
     {
-        return view('view.agents');
+        return \Auth::user();
     }
 
     public function create()

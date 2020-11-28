@@ -26,20 +26,19 @@ class BetTransactionController extends Controller
 
         $validated = $request->validate(
             [
-                'booth_id' => 'required',
-                'agent_id' => 'required',
-                'agent_name' => 'required',
-                'transactions' => 'required | array | min:1 | max:10',
-                'transaction_date' => 'required|date|after:yesterday|before:tomorrow',
-                'transactions.*.*' => 'required',
-                'transactions.*.amount' => 'numeric|min:1|max:1000'
+                'agent.*' => 'required',
+                'booth.*' => 'required',
+                'transaction.transaction_date' => 'required|date|after:yesterday|before:tomorrow',
+                'bets' => 'required | array | min:1 | max:10',
+                'bets.*.amount' => 'numeric|min:1|max:1000'
             ]);
 
-        $bets = $validated['transactions'];
-        $tran_date = $validated['transaction_date'];
-        $agent_id = $validated['agent_id'];
-        $booth_id = $validated['booth_id'];
 
+
+        $bets = $validated['bets'];
+        $tran_date = $validated['transaction']['transaction_date'];
+        $agent_id = $validated['agent']['agent_id'];
+        $booth_id = $validated['booth']['booth_id'];
 
         //Check if the numbers are closed
         $combinations = array_values(array_column($bets, 'combination'));
@@ -55,19 +54,28 @@ class BetTransactionController extends Controller
             'booth_id' => $booth_id,
             'transaction_date' => $tran_date]);
 
+        $savedBets = [];
         foreach ($bets as $bet) {
-            BetTransaction::insert([
+            $save = BetTransaction::create([
                 'transaction_id' => $transaction->id,
-                'game_category' => $bet['game_category'],
-                'draw_period' => $bet['draw_period'],
+                'game_category_id' => $bet['game_category_id'],
+                'draw_period_id' => $bet['draw_period_id'],
                 'combination' => $bet['combination'],
                 'amount' => $bet['amount'],
             ]);
+//            return $save->id;
+            $save = BetTransaction::where(['id' => $save->id])->with(['gameCategories','drawPeriod.gameType'])->get();
+            array_push($savedBets, $save[0]);
         }
 
 //        Encrypt the transaction ID so that it would be more safer....
         $encryptedKey = \Crypt::encrypt($transaction->id);
-        return $request->wantsJson() ? new JsonResponse(['transaction_code' => $encryptedKey, 'success' => 'Transaction granted!', 'data' => $bets], 200) : view('home');
+        return $request->wantsJson() ? new JsonResponse([
+            'transaction_code' => $encryptedKey,
+            'message' => 'Transaction granted!',
+            'data' => $savedBets,
+            ],
+            200) : view('home');
     }
 
     public function validateTransaction(Request $request)

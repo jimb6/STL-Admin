@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\v1\AgentController;
 use App\Http\Controllers\API\v1\AgentLoginController;
+use App\Http\Controllers\API\v1\BetTransactionController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +27,8 @@ Route::group([
 
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/users', [AgentController::class,'index']);
-        Route::post('/transaction', [\App\Http\Controllers\BetTransactionController::class,'store']);
-        Route::get('/transaction', [\App\Http\Controllers\BetTransactionController::class,'validateTransaction']);
+        Route::post('/transaction', [BetTransactionController::class,'store']);
+        Route::get('/transaction', [BetTransactionController::class,'validateTransaction']);
     });
 });
 
