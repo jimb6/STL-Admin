@@ -28,9 +28,6 @@ class PermissionSeeder extends Seeder
 
         $role2 = Role::create(['name' => 'admin']);
         $role2->givePermissionTo('edit agents');
-        $role2->givePermissionTo('create agents');
-        $role2->givePermissionTo('update agents');
-        $role2->givePermissionTo('delete agents');
 
         $role3 = Role::create(['name' => 'super-admin']);
         // gets all permissions via Gate::before rule; see AuthServiceProvider
