@@ -14,5 +14,4 @@ class BetTransactionController extends Controller
 {
     //
 
-
 }

@@ -18,8 +18,13 @@ class GameCategory extends Model
         return $this->belongsToMany('App\Models\DrawPeriod');
     }
 
-    public function DrawResult()
+    public function drawResult()
     {
         return $this->belongsTo('App\Models\DrawResult');
+    }
+
+    public function bets()
+    {
+        return $this->hasMany('App\Models\BetTransaction');
     }
 }

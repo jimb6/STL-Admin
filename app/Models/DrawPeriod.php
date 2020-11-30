@@ -9,8 +9,13 @@ class DrawPeriod extends Model
 {
     use HasFactory;
 
-    public function gameCategories()
+    public function bets()
     {
-        return $this->hasMany('App\Models\GameCategory');
+        return $this->hasMany('App\Models\BetTransaction');
+    }
+
+    public function gameType()
+    {
+        return $this->belongsTo('App\Models\GameType', 'game_types_id', 'id');
     }
 }

@@ -3,7 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="b3487cc3-9b60-4260-a8ef-ff874de3b72e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentLoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentLoginController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BetTransactionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BetTransactionController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/BetTransactionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/BetTransactionController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/BetTransaction.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/BetTransaction.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/DrawPeriod.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DrawPeriod.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/GameCategory.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/GameCategory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/GameType.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/GameType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
