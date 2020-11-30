@@ -42,7 +42,7 @@ return [
         ],
 
         'agent' => [
-            'driver' => 'sanctum',
+            'driver' => 'session',
             'provider' => 'agents',
         ],
 
