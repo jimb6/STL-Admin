@@ -29,6 +29,7 @@ Route::group([
         Route::get('/users', [AgentController::class,'index']);
         Route::post('/transaction', [BetTransactionController::class,'store']);
         Route::get('/transaction', [BetTransactionController::class,'validateTransaction']);
+        Route::get('/info', [AgentController::class, 'index']);
     });
 });
 

@@ -42,9 +42,8 @@ return [
         ],
 
         'agent' => [
-            'driver' => 'session',
+            'driver' => 'sanctum',
             'provider' => 'agents',
-            'hash' => false,
         ],
 
         'api' => [

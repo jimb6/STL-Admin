@@ -70,5 +70,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/add-new-agent', function () {
             return view('add-new-agent');
         });
+
+        Route::get('/settings/mobile/global', function () {
+            return view('settings.mobile.global');
+        });
+
+        Route::get('/settings/mobile/theme', function () {
+            return view('settings.mobile.theme');
+        });
     });
 });
