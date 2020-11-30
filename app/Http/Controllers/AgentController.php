@@ -10,12 +10,13 @@ class AgentController extends Controller
     //
     public function __construct()
     {
-        $this->middleware('auth');
+//        $this->middleware('auth');
     }
 
     public function index()
     {
-        return Agent::all();
+        $agents = Agent::all();
+        return response()->json($agents);
     }
 
 

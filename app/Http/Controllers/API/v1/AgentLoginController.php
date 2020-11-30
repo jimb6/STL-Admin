@@ -17,29 +17,21 @@ class AgentLoginController extends Controller
 
     public function login(Request $request)
     {
-        Log::info('Validate Information.');
         $request->validate([
             'username' => 'required|string',
             'password' => 'required|string',
         ]);
-        Log::info('validated');
 
-        Log::info('Authenticating...');
         if (!Auth::guard('agent')->attempt([
             'agent_name' => request('username'),
             'password' => request('password')
         ])) {
-            Log::info('Un authorize user');
-            return response(['error' => ['unauthenticated']]);
+            return response(['messages' => 'invalid username or password.'], 401);
         }
-
-        Log::info('Authenticated user!');
-        Log::info('Generating Api Token...');
 
         $user = $request->user('agent');
         $accessToken = $user->createToken(request('username'))->plainTextToken;
-        Log::info('Access token generated: ');
-        Log::info('Returning Data...');
+
         return response([
             'agent' =>
                 [
@@ -52,9 +44,8 @@ class AgentLoginController extends Controller
                     'address' => $user->address,
                     'access_token' => $accessToken,
                     'token_type' => 'Bearer'],
-            'messages' => [
-                'text' => 'You are now connected!'],
-        ]);
+            'messages' => 'You are now logged in as '.$user->guard_name,
+        ], 200);
     }
 
     public function logout(Request $request)

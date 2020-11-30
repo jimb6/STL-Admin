@@ -70,17 +70,17 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="{{ asset('favicon/ms-icon-144x144.png') }}">
     @endif
-
+    <script src="{{ asset('js/app.js') }}"></script>
     <!-- CUSTOM LINKS -->
     <link rel="stylesheet" href="{{ asset('css/admin_style.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ asset('js/custom_admin.js') }}"></script>
         <!-- materialize css -->
     <link rel="stylesheet" href="{{ asset('css/materialize.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <!-- toastr -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-
 </head>
 
 <body class="@yield('classes_body')" @yield('body_data')>
@@ -96,7 +96,6 @@
 
         {{-- Configured Scripts --}}
         @include('adminlte::plugins', ['type' => 'js'])
-
         <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     @else
         <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>

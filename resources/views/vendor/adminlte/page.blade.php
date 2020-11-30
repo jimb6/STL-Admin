@@ -16,10 +16,8 @@
 @section('classes_body', $layoutHelper->makeBodyClasses())
 
 @section('body_data', $layoutHelper->makeBodyData())
-
 @section('body')
-    <div class="wrapper">
-
+    <div class="wrapper" id="app">
         {{-- Top Navbar --}}
         @if($layoutHelper->isLayoutTopnavEnabled())
             @include('adminlte::partials.navbar.navbar-layout-topnav')
@@ -48,7 +46,6 @@
                     @yield('content')
                 </div>
             </div>
-
         </div>
 
         {{-- Footer --}}
@@ -67,4 +64,5 @@
 @section('adminlte_js')
     @stack('js')
     @yield('js')
+    @yield('scripts')
 @stop
