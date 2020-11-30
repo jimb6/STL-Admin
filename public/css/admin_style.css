@@ -6,6 +6,32 @@ body {
 p {
     margin-bottom: unset;
 }
+
+/*.row-striped:nth-of-type(odd){*/
+/*    background-color: #efefef;*/
+/*    border-left: 4px #87DBF8 solid;*/
+/*}*/
+
+/*.row-striped:nth-of-type(even){*/
+/*    background-color: #ffffff;*/
+/*    border-left: 4px #4DA1F4 solid;*/
+/*}*/
+
+/*.row-striped {*/
+/*    padding: 15px 0;*/
+/*}*/
+
+/*.grid-lines{*/
+/*    background-color: #fff;*/
+/*    background-image: linear-gradient(rgba(244,244,250,.8) 1px,transparent 0),*/
+/*    linear-gradient(#f4f4fa 1px,transparent 0),*/
+/*    linear-gradient(90deg,rgba(244,244,250,.8) 1px,transparent 0),*/
+/*    linear-gradient(90deg,#f4f4fa 1px,transparent 0),*/
+/*    linear-gradient(transparent 3px,#fff 0,#fff 94px,transparent 0),*/
+/*    linear-gradient(90deg,#f4f4fa 3px,transparent 0,transparent 94px,#f4f4fa 0);*/
+/*    background-size: 24px 24px,96px 96px,24px 24px,96px 96px,96px 96px,96px 96px;*/
+/*}*/
+
 span.yes {
     background: green;
     width: 25px;
@@ -270,7 +296,7 @@ input.datepicker {
 
 /* FORM */
 .cstm-form {
-    
+
 }
 .cstm-form form {
     width: 35%;

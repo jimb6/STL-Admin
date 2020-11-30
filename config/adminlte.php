@@ -69,7 +69,7 @@ return [
     'usermenu_header_class' => 'bg-danger',
     'usermenu_image' => true,
     'usermenu_desc' => true,
-    'usermenu_profile_url' => false,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -85,9 +85,9 @@ return [
 
     'layout_topnav' => null,
     'layout_boxed' => null,
-    'layout_fixed_sidebar' => null,
-    'layout_fixed_navbar' => null,
-    'layout_fixed_footer' => null,
+    'layout_fixed_sidebar' => ['xs' => true, 'lg' => false],
+    'layout_fixed_navbar' => ['xs' => true, 'lg' => false],
+    'layout_fixed_footer' => ['xs' => true, 'lg' => false],
 
     /*
     |--------------------------------------------------------------------------
@@ -144,7 +144,7 @@ return [
     |
     */
 
-    'sidebar_mini' => true,
+    'sidebar_mini' => false,
     'sidebar_collapse' => false,
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
@@ -166,7 +166,7 @@ return [
     |
     */
 
-    'right_sidebar' => true,
+    'right_sidebar' => false,
     'right_sidebar_icon' => 'fas fa-cogs',
     'right_sidebar_theme' => 'dark',
     'right_sidebar_slide' => true,
@@ -242,172 +242,185 @@ return [
 //            'can'  => 'manage-blog',
 //        ],
         [
-            'text'        => 'Dashboard',
-            'url'         => '/admin/home',
-            'icon'        => 'fas fa-tachometer-alt',
+            'text' => 'Dashboard',
+            'url' => '/admin/home',
+            'icon' => 'fas fa-tachometer-alt',
             'label_color' => 'success',
             'classes' => '',
         ],
+        ['header' => 'App Management'],
         [
-            'text'        => 'Agents',
+            'text' => 'Agents',
             // 'url'         => '/#',
-            'icon'        => 'fas fa-users',
+            'icon' => 'fas fa-users',
             'label_color' => 'success',
             'classes' => '',
             'submenu' => [
                 [
                     'text' => 'All Agents',
-                    'url'  => '/admin/agents',
+                    'url' => '/admin/agents',
                 ],
                 [
                     'text' => 'Add New',
-                    'url'  => '/admin/add-new-agent',
+                    'url' => '/admin/add-new-agent',
                 ],
             ]
 
         ],
         [
-            'text'        => 'Booths',
+            'text' => 'Booths',
             // 'url'         => '/#',
-            'icon'        => 'fas fa-store',
+            'icon' => 'fas fa-store',
             'label_color' => 'success',
             'classes' => '',
             'submenu' => [
                 [
                     'text' => 'All Booths',
-                    'url'  => '/admin/booths',
+                    'url' => '/admin/booths',
                 ],
                 [
                     'text' => 'Add New',
-                    'url'  => '/admin/add-new-booth',
+                    'url' => '/admin/add-new-booth',
                 ],
             ]
         ],
         [
-            'text'        => 'Winners',
+            'text' => 'Winners',
             // 'url'         => '/#',
-            'icon'        => 'fas fa-trophy',
+            'icon' => 'fas fa-trophy',
             'label_color' => 'success',
             'classes' => '',
             'submenu' => [
                 [
                     'text' => 'All Winners',
-                    'url'  => '/admin/winners',
+                    'url' => '/admin/winners',
                 ],
                 [
                     'text' => 'Add Result',
-                    'url'  => '/admin/add-new-result',
+                    'url' => '/admin/add-new-result',
                 ],
             ]
         ],
         [
-            'text'        => 'Bets',
+            'text' => 'Bets',
             // 'url'         => '/#',
-            'icon'        => 'fas fa-coins',
+            'icon' => 'fas fa-coins',
             'label_color' => 'success',
             'classes' => '',
             'submenu' => [
                 [
                     'text' => 'All Bets',
-                    'url'  => '/#',
+                    'url' => '/#',
                 ],
             ]
         ],
         [
-            'text'        => 'Collections',
+            'text' => 'Collections',
             // 'url'         => '/#',
-            'icon'        => 'fas fa-briefcase',
+            'icon' => 'fas fa-briefcase',
             'label_color' => 'success',
-            'classes' => '',
+            'classes' => 'xs',
             'submenu' => [
                 [
-                    'text' => 'All Collections',
-                    'url'  => '/#',
+                    'text' => 'Summary Collections',
+                    'url' => '/#',
+                ],
+                [
+                    'text' => 'Daily Collections',
+                    'url' => '/#',
+                ],
+                [
+                    'text' => 'Receive/Send Collections',
+                    'url' => '/#',
                 ],
             ]
         ],
+
+        ['header' => 'Settings'],
         [
-            'text'        => 'Account',
+            'text' => 'Account',
             // 'url'         => '/#',
-            'icon'        => 'fas fa-user-lock',
+            'icon' => 'fas fa-user-lock',
             'label_color' => 'success',
             'classes' => '',
             'submenu' => [
                 [
                     'text' => 'Profile',
-                    'url'  => '/admin/user/profile',
+                    'url' => '/admin/user/profile',
                 ],
                 [
                     'text' => 'Logout',
-                    'url'  => '/#',
+                    'url' => '/#',
                 ],
             ]
         ],
-        // ['header' => 'account_settings'],
-        // [
-        //     'text' => 'profile',
-        //     'url'  => 'profile',
-        //     'icon' => 'fas fa-fw fa-user',
-        // ],
-        // [
-        //     'text' => 'change_password',
-        //     'url'  => 'admin/settings',
-        //     'icon' => 'fas fa-fw fa-lock',
-        // ],
-        // [
-        //     'text'    => 'multilevel',
-        //     'icon'    => 'fas fa-fw fa-share',
-        //     'submenu' => [
-        //         [
-        //             'text' => 'level_one',
-        //             'url'  => '#',
-        //         ],
-        //         [
-        //             'text'    => 'level_one',
-        //             'url'     => '#',
-        //             'submenu' => [
-        //                 [
-        //                     'text' => 'level_two',
-        //                     'url'  => '#',
-        //                 ],
-        //                 [
-        //                     'text'    => 'level_two',
-        //                     'url'     => '#',
-        //                     'submenu' => [
-        //                         [
-        //                             'text' => 'level_three',
-        //                             'url'  => '#',
-        //                         ],
-        //                         [
-        //                             'text' => 'level_three',
-        //                             'url'  => '#',
-        //                         ],
-        //                     ],
-        //                 ],
-        //             ],
-        //         ],
-        //         [
-        //             'text' => 'level_one',
-        //             'url'  => '#',
-        //         ],
-        //     ],
-        // ],
-        // ['header' => 'labels'],
-        // [
-        //     'text'       => 'important',
-        //     'icon_color' => 'red',
-        //     'url'        => '#',
-        // ],
-        // [
-        //     'text'       => 'warning',
-        //     'icon_color' => 'yellow',
-        //     'url'        => '#',
-        // ],
-        // [
-        //     'text'       => 'information',
-        //     'icon_color' => 'cyan',
-        //     'url'        => '#',
-        // ],
+        [
+            'text' => 'Mobile Settings',
+            // 'url'         => '/#',
+            'icon' => 'fas fa-mobile-alt',
+            'label_color' => 'success',
+            'classes' => '',
+            'submenu' => [
+                [
+                    'text' => 'Global Settings',
+                    'url' => '/admin/settings/mobile/global',
+                ],
+                [
+                    'text' => 'Theme',
+                    'url' => '/admin/settings/mobile/theme',
+                ],
+            ]
+        ],
+        [
+            'text' => 'Settings',
+            // 'url'         => '/#',
+            'icon' => 'fas fa-cogs',
+            'label_color' => 'success',
+            'classes' => '',
+            'submenu' => [
+                [
+                    'text' => 'Global Settings',
+                    'url' => '#',
+                ],
+                [
+                    'text' => 'Users',
+                    'url' => '/#',
+                ],
+                [
+                    'text' => 'Roles & Permissions',
+                    // 'url'         => '/#',
+//                    'icon' => 'fas fa-user-secret',
+                    'label_color' => 'success',
+                    'classes' => '',
+                    'submenu' => [
+                        [
+                            'text' => 'Permissions List',
+                            'url' => '#',
+                        ],
+                        [
+                            'text' => 'Create Permission',
+                            'url' => '/#',
+                        ],
+                        [
+                            'text' => 'Roles List',
+                            'url' => '/#',
+                        ],
+                        [
+                            'text' => 'Create Role',
+                            'url' => '/#',
+                        ],
+                    ]
+                ],
+                [
+                    'text' => 'Push Notifications',
+                    'url' => '/#',
+                ],
+                [
+                    'text' => 'Mail',
+                    'url' => '/#',
+                ],
+            ]
+        ],
     ],
 
     /*
