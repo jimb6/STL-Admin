@@ -15,8 +15,8 @@ class AgentController extends Controller
 
     public function index()
     {
-        $agents = Agent::all();
-        return response()->json($agents);
+        return Agent::paginate(50);
+//        return response()->json($agents);
     }
 
 
@@ -41,7 +41,7 @@ class AgentController extends Controller
 
     public function answer($id, Request $request)
     {
-        $request->merge(['correct' => (bool) json_decode($request->get('correct'))]);
+        $request->merge(['correct' => (bool)json_decode($request->get('correct'))]);
         $request->validate([
             'correct' => 'required|boolean'
         ]);

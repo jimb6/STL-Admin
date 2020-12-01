@@ -48,7 +48,7 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::get('agents', function () {
-            return view('agents');
+            return view('agent.agents');
         })->name('view.agents');
 
         Route::get('booths', function () {
@@ -78,5 +78,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/settings/mobile/theme', function () {
             return view('settings.mobile.theme');
         });
+
+        Route::get('/bets/{any}', [\App\Http\Controllers\BetTransactionController::class, 'show'])->name('game.bets');
     });
 });

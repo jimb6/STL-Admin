@@ -10,7 +10,7 @@ class GameCategory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name', 'abbreviation', 'game_configuration_id'
     ];
 
     public function drawPeriods()

@@ -57,7 +57,7 @@
         @if(config('adminlte.right_sidebar'))
             @include('adminlte::partials.sidebar.right-sidebar')
         @endif
-
+        <vue-progress-bar></vue-progress-bar>
     </div>
 @stop
 

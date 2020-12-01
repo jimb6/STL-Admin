@@ -1,7 +1,7 @@
 <?php
 
-return [
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Title
@@ -30,8 +30,8 @@ return [
     |
     */
 
-    'use_ico_only' => false,
-    'use_full_favicon' => true,
+    'use_ico_only' => true,
+    'use_full_favicon' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -147,7 +147,7 @@ return [
     'sidebar_mini' => 'md',
     'sidebar_collapse' => false,
     'sidebar_collapse_auto_size' => true,
-    'sidebar_collapse_remember' => false,
+    'sidebar_collapse_remember' => true,
     'sidebar_collapse_remember_no_transition' => true,
     'sidebar_scrollbar_theme' => 'os-theme-light',
     'sidebar_scrollbar_auto_hide' => 'l',
@@ -230,6 +230,7 @@ return [
     |
     */
 
+
     'menu' => [
 //        [
 //            'text' => 'search',
@@ -261,6 +262,10 @@ return [
                     'url' => '/admin/agents',
                 ],
                 [
+                    'text' => 'Active Agents',
+                    'url' => '#',
+                ],
+                [
                     'text' => 'Add New',
                     'url' => '/admin/add-new-agent',
                 ],
@@ -269,6 +274,7 @@ return [
         ],
         [
             'text' => 'Booths',
+            'key' => 'boots',
             // 'url'         => '/#',
             'icon' => 'fas fa-store',
             'label_color' => 'success',
@@ -285,35 +291,26 @@ return [
             ]
         ],
         [
-            'text' => 'Winners',
+            'text' => 'Game Draws',
+            'key' => 'draws',
             // 'url'         => '/#',
-            'icon' => 'fas fa-trophy',
+            'icon' => 'fas fa-dice',
             'label_color' => 'success',
             'classes' => '',
             'submenu' => [
-                [
-                    'text' => 'All Winners',
-                    'url' => '/admin/winners',
-                ],
-                [
-                    'text' => 'Add Result',
-                    'url' => '/admin/add-new-result',
-                ],
             ]
         ],
         [
             'text' => 'Bets',
+            'key' => 'bets',
             // 'url'         => '/#',
             'icon' => 'fas fa-coins',
             'label_color' => 'success',
             'classes' => '',
             'submenu' => [
-                [
-                    'text' => 'All Bets',
-                    'url' => '/#',
-                ],
             ]
         ],
+        ['header' => 'Accounting Management'],
         [
             'text' => 'Collections',
             // 'url'         => '/#',
@@ -331,6 +328,24 @@ return [
                 ],
                 [
                     'text' => 'Receive/Send Collections',
+                    'url' => '/#',
+                ],
+            ]
+        ],
+        ['header' => 'Reporting'],
+        [
+            'text' => 'Create Report',
+            // 'url'         => '/#',
+            'icon' => 'fas fa-print',
+            'label_color' => 'success',
+            'classes' => 'xs',
+            'submenu' => [
+                [
+                    'text' => 'Collection Report',
+                    'url' => '/#',
+                ],
+                [
+                    'text' => 'Transaction Report',
                     'url' => '/#',
                 ],
             ]
