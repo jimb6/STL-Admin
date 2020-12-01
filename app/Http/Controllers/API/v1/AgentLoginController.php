@@ -31,6 +31,8 @@ class AgentLoginController extends Controller
 
         $user = $request->user('agent');
         $accessToken = $user->createToken(request('username'))->plainTextToken;
+        $user->api_token = $accessToken;
+        $user->update();
 
         return response([
             'agent' =>

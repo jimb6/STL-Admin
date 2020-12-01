@@ -1,10 +1,4 @@
 <div>
-    {{-- Care about people's approval and you will be their prisoner. --}}
-    <div style="text-align: center">
-        <button wire:click="increment">+</button>
-        <h1>{{ $count }}</h1>
-    </div>
-
     <div class="row">
         <div class="col-md-4 col-sm-6 col-12">
             <div class="info-box ">

@@ -23,7 +23,7 @@ class BetTransaction extends Model
         return $this->belongsTo('App\Models\DrawPeriod');
     }
 
-    public function gameCategories()
+    public function gameCategory()
     {
         return $this->belongsTo('App\Models\GameCategory', 'game_category_id','id');
     }

@@ -3,19 +3,18 @@ import VueRouter from 'vue-router'
 import VueProgressBar from 'vue-progressbar'
 import Vue from 'vue'
 import $ from 'jquery';
+// import pagination from 'laravel-vue-semantic-ui-pagination';
 
 Vue.use(VueRouter)
 require('./bootstrap');
 
 window.$ = window.jQuery = $;
 window.Vue = require('vue');
-import router from "./routes";
 import Dashboard from "./components/Dashboard";
-import ShowAgentComponent from "./components/agents/ShowAgentComponent";
-
+import ShowAgents from "./components/agents/show";
 // const files = require.context('./', true, /\.vue$/i)
-// Vue.component('ShowAgents', require('./components/agents/ShowAgentComponent').default);
-// Vue.component('dashboard', require('./components/Dashboard.vue'))
+Vue.component('pagination', require('laravel-vue-pagination'));
+// Vue.component('pagination', require('laravel-vue-semantic-ui-pagination'));
 const options = {
     color: '#ffd609',
     failedColor: '#ee060e',
@@ -31,10 +30,10 @@ const options = {
 }
 
 Vue.use(VueProgressBar, options)
-
-// const app = new Vue({
-//     el: '#app',
-//     router,
-//     render: h => h(app)
-//     // router
-// });
+//
+const app = new Vue({
+    el: '#app',
+    components: {
+        Dashboard, ShowAgents
+    }
+});
