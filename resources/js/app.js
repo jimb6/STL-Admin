@@ -1,4 +1,4 @@
-import App from "./components/layout/App";
+import App from "./App.vue";
 import VueRouter from 'vue-router'
 import VueProgressBar from 'vue-progressbar'
 import Vue from 'vue'
@@ -10,8 +10,10 @@ require('./bootstrap');
 
 window.$ = window.jQuery = $;
 window.Vue = require('vue');
-import Dashboard from "./components/Dashboard";
-import ShowAgents from "./components/agents/show";
+
+import Dashboard from "./pages/Dashboard";
+import Table from "./components/Table";
+
 // const files = require.context('./', true, /\.vue$/i)
 Vue.component('pagination', require('laravel-vue-pagination'));
 // Vue.component('pagination', require('laravel-vue-semantic-ui-pagination'));
@@ -34,6 +36,7 @@ Vue.use(VueProgressBar, options)
 const app = new Vue({
     el: '#app',
     components: {
-        Dashboard, ShowAgents
+        Dashboard, 
+        Table
     }
 });
