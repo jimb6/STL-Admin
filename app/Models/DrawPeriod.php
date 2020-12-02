@@ -2,20 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Scopes\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DrawPeriod extends Model
 {
+    use SoftDeletes;
     use HasFactory;
+    use Searchable;
 
-    public function bets()
-    {
-        return $this->hasMany('App\Models\BetTransaction');
-    }
+    protected $fillable = ['draw_time', 'draw_type'];
 
-    public function gameType()
+    protected $searchableFields = ['*'];
+
+    protected $table = 'draw_periods';
+
+    public function betGames()
     {
-        return $this->belongsTo('App\Models\GameType', 'game_types_id', 'id');
+        return $this->belongsToMany(BetGame::class);
     }
 }

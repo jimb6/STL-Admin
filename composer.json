@@ -20,7 +20,8 @@
         "livewire/livewire": "^2.3",
         "pusher/pusher-php-server": "^4.1",
         "spatie/laravel-permission": "^3.18",
-        "fakerphp/faker": "^1.9.1"
+        "fakerphp/faker": "^1.9.1",
+      "ext-json": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

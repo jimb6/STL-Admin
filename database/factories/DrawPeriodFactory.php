@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\DrawPeriod;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DrawPeriodFactory extends Factory
@@ -22,7 +23,8 @@ class DrawPeriodFactory extends Factory
     public function definition()
     {
         return [
-            //
+//            'draw_time' => $this->faker->time,
+//            'draw_type' => $this->faker->text(255),
         ];
     }
 }

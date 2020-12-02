@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\DrawResult;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DrawResultFactory extends Factory
@@ -22,7 +23,7 @@ class DrawResultFactory extends Factory
     public function definition()
     {
         return [
-            //
+//            'bet_game_id' => \App\Models\BetGame::factory(),
         ];
     }
 }
