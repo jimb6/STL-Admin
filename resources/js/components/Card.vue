@@ -1,15 +1,24 @@
 <template>
 	
+	<div class="card">
+		<CardItem v-bind:cards="cards"/>
+	</div>
 	
 	
 </template>
 
 <script>
+import CardItem from './CardItem';
+
 export default {
-	name: "show",
+	name: "Card",
+	props: ["cards"],
+	components: {
+        CardItem,
+    },
     data() {
         return {
-            agents: {},
+            
         };
     },
 };
@@ -17,5 +26,6 @@ export default {
 
 
 <style scoped>
+
 
 </style>
