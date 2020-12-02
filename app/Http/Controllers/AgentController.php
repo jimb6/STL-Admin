@@ -4,72 +4,105 @@ namespace App\Http\Controllers;
 
 use App\Models\Agent;
 use Illuminate\Http\Request;
+use App\Http\Requests\AgentStoreRequest;
+use App\Http\Requests\AgentUpdateRequest;
 
 class AgentController extends Controller
 {
-    //
-    public function __construct()
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
     {
-//        $this->middleware('auth');
+        $this->authorize('view-any', Agent::class);
+
+        $search = $request->get('search', '');
+
+        $agents = Agent::search($search)
+            ->latest()
+            ->paginate();
+
+        return view('app.agents.index', compact('agents', 'search'));
     }
 
-    public function index()
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request)
     {
-        return Agent::paginate(50);
-//        return response()->json($agents);
+        $this->authorize('create', Agent::class);
+
+        return view('app.agents.create');
     }
 
-
-    public function show($id)
+    /**
+     * @param \App\Http\Requests\AgentStoreRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(AgentStoreRequest $request)
     {
-        return Agent::findOrFail($id);
+        $this->authorize('create', Agent::class);
+
+        $validated = $request->validated();
+
+        $agent = Agent::create($validated);
+
+        return redirect()->route('agents.edit', $agent);
     }
 
-    public function store(Request $request)
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Agent $agent
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, Agent $agent)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-        ]);
+        $this->authorize('view', $agent);
 
-        $player = Agent::create($request->all());
-        $player->save($request);
-
-        return Agent::all()
-            ->response()
-            ->setStatusCode(201);
+        return view('app.agents.show', compact('agent'));
     }
 
-    public function answer($id, Request $request)
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Agent $agent
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Request $request, Agent $agent)
     {
-        $request->merge(['correct' => (bool)json_decode($request->get('correct'))]);
-        $request->validate([
-            'correct' => 'required|boolean'
-        ]);
+        $this->authorize('update', $agent);
 
-        $player = Player::findOrFail($id);
-        $player->answers++;
-        $player->points = ($request->get('correct')
-            ? $player->points + 1
-            : $player->points - 1);
-        $player->save();
-
-        return new PlayerResource($player);
+        return view('app.agents.edit', compact('agent'));
     }
 
-    public function delete($id)
+    /**
+     * @param \App\Http\Requests\AgentUpdateRequest $request
+     * @param \App\Models\Agent $agent
+     * @return \Illuminate\Http\Response
+     */
+    public function update(AgentUpdateRequest $request, Agent $agent)
     {
-        $player = Player::findOrFail($id);
-        $player->delete();
+        $this->authorize('update', $agent);
 
-        return response()->json(null, 204);
+        $validated = $request->validated();
+
+        $agent->update($validated);
+
+        return redirect()->route('agents.edit', $agent);
     }
 
-    public function resetAnswers($id)
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Agent $agent
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, Agent $agent)
     {
-        $player = Player::findOrFail($id);
-        $player->answers = 0;
-        $player->points = 0;
+        $this->authorize('delete', $agent);
 
-        return new PlayerResource($player);
+        $agent->delete();
+
+        return redirect()->route('agents.index');
     }
 }

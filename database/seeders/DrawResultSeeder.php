@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\DrawResult;
 use Illuminate\Database\Seeder;
 
 class DrawResultSeeder extends Seeder
@@ -13,6 +14,8 @@ class DrawResultSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DrawResult::factory()
+            ->count(5)
+            ->create();
     }
 }

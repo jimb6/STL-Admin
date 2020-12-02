@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\BetTransaction;
 use Illuminate\Database\Seeder;
 
 class BetTransactionSeeder extends Seeder
@@ -13,6 +14,8 @@ class BetTransactionSeeder extends Seeder
      */
     public function run()
     {
-        //
+//        BetTransaction::factory()
+//            ->count(5)
+//            ->create();
     }
 }

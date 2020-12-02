@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Base;
 use App\Models\Booth;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BoothFactory extends Factory
 {
@@ -24,7 +24,11 @@ class BoothFactory extends Factory
     public function definition()
     {
         return [
-            'location' => $this->faker->unique()->address(),
+            'location' => $this->faker->streetAddress(),
+            'status' => $this->faker->state([
+                'Active', 'Inactive', 'Removed'
+            ]),
+            'base_id' => Base::all()->random()->id,
         ];
     }
 }
