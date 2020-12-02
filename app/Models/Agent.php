@@ -2,63 +2,52 @@
 
 namespace App\Models;
 
-use App\Http\Middleware\Authenticate;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Scopes\Searchable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-
-class Agent extends Authenticatable
+class Agent extends Model
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use SoftDeletes;
+    use HasFactory;
+    use Searchable;
 
-    protected $fillable = ['agent_name', 'password', 'address', 'contact_number', 'age', 'sex', 'api_token'];
-
-    protected $hidden = [
-        'password',
-        'remember_token',
+    protected $fillable = [
+        'name',
+        'address',
+        'contact_number',
+        'age',
+        'sex',
+        'session_status',
+        'base_id',
+        'booth_id',
     ];
 
-    protected $guard = 'agent';
+    protected $searchableFields = ['*'];
 
-    public function generateToken()
+    protected $casts = [
+        'sex' => 'boolean',
+        'session_status' => 'boolean',
+    ];
+
+    public function collectionRecords()
     {
-        $this->api_token = $this->v4();
-        $this->save();
-
-        return $this->api_token;
-    }
-
-    public function v4()
-    {
-        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-
-            // 32 bits for "time_low"
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-
-            // 16 bits for "time_mid"
-            mt_rand(0, 0xffff),
-
-            // 16 bits for "time_hi_and_version",
-            // four most significant bits holds version number 4
-            mt_rand(0, 0x0fff) | 0x4000,
-
-            // 16 bits, 8 bits for "clk_seq_hi_res",
-            // 8 bits for "clk_seq_low",
-            // two most significant bits holds zero and one for variant DCE1.1
-            mt_rand(0, 0x3fff) | 0x8000,
-
-            // 48 bits for "node"
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
-        );
+        return $this->hasMany(CollectionRecord::class);
     }
 
     public function transactions()
     {
-        return $this->hasMany('App\Models\Transaction');
+        return $this->hasMany(BetTransaction::class);
     }
 
+    public function base()
+    {
+        return $this->belongsTo(Base::class);
+    }
 
+    public function booth()
+    {
+        return $this->belongsTo(Booth::class);
+    }
 }

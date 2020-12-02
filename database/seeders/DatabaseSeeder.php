@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Agent;
-use App\Models\Booth;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,11 +13,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(10)->create();
-        Agent::factory(1000)->create();
-        Booth::factory(1000)->create();
-        $this->call([
-           PermissionSeeder::class
-        ]);
+        // Adding an admin user
+        $this->call(BaseSeeder::class);
+        $this->call(BoothSeeder::class);
+        $user = \App\Models\User::factory(5);
+        $this->call(PermissionsSeeder::class);
+//        $this->call(CollectionRecordSeeder::class);
+        $this->call(AgentSeeder::class);
+        $this->call(DrawPeriodSeeder::class);
+//        $this->call(CloseNumberSeeder::class);
+        $this->call(CollectionStatusSeeder::class);
+        $this->call(UserSeeder::class);
+
+//        $this->call(BetTransactionSeeder::class);
+//        $this->call(BetSeeder::class);
+//        $this->call(WinnerSeeder::class);
+//        $this->call(DrawResultSeeder::class);
+        $this->call(BetGameSeeder::class);
     }
 }

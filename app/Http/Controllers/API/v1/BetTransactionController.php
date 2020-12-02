@@ -40,9 +40,25 @@ class BetTransactionController extends Controller
         $agent_id = $validated['agent']['agent_id'];
         $booth_id = $validated['booth']['booth_id'];
 
+
+
         //Check if the numbers are closed
-        $combinations = array_values(array_column($bets, 'combination'));
-//        $hasCloseNumber = ClosedNumbers::whereIn('number_value', $combinations)->get();                           //Eloquent Performance 156ms per transaction
+//        Get Bet Games (2D, 4D, 3D)
+//        Get Combinations (223, 334)
+//        Check if number is closed
+//        $combinations = array_values(array_column($bets, 'combination'));
+//        $hasCloseNumber = ClosedNumbers::whereIn('number_value', $combinations)->get();
+//
+//
+//         SELECT * CLOSE NUMBER WHERE BETGAMEID = BET_BETGAME_ID > 0 ? NAAY CLOSE : WALA GI CLOSE
+//
+
+//        STL-2D, STL-3D PARES, NAT. 2D, NAT. 3D, NAT.4D, PICK -3
+//        STL (10AM, 3PM, 9PM - 2PM 5PM 9PM)
+//
+//
+//
+//                           //Eloquent Performance 156ms per transaction
         $hasCloseNumber = DB::table('closed_numbers')->whereIn('number_value', $combinations)->get();   //Query Builder Performance 132ms per transaction
         if (count($hasCloseNumber) > 0) {
             //Validation of request

@@ -2,29 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Scopes\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BetTransaction extends Model
 {
+    use SoftDeletes;
     use HasFactory;
+    use Searchable;
 
-    protected $fillable = [
-        'transaction_id', 'game_category_id', 'draw_period_id', 'combination', 'amount'
-    ];
+    protected $fillable = ['agent_id'];
 
-    public function transaction()
+    protected $searchableFields = ['*'];
+
+    protected $table = 'bet_transactions';
+
+    public function agent()
     {
-        return $this->belongsTo('App\Models\Transaction');
+        return $this->belongsTo(Agent::class);
     }
 
-    public function drawPeriod()
+    public function bets()
     {
-        return $this->belongsTo('App\Models\DrawPeriod');
-    }
-
-    public function gameCategory()
-    {
-        return $this->belongsTo('App\Models\GameCategory', 'game_category_id','id');
+        return $this->hasMany(Bet::class);
     }
 }

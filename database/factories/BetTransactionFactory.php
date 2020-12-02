@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Illuminate\Support\Str;
 use App\Models\BetTransaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,7 +23,7 @@ class BetTransactionFactory extends Factory
     public function definition()
     {
         return [
-            //
+//            'agent_id' => \App\Models\Agent::factory(),
         ];
     }
 }

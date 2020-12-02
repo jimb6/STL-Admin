@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
@@ -32,20 +33,20 @@ class AppServiceProvider extends ServiceProvider
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
         $events->listen(function (BuildingMenu $event) {
             // Add some items to the menu...
-            $games = \App\Models\GameCategory::all();
-            $draws = \App\Models\DrawPeriod::with('gameType')->get();
-            $arrayOfGames = [];
-            $arrayOfDraws = [];
+            $games = \App\Models\BetGame::all();
+            $draws = \App\Models\DrawPeriod::all();
+
             foreach ($games as $game) {
                 $event->menu->addIn('bets', [
-                    'text' => $game->name,
-                    'url' => route('game.bets', $game->abbreviation)
+                    'text' => $game->game_name,
+                    'url' => route('game.bets', $game->game_abbreviation)
                 ]);
             }
+
             foreach ($draws as $draw) {
-                $event->menu->addIn('bets', [
-                    'text' => $draw->name.' '.substr($draw->gameType->name, 1),
-                    'url' => route('game.bets', $draw->name)
+                $event->menu->addIn('draws', [
+                    'text' => $draw->draw_type[0].' - '.Carbon::parse($draw->draw_time)->format('g:ia'),
+                    'url' => route('game.bets', $draw->draw_time)
                 ]);
             }
         }, BuildingMenu::class);

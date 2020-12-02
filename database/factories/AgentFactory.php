@@ -3,9 +3,10 @@
 namespace Database\Factories;
 
 use App\Models\Agent;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Factories\Sequence;
+use App\Models\Base;
+use App\Models\Booth;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AgentFactory extends Factory
 {
@@ -24,20 +25,14 @@ class AgentFactory extends Factory
     public function definition()
     {
         return [
-            'agent_name' => $this->faker->name(),
+            'name' => $this->faker->name(),
             'address' => $this->faker->address(),
             'contact_number' => $this->faker->phoneNumber(),
-            'age' => $this->faker->numberBetween(21, 60),
-            'sex' => $this->faker->randomElement([true, false]),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'age' => $this->faker->numberBetween(20, 40),
+            'sex' => $this->faker->boolean,
+            'session_status' => $this->faker->boolean,
+            'base_id' => Base::all()->random()->id,
+            'booth_id' => Booth::all()->random()->id,
         ];
-
-//        $table->string('agent_code')->unique();
-//        $table->string('agent_name');
-//        $table->string('');
-//        $table->text('');
-//        $table->string('contact_number');
-//        $table->integer('age');
-//        $table->boolean('sex');
     }
 }
