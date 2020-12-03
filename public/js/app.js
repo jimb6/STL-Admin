@@ -2438,6 +2438,19 @@ function formatMoney(money) {
         }
       }, _callee);
     }))();
+  },
+  methods: {
+    fetchData: function fetchData() {
+      var _this2 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.get('/api/agents?page=' + page).then(function (response) {
+        _this2.active = response.data.activeAgents.length;
+        _this2.agentCount = response.data.agents.length;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
   }
 });
 
