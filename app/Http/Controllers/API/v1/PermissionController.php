@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
@@ -54,7 +54,7 @@ class PermissionController extends Controller
         ]);
 
         $permission = Permission::create($data);
-        
+
         $roles = Role::find($request->roles);
         $permission->syncRoles($roles);
 
@@ -108,7 +108,7 @@ class PermissionController extends Controller
         ]);
 
         $permission->update($data);
-        
+
         $roles = Role::find($request->roles);
         $permission->syncRoles($roles);
 

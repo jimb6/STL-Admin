@@ -10,13 +10,15 @@ require('./bootstrap');
 
 window.$ = window.jQuery = $;
 window.Vue = require('vue');
-
+import router from "./routes";
 import Dashboard from "./pages/Dashboard";
-import Table from "./components/Table";
+import Agent from "./pages/Agent";
+import { Line } from "vue-chartjs";
 
 // const files = require.context('./', true, /\.vue$/i)
 Vue.component('pagination', require('laravel-vue-pagination'));
 // Vue.component('pagination', require('laravel-vue-semantic-ui-pagination'));
+
 const options = {
     color: '#ffd609',
     failedColor: '#ee060e',
@@ -35,8 +37,9 @@ Vue.use(VueProgressBar, options)
 //
 const app = new Vue({
     el: '#app',
+    router,
     components: {
         Dashboard, 
-        Table
+        Agent
     }
 });

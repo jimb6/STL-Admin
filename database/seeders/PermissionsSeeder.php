@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
 class PermissionsSeeder extends Seeder
@@ -13,6 +14,16 @@ class PermissionsSeeder extends Seeder
     {
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
+        Permission::create(['name' => 'menu dashboard']);
+        Permission::create(['name' => 'menu agent']);
+        Permission::create(['name' => 'menu booths']);
+        Permission::create(['name' => 'menu gamedraws']);
+        Permission::create(['name' => 'menu bets']);
+        Permission::create(['name' => 'menu collections']);
+        Permission::create(['name' => 'menu reports']);
+        Permission::create(['name' => 'menu mobilesettings']);
+        Permission::create(['name' => 'menu settings']);
+
 
         // Create default permissions
         Permission::create(['name' => 'list collectionrecords']);
@@ -121,5 +132,123 @@ class PermissionsSeeder extends Seeder
         if ($user) {
             $user->assignRole($adminRole);
         }
+
+        $administrator = Permission::where(['name' => [
+            //Menu
+            'menu dashboard',
+            'menu agent',
+            'menu booths',
+            'menu gamedraws',
+            'menu bets',
+            'menu collections',
+            'menu reports',
+            'menu mobilesettings',
+            'menu settings',
+            //Agents
+            'list agents',
+            'view agents',
+            'create agents',
+            'update agents',
+            'delete agents',
+            //Booths
+            'list booths',
+            'view booths',
+            'create booths',
+            'update booths',
+            'delete booths',
+            //Draw Periods
+            'list drawperiods',
+            'view drawperiods',
+            'create drawperiods',
+            'update drawperiods',
+            'delete drawperiods',
+            //Close Numbers
+            'list closenumbers',
+            'view closenumbers',
+            'create closenumbers',
+            'update closenumbers',
+            'delete closenumbers',
+            //Collections
+            'list collectionstatuses',
+            'view collectionstatuses',
+            'create collectionstatuses',
+            'update collectionstatuses',
+            'delete collectionstatuses',
+            //Bases
+            'list bases',
+            'view bases',
+            'create bases',
+            'update bases',
+            'delete bases',
+            //Bet Transaction
+            'list bettransactions',
+            'view bettransactions',
+            'create bettransactions',
+            'update bettransactions',
+            'delete bettransactions',
+            //Bets
+            'list bets',
+            'view bets',
+            'create bets',
+            'update bets',
+            'delete bets',
+            //Winners
+            'list winners',
+            'view winners',
+            'create winners',
+            'update winners',
+            'delete winners',
+            //Draw Results
+            'list drawresults',
+            'view drawresults',
+            'create drawresults',
+            'update drawresults',
+            'delete drawresults',
+            //Bet Games
+            'list betgames',
+            'view betgames',
+            'create betgames',
+            'update betgames',
+            'delete betgames',
+            //User Roles
+            'list roles',
+            'view roles',
+            'create roles',
+            'update roles',
+            'delete roles',
+            //Permissions
+            'list permissions',
+            'view permissions',
+            'create permissions',
+            'update permissions',
+            'delete permissions',
+            //Users
+            'list users',
+            'view users',
+            'create users',
+            'update users',
+            'delete users',
+        ]])->get();
+        $monitor = \App\Models\User::create([
+            'name' => 'Jim',
+            'email' => 'jimwellbuot@gmail.com',
+            'password' => Hash::make('password'),
+            'base_id' => 1
+        ]);
+
+
+        $monitoringMenu = Permission::all()->whereIn(
+            'name', ['menu dashboard', 'menu agent', 'menu booths', 'menu gamedraws', 'menu bets', 'menu collections', 'menu reports']);
+        $monitoringAccess = Permission::all()->whereIn(
+            'name',
+            [
+                'list agents', 'list booths', 'list bets', 'view bets', 'list closenumbers',
+                'create closenumbers', 'store closenumbers', 'list viewresults', 'list collectionrecords'
+            ]);
+
+        $monitorRole = Role::create(['name' => 'monitoring']);
+        $monitorRole->givePermissionTo($monitoringMenu);
+        $monitorRole->givePermissionTo($monitoringAccess);
+        $monitor->assignRole($monitorRole);
     }
 }

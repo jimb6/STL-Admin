@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
+use App\Http\Requests\CloseNumberStoreRequest;
+use App\Http\Requests\CloseNumberUpdateRequest;
 use App\Models\BetGame;
 use App\Models\CloseNumber;
 use Illuminate\Http\Request;
-use App\Http\Requests\CloseNumberStoreRequest;
-use App\Http\Requests\CloseNumberUpdateRequest;
 
 class CloseNumberController extends Controller
 {

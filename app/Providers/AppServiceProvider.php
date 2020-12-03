@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Carbon\Carbon;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -43,12 +44,16 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             }
 
-            foreach ($draws as $draw) {
-                $event->menu->addIn('draws', [
-                    'text' => $draw->draw_type[0].' - '.Carbon::parse($draw->draw_time)->format('g:ia'),
-                    'url' => route('game.bets', $draw->draw_time)
-                ]);
-            }
+//            if(Auth::user()->can(['view bets']))
+//            {
+                foreach ($draws as $draw) {
+                    $event->menu->addIn('draws', [
+                        'text' => $draw->draw_type[0].' - '.Carbon::parse($draw->draw_time)->format('g:ia'),
+                        'url' => route('game.bets', $draw->draw_time)
+                    ]);
+                }
+//            }
+
         }, BuildingMenu::class);
 
 

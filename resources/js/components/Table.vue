@@ -18,8 +18,8 @@
                         </thead>
                         <tbody  v-for="agent in agents.data" :key="agent.id">
                         <tr>
-                            <td>{{ agent.id }}</td>
-                            <td>{{ agent.agent_name }}</td>
+                            <td>AGENT ID HERE</td>
+                            <td>AGENT NAME HERE</td>
                             <td>
                                 <div class="progress progress-xs">
                                     <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
@@ -41,26 +41,13 @@
 
 <script>
 export default {
-    name: "show",
+
+    name: "table",
     data() {
         return {
-            agents: {},
+            
         };
     },
-    created() {
-        this.fetchData();
-    },
-    methods: {
-        fetchData(page = 1) {
-            axios.get('/api/agents?page='+page)
-                .then((response) => {
-                    this.agents = response.data
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-    }
 }
 </script>
 

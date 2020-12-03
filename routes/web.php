@@ -1,5 +1,17 @@
 <?php
 
+
+use App\Http\Controllers\API\v1\AgentController;
+use App\Http\Controllers\API\v1\BaseController;
+use App\Http\Controllers\API\v1\BoothController;
+use App\Http\Controllers\API\v1\CloseNumberController;
+use App\Http\Controllers\API\v1\CollectionRecordController;
+use App\Http\Controllers\API\v1\CollectionStatusController;
+use App\Http\Controllers\API\v1\DrawResultController;
+use App\Http\Controllers\API\v1\HomeController;
+use App\Http\Controllers\API\v1\PermissionController;
+use App\Http\Controllers\API\v1\RoleController;
+use App\Http\Controllers\API\v1\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -15,17 +27,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\BaseController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\AgentController;
-use App\Http\Controllers\BoothController;
-use App\Http\Controllers\DrawResultController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\CloseNumberController;
-use App\Http\Controllers\CollectionRecordController;
-use App\Http\Controllers\CollectionStatusController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +40,10 @@ use App\Http\Controllers\CollectionStatusController;
 |
 */
 
+//Route::get('/{any}', function () {
+//    return redirect()->route('home');
+//})->where('any', '.*');
+
 Route::get('/', function () {
     return redirect()->route('home');
 });
@@ -46,9 +52,9 @@ Auth::routes(['register' => false]);
 
 
 Route::prefix('admin')
-    ->middleware('auth')
+    ->middleware('auth:web')
     ->group(function () {
-        Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+        Route::get('/home', [HomeController::class, 'index'])->name('admin.home');
         Route::resource('roles', RoleController::class);
         Route::resource('permissions', PermissionController::class);
 
@@ -67,7 +73,9 @@ Route::prefix('admin')
         );
         Route::resource('close-numbers', CloseNumberController::class);
 
-        Route::get('/games/{any}', [\App\Http\Controllers\BetGameController::class, 'index'])->name('game.bets');
+        Route::get('/games/{any}', function (){
+            return view('');
+        })->name('game.bets');
     });
 
 

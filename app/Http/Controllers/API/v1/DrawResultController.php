@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
+use App\Http\Requests\DrawResultStoreRequest;
+use App\Http\Requests\DrawResultUpdateRequest;
 use App\Models\BetGame;
 use App\Models\DrawResult;
 use Illuminate\Http\Request;
-use App\Http\Requests\DrawResultStoreRequest;
-use App\Http\Requests\DrawResultUpdateRequest;
 
 class DrawResultController extends Controller
 {

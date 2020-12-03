@@ -17,8 +17,6 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, HasApiTokens;
-    use HasRoles;
-    use HasFactory;
     use Searchable;
     use SoftDeletes;
 
@@ -39,7 +37,8 @@ class User extends Authenticatable
 
     public function adminlte_desc()
     {
-        return Auth::user()->email;
+        $imploder = "";
+        return Auth::user()->email.' - '.strtoupper(implode($this->userRole()->toArray(), ""));
     }
 
     public function adminlte_profile_url()
@@ -47,8 +46,8 @@ class User extends Authenticatable
         return 'profile/username';
     }
 
-    public function messages()
+    public function userRole()
     {
-        return $this->hasMany(Message::class);
+        return Auth::user()->getRoleNames();
     }
 }
