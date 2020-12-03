@@ -123,7 +123,7 @@ export default {
             ],
         };
 
-        data["collections"].reverse().forEach(d => {
+        data["collections"].forEach(d => {
           const date = d.date;
           const {
             total,

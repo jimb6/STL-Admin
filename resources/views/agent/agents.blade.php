@@ -1,10 +1,11 @@
 @extends('adminlte::page')
 
 @section('content')
-    Hello Agents
+    <agent></agent>
+
 @endsection
 @section('scripts')
     <script>
-
+        
     </script>
 @endsection
