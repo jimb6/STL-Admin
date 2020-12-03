@@ -38,7 +38,7 @@ class User extends Authenticatable
     public function adminlte_desc()
     {
         $imploder = "";
-        return Auth::user()->email.' - '.strtoupper(implode($this->userRole()->toArray(), ""));
+        return Auth::user()->email.' - '.strtoupper(implode("", $this->userRole()->toArray()));
     }
 
     public function adminlte_profile_url()
