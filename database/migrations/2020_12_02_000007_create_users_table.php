@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('remember_token', 100)->nullable();
             $table->unsignedBigInteger('base_id');
-
+            $table->string('api_token', 60)->unique()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

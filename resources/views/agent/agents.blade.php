@@ -1,10 +1,5 @@
 @extends('adminlte::page')
-
 @section('content')
-    Hello Agents
-@endsection
-@section('scripts')
-    <script>
-
-    </script>
+{{--    <agent></agent>--}}
+{{ Auth::user() }}
 @endsection

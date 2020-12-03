@@ -48,8 +48,10 @@ Route::get('/', function () {
     return redirect()->route('admin.home');
 });
 
+Route::middleware('auth')->get('/user', function (Request $request) {
+    return Auth::user();
+});
 Auth::routes(['register' => false]);
-
 
 Route::prefix('admin')
     ->middleware('auth:web')

@@ -1,56 +1,68 @@
 <template>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Agents List</h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <table class="table table-bordered" >
-                        <thead>
-                        <tr>
-                            <th style="width: 10px">#</th>
-                            <th>Agent Name</th>
-                            <th>Progress</th>
-                            <th style="width: 40px">Label</th>
-                        </tr>
-                        </thead>
-                        <tbody  v-for="agent in agents.data" :key="agent.id">
-                        <tr>
-                            <td>AGENT ID HERE</td>
-                            <td>AGENT NAME HERE</td>
-                            <td>
-                                <div class="progress progress-xs">
-                                    <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-danger">55%</span></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <pagination :data="agents" v-bind:showDisabled="false" icon="chevron" @pagination-change-page="fetchData"></pagination>
-                </div>
-                <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
+    <div>
+        <div class="cstm-display">
+            <table id="cstm-table" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th v-for="label in labels">{{ label }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="content in contents">
+                        <td v-if="withIcon"><span class="avatar"><i :class="content.iconClass"></i></span></td>
+                        <td v-for="(item, index) in content" v-if="index != 'iconClass'">{{ item }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
         </div>
-        <!-- /.col -->
+
+        <div class="cstm-table-filter flex-between">
+            <div>
+                <input type="text" class="datepicker mr-4" placeholder="Date">
+                <button class="cstm-btn small ml-1">Filter</button>
+            </div>
+            <div>
+                <p><b>4/4</b> agents are on duty</p>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-export default {
+    import dataTables from "../assets/datatables.min.js";
+    import materialize from "../assets/materialize.min.js";
 
-    name: "table",
-    data() {
-        return {
-            
-        };
-    },
-}
+    export default {
+        name: "Table",
+        props: {
+            labels: {
+                type: Array
+            },
+            contents: {
+                type: Array
+            },
+            withIcon: false
+        },
+        methods: {
+
+        },
+        mounted() {
+            materialize.AutoInit();
+            $('#cstm-table').dataTable({
+                "bPaginate": false,
+                "bInfo": false
+            });
+            var oTable = $('#cstm-table').DataTable();
+            $('#cstm-search').keyup(function () {
+                console.log("asd");
+                oTable.search($(this).val()).draw();
+            });
+        },
+    };
 </script>
 
 <style scoped>
+
 
 </style>

@@ -16,7 +16,7 @@
 @section('classes_body'){{ ($auth_type ?? 'login') . '-page' }}@stop
 
 @section('body')
-    <div class="{{ $auth_type ?? 'login' }}-box">
+    <div class="" id="app">
 
         {{-- Logo --}}
         <div class="{{ $auth_type ?? 'login' }}-logo">
@@ -27,29 +27,28 @@
         </div>
 
         {{-- Card Box --}}
-        <div class="card {{ config('adminlte.classes_auth_card', 'card-outline card-primary') }}">
+{{--        <div class="card {{ config('adminlte.classes_auth_card', 'card-outline card-primary') }}">--}}
 
             {{-- Card Header --}}
-            @hasSection('auth_header')
-                <div class="card-header {{ config('adminlte.classes_auth_header', '') }}">
-                    <h3 class="card-title float-none text-center">
-                        @yield('auth_header')
-                    </h3>
-                </div>
-            @endif
+{{--            @hasSection('auth_header')--}}
+{{--                <div class="card-header {{ config('adminlte.classes_auth_header', '') }}">--}}
+{{--                    <h3 class="card-title float-none text-center">--}}
+{{--                        @yield('auth_header')--}}
+{{--                    </h3>--}}
+{{--                </div>--}}
+{{--            @endif--}}
 
             {{-- Card Body --}}
-            <div class="card-body {{ $auth_type ?? 'login' }}-card-body {{ config('adminlte.classes_auth_body', '') }}">
+            <div class="{{ $auth_type ?? 'login' }}-card-body ">
                 @yield('auth_body')
             </div>
 
             {{-- Card Footer --}}
-            @hasSection('auth_footer')
-                <div class="card-footer {{ config('adminlte.classes_auth_footer', '') }}">
-                    @yield('auth_footer')
-                </div>
-            @endif
-
+{{--            @hasSection('auth_footer')--}}
+{{--                <div class="card-footer {{ config('adminlte.classes_auth_footer', '') }}">--}}
+{{--                    @yield('auth_footer')--}}
+{{--                </div>--}}
+{{--            @endif--}}
         </div>
 
     </div>

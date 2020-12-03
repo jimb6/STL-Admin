@@ -14,6 +14,11 @@ import router from "./routes";
 import Dashboard from "./pages/Dashboard";
 import Agent from "./pages/Agent";
 import { Line } from "vue-chartjs";
+// import VueAxios from 'vue-axios';
+import axios from 'axios';
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import Vuelidate from 'vuelidate'
 
 // const files = require.context('./', true, /\.vue$/i)
 Vue.component('pagination', require('laravel-vue-pagination'));
@@ -33,13 +38,12 @@ const options = {
     inverse: false
 }
 
-Vue.use(VueProgressBar, options)
+Vue.use(VueProgressBar, options, axios, Vuelidate)
 //
 const app = new Vue({
     el: '#app',
     router,
     components: {
-        Dashboard, 
-        Agent
+        Dashboard, Agent, Login, Register
     }
 });

@@ -1,7 +1,7 @@
 <template>
 
     <div class="dashboard">
-        <Card v-bind:cards="cards" />
+        <Card v-bind:cards="cards"/>
         <div class="cstm-linechart">
             <div class="flex-between linechart-title">
                 <h3 class="">Collections</h3>
@@ -9,10 +9,10 @@
             </div>
 
             <LineChart
-              :chartData="arrCollections"
-              :options="chartOptions"
-              :chartColors="collectionsChartColors"
-              label=""
+                :chartData="arrCollections"
+                :options="chartOptions"
+                :chartColors="collectionsChartColors"
+                label=""
             />
         </div>
 
@@ -23,11 +23,6 @@
 import Card from "../components/Card";
 import LineChart from "../components/LineChart";
 
-function formatMoney(money){
-    money = (Math.round(money * 100) / 100).toFixed(2);
-    return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
 export default {
     name: "Dashboard",
     components: {
@@ -36,7 +31,7 @@ export default {
     },
     data() {
         return {
-            cards : [
+            cards: [
                 {
                     id: 1,
                     icon: "fas fa-users",
@@ -78,15 +73,18 @@ export default {
                 },
                 tooltips: {
                     callbacks: {
-                       label: function(tooltipItem) {
-                              return tooltipItem.yLabel;
-                       }
+                        label: function (tooltipItem) {
+                            return tooltipItem.yLabel;
+                        }
                     }
                 }
-            }
+            },
+            activeAgents: 0,
         };
     },
+
     async created() {
+        console.log("Created");
         const data = {
             collections: [
                 {date: "Dec 1", total: "300000"},
@@ -122,28 +120,29 @@ export default {
                 {date: "Dec 31", total: "357010"},
             ],
         };
-
         data["collections"].reverse().forEach(d => {
-          const date = d.date;
-          const {
-            total,
-          } = d;
-          this.arrCollections.push({ date, total: total });
-          this.totalCollection += parseFloat(total);
+            const date = d.date;
+            const {
+                total,
+            } = d;
+            this.arrCollections.push({date, total: total});
+            this.totalCollection += parseFloat(total);
         });
-        this.totalCollection = formatMoney(this.totalCollection);
+        this.totalCollection = this.formatMoney(this.totalCollection);
+        this.getActiveAgents();
     },
     methods: {
-        fetchData(page = 1) {
-            axios.get('/api/agents?page='+page)
-                .then((response) => {
-                    this.active = response.data.activeAgents.length
-                    this.agentCount = response.data.agents.length
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+        async getActiveAgents() {
+            // axios.get('/sanctum/csrf-cookie').then(response => {
+                axios.get('/api/user').then(response => {
+                    console.log(response)
+                }).catch(error => console.log(error)); // credentials didn't match
+            // });
         },
+        formatMoney(money) {
+            money = (Math.round(money * 100) / 100).toFixed(2);
+            return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
     }
 };
 </script>
@@ -154,26 +153,31 @@ export default {
     background: unset;
     box-shadow: unset;
 }
+
 .carditem-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 40px;
     padding: 20px 0;
 }
+
 .card-item {
     position: relative;
     padding: 20px;
     background: #fff;
     display: flex;
     border-radius: 5px;
-    box-shadow: 0 0 5px 1px rgba(0,0,0,.15);
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);
 }
-.card-item>div:first-child {
+
+.card-item > div:first-child {
     width: 40%;
 }
-.card-item>div:last-child {
+
+.card-item > div:last-child {
     width: 60%;
 }
+
 .card-item i {
     position: absolute;
     width: 30%;
@@ -186,6 +190,7 @@ export default {
     border-radius: 5px;
     background: linear-gradient(200DEG, rgb(75, 108, 183), rgb(24, 40, 72));
 }
+
 .card-item h3 {
     text-transform: uppercase;
     font-size: 18px;
@@ -194,28 +199,33 @@ export default {
     text-align: right;
     letter-spacing: 1px;
 }
+
 .card-item p {
     font-size: 40px;
     text-align: right;
 }
-.cstm-linechart{
+
+.cstm-linechart {
     padding: 40px 20px;
     background: #fff;
     border-radius: 5px;
-    box-shadow: 0 0 5px 1px rgba(0,0,0,.15);
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);
 }
+
 .linechart-title {
     position: relative;
     padding-bottom: 20px;
     margin-bottom: 30px;
     border-bottom: 1px solid #f3f3f3;
 }
-.linechart-title h3{
+
+.linechart-title h3 {
     text-transform: uppercase;
     font-weight: 300;
     letter-spacing: 1px;
     margin: 0;
 }
+
 .linechart-title p {
     padding: 10px 20px;
     background: #a8dadc;
@@ -223,6 +233,7 @@ export default {
     border-radius: 5px;
     font-weight: 600;
 }
+
 .linechart-title p:before {
     content: "₱";
     margin-right: 5px;

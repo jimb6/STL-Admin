@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Requests\AgentStoreRequest;
 use App\Models\Agent;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -56,15 +57,12 @@ class AgentController extends Controller
         $this->authorize('create agents', Agent::class);
     }
 
-
-
     /**
      * @param Request $request
      * @param Agent $agent
      * @return Application|Factory|View|JsonResponse|Response
      */
-    public
-    function show(Request $request, Agent $agent)
+    public function show(Request $request, Agent $agent)
     {
         $this->authorize('view agents', $agent);
 
@@ -78,8 +76,7 @@ class AgentController extends Controller
      * @param Agent $agent
      * @return Application|Factory|View|JsonResponse|Response
      */
-    public
-    function edit(Request $request, Agent $agent)
+    public function edit(Request $request, Agent $agent)
     {
         $this->authorize('update agents', $agent);
 
@@ -120,6 +117,12 @@ class AgentController extends Controller
             : redirect()->route('agents.index');
 
         return redirect()->route('agents.edit', $agent);
+    }
+
+    public function activeAgents()
+    {
+//        $activeAgents = Agent::all()->where(['session_status' => true, 'update_at' => Carbon::now()]);
+        return new JsonResponse([15], 200);
     }
 
 }

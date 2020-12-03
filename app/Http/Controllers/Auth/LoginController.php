@@ -41,7 +41,10 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        //
+        if($request->isXmlHttpRequest())
+        {
+            return response()->json(null, 200);
+        }
     }
 
     protected function loggedOut(Request $request)
