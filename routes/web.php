@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\Route;
 //})->where('any', '.*');
 
 Route::get('/', function () {
-    return redirect()->route('home');
+    return redirect()->route('admin.home');
 });
 
 Auth::routes(['register' => false]);
