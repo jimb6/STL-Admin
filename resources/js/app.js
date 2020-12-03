@@ -13,6 +13,7 @@ window.Vue = require('vue');
 
 import Dashboard from "./pages/Dashboard";
 import Agent from "./pages/Agent";
+import { Line } from "vue-chartjs";
 
 // const files = require.context('./', true, /\.vue$/i)
 Vue.component('pagination', require('laravel-vue-pagination'));
