@@ -27,10 +27,11 @@ class AgentController extends Controller
         $agents = Agent::search($search)
             ->latest()
             ->paginate();
+        $activeAgents = Agent::where('session_status', 1)->count();
 
         return $request->wantsJson() ?
             new JsonResponse([$agents], 200)
-            : view('agent.agents', compact('agents', 'search'));
+            : view('agent.agents', compact('agents', 'search', 'activeAgents'));
     }
 
     /**

@@ -13,17 +13,19 @@
 	    },
 	    data() {
 	        return {
-	            agent: {}
+	            agentCount: {},
+	            active: 0,
 	        };
 	    },
-	    created() {
+	    mounted() {
         	this.fetchData();
 	    },
 	    methods: {
 	        fetchData(page = 1) {
 	            axios.get('/api/agents?page='+page)
 	                .then((response) => {
-	                    this.agents = response.data
+	                    this.active = response.data.activeAgents.length
+                        this.agentCount = response.data.agents.length
 	                })
 	                .catch(function (error) {
 	                    console.log(error);
@@ -37,5 +39,5 @@
 
 
 <style>
-	
+
 </style>

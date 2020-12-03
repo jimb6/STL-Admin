@@ -7,7 +7,7 @@
                 <h3 class="">Collections</h3>
                 <p>{{ totalCollection }}</p>
             </div>
-            
+
             <LineChart
               :chartData="arrCollections"
               :options="chartOptions"
@@ -15,7 +15,7 @@
               label=""
             />
         </div>
-        
+
     </div>
 </template>
 
@@ -132,6 +132,18 @@ export default {
           this.totalCollection += parseFloat(total);
         });
         this.totalCollection = formatMoney(this.totalCollection);
+    },
+    methods: {
+        fetchData(page = 1) {
+            axios.get('/api/agents?page='+page)
+                .then((response) => {
+                    this.active = response.data.activeAgents.length
+                    this.agentCount = response.data.agents.length
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
     }
 };
 </script>

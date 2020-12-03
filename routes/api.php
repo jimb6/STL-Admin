@@ -1,16 +1,16 @@
 <?php
 
-use App\Http\Controllers\API\v1\API\v1\AgentController;
-use App\Http\Controllers\API\v1\API\v1\AgentLoginController;
-use App\Http\Controllers\API\v1\API\v1\BaseController;
-use App\Http\Controllers\API\v1\API\v1\BoothController;
-use App\Http\Controllers\API\v1\API\v1\CloseNumberController;
-use App\Http\Controllers\API\v1\API\v1\CollectionRecordController;
-use App\Http\Controllers\API\v1\API\v1\CollectionStatusController;
-use App\Http\Controllers\API\v1\API\v1\DrawResultController;
-use App\Http\Controllers\API\v1\API\v1\PermissionController;
-use App\Http\Controllers\API\v1\API\v1\RoleController;
-use App\Http\Controllers\API\v1\API\v1\UserController;
+use App\Http\Controllers\API\v1\AgentController;
+use App\Http\Controllers\API\v1\AgentLoginController;
+use App\Http\Controllers\API\v1\BaseController;
+use App\Http\Controllers\API\v1\BoothController;
+use App\Http\Controllers\API\v1\CloseNumberController;
+use App\Http\Controllers\API\v1\CollectionRecordController;
+use App\Http\Controllers\API\v1\CollectionStatusController;
+use App\Http\Controllers\API\v1\DrawResultController;
+use App\Http\Controllers\API\v1\PermissionController;
+use App\Http\Controllers\API\v1\RoleController;
+use App\Http\Controllers\API\v1\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
