@@ -41,7 +41,8 @@
 
 <script>
 export default {
-    name: "show",
+
+    name: "table",
     data() {
         return {
             agents: {},

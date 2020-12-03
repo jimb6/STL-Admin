@@ -1,22 +1,13 @@
 import VueRouter from "vue-router";
-import GeneralBetComponents from "./components/GeneralBetComponents";
-import Home from "./components/Home";
+import Dashboard from "./pages/Dashboard";
 
 let routes = [
     {
         path: '/',
         name: 'home',
-        components: Home
+        components: Dashboard
     },
-    {
-        path: '/bet-transactions',
-        name: 'bet',
-        components: GeneralBetComponents
-    }
 ];
-
-
-
 
 const router = new VueRouter({
     mode: 'history',

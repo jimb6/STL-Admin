@@ -2,125 +2,65 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3487cc3-9b60-4260-a8ef-ff874de3b72e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/BaseController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/BoothController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/CloseNumberController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/CollectionRecordController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/CollectionStatusController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/Base.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/Bet.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/BetGame.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/CloseNumber.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/CollectionRecord.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/CollectionStatus.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/Scopes/Searchable.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/Winner.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/factories/BetFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/factories/BetGameFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/factories/CollectionRecordFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000006_create_collection_statuses_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000010_create_bets_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000013_create_bet_games_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000014_add_foreigns_to_collection_records_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000015_add_foreigns_to_agents_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000016_add_foreigns_to_booths_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000017_add_foreigns_to_bet_game_draw_period_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000018_add_foreigns_to_close_numbers_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000020_add_foreigns_to_bet_transactions_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000021_add_foreigns_to_bets_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000022_add_foreigns_to_winners_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000023_add_foreigns_to_draw_results_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/BetGameSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/BoothSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/CloseNumberSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/CollectionRecordSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/CollectionStatusSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/PermissionsSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/WinnerSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/HomeController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/UserController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/AgentStoreRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/AgentUpdateRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/BaseStoreRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/BaseUpdateRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/BoothStoreRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/BoothUpdateRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/CloseNumberStoreRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/CloseNumberUpdateRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/CollectionRecordStoreRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/CollectionRecordUpdateRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/CollectionStatusStoreRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/CollectionStatusUpdateRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/DrawResultStoreRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/DrawResultUpdateRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/UserStoreRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Requests/UserUpdateRequest.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BetTransactionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BetTransactionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AgentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AgentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AppSettingsController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/BetTransactionController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ChatsController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ClosedNumbersController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/DrawPeriodController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/DrawResultController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/DrawResultController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/GameCategoryController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/GameConfigurationController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/GameTypeController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentLoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentLoginController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentTransactionController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BetTransactionController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/ForgotPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ForgotPasswordController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AgentController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/ConfirmPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/ConfirmPasswordController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/ForgotPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/ForgotPasswordController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/ResetPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/ResetPasswordController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/VerificationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/VerificationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/BaseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BaseController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/BetGameController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/BoothController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BoothController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CloseNumberController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/CloseNumberController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CollectionRecordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/CollectionRecordController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CollectionStatusController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/CollectionStatusController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/Controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/DrawResultController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/DrawResultController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PermissionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PermissionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RoleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/RoleController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TransactionController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PermissionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/PermissionController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RoleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/RoleController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/API/v1/Transaction.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Agent.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Agent.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/AppSettings.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/BetTransaction.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/BetTransaction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Booth.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Booth.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ClosedNumbers.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/DrawPeriod.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DrawPeriod.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/DrawResult.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DrawResult.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/GameCategory.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/GameConfiguration.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/GameType.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Message.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Permission.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Role.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Transaction.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Livewire/Dashboard.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/AgentFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/AgentFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/AppSettingsFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/BaseFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/BetTransactionFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/BetTransactionFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/BoothFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/BoothFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/ClosedNumbersFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/CloseNumberFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/DrawPeriodFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/DrawPeriodFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/DrawResultFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/DrawResultFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/GameCategoryFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/WinnerFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/GameConfigurationFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/CollectionStatusFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/GameTypeFactory.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/PermissionFactory.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/RoleFactory.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/TransactionFactory.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/UserFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/UserFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000007_create_users_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_100000_create_password_resets_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_100000_create_password_resets_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000000_create_collection_records_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_23_071853_create_agents_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000001_create_agents_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_25_111048_create_game_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000005_create_close_numbers_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_25_111355_create_draw_periods_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000004_create_draw_periods_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_25_111613_create_app_settings_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000019_add_foreigns_to_users_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_26_100929_create_transactions_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000011_create_winners_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_26_100940_create_bet_transactions_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000009_create_bet_transactions_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_26_113801_create_closed_numbers_table.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_27_101216_create_booth_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000002_create_booths_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_27_155121_create_draw_results_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000012_create_draw_results_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_27_165237_create_game_configurations_table.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_27_170124_create_game_types_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000008_create_bases_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_27_172709_game_categories_in_game_period.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_28_105607_create_permission_tables.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_01_064209_create_permission_tables.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_28_161352_custom_game_categories_field.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000003_create_bet_game_draw_period_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/AppSettingsSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/BetSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/BetTransactionSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/BetTransactionSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/ClosedNumbersSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/UserSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/DrawPeriodSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DrawPeriodSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/DrawResultSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DrawResultSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/GameCategorySeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/AgentSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/GameConfigurationSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/BaseSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/GameTypeSeeder.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/PermissionSeeder.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/PermissionsTableSeeder.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/RefreshPermissionsSeeder.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/RoleHasPermissionsTableSeeder.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/RoleSeeder.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/TransactionSeeder.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Dashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/adminlte.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/adminlte.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/PermissionsSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/PermissionsSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/bootstrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/bootstrap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/Table.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Table.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/pages/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/Dashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/agent/agents.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/agent/agents.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/bets/categorize.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/bets/categorize.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/livewire/dashboard.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/vendor/adminlte/page.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/vendor/adminlte/page.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -275,7 +215,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/database" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/Http/Controllers/API/v1" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -286,18 +226,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\app\Http\Controllers\API\v1" />
+      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\app\Http" />
+      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\app\Http\Controllers" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\app\Models" />
-      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\app\Http\Controllers" />
-      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin" />
-      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database\seeders" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\app\Http\Controllers\API\v1" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\views\agent" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\views\dashboard" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database\factories" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database\BoothFactory" />
-      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\views" />
     </key>
   </component>
   <component name="RunManager">
@@ -330,6 +270,7 @@
       <workItem from="1606695928554" duration="35662000" />
       <workItem from="1606782168463" duration="20213000" />
       <workItem from="1606870700954" duration="11340000" />
+      <workItem from="1606953800024" duration="7141000" />
     </task>
     <servers />
   </component>
@@ -353,10 +294,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606791113957" />
-    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1606878569863">
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1606891809640">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606878569863" />
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606891809640" />
     <state x="736" y="432" key="ComposerInitDialogKey" timestamp="1606110007718">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -377,13 +318,24 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1606786957221" />
-    <state x="616" y="240" key="run.anything.popup" timestamp="1606782902438">
+    <state x="616" y="240" key="run.anything.popup" timestamp="1606899776728">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606782902438" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1606874199589">
+    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606899776728" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1606897721682">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606874199589" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606897721682" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/resources/js/pages/Dashboard.vue</url>
+          <line>8</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -232,41 +232,38 @@ return [
 
 
     'menu' => [
-//        [
-//            'text' => 'search',
-//            'search' => true,
-//            'topnav' => true,
-//        ],
-//        [
-//            'text' => 'blog',
-//            'url'  => 'admin/blog',
-//            'can'  => 'manage-blog',
-//        ],
         [
             'text' => 'Dashboard',
             'url' => '/admin/home',
             'icon' => 'fas fa-tachometer-alt',
             'label_color' => 'success',
+            'can' => 'menu dashboard',
             'classes' => '',
         ],
-        ['header' => 'App Management'],
+        [
+            'header' => 'App Management',
+        ],
         [
             'text' => 'Agents',
             // 'url'         => '/#',
             'icon' => 'fas fa-users',
             'label_color' => 'success',
+            'can' => 'menu agent',
             'classes' => '',
             'submenu' => [
                 [
                     'text' => 'All Agents',
+                    'can' => 'list agents',
                     'url' => '/admin/agents',
                 ],
                 [
                     'text' => 'Active Agents',
+                    'can' => 'list agents',
                     'url' => '#',
                 ],
                 [
                     'text' => 'Add New',
+                    'can' => 'create agents',
                     'url' => '/admin/add-new-agent',
                 ],
             ]
@@ -279,13 +276,16 @@ return [
             'icon' => 'fas fa-store',
             'label_color' => 'success',
             'classes' => '',
+            'can' => 'menu booths',
             'submenu' => [
                 [
                     'text' => 'All Booths',
+                    'can' => 'view booths',
                     'url' => '/admin/booths',
                 ],
                 [
                     'text' => 'Add New',
+                    'can' => 'view booths',
                     'url' => '/admin/add-new-booth',
                 ],
             ]
@@ -296,13 +296,15 @@ return [
             // 'url'         => '/#',
             'icon' => 'fas fa-dice',
             'label_color' => 'success',
-            'classes' => '',
+            'classes' => 'menu gamedraws',
+            'can' => 'view drawperiods',
             'submenu' => [
             ]
         ],
         [
             'text' => 'Bets',
             'key' => 'bets',
+            'can' => 'menu bets',
             // 'url'         => '/#',
             'icon' => 'fas fa-coins',
             'label_color' => 'success',
@@ -316,6 +318,7 @@ return [
             // 'url'         => '/#',
             'icon' => 'fas fa-briefcase',
             'label_color' => 'success',
+            'can' => 'menu collections',
             'classes' => 'xs',
             'submenu' => [
                 [
@@ -332,12 +335,16 @@ return [
                 ],
             ]
         ],
-        ['header' => 'Reporting'],
+        [
+            'header' => 'Reporting',
+            'can' => 'menu reports'
+        ],
         [
             'text' => 'Create Report',
             // 'url'         => '/#',
             'icon' => 'fas fa-print',
             'label_color' => 'success',
+            'can' => 'menu reports',
             'classes' => 'xs',
             'submenu' => [
                 [
@@ -357,6 +364,7 @@ return [
             // 'url'         => '/#',
             'icon' => 'fas fa-user-lock',
             'label_color' => 'success',
+//            'can' => 'menu settings',
             'classes' => '',
             'submenu' => [
                 [
@@ -374,6 +382,7 @@ return [
             // 'url'         => '/#',
             'icon' => 'fas fa-mobile-alt',
             'label_color' => 'success',
+            'can' => 'menu mobilesettings',
             'classes' => '',
             'submenu' => [
                 [
@@ -391,6 +400,7 @@ return [
             // 'url'         => '/#',
             'icon' => 'fas fa-cogs',
             'label_color' => 'success',
+            'can' => 'menu settings',
             'classes' => '',
             'submenu' => [
                 [

@@ -1,65 +1,226 @@
 <?php
 
-namespace App\Http\Controllers\API\v1;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+<<<<<<< HEAD
+use App\Http\Requests\AgentStoreRequest;
+use App\Http\Requests\AgentUpdateRequest;
 use App\Models\Agent;
-use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\Sanctum;
+use Illuminate\Http\Response;
+=======
+use App\Models\Agent;
+use Illuminate\Http\Request;
+use App\Http\Requests\AgentStoreRequest;
+use App\Http\Requests\AgentUpdateRequest;
+>>>>>>> develop
 
 class AgentController extends Controller
 {
     /**
-     * AgentController constructor.
+<<<<<<< HEAD
+     * @param Request $request
+     * @return Application|Factory|View|JsonResponse|Response
      */
-    public function __construct()
+    public function index(Request $request)
     {
-//        $this->middleware('auth:sanctum');
+        $this->authorize('view agents', Agent::class);
+        $search = $request->get('search', '');
+        $agents = Agent::search($search)
+            ->latest()
+            ->paginate();
+
+        return $request->wantsJson()?
+            new JsonResponse([$agents], 200)
+            : view('agent.agents', compact('agents', 'search'));
     }
 
-
-    public function index()
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|JsonResponse|Response
+     */
+    public function create(Request $request)
     {
-        return \Auth::user();
+        $this->authorize('create agents', Agent::class);
+
+        return $request->wantsJson()?
+            new JsonResponse([],200)
+            :  view('app.agents.create');
     }
 
-    public function create()
+    /**
+     * @param \App\Http\Requests\AgentStoreRequest $request
+     * @return JsonResponse|RedirectResponse|Response
+     */
+    public function store(AgentStoreRequest $request)
     {
-        //
+        $this->authorize('create agents', Agent::class);
+
+=======
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $this->authorize('view-any', Agent::class);
+
+        $search = $request->get('search', '');
+
+        $agents = Agent::search($search)
+            ->latest()
+            ->paginate();
+
+        return view('app.agents.index', compact('agents', 'search'));
     }
 
-    public function store(Request $request)
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request)
     {
-        //
-        return $request->wantsJson()
-            ? new JsonResponse([], 201)
-            : redirect()->get(['view.agents']);
+        $this->authorize('create', Agent::class);
+
+        return view('app.agents.create');
     }
 
-    public function show($id)
+    /**
+     * @param \App\Http\Requests\AgentStoreRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(AgentStoreRequest $request)
     {
-        //
+        $this->authorize('create', Agent::class);
+
+>>>>>>> develop
+        $validated = $request->validated();
+
+        $agent = Agent::create($validated);
+
+<<<<<<< HEAD
+        return $request->wantsJson()?
+            new JsonResponse($agent,201)
+            : redirect()->route('agents.edit', $agent);
     }
 
-    public function edit($id)
+    /**
+     * @param Request $request
+     * @param Agent $agent
+     * @return Application|Factory|View|JsonResponse|Response
+     */
+    public function show(Request $request, Agent $agent)
     {
-        //
+        $this->authorize('view agents', $agent);
+
+        return $request->wantsJson()?
+            new JsonResponse([],302)
+            : view('app.agents.show', compact('agent'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * @param Request $request
+     * @param Agent $agent
+     * @return Application|Factory|View|JsonResponse|Response
+     */
+    public function edit(Request $request, Agent $agent)
     {
-        //
+        $this->authorize('update agents', $agent);
+
+        return $request->wantsJson()?
+            new JsonResponse([],200)
+            : view('app.agents.edit', compact('agent'));
+=======
+        return redirect()->route('agents.edit', $agent);
     }
 
-    public function destroy($id)
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Agent $agent
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, Agent $agent)
     {
-        //
+        $this->authorize('view', $agent);
+
+        return view('app.agents.show', compact('agent'));
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Agent $agent
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Request $request, Agent $agent)
+    {
+        $this->authorize('update', $agent);
 
+        return view('app.agents.edit', compact('agent'));
+>>>>>>> develop
+    }
 
+    /**
+     * @param \App\Http\Requests\AgentUpdateRequest $request
+<<<<<<< HEAD
+     * @param Agent $agent
+     * @return JsonResponse|RedirectResponse|Response
+     */
+    public function update(AgentUpdateRequest $request, Agent $agent)
+    {
+        $this->authorize('update agents', $agent);
+=======
+     * @param \App\Models\Agent $agent
+     * @return \Illuminate\Http\Response
+     */
+    public function update(AgentUpdateRequest $request, Agent $agent)
+    {
+        $this->authorize('update', $agent);
+>>>>>>> develop
 
+        $validated = $request->validated();
 
+        $agent->update($validated);
+
+<<<<<<< HEAD
+        return $request->wantsJson()?
+            new JsonResponse([],202)
+            : redirect()->route('agents.edit', $agent);
+    }
+
+    /**
+     * @param Request $request
+     * @param Agent $agent
+     * @return JsonResponse|RedirectResponse|Response
+     */
+    public function destroy(Request $request, Agent $agent)
+    {
+        $this->authorize('delete agents', $agent);
+
+        $agent->delete();
+
+        return $request->wantsJson()?
+            new JsonResponse($agent,200)
+            : redirect()->route('agents.index');
+=======
+        return redirect()->route('agents.edit', $agent);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Agent $agent
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, Agent $agent)
+    {
+        $this->authorize('delete', $agent);
+
+        $agent->delete();
+
+        return redirect()->route('agents.index');
+>>>>>>> develop
+    }
 }

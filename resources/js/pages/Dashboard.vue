@@ -2,17 +2,16 @@
 
     <div class="dashboard">
         <h1>Dashboard</h1>
-        <Card />
+        <Table></Table>
     </div>
-
 </template>
 
 <script>
-import Card from "../components/Card";
+import Table from "../components/Table";
 export default {
     name: "Dashboard",
     components: {
-        Card,
+        Table,
     },
     data() {
         return {
@@ -21,13 +20,13 @@ export default {
                     id: 1,
                     title: "Agents",
                     active: 25,
-                    overall: 100 
+                    overall: 100
                 },
                 {
                     id: 2,
                     title: "Booths",
                     active: 25,
-                    overall: 100 
+                    overall: 100
                 },
             ]
         };

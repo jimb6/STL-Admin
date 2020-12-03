@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
-use App\Models\Base;
-use Illuminate\Http\Request;
 use App\Http\Requests\BaseStoreRequest;
 use App\Http\Requests\BaseUpdateRequest;
+use App\Models\Base;
+use Illuminate\Http\Request;
 
 class BaseController extends Controller
 {
