@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Base;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\API\v1\API\v1\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Http\Controllers\API\v1\Controller;
+use App\Models\Base;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {

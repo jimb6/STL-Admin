@@ -12,10 +12,12 @@ window.$ = window.jQuery = $;
 window.Vue = require('vue');
 import router from "./routes";
 import Dashboard from "./pages/Dashboard";
+import Agent from "./pages/Agent";
+import { Line } from "vue-chartjs";
 
 // const files = require.context('./', true, /\.vue$/i)
-// Vue.component('pagination', require('laravel-vue-pagination'));
-Vue.component('pagination', require('laravel-vue-semantic-ui-pagination'));
+Vue.component('pagination', require('laravel-vue-pagination'));
+// Vue.component('pagination', require('laravel-vue-semantic-ui-pagination'));
 
 const options = {
     color: '#ffd609',
@@ -37,6 +39,7 @@ const app = new Vue({
     el: '#app',
     router,
     components: {
-        Dashboard
+        Dashboard, 
+        Agent
     }
 });

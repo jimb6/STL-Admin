@@ -1,11 +1,9 @@
 <?php
 
-<<<<<<< HEAD
-namespace App\Http\Controllers\API\v1;
-=======
-namespace App\Http\Controllers;
->>>>>>> develop
 
+namespace App\Http\Controllers\API\v1;
+
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,14 +21,10 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return Renderable
      */
     public function index()
     {
-<<<<<<< HEAD
         return view('dashboard.home');
-=======
-        return view('home');
->>>>>>> develop
     }
 }

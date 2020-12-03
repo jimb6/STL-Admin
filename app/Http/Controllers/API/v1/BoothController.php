@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Http\Requests\BoothStoreRequest;
+use App\Http\Requests\BoothUpdateRequest;
 use App\Models\Base;
 use App\Models\Booth;
 use Illuminate\Http\Request;
-use App\Http\Requests\BoothStoreRequest;
-use App\Http\Requests\BoothUpdateRequest;
 
 class BoothController extends Controller
 {

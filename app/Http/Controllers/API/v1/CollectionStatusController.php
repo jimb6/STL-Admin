@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use Illuminate\Http\Request;
-use App\Models\CollectionStatus;
 use App\Http\Requests\CollectionStatusStoreRequest;
 use App\Http\Requests\CollectionStatusUpdateRequest;
+use App\Models\CollectionStatus;
+use Illuminate\Http\Request;
 
 class CollectionStatusController extends Controller
 {
