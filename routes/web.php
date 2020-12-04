@@ -49,7 +49,7 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->get('/user', function (Request $request) {
-    return Auth::user();
+    return response(Auth::user());
 });
 Auth::routes(['register' => false]);
 

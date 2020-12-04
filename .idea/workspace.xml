@@ -2,29 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3487cc3-9b60-4260-a8ef-ff874de3b72e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/js/pages/auth/Login.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/pages/auth/Register.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/pages/auth/Verify.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentLoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentLoginController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Providers/RouteServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/RouteServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/cors.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/cors.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_12_02_000007_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000007_create_users_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/bootstrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/bootstrap.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/pages/Agent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/Agent.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/pages/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/Dashboard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/agent/agents.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/agent/agents.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/vendor/adminlte/auth/auth-page.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/vendor/adminlte/auth/auth-page.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/vendor/adminlte/auth/login.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/vendor/adminlte/auth/login.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/pages/auth/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/auth/Login.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
@@ -190,19 +177,19 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\js\pages\auth" />
-      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\app\Http\Controllers\API\v1" />
-      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\views\agent" />
-      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\views\dashboard" />
-      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database\factories" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\app\Http\Controllers\API\v1" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\app\Http" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\app\Http\Controllers" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database" />
       <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\app\Models" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\js\pages\auth" />
+      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\app\Http\Controllers\API\v1" />
+      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\views\agent" />
+      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\views\dashboard" />
+      <recent name="C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\database\factories" />
     </key>
   </component>
   <component name="RunManager">
@@ -259,10 +246,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606791113957" />
-    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1606891809640">
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1607059828788">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606891809640" />
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607059828788" />
     <state x="736" y="432" key="ComposerInitDialogKey" timestamp="1606110007718">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

@@ -24,10 +24,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 //Auth::routes();
-Route::middleware('guest')->get('/user', function (Request $request) {
+Route::middleware('auth')->get('/user', function (Request $request) {
     return Auth::user();
 });
-
+Route::middleware('auth')->get('/agents', [AgentController::class, 'index']);
 
 Route::group([
     'prefix' => '/v1/'

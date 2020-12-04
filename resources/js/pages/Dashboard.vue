@@ -134,7 +134,7 @@ export default {
     methods: {
         async getActiveAgents() {
             // axios.get('/sanctum/csrf-cookie').then(response => {
-                axios.get('/api/user').then(response => {
+                axios.get('/user').then(response => {
                     console.log(response)
                 }).catch(error => console.log(error)); // credentials didn't match
             // });
