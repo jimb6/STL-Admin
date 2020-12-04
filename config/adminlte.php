@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'STL Administrator',
+    'title' => 'STL Application',
     'title_prefix' => 'DAVOR | ',
     'title_postfix' => '',
 
@@ -45,7 +45,7 @@ return [
     |
     */
 
-    'logo' => '<b>STL</b> ADMIN',
+    'logo' => '<b>STL</b> APPLICATION',
     'logo_img' => 'vendor/adminlte/dist/img/logo_v2.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -188,7 +188,7 @@ return [
 
     'use_route_url' => false,
 
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'admin/home',
 
     'logout_url' => 'logout',
 
@@ -238,6 +238,7 @@ return [
             'icon' => 'fas fa-tachometer-alt',
             'label_color' => 'success',
             'can' => 'menu dashboard',
+            'key' => 'dashboard',
             'classes' => '',
         ],
         [
@@ -319,19 +320,22 @@ return [
             'icon' => 'fas fa-briefcase',
             'label_color' => 'success',
             'can' => 'menu collections',
-            'classes' => 'xs',
+            'classes' => 'xs text-wrap',
             'submenu' => [
                 [
                     'text' => 'Summary Collections',
                     'url' => '/#',
+                    'classes' => 'xs text-wrap',
                 ],
                 [
                     'text' => 'Daily Collections',
                     'url' => '/#',
+                    'classes' => 'xs text-wrap',
                 ],
                 [
                     'text' => 'Receive/Send Collections',
                     'url' => '/#',
+                    'classes' => 'xs text-wrap',
                 ],
             ]
         ],

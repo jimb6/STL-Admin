@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->get('/user', function (Request $request) {
     return Auth::user();
 });
-Route::middleware('auth')->get('/agents', [AgentController::class, 'index']);
+
 
 Route::group([
     'prefix' => '/v1/'

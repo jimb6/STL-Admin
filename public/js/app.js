@@ -2279,12 +2279,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         id: 1,
         icon: "fas fa-users",
         title: "Active Agents",
-        description: "1000"
+        description: ""
       }, {
         id: 2,
         icon: "fas fa-store",
         title: "Active Booths",
-        description: "450"
+        description: ""
       }, {
         id: 3,
         icon: "fas fa-trophy",
@@ -2318,7 +2318,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }
       },
-      activeAgents: 0
+      activeAgents: 0,
+      activeBooths: 0
     };
   },
   created: function created() {
@@ -2439,10 +2440,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.totalCollection += parseFloat(total);
               });
               _this.totalCollection = _this.formatMoney(_this.totalCollection);
+              _context.next = 6;
+              return _this.getActiveAgents();
 
-              _this.getActiveAgents();
+            case 6:
+              _context.next = 8;
+              return _this.getActiveBooths();
 
-            case 5:
+            case 8:
+              _context.next = 10;
+              return _this.getDailyTotalCollections();
+
+            case 10:
             case "end":
               return _context.stop();
           }
@@ -2452,25 +2461,80 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     getActiveAgents: function getActiveAgents() {
+      var _this2 = this;
+
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                // axios.get('/sanctum/csrf-cookie').then(response => {
-                axios.get('/user').then(function (response) {
-                  console.log(response);
-                })["catch"](function (error) {
-                  return console.log(error);
-                }); // credentials didn't match
-                // });
+                _context2.next = 2;
+                return axios.get('/agents/count ')["catch"](function (error) {
+                  _this2.cards[0].description = "No Data";
+                });
 
-              case 1:
+              case 2:
+                response = _context2.sent;
+                _this2.cards[0].description = response.data['active'].toString() + '<span class="card-item-description">/' + response.data['total'].toString() + '</span>';
+
+              case 4:
               case "end":
                 return _context2.stop();
             }
           }
         }, _callee2);
+      }))();
+    },
+    getActiveBooths: function getActiveBooths() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios.get('/booths/count')["catch"](function (error) {
+                  return _this3.cards[1].description = "No Data";
+                });
+
+              case 2:
+                response = _context3.sent;
+                _this3.cards[1].description = response.data['active'].toString() + '<span class="card-item-description">/' + response.data['total'].toString() + '</span>';
+                console.log(response.data);
+
+              case 5:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    getDailyTotalCollections: function getDailyTotalCollections() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return axios.get('/collections/daily-sum')["catch"](function (error) {
+                  return console.log(error);
+                });
+
+              case 2:
+                response = _context4.sent;
+                console.log(response);
+
+              case 4:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
       }))();
     },
     formatMoney: function formatMoney(money) {
@@ -19270,7 +19334,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.card {\r\n    background: unset;\r\n    box-shadow: unset;\n}\n.carditem-container {\r\n    display: grid;\r\n    grid-template-columns: 1fr 1fr 1fr 1fr;\r\n    grid-gap: 40px;\r\n    padding: 20px 0;\n}\n.card-item {\r\n    position: relative;\r\n    padding: 20px;\r\n    background: #fff;\r\n    display: flex;\r\n    border-radius: 5px;\r\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.card-item > div:first-child {\r\n    width: 40%;\n}\n.card-item > div:last-child {\r\n    width: 60%;\n}\n.card-item i {\r\n    position: absolute;\r\n    width: 30%;\r\n    height: 100px;\r\n    top: -20px;\r\n    text-align: center;\r\n    line-height: 100px;\r\n    font-size: 35px;\r\n    color: #fff;\r\n    border-radius: 5px;\r\n    background: linear-gradient(200DEG, rgb(75, 108, 183), rgb(24, 40, 72));\n}\n.card-item h3 {\r\n    text-transform: uppercase;\r\n    font-size: 18px;\r\n    font-weight: 300;\r\n    letter-spacing: 1px;\r\n    text-align: right;\r\n    letter-spacing: 1px;\n}\n.card-item p {\r\n    font-size: 40px;\r\n    text-align: right;\n}\n.cstm-linechart {\r\n    padding: 40px 20px;\r\n    background: #fff;\r\n    border-radius: 5px;\r\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.linechart-title {\r\n    position: relative;\r\n    padding-bottom: 20px;\r\n    margin-bottom: 30px;\r\n    border-bottom: 1px solid #f3f3f3;\n}\n.linechart-title h3 {\r\n    text-transform: uppercase;\r\n    font-weight: 300;\r\n    letter-spacing: 1px;\r\n    margin: 0;\n}\n.linechart-title p {\r\n    padding: 10px 20px;\r\n    background: #a8dadc;\r\n    color: #fff;\r\n    border-radius: 5px;\r\n    font-weight: 600;\n}\n.linechart-title p:before {\r\n    content: \"\\20B1\";\r\n    margin-right: 5px;\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n.card {\n    background: unset;\n    box-shadow: unset;\n}\n.carditem-container {\n    display: grid;\n    grid-template-columns: 1fr 1fr 1fr 1fr;\n    grid-gap: 40px;\n    padding: 20px 0;\n}\n.card-item {\n    position: relative;\n    padding: 20px;\n    background: #fff;\n    display: flex;\n    border-radius: 5px;\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.card-item > div:first-child {\n    width: 40%;\n}\n.card-item > div:last-child {\n    width: 60%;\n}\n.card-item i {\n    position: absolute;\n    width: 30%;\n    height: 100px;\n    top: -20px;\n    text-align: center;\n    line-height: 100px;\n    font-size: 35px;\n    color: #fff;\n    border-radius: 5px;\n    background: linear-gradient(200DEG, rgb(75, 108, 183), rgb(24, 40, 72));\n}\n.card-item h3 {\n    text-transform: uppercase;\n    font-size: 18px;\n    font-weight: 300;\n    letter-spacing: 1px;\n    text-align: right;\n    letter-spacing: 1px;\n}\n.card-item p {\n    font-size: 40px;\n    text-align: right;\n}\n.cstm-linechart {\n    padding: 40px 20px;\n    background: #fff;\n    border-radius: 5px;\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.linechart-title {\n    position: relative;\n    padding-bottom: 20px;\n    margin-bottom: 30px;\n    border-bottom: 1px solid #f3f3f3;\n}\n.linechart-title h3 {\n    text-transform: uppercase;\n    font-weight: 300;\n    letter-spacing: 1px;\n    margin: 0;\n}\n.linechart-title p {\n    padding: 10px 20px;\n    background: #a8dadc;\n    color: #fff;\n    border-radius: 5px;\n    font-weight: 600;\n}\n.linechart-title p:before {\n    content: \"\\20B1\";\n    margin-right: 5px;\n}\n.card-item-description {\n    font-size: 14px;\n    color: #555555;\n}\n\n", ""]);
 
 // exports
 
@@ -82831,7 +82895,7 @@ var render = function() {
         _c("div", [
           _c("h3", [_vm._v(_vm._s(carditem.title))]),
           _vm._v(" "),
-          _c("p", [_vm._v(_vm._s(carditem.description))])
+          _c("p", { domProps: { innerHTML: _vm._s(carditem.description) } })
         ])
       ])
     }),

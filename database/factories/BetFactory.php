@@ -28,7 +28,7 @@ class BetFactory extends Factory
             'combination' => $this->faker->text(255),
             'amount' => $this->faker->randomNumber(2),
             'bet_game_id' => \App\Models\BetGame::factory(),
-            'bet_transaction_id' => \App\Models\BetTransaction::factory(),
+            'bet_transaction_id' => \App\Models\BetTransaction::all()->random()->id,
         ];
     }
 }

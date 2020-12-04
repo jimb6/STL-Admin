@@ -36,13 +36,13 @@ export default {
                     id: 1,
                     icon: "fas fa-users",
                     title: "Active Agents",
-                    description: "1000",
+                    description: "",
                 },
                 {
                     id: 2,
                     icon: "fas fa-store",
                     title: "Active Booths",
-                    description: "450",
+                    description: "",
                 },
                 {
                     id: 3,
@@ -80,6 +80,7 @@ export default {
                 }
             },
             activeAgents: 0,
+            activeBooths: 0,
         };
     },
 
@@ -129,16 +130,36 @@ export default {
             this.totalCollection += parseFloat(total);
         });
         this.totalCollection = this.formatMoney(this.totalCollection);
-        this.getActiveAgents();
+        await this.getActiveAgents();
+        await this.getActiveBooths();
+        await this.getDailyTotalCollections();
     },
     methods: {
         async getActiveAgents() {
             // axios.get('/sanctum/csrf-cookie').then(response => {
-                axios.get('/user').then(response => {
-                    console.log(response)
-                }).catch(error => console.log(error)); // credentials didn't match
-            // });
+            const response = await axios.get('/agents/count ').catch(error => {
+                this.cards[0].description = "No Data"
+            })
+            this.cards[0].description = response.data['active'].toString() +
+                '<span class="card-item-description">/' +
+                response.data['total'].toString() +
+                '</span>'
         },
+
+        async getActiveBooths() {
+            const response = await axios.get('/booths/count').catch(error => this.cards[1].description = "No Data");
+            this.cards[1].description = response.data['active'].toString() +
+                '<span class="card-item-description">/' +
+                response.data['total'].toString() +
+                '</span>'
+            console.log(response.data)
+        },
+
+        async getDailyTotalCollections() {
+            const response = await axios.get('/collections/daily-sum').catch(error => console.log(error));
+            console.log(response)
+        },
+
         formatMoney(money) {
             money = (Math.round(money * 100) / 100).toFixed(2);
             return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -237,6 +258,11 @@ export default {
 .linechart-title p:before {
     content: "₱";
     margin-right: 5px;
+}
+
+.card-item-description {
+    font-size: 14px;
+    color: #555555;
 }
 
 </style>

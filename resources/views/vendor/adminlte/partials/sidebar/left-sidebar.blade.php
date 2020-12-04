@@ -5,6 +5,7 @@
         @include('adminlte::partials.common.brand-logo-xl')
     @else
         @include('adminlte::partials.common.brand-logo-xs')
+
     @endif
 
     {{-- Sidebar menu --}}

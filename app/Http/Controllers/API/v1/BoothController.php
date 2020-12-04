@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Requests\BoothStoreRequest;
 use App\Http\Requests\BoothUpdateRequest;
+use App\Models\Agent;
 use App\Models\Base;
 use App\Models\Booth;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class BoothController extends Controller
@@ -109,5 +111,15 @@ class BoothController extends Controller
         $booth->delete();
 
         return redirect()->route('booths.index');
+    }
+
+
+    public function getActiveBooths()
+    {
+        $allBooths = Booth::all()->where('base_id', '=', \Auth::user()->base_id);
+        $activeBooths = $allBooths->
+        where('status', '=', "1")->count();
+
+        return new JsonResponse(['total' => count($allBooths), 'active' => $activeBooths], 200);
     }
 }

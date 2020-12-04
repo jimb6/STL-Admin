@@ -2,6 +2,7 @@
     {{ config('adminlte.classes_topnav_nav', 'navbar-expand') }}
     {{ config('adminlte.classes_topnav', 'navbar-white navbar-light') }}">
 
+
     {{-- Navbar left links --}}
     <ul class="navbar-nav">
         {{-- Left sidebar toggler link --}}
@@ -13,6 +14,12 @@
         {{-- Custom left links --}}
         @yield('content_top_nav_left')
     </ul>
+
+
+    @php
+      $userBase = Auth::user()->base;
+    @endphp
+    <h3 class="text-uppercase m-0 py-2 text-center" style="width: 100%; letter-spacing: 1px; font-weight: 200;">{{$userBase['base_name']}} Base</h3>
 
     {{-- Navbar right links --}}
     <ul class="navbar-nav ml-auto">

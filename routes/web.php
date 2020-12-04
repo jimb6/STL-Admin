@@ -12,6 +12,7 @@ use App\Http\Controllers\API\v1\HomeController;
 use App\Http\Controllers\API\v1\PermissionController;
 use App\Http\Controllers\API\v1\RoleController;
 use App\Http\Controllers\API\v1\UserController;
+use App\Http\Controllers\BetCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -48,13 +49,18 @@ Route::get('/', function () {
     return redirect()->route('admin.home');
 });
 
-Route::middleware('auth')->get('/user', function (Request $request) {
-    return response(Auth::user());
+
+Route::middleware('guest')->group(function (){
+    Route::get('/agents/count', [AgentController::class, 'activeAgents'])->name('agents.active.count');
+    Route::get('/booths/count', [BoothController::class, 'getActiveBooths'])->name('booths.active.count');
+    Route::get('/collections/daily-sum', [BetCollection::class, 'baseCollection'])->name('bet.collection.daily.sum');
 });
+
+
 Auth::routes(['register' => false]);
 
 Route::prefix('admin')
-    ->middleware('auth:web')
+    ->middleware('auth')
     ->group(function () {
         Route::get('/home', [HomeController::class, 'index'])->name('admin.home');
         Route::resource('roles', RoleController::class);
@@ -78,6 +84,9 @@ Route::prefix('admin')
         Route::get('/games/{any}', function (){
             return view('');
         })->name('game.bets');
+
+//        Customize Request
+
     });
 
 

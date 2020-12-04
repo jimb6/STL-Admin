@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Requests\AgentStoreRequest;
 use App\Models\Agent;
-use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -121,8 +120,10 @@ class AgentController extends Controller
 
     public function activeAgents()
     {
-//        $activeAgents = Agent::all()->where(['session_status' => true, 'update_at' => Carbon::now()]);
-        return new JsonResponse([15], 200);
+        $agents = Agent::all()->where('base_id', '=', \Auth::user()->base_id);
+        $activeAgents = $agents->where('session_status', '=', true)->count();
+
+        return new JsonResponse(['total' => count($agents), 'active' => $activeAgents], 200);
     }
 
 }

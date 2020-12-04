@@ -47,4 +47,9 @@ class User extends Authenticatable
     {
         return Auth::user()->getRoleNames();
     }
+
+    public function base()
+    {
+        return $this->belongsTo('App\Models\Base');
+    }
 }
