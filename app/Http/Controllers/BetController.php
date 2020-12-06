@@ -3,22 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\API\v1\Controller;
-use App\Models\Base;
-use App\Models\Bet;
-use App\Models\BetGame;
-use App\Models\BetTransaction;
-use App\Models\DrawPeriod;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
-class BetCollection extends Controller
+class BetController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,8 +19,6 @@ class BetCollection extends Controller
     public function index()
     {
         //
-
-
     }
 
     /**
@@ -46,12 +35,11 @@ class BetCollection extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return Application|Factory|View|Response
+     * @return Response
      */
     public function store(Request $request)
     {
         //
-
     }
 
     /**
@@ -62,7 +50,10 @@ class BetCollection extends Controller
      */
     public function show($id)
     {
-
+        //
+        $betType = $id;
+//        $betType = str_replace('-', '',$betType);
+        return view('bets.categorize', compact('betType'));
     }
 
     /**
@@ -97,32 +88,5 @@ class BetCollection extends Controller
     public function destroy($id)
     {
         //
-    }
-
-
-    public function baseCollection()
-    {
-        try {
-//          GET 10:30 2D Bets
-            $data = DB::table('bets_today')
-                ->where('bet_game_id', '=', 2)
-                ->where('draw_period_id', '=', 1)
-                ->sum('amount');
-        }catch (\Exception $ex)
-        {
-            DB::select('call setBetsToday');
-            $data = DB::table('bets_today')->where('bet_game_id', '=', 2)->get();
-        }
-
-//        $data = Bet::with('drawPeriod', 'betGame')->where('created_at', '')->get();
-
-        return response([$data], 200);
-
-    }
-
-    public function todayBaseCollection()
-    {
-        $data = DB::select('call sumDailyCollection(?)', [1]);
-        return response([$data], 200)->header('Content-Type', 'application/json');
     }
 }

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Agent;
 use App\Models\Base;
 use App\Models\Booth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -32,6 +33,7 @@ class AgentFactory extends Factory
             'sex' => $this->faker->boolean,
             'session_status' => $this->faker->boolean,
             'base_id' => Base::all()->random()->id,
+            'password' => Hash::make('password'),
             'booth_id' => Booth::all()->random()->id,
         ];
     }

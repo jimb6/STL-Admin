@@ -20,8 +20,8 @@ class CreateBetsTable extends Migration
             $table->string('combination');
             $table->double('amount');
             $table->unsignedBigInteger('bet_game_id');
+            $table->unsignedBigInteger('draw_period_id');
             $table->unsignedBigInteger('bet_transaction_id');
-
             $table->timestamps();
             $table->softDeletes();
         });

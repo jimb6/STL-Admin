@@ -27,7 +27,7 @@ class BetFactory extends Factory
             'rumbled' => $this->faker->boolean,
             'combination' => $this->faker->text(255),
             'amount' => $this->faker->randomNumber(2),
-            'bet_game_id' => \App\Models\BetGame::factory(),
+            'bet_game_id' => \App\Models\BetGame::all()->random()->id,
             'bet_transaction_id' => \App\Models\BetTransaction::all()->random()->id,
         ];
     }

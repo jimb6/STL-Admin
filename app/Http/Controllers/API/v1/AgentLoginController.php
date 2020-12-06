@@ -21,7 +21,7 @@ class AgentLoginController extends Controller
         ]);
 
         if (!Auth::guard('agent')->attempt([
-            'agent_name' => request('username'),
+            'contact_number' => request('username'),
             'password' => request('password')
         ])) {
             return response(['messages' => 'invalid username or password.'], 401);

@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\API\v1\AgentController;
+use App\Http\Controllers\API\v1\AgentLoginController;
 use App\Http\Controllers\API\v1\BaseController;
 use App\Http\Controllers\API\v1\BoothController;
 use App\Http\Controllers\API\v1\CloseNumberController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\API\v1\PermissionController;
 use App\Http\Controllers\API\v1\RoleController;
 use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\BetCollection;
+use App\Http\Controllers\BetController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -49,11 +51,12 @@ Route::get('/', function () {
     return redirect()->route('admin.home');
 });
 
+//Route::post('/login', [AgentLoginController::class, 'login']);
 
-Route::middleware('guest')->group(function (){
+Route::middleware('auth:web')->group(function (){
     Route::get('/agents/count', [AgentController::class, 'activeAgents'])->name('agents.active.count');
     Route::get('/booths/count', [BoothController::class, 'getActiveBooths'])->name('booths.active.count');
-    Route::get('/collections/daily-sum', [BetCollection::class, 'baseCollection'])->name('bet.collection.daily.sum');
+    Route::get('/collections/daily-sum', [BetCollection::class, 'todayBaseCollection'])->name('bet.collection.daily.sum');
 });
 
 
@@ -81,78 +84,8 @@ Route::prefix('admin')
         );
         Route::resource('close-numbers', CloseNumberController::class);
 
-        Route::get('/games/{any}', function (){
-            return view('');
-        })->name('game.bets');
+        Route::get('/games/{any}', [BetController::class, 'show'])->name('game.bets');
 
 //        Customize Request
 
     });
-
-
-//Auth::routes(['register' => false]);
-//
-//
-//Route::get('/home', function () {
-//    return redirect()->route('home');
-//});
-//
-//Route::get('/', function () {
-//    return redirect()->route('home');
-//});
-//
-//Route::get('/testing-page', function(){
-//    return view('test');
-//})->name('test');
-
-//Temporary.....
-
-//Route::get('/', 'ChatsController@index')->name('home');
-//Route::get('messages', 'ChatsController@fetchMessages');
-//Route::post('messages', 'ChatsController@sendMessage');
-
-//End of temporary ....
-
-//Route::middleware('auth')->group(function () {
-//    Route::prefix('admin')->group(function () {
-//
-//
-//        Route::get('user/profile', function () {
-//            return view('admin/profile');
-//        });
-//
-//        Route::get('agents', function () {
-//            return view('agent.agents');
-//        })->name('view.agents');
-//
-//        Route::get('booths', function () {
-//            return view('booths');
-//        });
-//
-//        Route::get('winners', function () {
-//            return view('winners');
-//        });
-//
-//        Route::get('/add-new-result', function () {
-//            return view('add-new-result');
-//        });
-//
-//        Route::get('/add-new-booth', function () {
-//            return view('add-new-booth');
-//        });
-//
-//        Route::get('/add-new-agent', function () {
-//            return view('add-new-agent');
-//        });
-//
-//        Route::get('/settings/mobile/global', function () {
-//            return view('settings.mobile.global');
-//        });
-//
-//        Route::get('/settings/mobile/theme', function () {
-//            return view('settings.mobile.theme');
-//        });
-//
-//        Route::get('/bets/{any}', [\App\Http\Controllers\BetTransactionController::class, 'show'])->name('game.bets');
-//    });
-//});

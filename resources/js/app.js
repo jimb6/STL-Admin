@@ -4,6 +4,7 @@ import VueProgressBar from 'vue-progressbar'
 import Vue from 'vue'
 import $ from 'jquery';
 // import pagination from 'laravel-vue-semantic-ui-pagination';
+import Bet from './pages/Bet'
 
 Vue.use(VueRouter)
 require('./bootstrap');
@@ -44,6 +45,6 @@ const app = new Vue({
     el: '#app',
     router,
     components: {
-        Dashboard, Agent, Login, Register
+        Dashboard, Agent, Login, Register, Bet
     }
 });
