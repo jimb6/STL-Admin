@@ -6,12 +6,16 @@ use App\Models\Scopes\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
-class Agent extends Model
+class Agent extends Authenticatable
 {
-    use SoftDeletes;
-    use HasFactory;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens;
     use Searchable;
+    use SoftDeletes;
 
     protected $fillable = [
         'name',

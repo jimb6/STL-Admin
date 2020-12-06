@@ -2,17 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3487cc3-9b60-4260-a8ef-ff874de3b72e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/BetController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_05_134054_create_sum_daily_collection.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_06_135014_create_custom_agent_column.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/seeders/BetGameDrawPeriodFactory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/pages/Bet.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentLoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentLoginController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BoothController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BoothController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/adminlte.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/adminlte.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/BetCollection.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/BetCollection.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Agent.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Agent.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Bet.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Bet.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/DrawPeriod.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DrawPeriod.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/RouteServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/RouteServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/AgentFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/AgentFactory.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/factories/BetFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/BetFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_12_02_000001_create_agents_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000001_create_agents_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_12_02_000010_create_bets_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000010_create_bets_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_12_02_000021_add_foreigns_to_bets_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000021_add_foreigns_to_bets_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/CardItem.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/CardItem.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/pages/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/Dashboard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/vendor/adminlte/partials/navbar/navbar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/vendor/adminlte/partials/navbar/navbar.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/vendor/adminlte/partials/sidebar/left-sidebar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/vendor/adminlte/partials/sidebar/left-sidebar.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/bets/categorize.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/bets/categorize.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
@@ -224,6 +237,8 @@
       <workItem from="1606782168463" duration="20213000" />
       <workItem from="1606870700954" duration="11340000" />
       <workItem from="1606953800024" duration="8400000" />
+      <workItem from="1607136069166" duration="7504000" />
+      <workItem from="1607226260769" duration="21506000" />
     </task>
     <servers />
   </component>
@@ -247,10 +262,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606791113957" />
-    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1607068898665">
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1607238457837">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607068898665" />
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607238457837" />
     <state x="736" y="432" key="ComposerInitDialogKey" timestamp="1606110007718">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -271,10 +286,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1606786957221" />
-    <state x="616" y="240" key="run.anything.popup" timestamp="1607070422390">
+    <state x="616" y="240" key="run.anything.popup" timestamp="1607247597568">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607070422390" />
+    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607247597568" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1606897721682">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

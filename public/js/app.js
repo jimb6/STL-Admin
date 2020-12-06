@@ -2225,6 +2225,26 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/Bet.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/Bet.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "Bet",
+  props: ['betType']
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/Dashboard.vue?vue&type=script&lang=js&":
 /*!***************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/Dashboard.vue?vue&type=script&lang=js& ***!
@@ -2289,12 +2309,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         id: 3,
         icon: "fas fa-trophy",
         title: "Today Winners",
-        description: "125"
+        description: ""
       }, {
         id: 4,
         icon: "fas fa-briefcase",
         title: "Today Collections",
-        description: "50000"
+        description: ""
       }],
       arrCollections: [],
       collectionsChartColors: {
@@ -2319,7 +2339,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       },
       activeAgents: 0,
-      activeBooths: 0
+      activeBooths: 0,
+      headers: {
+        'content-type': 'application-json',
+        'accept': 'application-json'
+      }
     };
   },
   created: function created() {
@@ -2477,8 +2501,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 2:
                 response = _context2.sent;
                 _this2.cards[0].description = response.data['active'].toString() + '<span class="card-item-description">/' + response.data['total'].toString() + '</span>';
+                console.log(response);
 
-              case 4:
+              case 5:
               case "end":
                 return _context2.stop();
             }
@@ -2496,7 +2521,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios.get('/booths/count')["catch"](function (error) {
+                return axios.get('/booths/count', {
+                  headers: {
+                    'content-type': 'application/json',
+                    'accept': 'application/json'
+                  }
+                })["catch"](function (error) {
                   return _this3.cards[1].description = "No Data";
                 });
 
@@ -2514,6 +2544,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     getDailyTotalCollections: function getDailyTotalCollections() {
+      var _this4 = this;
+
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
@@ -2521,15 +2553,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return axios.get('/collections/daily-sum')["catch"](function (error) {
-                  return console.log(error);
+                return axios.get('/collections/daily-sum', {
+                  headers: {
+                    'content-type': 'application/json',
+                    'accept': 'application/json'
+                  }
+                })["catch"](function (error) {
+                  return _this4.cards[3].description = "No Data";
                 });
 
               case 2:
                 response = _context4.sent;
-                console.log(response);
+                _this4.cards[3].description = response.data[0][0]['sum_amount'].toString();
+                console.log("Sa Total ni ha!", response);
 
-              case 4:
+              case 5:
               case "end":
                 return _context4.stop();
             }
@@ -83070,6 +83108,30 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/Bet.vue?vue&type=template&id=01833418&scoped=true&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/Bet.vue?vue&type=template&id=01833418&scoped=true& ***!
+  \*************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("h1", [_vm._v(_vm._s(_vm.betType))])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/Dashboard.vue?vue&type=template&id=82704d4a&":
 /*!*******************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/Dashboard.vue?vue&type=template&id=82704d4a& ***!
@@ -100662,21 +100724,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
-/* harmony import */ var _pages_Dashboard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/Dashboard */ "./resources/js/pages/Dashboard.vue");
-/* harmony import */ var _pages_Agent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/Agent */ "./resources/js/pages/Agent.vue");
-/* harmony import */ var vue_chartjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-chartjs */ "./node_modules/vue-chartjs/es/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _pages_auth_Login__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./pages/auth/Login */ "./resources/js/pages/auth/Login.vue");
-/* harmony import */ var _pages_auth_Register__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./pages/auth/Register */ "./resources/js/pages/auth/Register.vue");
-/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
-/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(vuelidate__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _pages_Bet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/Bet */ "./resources/js/pages/Bet.vue");
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
+/* harmony import */ var _pages_Dashboard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/Dashboard */ "./resources/js/pages/Dashboard.vue");
+/* harmony import */ var _pages_Agent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pages/Agent */ "./resources/js/pages/Agent.vue");
+/* harmony import */ var vue_chartjs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-chartjs */ "./node_modules/vue-chartjs/es/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _pages_auth_Login__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./pages/auth/Login */ "./resources/js/pages/auth/Login.vue");
+/* harmony import */ var _pages_auth_Register__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./pages/auth/Register */ "./resources/js/pages/auth/Register.vue");
+/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
+/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(vuelidate__WEBPACK_IMPORTED_MODULE_13__);
 
 
 
 
  // import pagination from 'laravel-vue-semantic-ui-pagination';
+
 
 vue__WEBPACK_IMPORTED_MODULE_3___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
@@ -100709,16 +100773,17 @@ var options = {
   location: 'top',
   inverse: false
 };
-vue__WEBPACK_IMPORTED_MODULE_3___default.a.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_2___default.a, options, axios__WEBPACK_IMPORTED_MODULE_9___default.a, vuelidate__WEBPACK_IMPORTED_MODULE_12___default.a); //
+vue__WEBPACK_IMPORTED_MODULE_3___default.a.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_2___default.a, options, axios__WEBPACK_IMPORTED_MODULE_10___default.a, vuelidate__WEBPACK_IMPORTED_MODULE_13___default.a); //
 
 var app = new vue__WEBPACK_IMPORTED_MODULE_3___default.a({
   el: '#app',
-  router: _routes__WEBPACK_IMPORTED_MODULE_5__["default"],
+  router: _routes__WEBPACK_IMPORTED_MODULE_6__["default"],
   components: {
-    Dashboard: _pages_Dashboard__WEBPACK_IMPORTED_MODULE_6__["default"],
-    Agent: _pages_Agent__WEBPACK_IMPORTED_MODULE_7__["default"],
-    Login: _pages_auth_Login__WEBPACK_IMPORTED_MODULE_10__["default"],
-    Register: _pages_auth_Register__WEBPACK_IMPORTED_MODULE_11__["default"]
+    Dashboard: _pages_Dashboard__WEBPACK_IMPORTED_MODULE_7__["default"],
+    Agent: _pages_Agent__WEBPACK_IMPORTED_MODULE_8__["default"],
+    Login: _pages_auth_Login__WEBPACK_IMPORTED_MODULE_11__["default"],
+    Register: _pages_auth_Register__WEBPACK_IMPORTED_MODULE_12__["default"],
+    Bet: _pages_Bet__WEBPACK_IMPORTED_MODULE_5__["default"]
   }
 });
 
@@ -111650,6 +111715,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Agent_vue_vue_type_template_id_3c8100cc___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Agent_vue_vue_type_template_id_3c8100cc___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/Bet.vue":
+/*!************************************!*\
+  !*** ./resources/js/pages/Bet.vue ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Bet_vue_vue_type_template_id_01833418_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Bet.vue?vue&type=template&id=01833418&scoped=true& */ "./resources/js/pages/Bet.vue?vue&type=template&id=01833418&scoped=true&");
+/* harmony import */ var _Bet_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Bet.vue?vue&type=script&lang=js& */ "./resources/js/pages/Bet.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Bet_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Bet_vue_vue_type_template_id_01833418_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Bet_vue_vue_type_template_id_01833418_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "01833418",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/Bet.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/Bet.vue?vue&type=script&lang=js&":
+/*!*************************************************************!*\
+  !*** ./resources/js/pages/Bet.vue?vue&type=script&lang=js& ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Bet_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Bet.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/Bet.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Bet_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/Bet.vue?vue&type=template&id=01833418&scoped=true&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/pages/Bet.vue?vue&type=template&id=01833418&scoped=true& ***!
+  \*******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Bet_vue_vue_type_template_id_01833418_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Bet.vue?vue&type=template&id=01833418&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/Bet.vue?vue&type=template&id=01833418&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Bet_vue_vue_type_template_id_01833418_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Bet_vue_vue_type_template_id_01833418_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

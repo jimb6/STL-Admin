@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DrawPeriod extends Model
 {
@@ -22,5 +22,10 @@ class DrawPeriod extends Model
     public function betGames()
     {
         return $this->belongsToMany(BetGame::class);
+    }
+
+    public function bets()
+    {
+        return $this->hasMany(Bet::class);
     }
 }

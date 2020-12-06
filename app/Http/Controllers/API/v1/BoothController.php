@@ -116,10 +116,11 @@ class BoothController extends Controller
 
     public function getActiveBooths()
     {
-        $allBooths = Booth::all()->where('base_id', '=', \Auth::user()->base_id);
+        $allBooths = Booth::all()->where('base_id', '=', 1);
         $activeBooths = $allBooths->
         where('status', '=', "1")->count();
 
-        return new JsonResponse(['total' => count($allBooths), 'active' => $activeBooths], 200);
+        return response(['total' => count($allBooths), 'active' => $activeBooths], 200)
+            ->header('Content-Type', 'application/json');
     }
 }

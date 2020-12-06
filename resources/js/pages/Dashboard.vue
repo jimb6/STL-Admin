@@ -48,13 +48,13 @@ export default {
                     id: 3,
                     icon: "fas fa-trophy",
                     title: "Today Winners",
-                    description: "125",
+                    description: "",
                 },
                 {
                     id: 4,
                     icon: "fas fa-briefcase",
                     title: "Today Collections",
-                    description: "50000",
+                    description: "",
                 },
             ],
             arrCollections: [],
@@ -81,6 +81,10 @@ export default {
             },
             activeAgents: 0,
             activeBooths: 0,
+            headers: {
+                'content-type': 'application-json',
+                'accept': 'application-json',
+            }
         };
     },
 
@@ -144,10 +148,17 @@ export default {
                 '<span class="card-item-description">/' +
                 response.data['total'].toString() +
                 '</span>'
+            console.log(response);
         },
 
         async getActiveBooths() {
-            const response = await axios.get('/booths/count').catch(error => this.cards[1].description = "No Data");
+            const response = await axios.get('/booths/count',
+                {
+                    headers: {
+                        'content-type': 'application/json',
+                        'accept': 'application/json'
+                    }
+                }).catch(error => this.cards[1].description = "No Data");
             this.cards[1].description = response.data['active'].toString() +
                 '<span class="card-item-description">/' +
                 response.data['total'].toString() +
@@ -156,8 +167,14 @@ export default {
         },
 
         async getDailyTotalCollections() {
-            const response = await axios.get('/collections/daily-sum').catch(error => console.log(error));
-            console.log(response)
+            const response = await axios.get('/collections/daily-sum', {
+                headers: {
+                    'content-type': 'application/json',
+                    'accept': 'application/json'
+                }
+            }).catch(error => this.cards[3].description = "No Data");
+            this.cards[3].description = response.data[0][0]['sum_amount'].toString()
+            console.log("Sa Total ni ha!", response)
         },
 
         formatMoney(money) {

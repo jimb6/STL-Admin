@@ -30,12 +30,12 @@ Route::middleware('auth')->get('/user', function (Request $request) {
 
 
 Route::group([
-    'prefix' => '/v1/'
+    'prefix' => '/v1/agent'
 ], function () {
-    Route::post('login', [AgentLoginController::class, 'login']);
-
+    Route::post('/login', [AgentLoginController::class, 'login']);
     Route::middleware('sanctum')
         ->group(function () {
+            Route::post('/logout', [AgentLoginController::class, 'logout']);
 //            Route::resource('roles', RoleController::class);
 //            Route::resource('permissions', PermissionController::class);
             Route::resource('agents', AgentController::class);

@@ -120,10 +120,11 @@ class AgentController extends Controller
 
     public function activeAgents()
     {
-        $agents = Agent::all()->where('base_id', '=', \Auth::user()->base_id);
+        $agents = Agent::all()->where('base_id', '=', 1);
         $activeAgents = $agents->where('session_status', '=', true)->count();
 
-        return new JsonResponse(['total' => count($agents), 'active' => $activeAgents], 200);
+        return response(['total' => count($agents), 'active' => $activeAgents], 200)
+            ->header('Content-Type', 'application/json');
     }
 
 }

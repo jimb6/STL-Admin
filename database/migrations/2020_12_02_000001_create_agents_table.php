@@ -21,6 +21,8 @@ class CreateAgentsTable extends Migration
             $table->integer('age');
             $table->boolean('sex', ['Male', 'Female']);
             $table->boolean('session_status');
+            $table->string('password');
+//            $table->string('api_token');
             $table->unsignedBigInteger('base_id');
             $table->unsignedBigInteger('booth_id')->nullable();
 
