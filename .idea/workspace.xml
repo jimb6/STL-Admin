@@ -4,11 +4,9 @@
     <list default="true" id="b3487cc3-9b60-4260-a8ef-ff874de3b72e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/admin_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/admin_style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/materialize.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/materialize.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/Table.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Table.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/pages/Bet.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/Bet.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/pages/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/Dashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/pages/auth/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/auth/Login.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -220,7 +218,7 @@
       <workItem from="1606953800024" duration="8400000" />
       <workItem from="1607136069166" duration="7504000" />
       <workItem from="1607226260769" duration="21506000" />
-      <workItem from="1607313764768" duration="9811000" />
+      <workItem from="1607313764768" duration="11184000" />
     </task>
     <servers />
   </component>

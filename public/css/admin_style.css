@@ -77,6 +77,12 @@ span.d-none.d-md-inline{
 .main-sidebar span.brand-text {
     color: #EAF11B;
 }
+.main-sidebar li.nav-header {
+    text-transform: uppercase;
+    color: rgba(255,255,255,.25) !important;
+    font-size: 12px !important;
+    letter-spacing: 1px;
+}
 .cstm-sidebar {
     padding: unset;
 }

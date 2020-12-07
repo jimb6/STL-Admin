@@ -2559,7 +2559,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   total: "357010"
                 }]
               };
-              data["collections"].reverse().forEach(function (d) {
+              data["collections"].forEach(function (d) {
                 var date = d.date;
                 var total = d.total;
 
@@ -19504,7 +19504,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.card {\r\n    background: unset;\r\n    box-shadow: unset;\n}\n.carditem-container {\r\n    display: grid;\r\n    grid-template-columns: 1fr 1fr 1fr 1fr;\r\n    grid-gap: 40px;\r\n    padding: 20px 0;\n}\n.card-item {\r\n    position: relative;\r\n    padding: 20px;\r\n    background: #fff;\r\n    display: flex;\r\n    border-radius: 5px;\r\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.card-item > div:first-child {\r\n    width: 40%;\n}\n.card-item > div:last-child {\r\n    width: 60%;\n}\n.card-item i {\r\n    position: absolute;\r\n    width: 30%;\r\n    height: 100px;\r\n    top: -20px;\r\n    text-align: center;\r\n    line-height: 100px;\r\n    font-size: 35px;\r\n    color: #fff;\r\n    border-radius: 5px;\r\n    background: linear-gradient(200DEG, rgb(75, 108, 183), rgb(24, 40, 72));\n}\n.card-item h3 {\r\n    text-transform: uppercase;\r\n    font-size: 18px;\r\n    font-weight: 300;\r\n    letter-spacing: 1px;\r\n    text-align: right;\r\n    letter-spacing: 1px;\n}\n.card-item p {\r\n    font-size: 40px;\r\n    text-align: right;\n}\n.cstm-linechart {\r\n    padding: 40px 20px;\r\n    background: #fff;\r\n    border-radius: 5px;\r\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.linechart-title {\r\n    position: relative;\r\n    padding-bottom: 20px;\r\n    margin-bottom: 30px;\r\n    border-bottom: 1px solid #f3f3f3;\n}\n.linechart-title h3 {\r\n    text-transform: uppercase;\r\n    font-weight: 300;\r\n    letter-spacing: 1px;\r\n    margin: 0;\n}\n.linechart-title p {\r\n    padding: 10px 20px;\r\n    background: #a8dadc;\r\n    color: #fff;\r\n    border-radius: 5px;\r\n    font-weight: 600;\n}\n.linechart-title p:before {\r\n    content: \"\\20B1\";\r\n    margin-right: 5px;\n}\n.card-item-description {\r\n    font-size: 14px;\r\n    color: #555555;\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n.card {\n    background: unset;\n    box-shadow: unset;\n}\n.carditem-container {\n    display: grid;\n    grid-template-columns: 1fr 1fr 1fr 1fr;\n    grid-gap: 40px;\n    padding: 20px 0;\n}\n.card-item {\n    position: relative;\n    padding: 20px;\n    background: #fff;\n    display: flex;\n    border-radius: 5px;\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.card-item > div:first-child {\n    width: 40%;\n}\n.card-item > div:last-child {\n    width: 60%;\n}\n.card-item i {\n    position: absolute;\n    width: 30%;\n    height: 100px;\n    top: -20px;\n    text-align: center;\n    line-height: 100px;\n    font-size: 35px;\n    color: #fff;\n    border-radius: 5px;\n    background: linear-gradient(200DEG, rgb(75, 108, 183), rgb(24, 40, 72));\n}\n.card-item h3 {\n    text-transform: uppercase;\n    font-size: 18px;\n    font-weight: 300;\n    letter-spacing: 1px;\n    text-align: right;\n    letter-spacing: 1px;\n}\n.card-item p {\n    font-size: 40px;\n    text-align: right;\n}\n.cstm-linechart {\n    padding: 40px 20px;\n    background: #fff;\n    border-radius: 5px;\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.linechart-title {\n    position: relative;\n    padding-bottom: 20px;\n    margin-bottom: 30px;\n    border-bottom: 1px solid #f3f3f3;\n}\n.linechart-title h3 {\n    text-transform: uppercase;\n    font-weight: 300;\n    letter-spacing: 1px;\n    margin: 0;\n}\n.linechart-title p {\n    padding: 10px 20px;\n    background: #a8dadc;\n    color: #fff;\n    border-radius: 5px;\n    font-weight: 600;\n}\n.linechart-title p:before {\n    content: \"\\20B1\";\n    margin-right: 5px;\n}\n.card-item-description {\n    font-size: 14px;\n    color: #555555;\n}\n\n", ""]);
 
 // exports
 
@@ -19523,7 +19523,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.loader-container {\n    position: absolute;\n    z-index: 99;\n    top: 50%;\n    left: 50%;\n    transform: translateX(-50%) translateY(-50%);\n}\n.cstm-error {\n    padding: 8px;\n    border: 2px solid #EAF11B;\n    color: #EAF11B;\n    text-transform: uppercase;\n    font-weight: 600;\n    font-size: 14px;\n    margin-bottom: 20px;\n    transition-duration: 500ms;\n}\n\n/* CUSTOM LOGIN CSS */\nbody.login-page {\n    background: rgb(29,53,87);\n    background: linear-gradient(22deg, rgba(29,53,87,1) 0%, rgba(230,57,70,1) 100%);\n}\n.login-logo img {\n    position: relative;\n    top: -4px;\n}\n.login-logo a, .login-logo a b {\n     color: #EAF11B;\n     font-weight: 500;\n}\n.login-card-body {\n    border-radius: 10px;\n}\n.login-card-body:nth-of-type(1) {\n    background: unset;\n}\n.login-card-body:nth-of-type(2) {\n     border-radius: 10px;\n     background: unset;\n     border: 1px solid rgba(255,255,255,.75);\n}\nh3.login-box-msg {\n    font-weight: 200;\n    letter-spacing: 2px;\n    color: #FFFFFF;\n}\n.input-group-text {\n    border: 1px solid #ffffff !important;\n    border-right: unset !important;\n    border-radius: unset !important;\n    border-top-left-radius: 5px !important;\n    border-bottom-left-radius: 5px !important;\n}\n.login-page input.form-control.form__input {\n    border: unset;\n}\n.cstm-submit-btn {\n    text-transform: uppercase;\n    letter-spacing: 2px;\n    font-weight: 300;\n    background: #1d3557;\n    border: none;\n    padding: 10px;\n    transition-duration: 400ms;\n    color: #fff;\n}\n.cstm-submit-btn:hover {\n    background: #457b9d;\n    color: #fff;\n}\n", ""]);
+exports.push([module.i, "\n.loader-container {\n    position: absolute;\n    z-index: 99;\n    top: 50%;\n    left: 50%;\n    transform: translateX(-50%) translateY(-50%);\n}\n.cstm-error {\n    padding: 8px;\n    border: 2px solid #EAF11B;\n    color: #EAF11B;\n    text-transform: uppercase;\n    font-weight: 600;\n    font-size: 14px;\n    margin-bottom: 20px;\n    transition-duration: 500ms;\n}\n\n/* CUSTOM LOGIN CSS */\nbody.login-page {\n    background: rgb(29,53,87);\n    background: linear-gradient(22deg, rgba(29,53,87,1) 0%, rgba(230,57,70,1) 100%);\n}\n.login-logo img {\n    position: relative;\n    top: -4px;\n}\n.login-logo a, .login-logo a b {\n     color: #EAF11B;\n     font-weight: 500;\n}\n.login-card-body {\n    border-radius: 10px;\n}\n.login-card-body:nth-of-type(1) {\n    background: unset;\n}\n.login-card-body:nth-of-type(2) {\n     border-radius: 10px;\n     background: unset;\n     border: 1px solid rgba(255,255,255,.75);\n}\nh3.login-box-msg {\n    font-weight: 200;\n    letter-spacing: 2px;\n    color: #FFFFFF;\n}\n.input-group-text {\n    border: 1px solid #ffffff !important;\n    border-right: unset !important;\n    border-radius: unset !important;\n    border-top-left-radius: 5px !important;\n    border-bottom-left-radius: 5px !important;\n}\n.login-page input.form-control.form__input {\n    border: unset;\n}\n.cstm-submit-btn {\n    text-transform: uppercase;\n    letter-spacing: 2px;\n    font-weight: 300;\n    background: #1d3557;\n    border: none;\n    padding: 10px;\n    transition-duration: 400ms;\n    color: #fff;\n}\n.cstm-submit-btn:hover {\n    background: #457b9d;\n    color: #fff;\n}\n.shake {\n    animation: shake 150ms 2 linear;\n    -moz-animation: shake 150ms 2 linear;\n    -webkit-animation: shake 150ms 2 linear;\n    -o-animation: shake 150ms 2 linear;\n}\n@keyframes shake {\n0% {\n        transform: translate(5px, 0);\n}\n50% {\n        transform: translate(-5px, 0);\n}\n100% {\n        transform: translate(0, 0);\n}\n}\n@-webkit-keyframes shake {\n0% {\n        -webkit-transform: translate(5px, 0);\n}\n50% {\n        -webkit-transform: translate(-5px, 0);\n}\n100% {\n        -webkit-transform: translate(0, 0);\n}\n}\n", ""]);
 
 // exports
 
@@ -83499,173 +83499,184 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-body login-card-body" }, [
-        _c("h3", { staticClass: "login-box-msg" }, [_vm._v("LOGIN")]),
-        _vm._v(" "),
-        _c("form", [
-          _c("div", { staticClass: "mb-4" }, [
-            _c(
-              "div",
-              {
-                staticClass: "input-group",
-                class: { "form-group--error": _vm.$v.email.$error }
-              },
-              [
-                _vm._m(0),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model.trim",
-                      value: _vm.email,
-                      expression: "email",
-                      modifiers: { trim: true }
-                    },
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.email,
-                      expression: "email"
-                    }
-                  ],
-                  staticClass: "form-control form__input",
-                  attrs: { type: "email", placeholder: "Email" },
-                  domProps: { value: _vm.email, value: _vm.email },
-                  on: {
-                    input: [
-                      function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.email = $event.target.value
+      _c(
+        "div",
+        {
+          staticClass: "card-body login-card-body",
+          class: { shake: _vm.error }
+        },
+        [
+          _c("h3", { staticClass: "login-box-msg" }, [_vm._v("LOGIN")]),
+          _vm._v(" "),
+          _c("form", [
+            _c("div", { staticClass: "mb-4" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "input-group",
+                  class: { "form-group--error": _vm.$v.email.$error }
+                },
+                [
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model.trim",
+                        value: _vm.email,
+                        expression: "email",
+                        modifiers: { trim: true }
                       },
-                      function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.email = $event.target.value.trim()
-                      },
-                      function($event) {
-                        return _vm.setEmail($event.target.value)
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.email,
+                        expression: "email"
                       }
                     ],
-                    blur: function($event) {
-                      return _vm.$forceUpdate()
+                    staticClass: "form-control form__input",
+                    attrs: { type: "email", placeholder: "Email" },
+                    domProps: { value: _vm.email, value: _vm.email },
+                    on: {
+                      input: [
+                        function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.email = $event.target.value
+                        },
+                        function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.email = $event.target.value.trim()
+                        },
+                        function($event) {
+                          return _vm.setEmail($event.target.value)
+                        }
+                      ],
+                      blur: function($event) {
+                        return _vm.$forceUpdate()
+                      }
                     }
-                  }
-                })
-              ]
-            ),
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              !_vm.$v.email.required && _vm.error != ""
+                ? _c(
+                    "div",
+                    {
+                      staticClass:
+                        "error text-xs text-white-50 text-center mt-1"
+                    },
+                    [_vm._v("Email is required")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              !_vm.$v.email.email && _vm.error != ""
+                ? _c(
+                    "div",
+                    {
+                      staticClass:
+                        "error text-xs text-white-50 text-center mt-1"
+                    },
+                    [_vm._v("Not an email")]
+                  )
+                : _vm._e()
+            ]),
             _vm._v(" "),
-            !_vm.$v.email.required && _vm.error != ""
-              ? _c(
-                  "div",
-                  {
-                    staticClass: "error text-xs text-white-50 text-center mt-1"
-                  },
-                  [_vm._v("Email is required")]
-                )
-              : _vm._e(),
+            _c("div", { staticClass: "mb-4" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "input-group",
+                  class: { "form-group--error": _vm.$v.password.$error }
+                },
+                [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "form-control form__input",
+                    attrs: { type: "password", placeholder: "Password" },
+                    on: {
+                      input: function($event) {
+                        return _vm.setPassword($event.target.value)
+                      }
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              !_vm.$v.password.required && _vm.error != ""
+                ? _c(
+                    "div",
+                    {
+                      staticClass:
+                        "error text-xs text-white-50 text-center mt-1"
+                    },
+                    [_vm._v("Password is required")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              !_vm.$v.password.minLength && _vm.error != ""
+                ? _c(
+                    "div",
+                    {
+                      staticClass:
+                        "error text-xs text-white-50 text-center mt-1"
+                    },
+                    [
+                      _vm._v(
+                        "Password must have at least\n                            " +
+                          _vm._s(_vm.$v.password.$params.minLength.min) +
+                          " characters.\n                        "
+                      )
+                    ]
+                  )
+                : _vm._e()
+            ]),
             _vm._v(" "),
-            !_vm.$v.email.email && _vm.error != ""
-              ? _c(
-                  "div",
-                  {
-                    staticClass: "error text-xs text-white-50 text-center mt-1"
-                  },
-                  [_vm._v("Not an email")]
-                )
-              : _vm._e()
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "mb-4" }, [
             _c(
               "div",
               {
-                staticClass: "input-group",
-                class: { "form-group--error": _vm.$v.password.$error }
+                staticClass: "error text-lg-center",
+                class: { "cstm-error": _vm.error },
+                model: {
+                  value: _vm.error,
+                  callback: function($$v) {
+                    _vm.error = $$v
+                  },
+                  expression: "error"
+                }
               },
-              [
-                _vm._m(1),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "form-control form__input",
-                  attrs: { type: "password", placeholder: "Password" },
-                  on: {
-                    input: function($event) {
-                      return _vm.setPassword($event.target.value)
-                    }
-                  }
-                })
-              ]
+              [_vm._v(_vm._s(_vm.error))]
             ),
             _vm._v(" "),
-            !_vm.$v.password.required && _vm.error != ""
-              ? _c(
-                  "div",
+            _c("div", { staticClass: "row mt-5" }, [
+              _c("div", { staticClass: "col-12" }, [
+                _c(
+                  "button",
                   {
-                    staticClass: "error text-xs text-white-50 text-center mt-1"
-                  },
-                  [_vm._v("Password is required")]
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            !_vm.$v.password.minLength && _vm.error != ""
-              ? _c(
-                  "div",
-                  {
-                    staticClass: "error text-xs text-white-50 text-center mt-1"
-                  },
-                  [
-                    _vm._v(
-                      "Password must have at least\n                            " +
-                        _vm._s(_vm.$v.password.$params.minLength.min) +
-                        " characters.\n                        "
-                    )
-                  ]
-                )
-              : _vm._e()
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "error text-lg-center",
-              class: { "cstm-error": _vm.error },
-              model: {
-                value: _vm.error,
-                callback: function($$v) {
-                  _vm.error = $$v
-                },
-                expression: "error"
-              }
-            },
-            [_vm._v(_vm._s(_vm.error))]
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "row mt-5" }, [
-            _c("div", { staticClass: "col-12" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-block cstm-submit-btn",
-                  attrs: { type: "submit" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.handleLogin($event)
+                    staticClass: "btn btn-block cstm-submit-btn",
+                    attrs: { type: "submit" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.handleLogin($event)
+                      }
                     }
-                  }
-                },
-                [_vm._v("Login")]
-              )
-            ]),
-            _vm._v(" "),
-            _vm._m(2)
+                  },
+                  [_vm._v("Login")]
+                )
+              ]),
+              _vm._v(" "),
+              _vm._m(2)
+            ])
           ])
-        ])
-      ])
+        ]
+      )
     ])
   ])
 }
