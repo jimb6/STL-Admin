@@ -23,4 +23,9 @@ class CloseNumber extends Model
     {
         return $this->belongsTo(BetGame::class);
     }
+
+    public function drawPeriod()
+    {
+        return $this->belongsTo(DrawPeriod::class);
+    }
 }

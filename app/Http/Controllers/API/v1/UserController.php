@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Models\User;
-use App\Models\Base;
-use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\Agent;
+use App\Models\Base;
+use App\Models\Booth;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -26,7 +28,7 @@ class UserController extends Controller
             ->latest()
             ->paginate();
 
-        return view('app.users.index', compact('users', 'search'));
+        return view('admin.profile', compact('users', 'search'));
     }
 
     /**
@@ -127,5 +129,14 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index');
+    }
+
+
+    public function showProfile()
+    {
+        $user = User::find(\Auth::user()->id)->with('base')->get()[0];
+        $booths = Booth::all();
+        $agents = Agent::all();
+        return view('admin.profile', compact(['user', 'booths', 'agents']));
     }
 }
