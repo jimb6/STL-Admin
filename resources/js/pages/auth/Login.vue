@@ -14,62 +14,67 @@
         <div class="card">
 
             <div class="card-body login-card-body">
-                <div class="error text-lg-center text-danger" v-model="error">{{ error }}</div>
-                <p class="login-box-msg">Sign in to start your session</p>
+                <h3 class="login-box-msg">LOGIN</h3>
                 <form>
-                    <div class="error text-xs text-danger" v-if="!$v.email.required">Email is required</div>
-                    <div class="error text-xs text-danger" v-if="!$v.email.email">Not an email</div>
-                    <div class="input-group mb-3" :class="{ 'form-group--error': $v.email.$error }">
-                        <input type="email" class="form-control form__input"
-                               v-model.trim="email"
-                               @input="setEmail($event.target.value)"
-                               placeholder="Email" v-model="email">
 
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                    <div class="mb-4">
+                        <div class="input-group" :class="{ 'form-group--error': $v.email.$error }">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope text-white"></span>
+                                </div>
                             </div>
+                            <input type="email" class="form-control form__input"
+                                   v-model.trim="email"
+                                   @input="setEmail($event.target.value)"
+                                   placeholder="Email" v-model="email">
+                        </div>
+                        <div class="error text-xs text-white-50 text-center mt-1" v-if="!$v.email.required && error != ''">Email is required</div>
+                        <div class="error text-xs text-white-50 text-center mt-1" v-if="!$v.email.email && error != ''">Not an email</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="input-group" :class="{ 'form-group--error': $v.password.$error }">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock text-white"></span>
+                                </div>
+                            </div>
+                            <input type="password"
+                                   class="form-control form__input"
+                                   placeholder="Password"
+                                   @input="setPassword($event.target.value)">
+                        </div>
+                        <div class="error text-xs text-white-50 text-center mt-1" v-if="!$v.password.required && error != ''">Password is required</div>
+                        <div class="error text-xs text-white-50 text-center mt-1" v-if="!$v.password.minLength && error != ''">Password must have at least
+                            {{ $v.password.$params.minLength.min }} characters.
                         </div>
                     </div>
 
-                    <div class="error text-xs text-danger" v-if="!$v.password.required">Password is required</div>
-                    <div class="error text-xs text-danger" v-if="!$v.password.minLength">Password must have at least
-                        {{ $v.password.$params.minLength.min }} characters.
-                    </div>
-                    <div class="input-group mb-3" :class="{ 'form-group--error': $v.password.$error }">
-                        <input type="password"
-                               class="form-control form__input"
-                               placeholder="Password"
-                               @input="setPassword($event.target.value)">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
+                    <div :class="{'cstm-error': error}" class="error text-lg-center" v-model="error">{{ error }}</div>
+
+
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-block cstm-submit-btn" @click.prevent="handleLogin">Login</button>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="icheck-primary">
+                        <!-- /.col -->
+                        <div class="col-12 mt-4">
+                            <div class="icheck-primary text-white">
                                 <input type="checkbox" id="remember">
-                                <label for="remember">
+                                <label for="remember" class="font-weight-light">
                                     Remember Me
                                 </label>
                             </div>
                         </div>
                         <!-- /.col -->
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block" @click.prevent="handleLogin">Sign
-                                In
-                            </button>
-                        </div>
-                        <!-- /.col -->
                     </div>
                 </form>
                 <!-- /.social-auth-links -->
-                <hr/>
-                <p class="mb-1">
-                    <!--                    <router-link :to="{}">I forgot my password</router-link>-->
-                </p>
+<!--                <hr/>-->
+<!--                <p class="mb-1">-->
+<!--                    &lt;!&ndash;                    <router-link :to="{}">I forgot my password</router-link>&ndash;&gt;-->
+<!--                </p>-->
             </div>
             <!-- /.login-card-body -->
         </div>
@@ -118,10 +123,12 @@ export default {
 
     methods: {
         setEmail(value) {
+            this.error = '';
             this.email = value
             this.$v.email.$touch()
         },
         setPassword(value) {
+            this.error = '';
             this.password = value
             this.$v.password.$touch()
         },
@@ -132,7 +139,6 @@ export default {
                     window.location.href = "/"
                     // console.log(response)
                 }).catch(error => {
-                    console.log(error)
                     this.error = "Invalid username or password"
                 }).finally(() => this.loading = false); // credentials didn't match
             });
@@ -147,12 +153,76 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .loader-container {
     position: absolute;
     z-index: 99;
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
+}
+.cstm-error {
+    padding: 8px;
+    border: 2px solid #EAF11B;
+    color: #EAF11B;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 20px;
+    transition-duration: 500ms;
+}
+
+/* CUSTOM LOGIN CSS */
+body.login-page {
+    background: rgb(29,53,87);
+    background: linear-gradient(22deg, rgba(29,53,87,1) 0%, rgba(230,57,70,1) 100%);
+}
+.login-logo img {
+    position: relative;
+    top: -4px;
+}
+.login-logo a, .login-logo a b {
+     color: #EAF11B;
+     font-weight: 500;
+}
+.login-card-body {
+    border-radius: 10px;
+}
+.login-card-body:nth-of-type(1) {
+    background: unset;
+}
+.login-card-body:nth-of-type(2) {
+     border-radius: 10px;
+     background: unset;
+     border: 1px solid rgba(255,255,255,.75);;
+}
+h3.login-box-msg {
+    font-weight: 200;
+    letter-spacing: 2px;
+    color: #FFFFFF;
+}
+.input-group-text {
+    border: 1px solid #ffffff !important;
+    border-right: unset !important;
+    border-radius: unset !important;
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+}
+.login-page input.form-control.form__input {
+    border: unset;
+}
+.cstm-submit-btn {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 300;
+    background: #1d3557;
+    border: none;
+    padding: 10px;
+    transition-duration: 400ms;
+    color: #fff;
+}
+.cstm-submit-btn:hover {
+    background: #457b9d;
+    color: #fff;
 }
 </style>
