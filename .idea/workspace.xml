@@ -2,32 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3487cc3-9b60-4260-a8ef-ff874de3b72e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/BetController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_05_134054_create_sum_daily_collection.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_06_135014_create_custom_agent_column.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/BetGameDrawPeriodFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/pages/Bet.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentLoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/AgentLoginController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BoothController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/v1/BoothController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/BetCollection.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/BetCollection.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Agent.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Agent.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Bet.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Bet.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/DrawPeriod.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DrawPeriod.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Providers/RouteServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/RouteServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/AgentFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/AgentFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/BetFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/BetFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_12_02_000001_create_agents_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000001_create_agents_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_12_02_000010_create_bets_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000010_create_bets_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_12_02_000021_add_foreigns_to_bets_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_02_000021_add_foreigns_to_bets_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/pages/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/Dashboard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/bets/categorize.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/bets/categorize.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/pages/auth/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/auth/Login.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -239,61 +216,12 @@
       <workItem from="1606953800024" duration="8400000" />
       <workItem from="1607136069166" duration="7504000" />
       <workItem from="1607226260769" duration="21506000" />
+      <workItem from="1607313764768" duration="2734000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="723" y="322" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1606549264779">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="723" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1606549264779" />
-    <state x="765" y="202" key="#com.intellij.ide.util.MemberChooser" timestamp="1606727414247">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="765" y="202" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1606727414247" />
-    <state x="558" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1606357799468">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="558" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606357799468" />
-    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1606791113957">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606791113957" />
-    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1607238457837">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607238457837" />
-    <state x="736" y="432" key="ComposerInitDialogKey" timestamp="1606110007718">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="736" y="432" key="ComposerInitDialogKey/0.0.1920.1040@0.0.1920.1040" timestamp="1606110007718" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1606534567468">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1606534567468" />
-    <state x="684" y="441" key="GitCloneDialog" timestamp="1606698862854">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="684" y="441" key="GitCloneDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606698862854" />
-    <state x="794" y="443" key="NewPhpFileDialog" timestamp="1606727233669">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="794" y="443" key="NewPhpFileDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606727233669" />
-    <state x="461" y="165" key="SettingsEditor" timestamp="1606786957221">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="461" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1606786957221" />
-    <state x="616" y="240" key="run.anything.popup" timestamp="1607247597568">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607247597568" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1606897721682">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606897721682" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
