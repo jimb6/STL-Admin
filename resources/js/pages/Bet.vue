@@ -47,7 +47,7 @@ export default {
                     optionTitle: "Draw Period",
                     options: ['10:30AM', '4PM', '9PM'],
                     optionValues: ['1', '2', '3'],
-                    optionSelected: '4PM',
+                    optionSelected: '10:30AM',
                 }
             ],
         }

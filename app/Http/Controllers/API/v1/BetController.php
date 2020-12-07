@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\API\v1\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -14,11 +13,14 @@ class BetController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Application|Factory|View|Response
      */
     public function index()
     {
         //
+        $betType = \request('any');
+//        $betType = str_replace('-', '',$betType);
+        return view('bets.categorize', compact('betType'));
     }
 
     /**
@@ -51,9 +53,8 @@ class BetController extends Controller
     public function show($id)
     {
         //
-        $betType = $id;
-//        $betType = str_replace('-', '',$betType);
-        return view('bets.categorize', compact('betType'));
+//        $drawPreiodId = BetGame::with('drawPeriods')->where('abbreviation', '=', $id);
+//        Bet::with('transaction')->where('')
     }
 
     /**

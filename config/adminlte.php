@@ -14,8 +14,8 @@ return [
     |
     */
 
-    'title' => 'STL Application',
-    'title_prefix' => 'DAVOR | ',
+    'title' => config('name', 'STL Application'),
+    'title_prefix' => config('base', ''),
     'title_postfix' => '',
 
     /*
@@ -249,13 +249,13 @@ return [
             // 'url'         => '/#',
             'icon' => 'fas fa-users',
             'label_color' => 'success',
-            'can' => 'menu agent',
+            'can' => 'menu agents',
             'classes' => '',
             'submenu' => [
                 [
                     'text' => 'All Agents',
                     'can' => 'list agents',
-                    'url' => '/admin/agents',
+                    'route' => 'agents.index',
                 ],
                 [
                     'text' => 'Active Agents',
@@ -265,7 +265,7 @@ return [
                 [
                     'text' => 'Add New',
                     'can' => 'create agents',
-                    'url' => '/admin/add-new-agent',
+                    'route' => 'agents.create',
                 ],
             ]
 
@@ -282,12 +282,12 @@ return [
                 [
                     'text' => 'All Booths',
                     'can' => 'view booths',
-                    'url' => '/admin/booths',
+                    'route' => 'booths.index',
                 ],
                 [
                     'text' => 'Add New',
                     'can' => 'view booths',
-                    'url' => '/admin/add-new-booth',
+                    'route' => 'booths.create',
                 ],
             ]
         ],
@@ -373,11 +373,11 @@ return [
             'submenu' => [
                 [
                     'text' => 'Profile',
-                    'url' => '/admin/user/profile',
+                    'route' => 'user.profile',
                 ],
                 [
                     'text' => 'Logout',
-                    'url' => '/#',
+                    'route' => 'user.logout',
                 ],
             ]
         ],
