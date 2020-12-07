@@ -53,13 +53,29 @@ span.no {
     line-height: 25px;
 }
 
+/* MAIN HEADER */
+nav.main-header {
+    background: #1D3557;
+    border-top: 3px solid #E63946;
+}
+nav.main-header h3,
+nav.main-header .nav-link i,
+span.d-none.d-md-inline{
+    color: #fff;
+}
 
 /* SIDEBAR */
 .content-wrapper {
     background: #f1faee;
 }
 .main-sidebar a.brand-link {
-    border-color: rgba(255,255,255,.05);
+    height: 67px;
+    border-top: 3px solid #E63946 !important;
+    background: #1D3557 !important;
+    border-bottom: unset;
+}
+.main-sidebar span.brand-text {
+    color: #EAF11B;
 }
 .cstm-sidebar {
     padding: unset;
@@ -69,6 +85,10 @@ span.no {
 }
 aside.main-sidebar.sidebar-dark-danger.elevation-4 {
     background: #1d3557;
+}
+.main-sidebar nav {
+    box-shadow: unset;
+    margin-top: unset !important;
 }
 .cstm-sidebar li.nav-item {
     color: #fff;
