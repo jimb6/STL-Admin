@@ -1,21 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\API\v1\Controller;
-use App\Models\Base;
-use App\Models\Bet;
-use App\Models\BetGame;
-use App\Models\BetTransaction;
-use App\Models\DrawPeriod;
-use App\Models\User;
-use Carbon\Carbon;
+
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class BetCollectionController extends Controller

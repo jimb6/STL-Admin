@@ -123,6 +123,12 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+
+    'custom' => [
+        'base' => 'Admin',
+        ''
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

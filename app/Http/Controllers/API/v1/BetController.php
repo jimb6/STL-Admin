@@ -1,11 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\API\v1\Controller;
-use App\Models\Bet;
-use App\Models\BetGame;
-use App\Models\DrawPeriod;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;

@@ -2062,6 +2062,130 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NotificationCard.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/NotificationCard.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "NotificationCard"
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Table.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Table.vue?vue&type=script&lang=js& ***!
@@ -2258,6 +2382,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Card__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Card */ "./resources/js/components/Card.vue");
 /* harmony import */ var _components_LineChart__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/LineChart */ "./resources/js/components/LineChart.vue");
+/* harmony import */ var _components_NotificationCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/NotificationCard */ "./resources/js/components/NotificationCard.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2285,11 +2410,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Dashboard",
   components: {
+    NotificationCard: _components_NotificationCard__WEBPACK_IMPORTED_MODULE_3__["default"],
     Card: _components_Card__WEBPACK_IMPORTED_MODULE_1__["default"],
     LineChart: _components_LineChart__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
@@ -23806,7 +23941,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.card {\r\n    background: unset;\r\n    box-shadow: unset;\n}\n.carditem-container {\r\n    display: grid;\r\n    grid-template-columns: 1fr 1fr 1fr 1fr;\r\n    grid-gap: 40px;\r\n    padding: 20px 0;\n}\n.card-item {\r\n    position: relative;\r\n    padding: 20px;\r\n    background: #fff;\r\n    display: flex;\r\n    border-radius: 5px;\r\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.card-item > div:first-child {\r\n    width: 40%;\n}\n.card-item > div:last-child {\r\n    width: 60%;\n}\n.card-item i {\r\n    position: absolute;\r\n    width: 30%;\r\n    height: 100px;\r\n    top: -20px;\r\n    text-align: center;\r\n    line-height: 100px;\r\n    font-size: 35px;\r\n    color: #fff;\r\n    border-radius: 5px;\r\n    background: linear-gradient(200DEG, rgb(75, 108, 183), rgb(24, 40, 72));\n}\n.card-item h3 {\r\n    text-transform: uppercase;\r\n    font-size: 18px;\r\n    font-weight: 300;\r\n    letter-spacing: 1px;\r\n    text-align: right;\r\n    letter-spacing: 1px;\n}\n.card-item p {\r\n    font-size: 40px;\r\n    text-align: right;\n}\n.cstm-linechart {\r\n    padding: 40px 20px;\r\n    background: #fff;\r\n    border-radius: 5px;\r\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.linechart-title {\r\n    position: relative;\r\n    padding-bottom: 20px;\r\n    margin-bottom: 30px;\r\n    border-bottom: 1px solid #f3f3f3;\n}\n.linechart-title h3 {\r\n    text-transform: uppercase;\r\n    font-weight: 300;\r\n    letter-spacing: 1px;\r\n    margin: 0;\n}\n.linechart-title p {\r\n    padding: 10px 20px;\r\n    background: #a8dadc;\r\n    color: #fff;\r\n    border-radius: 5px;\r\n    font-weight: 600;\n}\n.linechart-title p:before {\r\n    content: \"\\20B1\";\r\n    margin-right: 5px;\n}\n.card-item-description {\r\n    font-size: 14px;\r\n    color: #555555;\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n.dashboard .card {\n    background: unset;\n    box-shadow: unset;\n}\n.dashboard .carditem-container {\n    display: grid;\n    grid-template-columns: 1fr 1fr 1fr 1fr;\n    grid-gap: 40px;\n    padding: 20px 0;\n}\n.dashboard .card-item {\n    position: relative;\n    padding: 20px;\n    background: #fff;\n    display: flex;\n    border-radius: 5px;\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.dashboard .card-item > div:first-child {\n    width: 40%;\n}\n.dashboard .card-item > div:last-child {\n    width: 60%;\n}\n.dashboard .card-item i {\n    position: absolute;\n    width: 30%;\n    height: 100px;\n    top: -20px;\n    text-align: center;\n    line-height: 100px;\n    font-size: 35px;\n    color: #fff;\n    border-radius: 5px;\n    background: linear-gradient(200DEG, rgb(75, 108, 183), rgb(24, 40, 72));\n}\n.dashboard .card-item h3 {\n    text-transform: uppercase;\n    font-size: 18px;\n    font-weight: 300;\n    letter-spacing: 1px;\n    text-align: right;\n    letter-spacing: 1px;\n}\n.dashboard .card-item p {\n    font-size: 40px;\n    text-align: right;\n}\n.dashboard .cstm-linechart {\n    padding: 40px 20px;\n    background: #fff;\n    border-radius: 5px;\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.linechart-title {\n    position: relative;\n    padding-bottom: 20px;\n    margin-bottom: 30px;\n    border-bottom: 1px solid #f3f3f3;\n}\n.linechart-title h3 {\n    text-transform: uppercase;\n    font-weight: 300;\n    letter-spacing: 1px;\n    margin: 0;\n}\n.linechart-title p {\n    padding: 10px 20px;\n    background: #a8dadc;\n    color: #fff;\n    border-radius: 5px;\n    font-weight: 600;\n}\n.linechart-title p:before {\n    content: \"\\20B1\";\n    margin-right: 5px;\n}\n.card-item-description {\n    font-size: 14px;\n    color: #555555;\n}\n\n", ""]);
 
 // exports
 
@@ -23825,7 +23960,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.loader-container {\n    position: absolute;\n    z-index: 99;\n    top: 50%;\n    left: 50%;\n    transform: translateX(-50%) translateY(-50%);\n}\n.cstm-error {\n    padding: 8px;\n    border: 2px solid #EAF11B;\n    color: #EAF11B;\n    text-transform: uppercase;\n    font-weight: 600;\n    font-size: 14px;\n    margin-bottom: 20px;\n    transition-duration: 500ms;\n}\n\n/* CUSTOM LOGIN CSS */\nbody.login-page {\n    background: rgb(29,53,87);\n    background: linear-gradient(22deg, rgba(29,53,87,1) 0%, rgba(230,57,70,1) 100%);\n}\n.login-logo img {\n    position: relative;\n    top: -4px;\n}\n.login-logo a, .login-logo a b {\n     color: #EAF11B;\n     font-weight: 500;\n}\n.login-card-body {\n    border-radius: 10px;\n}\n.login-card-body:nth-of-type(1) {\n    background: unset;\n}\n.login-card-body:nth-of-type(2) {\n     border-radius: 10px;\n     background: unset;\n     border: 1px solid rgba(255,255,255,.75);\n}\nh3.login-box-msg {\n    font-weight: 200;\n    letter-spacing: 2px;\n    color: #FFFFFF;\n}\n.input-group-text {\n    border: 1px solid #ffffff !important;\n    border-right: unset !important;\n    border-radius: unset !important;\n    border-top-left-radius: 5px !important;\n    border-bottom-left-radius: 5px !important;\n}\n.login-page input.form-control.form__input {\n    border: unset;\n}\n.cstm-submit-btn {\n    text-transform: uppercase;\n    letter-spacing: 2px;\n    font-weight: 300;\n    background: #1d3557;\n    border: none;\n    padding: 10px;\n    transition-duration: 400ms;\n    color: #fff;\n}\n.cstm-submit-btn:hover {\n    background: #457b9d;\n    color: #fff;\n}\n", ""]);
+exports.push([module.i, "\n.loader-container {\r\n    position: absolute;\r\n    z-index: 99;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translateX(-50%) translateY(-50%);\n}\n.cstm-error {\r\n    padding: 8px;\r\n    border: 2px solid #EAF11B;\r\n    color: #EAF11B;\r\n    text-transform: uppercase;\r\n    font-weight: 600;\r\n    font-size: 14px;\r\n    margin-bottom: 20px;\r\n    transition-duration: 500ms;\n}\r\n\r\n/* CUSTOM LOGIN CSS */\nbody.login-page {\r\n    background: rgb(29,53,87);\r\n    background: linear-gradient(22deg, rgba(29,53,87,1) 0%, rgba(230,57,70,1) 100%);\n}\n.login-logo img {\r\n    position: relative;\r\n    top: -4px;\n}\n.login-logo a, .login-logo a b {\r\n     color: #EAF11B;\r\n     font-weight: 500;\n}\n.login-card-body {\r\n    border-radius: 10px;\n}\n.login-card-body:nth-of-type(1) {\r\n    background: unset;\n}\n.login-card-body:nth-of-type(2) {\r\n     border-radius: 10px;\r\n     background: unset;\r\n     border: 1px solid rgba(255,255,255,.75);\n}\nh3.login-box-msg {\r\n    font-weight: 200;\r\n    letter-spacing: 2px;\r\n    color: #FFFFFF;\n}\n.input-group-text {\r\n    border: 1px solid #ffffff !important;\r\n    border-right: unset !important;\r\n    border-radius: unset !important;\r\n    border-top-left-radius: 5px !important;\r\n    border-bottom-left-radius: 5px !important;\n}\n.login-page input.form-control.form__input {\r\n    border: unset;\n}\n.cstm-submit-btn {\r\n    text-transform: uppercase;\r\n    letter-spacing: 2px;\r\n    font-weight: 300;\r\n    background: #1d3557;\r\n    border: none;\r\n    padding: 10px;\r\n    transition-duration: 400ms;\r\n    color: #fff;\n}\n.cstm-submit-btn:hover {\r\n    background: #457b9d;\r\n    color: #fff;\n}\r\n", ""]);
 
 // exports
 
@@ -90011,6 +90146,230 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NotificationCard.vue?vue&type=template&id=789450f4&scoped=true&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/NotificationCard.vue?vue&type=template&id=789450f4&scoped=true& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-header border-0" }, [
+          _c("h3", { staticClass: "card-title" }, [_vm._v("Products")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-tools" }, [
+            _c(
+              "a",
+              { staticClass: "btn btn-tool btn-sm", attrs: { href: "#" } },
+              [_c("i", { staticClass: "fas fa-download" })]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              { staticClass: "btn btn-tool btn-sm", attrs: { href: "#" } },
+              [_c("i", { staticClass: "fas fa-bars" })]
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body p-0" }, [
+          _c(
+            "table",
+            { staticClass: "table table-striped table-valign-middle" },
+            [
+              _c("thead", [
+                _c("tr", [
+                  _c("th", [_vm._v("Product")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("Price")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("Sales")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("More")])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("tbody", [
+                _c("tr", [
+                  _c("td", [
+                    _c("img", {
+                      staticClass: "img-circle img-size-32 mr-2",
+                      attrs: {
+                        src: "dist/img/default-150x150.png",
+                        alt: "Product 1"
+                      }
+                    }),
+                    _vm._v(
+                      "\n                        Some Product\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("$13 USD")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("small", { staticClass: "text-success mr-1" }, [
+                      _c("i", { staticClass: "fas fa-arrow-up" }),
+                      _vm._v(
+                        "\n                            12%\n                        "
+                      )
+                    ]),
+                    _vm._v(
+                      "\n                        12,000 Sold\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "a",
+                      { staticClass: "text-muted", attrs: { href: "#" } },
+                      [_c("i", { staticClass: "fas fa-search" })]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [
+                    _c("img", {
+                      staticClass: "img-circle img-size-32 mr-2",
+                      attrs: {
+                        src: "dist/img/default-150x150.png",
+                        alt: "Product 1"
+                      }
+                    }),
+                    _vm._v(
+                      "\n                        Another Product\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("$29 USD")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("small", { staticClass: "text-warning mr-1" }, [
+                      _c("i", { staticClass: "fas fa-arrow-down" }),
+                      _vm._v(
+                        "\n                            0.5%\n                        "
+                      )
+                    ]),
+                    _vm._v(
+                      "\n                        123,234 Sold\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "a",
+                      { staticClass: "text-muted", attrs: { href: "#" } },
+                      [_c("i", { staticClass: "fas fa-search" })]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [
+                    _c("img", {
+                      staticClass: "img-circle img-size-32 mr-2",
+                      attrs: {
+                        src: "dist/img/default-150x150.png",
+                        alt: "Product 1"
+                      }
+                    }),
+                    _vm._v(
+                      "\n                        Amazing Product\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("$1,230 USD")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("small", { staticClass: "text-danger mr-1" }, [
+                      _c("i", { staticClass: "fas fa-arrow-down" }),
+                      _vm._v(
+                        "\n                            3%\n                        "
+                      )
+                    ]),
+                    _vm._v(
+                      "\n                        198 Sold\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "a",
+                      { staticClass: "text-muted", attrs: { href: "#" } },
+                      [_c("i", { staticClass: "fas fa-search" })]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [
+                    _c("img", {
+                      staticClass: "img-circle img-size-32 mr-2",
+                      attrs: {
+                        src: "dist/img/default-150x150.png",
+                        alt: "Product 1"
+                      }
+                    }),
+                    _vm._v(
+                      "\n                        Perfect Item\n                        "
+                    ),
+                    _c("span", { staticClass: "badge bg-danger" }, [
+                      _vm._v("NEW")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("$199 USD")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("small", { staticClass: "text-success mr-1" }, [
+                      _c("i", { staticClass: "fas fa-arrow-up" }),
+                      _vm._v(
+                        "\n                            63%\n                        "
+                      )
+                    ]),
+                    _vm._v(
+                      "\n                        87 Sold\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "a",
+                      { staticClass: "text-muted", attrs: { href: "#" } },
+                      [_c("i", { staticClass: "fas fa-search" })]
+                    )
+                  ])
+                ])
+              ])
+            ]
+          )
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Table.vue?vue&type=template&id=5bd01d73&scoped=true&":
 /*!********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Table.vue?vue&type=template&id=5bd01d73&scoped=true& ***!
@@ -90211,36 +90570,42 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "dashboard" },
-    [
-      _c("Card", { attrs: { cards: _vm.cards } }),
-      _vm._v(" "),
+  return _c("div", { staticClass: "dashboard" }, [
+    _c("div", { staticClass: "row" }, [
       _c(
         "div",
-        { staticClass: "cstm-linechart" },
-        [
-          _c("div", { staticClass: "flex-between linechart-title" }, [
-            _c("h3", {}, [_vm._v("Collections")]),
-            _vm._v(" "),
-            _c("p", [_vm._v(_vm._s(_vm.totalCollection))])
-          ]),
-          _vm._v(" "),
-          _c("LineChart", {
-            attrs: {
-              chartData: _vm.arrCollections,
-              options: _vm.chartOptions,
-              chartColors: _vm.collectionsChartColors,
-              label: ""
-            }
-          })
-        ],
+        { staticClass: "col-lg-12" },
+        [_c("Card", { attrs: { cards: _vm.cards } })],
         1
-      )
-    ],
-    1
-  )
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-lg-9" }, [
+        _c(
+          "div",
+          { staticClass: "cstm-linechart" },
+          [
+            _c("div", { staticClass: "flex-between linechart-title" }, [
+              _c("h3", {}, [_vm._v("Collections")]),
+              _vm._v(" "),
+              _c("p", [_vm._v(_vm._s(_vm.totalCollection))])
+            ]),
+            _vm._v(" "),
+            _c("LineChart", {
+              attrs: {
+                chartData: _vm.arrCollections,
+                options: _vm.chartOptions,
+                chartColors: _vm.collectionsChartColors,
+                label: ""
+              }
+            })
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-3" }, [_c("NotificationCard")], 1)
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -118466,8 +118831,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
-  key: "",
-  cluster: "mt1",
+  key: "0671ee87f21fe5a67c85",
+  cluster: "ap1",
   forceTLS: true
 });
 
@@ -118658,6 +119023,75 @@ component.options.__file = "resources/js/components/LineChart.vue"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LineChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./LineChart.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LineChart.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LineChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/NotificationCard.vue":
+/*!******************************************************!*\
+  !*** ./resources/js/components/NotificationCard.vue ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _NotificationCard_vue_vue_type_template_id_789450f4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NotificationCard.vue?vue&type=template&id=789450f4&scoped=true& */ "./resources/js/components/NotificationCard.vue?vue&type=template&id=789450f4&scoped=true&");
+/* harmony import */ var _NotificationCard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NotificationCard.vue?vue&type=script&lang=js& */ "./resources/js/components/NotificationCard.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _NotificationCard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _NotificationCard_vue_vue_type_template_id_789450f4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _NotificationCard_vue_vue_type_template_id_789450f4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "789450f4",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/NotificationCard.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/NotificationCard.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/NotificationCard.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NotificationCard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./NotificationCard.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NotificationCard.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NotificationCard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/NotificationCard.vue?vue&type=template&id=789450f4&scoped=true&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/components/NotificationCard.vue?vue&type=template&id=789450f4&scoped=true& ***!
+  \*************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NotificationCard_vue_vue_type_template_id_789450f4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./NotificationCard.vue?vue&type=template&id=789450f4&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NotificationCard.vue?vue&type=template&id=789450f4&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NotificationCard_vue_vue_type_template_id_789450f4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NotificationCard_vue_vue_type_template_id_789450f4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 
@@ -119155,8 +119589,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Julius\Documents\GIT-KRAKEN\STL-Admin\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Julius\Documents\GIT-KRAKEN\STL-Admin\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\RSY-JIM\PhpstormProjects\RSY-Project\STL-Admin\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

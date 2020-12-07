@@ -2,7 +2,6 @@
 
 
 use App\Http\Controllers\API\v1\AgentController;
-use App\Http\Controllers\API\v1\AgentLoginController;
 use App\Http\Controllers\API\v1\BaseController;
 use App\Http\Controllers\API\v1\BoothController;
 use App\Http\Controllers\API\v1\CloseNumberController;
@@ -13,8 +12,7 @@ use App\Http\Controllers\API\v1\HomeController;
 use App\Http\Controllers\API\v1\PermissionController;
 use App\Http\Controllers\API\v1\RoleController;
 use App\Http\Controllers\API\v1\UserController;
-use App\Http\Controllers\BetCollectionController;
-use App\Http\Controllers\BetController;
+use App\Http\Controllers\API\v1\BetCollectionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -68,7 +66,6 @@ Route::prefix('admin')
         Route::get('/home', [HomeController::class, 'index'])->name('admin.home');
         Route::resource('roles', RoleController::class);
         Route::resource('permissions', PermissionController::class);
-
         Route::resource('agents', AgentController::class);
         Route::resource('booths', BoothController::class);
         Route::resource('bases', BaseController::class);
@@ -84,8 +81,10 @@ Route::prefix('admin')
         );
         Route::resource('close-numbers', CloseNumberController::class);
 
-        Route::get('/games/{any}', [BetController::class, 'index'])->name('game.bets');
-        Route::get('/games/{any}', [BetController::class, 'show'])->name('game.bets');
+//        Route::get('user/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('user.logout');
+
+        Route::get('user/profile', [UserController::class, 'showProfile'])->name('user.profile');
+        Route::get('/games/{any}', [BetCollectionController::class, 'index'])->name('game.bets');
 
 //        Customize Request
 

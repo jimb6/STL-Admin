@@ -16,10 +16,11 @@ class DatabaseSeeder extends Seeder
         // Adding an admin user
         $this->call(BaseSeeder::class);
         $this->call(BoothSeeder::class);
-        $user = \App\Models\User::factory(5);
+        $this->call(AgentSeeder::class);
+//        $user = \App\Models\User::factory(5);
         $this->call(PermissionsSeeder::class);
 //        $this->call(CollectionRecordSeeder::class);
-        $this->call(AgentSeeder::class);
+
         $this->call(DrawPeriodSeeder::class);
 //        $this->call(CloseNumberSeeder::class);
         $this->call(CollectionStatusSeeder::class);
@@ -31,6 +32,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call(DrawResultSeeder::class);
         $this->call(BetGameSeeder::class);
         $this->call(BetGameDrawPeriodFactory::class);
+
 
     }
 }

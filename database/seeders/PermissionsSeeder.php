@@ -15,7 +15,7 @@ class PermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
         Permission::create(['name' => 'menu dashboard']);
-        Permission::create(['name' => 'menu agent']);
+        Permission::create(['name' => 'menu agents']);
         Permission::create(['name' => 'menu booths']);
         Permission::create(['name' => 'menu gamedraws']);
         Permission::create(['name' => 'menu bets']);
@@ -141,7 +141,7 @@ class PermissionsSeeder extends Seeder
         ]);
 
         $monitoringMenu = Permission::all()->whereIn(
-            'name', ['menu dashboard', 'menu agent', 'menu booths', 'menu gamedraws', 'menu bets', 'menu collections', 'menu reports']);
+            'name', ['menu dashboard', 'menu agents', 'menu booths', 'menu gamedraws', 'menu bets', 'menu collections', 'menu reports']);
         $monitoringAccess = Permission::all()->whereIn(
             'name',
             [

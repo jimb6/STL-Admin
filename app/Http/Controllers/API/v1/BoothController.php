@@ -4,10 +4,8 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Requests\BoothStoreRequest;
 use App\Http\Requests\BoothUpdateRequest;
-use App\Models\Agent;
 use App\Models\Base;
 use App\Models\Booth;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class BoothController extends Controller
@@ -18,7 +16,7 @@ class BoothController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('view-any', Booth::class);
+        $this->authorize('view booths', Booth::class);
 
         $search = $request->get('search', '');
 
@@ -26,7 +24,7 @@ class BoothController extends Controller
             ->latest()
             ->paginate();
 
-        return view('app.booths.index', compact('booths', 'search'));
+        return view('booths.index', compact('booths', 'search'));
     }
 
     /**
@@ -35,11 +33,11 @@ class BoothController extends Controller
      */
     public function create(Request $request)
     {
-        $this->authorize('create', Booth::class);
+        $this->authorize('create booths', Booth::class);
 
         $bases = Base::pluck('base_name', 'id');
 
-        return view('app.booths.create', compact('bases'));
+        return view('booths.create', compact('bases'));
     }
 
     /**
@@ -48,7 +46,7 @@ class BoothController extends Controller
      */
     public function store(BoothStoreRequest $request)
     {
-        $this->authorize('create', Booth::class);
+        $this->authorize('create booths', Booth::class);
 
         $validated = $request->validated();
 
@@ -64,7 +62,7 @@ class BoothController extends Controller
      */
     public function show(Request $request, Booth $booth)
     {
-        $this->authorize('view', $booth);
+        $this->authorize('view booths', $booth);
 
         return view('app.booths.show', compact('booth'));
     }
@@ -76,7 +74,7 @@ class BoothController extends Controller
      */
     public function edit(Request $request, Booth $booth)
     {
-        $this->authorize('update', $booth);
+        $this->authorize('update booths', $booth);
 
         $bases = Base::pluck('base_name', 'id');
 
@@ -90,7 +88,7 @@ class BoothController extends Controller
      */
     public function update(BoothUpdateRequest $request, Booth $booth)
     {
-        $this->authorize('update', $booth);
+        $this->authorize('update booths', $booth);
 
         $validated = $request->validated();
 
@@ -106,7 +104,7 @@ class BoothController extends Controller
      */
     public function destroy(Request $request, Booth $booth)
     {
-        $this->authorize('delete', $booth);
+        $this->authorize('delete booths', $booth);
 
         $booth->delete();
 

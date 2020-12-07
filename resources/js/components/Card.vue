@@ -1,10 +1,10 @@
 <template>
-	
+
 	<div class="card">
 		<CardItem v-bind:cards="cards"/>
 	</div>
-	
-	
+
+
 </template>
 
 <script>
@@ -18,7 +18,7 @@ export default {
     },
     data() {
         return {
-            
+
         };
     },
 };
@@ -26,6 +26,5 @@ export default {
 
 
 <style scoped>
-
 
 </style>
