@@ -13,7 +13,7 @@ use App\Http\Controllers\API\v1\HomeController;
 use App\Http\Controllers\API\v1\PermissionController;
 use App\Http\Controllers\API\v1\RoleController;
 use App\Http\Controllers\API\v1\UserController;
-use App\Http\Controllers\BetCollection;
+use App\Http\Controllers\BetCollectionController;
 use App\Http\Controllers\BetController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -56,7 +56,7 @@ Route::get('/', function () {
 Route::middleware('auth:web')->group(function (){
     Route::get('/agents/count', [AgentController::class, 'activeAgents'])->name('agents.active.count');
     Route::get('/booths/count', [BoothController::class, 'getActiveBooths'])->name('booths.active.count');
-    Route::get('/collections/daily-sum', [BetCollection::class, 'todayBaseCollection'])->name('bet.collection.daily.sum');
+    Route::get('/collections/daily-sum', [BetCollectionController::class, 'todayBaseCollection'])->name('bet.collection.daily.sum');
 });
 
 

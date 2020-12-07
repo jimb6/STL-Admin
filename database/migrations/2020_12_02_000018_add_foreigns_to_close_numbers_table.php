@@ -18,6 +18,11 @@ class AddForeignsToCloseNumbersTable extends Migration
                 ->foreign('bet_game_id')
                 ->references('id')
                 ->on('bet_games');
+
+            $table
+                ->foreign('draw_period_id')
+                ->references('id')
+                ->on('draw_periods');
         });
     }
 
