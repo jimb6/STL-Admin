@@ -86,6 +86,7 @@ Route::prefix('admin')
         Route::get('user/profile', [UserController::class, 'showProfile'])->name('user.profile');
         Route::get('/games/{any}', [BetCollectionController::class, 'index'])->name('game.bets');
 
+
 //        Customize Request
 
     });

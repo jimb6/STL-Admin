@@ -13,7 +13,7 @@
         <!-- /.login-logo -->
         <div class="card">
 
-            <div class="card-body login-card-body">
+            <div :class="{'shake': error}" class="card-body login-card-body" >
                 <h3 class="login-box-msg">LOGIN</h3>
                 <form>
 
@@ -224,5 +224,71 @@ h3.login-box-msg {
 .cstm-submit-btn:hover {
     background: #457b9d;
     color: #fff;
+}
+.shake {
+    animation: shake 150ms 2 linear;
+    -moz-animation: shake 150ms 2 linear;
+    -webkit-animation: shake 150ms 2 linear;
+    -o-animation: shake 150ms 2 linear;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(5px, 0);
+    }
+    50% {
+        transform: translate(-5px, 0);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+@-moz-keyframes shake {
+    0% {
+        -moz-transform: translate(5px, 0);
+    }
+    50% {
+        -moz-transform: translate(-5px, 0);
+    }
+    100% {
+        -moz-transform: translate(0, 0);
+    }
+}
+
+@-webkit-keyframes shake {
+    0% {
+        -webkit-transform: translate(5px, 0);
+    }
+    50% {
+        -webkit-transform: translate(-5px, 0);
+    }
+    100% {
+        -webkit-transform: translate(0, 0);
+    }
+}
+
+@-ms-keyframes shake {
+    0% {
+        -ms-transform: translate(5px, 0);
+    }
+    50% {
+        -ms-transform: translate(-5px, 0);
+    }
+    100% {
+        -ms-transform: translate(0, 0);
+    }
+}
+
+@-o-keyframes shake {
+    0% {
+        -o-transform: translate(5px, 0);
+    }
+    50% {
+        -o-transform: translate(-5px, 0);
+    }
+    100% {
+        -o-transform: translate(0, 0);
+    }
 }
 </style>

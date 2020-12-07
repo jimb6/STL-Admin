@@ -135,7 +135,7 @@ export default {
                 {date: "Dec 31", total: "357010"},
             ],
         };
-        data["collections"].reverse().forEach(d => {
+        data["collections"].forEach(d => {
             const date = d.date;
             const {
                 total,

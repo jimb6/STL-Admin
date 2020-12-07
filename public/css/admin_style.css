@@ -77,6 +77,12 @@ span.d-none.d-md-inline{
 .main-sidebar span.brand-text {
     color: #EAF11B;
 }
+.main-sidebar li.nav-header {
+    text-transform: uppercase;
+    color: rgba(255,255,255,.25) !important;
+    font-size: 12px !important;
+    letter-spacing: 1px;
+}
 .cstm-sidebar {
     padding: unset;
 }
@@ -209,7 +215,6 @@ aside.main-sidebar.sidebar-dark-danger.elevation-4 {
 	width: 100%;
 	min-height: 75vh;
 	background: #fff;
-	margin-top: 30px;
 }
 .cstm-display table {
 	width: 100%;
@@ -277,7 +282,6 @@ table.dataTable>thead .sorting_desc_disabled:after {
 }
 .cstm-table-filter{
     text-align: right;
-    padding: 20px 0 10px 0;
 }
 input.cstm-input {
 	border-radius: 50px;
@@ -296,6 +300,8 @@ input.datepicker {
     outline: none;
     background: transparent;
     font-size: 14px;
+    transition-duration: 400ms;
+    width: 125px;
 }
 .input-field input {
     font-size: 14px !important;
@@ -306,6 +312,12 @@ input.datepicker {
 }
 .input-field .selected {
     background: #1D3557 !important;
+}
+.cstm-table-filter .input-field,
+.cstm-table-filter .select-wrapper input.select-dropdown{
+    width: 150px;
+    height: 34px;
+    border-bottom: 1px solid #ddd !important;
 }
 .select-wrapper svg {
     opacity: .5;
