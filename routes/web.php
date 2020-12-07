@@ -85,7 +85,7 @@ Route::prefix('admin')
         Route::resource('close-numbers', CloseNumberController::class);
 
         Route::get('/games/{any}', [BetController::class, 'index'])->name('game.bets');
-        Route::get('/games/{any}', [BetController::class, 'show'])->name('game.bets');
+//        Route::get('/games/{any}', [BetController::class, 'show'])->name('game.bets');
 
 //        Customize Request
 
