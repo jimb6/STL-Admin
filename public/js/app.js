@@ -2485,7 +2485,7 @@ __webpack_require__.r(__webpack_exports__);
         optionTitle: "Draw Period",
         options: ['10:30AM', '4PM', '9PM'],
         optionValues: ['1', '2', '3'],
-        optionSelected: '10:30AM'
+        optionSelected: '4PM'
       }]
     };
   },
