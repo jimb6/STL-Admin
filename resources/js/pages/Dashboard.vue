@@ -1,31 +1,41 @@
 <template>
-
     <div class="dashboard">
-        <Card v-bind:cards="cards"/>
-        <div class="cstm-linechart">
-            <div class="flex-between linechart-title">
-                <h3 class="">Collections</h3>
-                <p>{{ totalCollection }}</p>
+        <div class="row">
+            <div class="col-lg-12">
+                <Card v-bind:cards="cards"/>
             </div>
 
-            <LineChart
-                :chartData="arrCollections"
-                :options="chartOptions"
-                :chartColors="collectionsChartColors"
-                label=""
-            />
-        </div>
+            <div class="col-lg-9">
+                <div class="cstm-linechart">
+                    <div class="flex-between linechart-title">
+                        <h3 class="">Collections</h3>
+                        <p>{{ totalCollection }}</p>
+                    </div>
 
+                    <LineChart
+                        :chartData="arrCollections"
+                        :options="chartOptions"
+                        :chartColors="collectionsChartColors"
+                        label=""
+                    />
+                </div>
+            </div>
+            <div class="col-3">
+                <NotificationCard></NotificationCard>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import Card from "../components/Card";
 import LineChart from "../components/LineChart";
+import NotificationCard from "../components/NotificationCard";
 
 export default {
     name: "Dashboard",
     components: {
+        NotificationCard,
         Card,
         LineChart
     },
@@ -187,19 +197,19 @@ export default {
 
 <style>
 
-.card {
+.dashboard .card {
     background: unset;
     box-shadow: unset;
 }
 
-.carditem-container {
+.dashboard .carditem-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 40px;
     padding: 20px 0;
 }
 
-.card-item {
+.dashboard .card-item {
     position: relative;
     padding: 20px;
     background: #fff;
@@ -208,15 +218,15 @@ export default {
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);
 }
 
-.card-item > div:first-child {
+.dashboard .card-item > div:first-child {
     width: 40%;
 }
 
-.card-item > div:last-child {
+.dashboard .card-item > div:last-child {
     width: 60%;
 }
 
-.card-item i {
+.dashboard .card-item i {
     position: absolute;
     width: 30%;
     height: 100px;
@@ -229,7 +239,7 @@ export default {
     background: linear-gradient(200DEG, rgb(75, 108, 183), rgb(24, 40, 72));
 }
 
-.card-item h3 {
+.dashboard .card-item h3 {
     text-transform: uppercase;
     font-size: 18px;
     font-weight: 300;
@@ -238,12 +248,12 @@ export default {
     letter-spacing: 1px;
 }
 
-.card-item p {
+.dashboard .card-item p {
     font-size: 40px;
     text-align: right;
 }
 
-.cstm-linechart {
+.dashboard .cstm-linechart {
     padding: 40px 20px;
     background: #fff;
     border-radius: 5px;

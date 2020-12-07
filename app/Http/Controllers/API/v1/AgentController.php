@@ -23,6 +23,7 @@ class AgentController extends Controller
     public function index(Request $request)
     {
         $this->authorize('view agents', Agent::class);
+
         $search = $request->get('search', '');
         $agents = Agent::search($search)
             ->latest()
@@ -31,7 +32,7 @@ class AgentController extends Controller
 
         return $request->wantsJson() ?
             new JsonResponse([$agents], 200)
-            : view('agent.agents', compact('agents', 'search', 'activeAgents'));
+            : view('agents.index', compact('agents', 'search', 'activeAgents'));
     }
 
     /**
@@ -44,7 +45,7 @@ class AgentController extends Controller
 
         return $request->wantsJson() ?
             new JsonResponse([], 200)
-            : view('app.agents.create');
+            : view('agents.create');
     }
 
     /**
@@ -67,7 +68,7 @@ class AgentController extends Controller
 
         return $request->wantsJson() ?
             new JsonResponse([], 302)
-            : view('app.agents.show', compact('agent'));
+            : view('agents.show', compact('agent'));
     }
 
     /**
@@ -81,7 +82,7 @@ class AgentController extends Controller
 
         return $request->wantsJson() ?
             new JsonResponse([], 200)
-            : view('app.agents.edit', compact('agent'));
+            : view('agents.edit', compact('agent'));
 
         return redirect()->route('agents.edit', $agent);
     }

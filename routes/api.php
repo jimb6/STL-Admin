@@ -1,16 +1,7 @@
 <?php
 
-use App\Http\Controllers\API\v1\AgentController;
-use App\Http\Controllers\API\v1\AgentLoginController;
-use App\Http\Controllers\API\v1\BaseController;
-use App\Http\Controllers\API\v1\BoothController;
-use App\Http\Controllers\API\v1\CloseNumberController;
-use App\Http\Controllers\API\v1\CollectionRecordController;
-use App\Http\Controllers\API\v1\CollectionStatusController;
-use App\Http\Controllers\API\v1\DrawResultController;
-use App\Http\Controllers\API\v1\PermissionController;
-use App\Http\Controllers\API\v1\RoleController;
-use App\Http\Controllers\API\v1\UserController;
+use App\Http\Controllers\API\v1\API\v1\API\v1\AgentController;
+use App\Http\Controllers\API\v1\API\v1\API\v1\AgentLoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,7 +21,7 @@ Route::middleware('auth')->get('/user', function (Request $request) {
 
 
 Route::group([
-    'prefix' => '/v1/agent'
+    'prefix' => '/v1/agents'
 ], function () {
     Route::post('/login', [AgentLoginController::class, 'login']);
     Route::middleware('sanctum')

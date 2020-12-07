@@ -3,24 +3,23 @@ import VueRouter from 'vue-router'
 import VueProgressBar from 'vue-progressbar'
 import Vue from 'vue'
 import $ from 'jquery';
-// import pagination from 'laravel-vue-semantic-ui-pagination';
+import axios from 'axios';
+import Vuelidate from 'vuelidate'
+
+import router from "./routes";
+
+import Dashboard from "./pages/Dashboard";
+import Agent from "./pages/Agent";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
 import Bet from './pages/Bet'
 
-Vue.use(VueRouter)
 require('./bootstrap');
 
 window.$ = window.jQuery = $;
 window.Vue = require('vue');
-import router from "./routes";
-import Dashboard from "./pages/Dashboard";
-import Agent from "./pages/Agent";
-import { Line } from "vue-chartjs";
-// import VueAxios from 'vue-axios';
-import axios from 'axios';
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import Vuelidate from 'vuelidate'
 
+Vue.use(VueRouter)
 // const files = require.context('./', true, /\.vue$/i)
 Vue.component('pagination', require('laravel-vue-pagination'));
 // Vue.component('pagination', require('laravel-vue-semantic-ui-pagination'));

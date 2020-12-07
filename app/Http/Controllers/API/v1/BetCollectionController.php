@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\API\v1\Controller;
+
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
-class BetController extends Controller
+class BetCollectionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,6 +20,8 @@ class BetController extends Controller
     public function index()
     {
         //
+
+
     }
 
     /**
@@ -35,11 +38,12 @@ class BetController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return Response
+     * @return Application|Factory|View|Response
      */
     public function store(Request $request)
     {
         //
+
     }
 
     /**
@@ -50,10 +54,7 @@ class BetController extends Controller
      */
     public function show($id)
     {
-        //
-        $betType = $id;
-//        $betType = str_replace('-', '',$betType);
-        return view('bets.categorize', compact('betType'));
+
     }
 
     /**
@@ -88,5 +89,32 @@ class BetController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function baseCollection()
+    {
+        try {
+//          GET 10:30 2D Bets
+            $data = DB::table('bets_today')
+                ->where('bet_game_id', '=', 2)
+                ->where('draw_period_id', '=', 1)
+                ->sum('amount');
+        }catch (\Exception $ex)
+        {
+            DB::select('call setBetsToday');
+            $data = DB::table('bets_today')->where('bet_game_id', '=', 2)->get();
+        }
+
+//        $data = Bet::with('drawPeriod', 'betGame')->where('created_at', '')->get();
+
+        return response([$data], 200);
+
+    }
+
+    public function todayBaseCollection()
+    {
+        $data = DB::select('call sumDailyCollection(?)', [1]);
+        return response([$data], 200)->header('Content-Type', 'application/json');
     }
 }

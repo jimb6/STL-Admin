@@ -4,7 +4,6 @@
 namespace App\Http\Controllers\API\v1;
 
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {

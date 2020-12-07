@@ -17,7 +17,7 @@ class CreateCloseNumbersTable extends Migration
             $table->bigIncrements('id');
             $table->string('number_value');
             $table->unsignedBigInteger('bet_game_id');
-
+            $table->unsignedBigInteger('draw_period_id');
             $table->timestamps();
             $table->softDeletes();
         });
