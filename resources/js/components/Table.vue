@@ -4,16 +4,21 @@
             <div class="cstm-table-filter">
                 <div class="flex">
                     <button class="cstm-btn small mr-3" @click="filterDate">Filter</button>
-                    <input type="text" class="datepicker mr-3" :class="{'changed': date_changed}" placeholder="Date" :value="date_filter" @change="changeDate($event)">
+                    <input type="text" class="datepicker mr-3" :class="{'changed': date_changed}" placeholder="Date"
+                           :value="date_filter" @change="changeDate($event)">
                     <div class="input-field s12 my-0" v-for="selectItem in selectFilters">
                         <select class="cstm-select">
                             <option value="" disabled selected>{{ selectItem.optionTitle }}</option>
-                            <option v-for="(option, index) in selectItem.options" :value="selectItem.optionValues[index]" :selected="option == selectItem.optionSelected">{{ option }}</option>
+                            <option v-for="(option, index) in selectItem.options"
+                                    :value="selectItem.optionValues[index]"
+                                    :selected="option == selectItem.optionSelected">{{ option }}
+                            </option>
                         </select>
                     </div>
                 </div>
             </div>
             <div id="cstm-table_filter" class="dataTables_filter flex-end cstm-search">
+                <button class="cstm-btn small icon font-large mr-3" @click="exportToExcel('cstm-table')"><i class="fas fa-file-excel"></i></button>
                 <p>Search</p>
                 <input type="text" name="search" id="cstm-search" class="cstm-input">
             </div>
@@ -61,7 +66,7 @@ export default {
         date: String,
         selectFilters: Array
     },
-    created(){
+    created() {
         this.date_filter = this.date;
     },
     data() {
@@ -73,19 +78,50 @@ export default {
         }
     },
     methods: {
-        filterDate(){
+        filterDate() {
             this.display_contents = [];
             this.date_changed = false;
             this.$emit('filter-by-date', this.date_filter);
         },
-        changeDate(event){
-            this.date_changed =  (this.date != event.target.value );
+        changeDate(event) {
+            this.date_changed = (this.date != event.target.value);
             this.date_filter = event.target.value;
+        },
+        exportToExcel(tableID, filename = '') {
+            var downloadurl;
+            var dataFileType = 'application/vnd.ms-excel';
+            var tableSelect = document.getElementById(tableID);
+            var tableHTMLData = tableSelect.outerHTML.replace(/ /g, '%20');
+
+            // Specify file name
+            filename = filename ? filename + '.xls' : 'export_excel_data.xls';
+
+            // Create download link element
+            downloadurl = document.createElement("a");
+
+            document.body.appendChild(downloadurl);
+
+            if (navigator.msSaveOrOpenBlob) {
+                var blob = new Blob(['\ufeff', tableHTMLData], {
+                    type: dataFileType
+                });
+                navigator.msSaveOrOpenBlob(blob, filename);
+            } else {
+                // Create a link to the file
+                downloadurl.href = 'data:' + dataFileType + ', ' + tableHTMLData;
+
+                // Setting the file name
+                downloadurl.download = filename;
+
+                //triggering the function
+                downloadurl.click();
+            }
         }
+
     },
     mounted() {
         materialize.AutoInit();
-        try{
+        try {
             const table = $('#cstm-table');
             table.dataTable({
                 "bPaginate": false,
@@ -100,10 +136,10 @@ export default {
     },
     computed: {
         displayContents() {
-            const index = this.count.length-2;
+            const index = this.count.length - 2;
             const c = [];
             c.splice(0, 1, this.contents);
-            console.log( c.splice(0, 1, this.contents) );
+            console.log(c.splice(0, 1, this.contents));
             return c[0];
         }
     }

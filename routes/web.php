@@ -81,7 +81,8 @@ Route::prefix('admin')
         );
         Route::resource('close-numbers', CloseNumberController::class);
 
-//        Route::get('user/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('user.logout');
+        Route::get('/games/{any}', [BetController::class, 'index'])->name('game.bets');
+//        Route::get('/games/{any}', [BetController::class, 'show'])->name('game.bets');
 
         Route::get('user/profile', [UserController::class, 'showProfile'])->name('user.profile');
         Route::get('/games/{any}', [BetCollectionController::class, 'index'])->name('game.bets');

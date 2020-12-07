@@ -2248,6 +2248,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2280,6 +2285,32 @@ __webpack_require__.r(__webpack_exports__);
     changeDate: function changeDate(event) {
       this.date_changed = this.date != event.target.value;
       this.date_filter = event.target.value;
+    },
+    exportToExcel: function exportToExcel(tableID) {
+      var filename = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+      var downloadurl;
+      var dataFileType = 'application/vnd.ms-excel';
+      var tableSelect = document.getElementById(tableID);
+      var tableHTMLData = tableSelect.outerHTML.replace(/ /g, '%20'); // Specify file name
+
+      filename = filename ? filename + '.xls' : 'export_excel_data.xls'; // Create download link element
+
+      downloadurl = document.createElement("a");
+      document.body.appendChild(downloadurl);
+
+      if (navigator.msSaveOrOpenBlob) {
+        var blob = new Blob(["\uFEFF", tableHTMLData], {
+          type: dataFileType
+        });
+        navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        // Create a link to the file
+        downloadurl.href = 'data:' + dataFileType + ', ' + tableHTMLData; // Setting the file name
+
+        downloadurl.download = filename; //triggering the function
+
+        downloadurl.click();
+      }
     }
   },
   mounted: function mounted() {
@@ -90590,7 +90621,7 @@ var render = function() {
                             selected: option == selectItem.optionSelected
                           }
                         },
-                        [_vm._v(_vm._s(option))]
+                        [_vm._v(_vm._s(option) + "\n                        ")]
                       )
                     })
                   ],
@@ -90603,7 +90634,34 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(0)
+      _c(
+        "div",
+        {
+          staticClass: "dataTables_filter flex-end cstm-search",
+          attrs: { id: "cstm-table_filter" }
+        },
+        [
+          _c(
+            "button",
+            {
+              staticClass: "cstm-btn small icon font-large mr-3",
+              on: {
+                click: function($event) {
+                  return _vm.exportToExcel("cstm-table")
+                }
+              }
+            },
+            [_c("i", { staticClass: "fas fa-file-excel" })]
+          ),
+          _vm._v(" "),
+          _c("p", [_vm._v("Search")]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "cstm-input",
+            attrs: { type: "text", name: "search", id: "cstm-search" }
+          })
+        ]
+      )
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "cstm-display" }, [
@@ -90665,30 +90723,10 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(1)
+    _vm._m(0)
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "dataTables_filter flex-end cstm-search",
-        attrs: { id: "cstm-table_filter" }
-      },
-      [
-        _c("p", [_vm._v("Search")]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "cstm-input",
-          attrs: { type: "text", name: "search", id: "cstm-search" }
-        })
-      ]
-    )
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

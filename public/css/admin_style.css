@@ -206,10 +206,20 @@ aside.main-sidebar.sidebar-dark-danger.elevation-4 {
 	padding: 6px 12px;
 	font-size: 12px;
 }
+.cstm-btn.icon {
+    color: green;
+    font-size: 22px;
+    padding: 0px 3px !important;
+    border-radius: 3px;
+    border: unset;
+}
 .cstm-btn:hover {
     background: #e63946;
     color: #fff;
     border-color: #e63946;
+}
+.cstm-btn.icon:hover {
+    background: green;
 }
 .cstm-display {
 	width: 100%;
