@@ -245,6 +245,26 @@ return [
             'header' => 'App Management',
         ],
         [
+            'text' => 'Bases',
+            'icon' => 'fas fa-house-user',
+            'label_color' => 'success',
+            'can' => 'menu bases',
+            'classes' => '',
+            'key' => 'bases',
+            'submenu' => [
+                [
+                    'text' => 'All Bases',
+                    'can' => 'list bases',
+                    'url' => '#',
+                ],
+                [
+                    'text' => 'Add New',
+                    'can' => 'create bases',
+                    'url' => '#',
+                ],
+            ],
+        ],
+        [
             'text' => 'Agents',
             // 'url'         => '/#',
             'icon' => 'fas fa-users',
@@ -256,11 +276,6 @@ return [
                     'text' => 'All Agents',
                     'can' => 'list agents',
                     'route' => 'agents.index',
-                ],
-                [
-                    'text' => 'Active Agents',
-                    'can' => 'list agents',
-                    'url' => '#',
                 ],
                 [
                     'text' => 'Add New',
@@ -289,17 +304,7 @@ return [
                     'can' => 'view booths',
                     'route' => 'booths.create',
                 ],
-            ]
-        ],
-        [
-            'text' => 'Game Draws',
-            'key' => 'draws',
-            // 'url'         => '/#',
-            'icon' => 'fas fa-dice',
-            'label_color' => 'success',
-            'classes' => 'menu gamedraws',
-            'can' => 'view drawperiods',
-            'submenu' => [
+
             ]
         ],
         [
@@ -311,6 +316,16 @@ return [
             'label_color' => 'success',
             'classes' => '',
             'submenu' => [
+                [
+                    'text' => 'All Bets',
+                    'can' => 'view booths',
+                    'route' => 'booths.index',
+                ],
+                [
+                    'text' => 'Add New',
+                    'can' => 'view booths',
+                    'route' => 'booths.create',
+                ],
             ]
         ],
         ['header' => 'Accounting Management'],
@@ -323,28 +338,23 @@ return [
             'classes' => 'xs text-wrap',
             'submenu' => [
                 [
-                    'text' => 'Summary Collections',
-                    'url' => '/#',
-                    'classes' => 'xs text-wrap',
+                    'text' => 'All Collections',
+                    'can' => 'view booths',
+                    'route' => 'booths.index',
                 ],
                 [
-                    'text' => 'Daily Collections',
-                    'url' => '/#',
-                    'classes' => 'xs text-wrap',
-                ],
-                [
-                    'text' => 'Receive/Send Collections',
-                    'url' => '/#',
-                    'classes' => 'xs text-wrap',
+                    'text' => 'Add New',
+                    'can' => 'view booths',
+                    'route' => 'booths.create',
                 ],
             ]
         ],
         [
             'header' => 'Reporting',
-            'can' => 'menu reports'
+            'can' => 'menu reports',
         ],
         [
-            'text' => 'Create Report',
+            'text' => 'Reports',
             // 'url'         => '/#',
             'icon' => 'fas fa-print',
             'label_color' => 'success',
@@ -352,12 +362,14 @@ return [
             'classes' => 'xs',
             'submenu' => [
                 [
-                    'text' => 'Collection Report',
-                    'url' => '/#',
+                    'text' => 'All Reports',
+                    'can' => 'view booths',
+                    'route' => 'booths.index',
                 ],
                 [
-                    'text' => 'Transaction Report',
-                    'url' => '/#',
+                    'text' => 'Add New',
+                    'can' => 'view booths',
+                    'route' => 'booths.create',
                 ],
             ]
         ],
@@ -377,7 +389,7 @@ return [
                 ],
                 [
                     'text' => 'Logout',
-                    'route' => 'user.logout',
+                    'url' => '#',
                 ],
             ]
         ],

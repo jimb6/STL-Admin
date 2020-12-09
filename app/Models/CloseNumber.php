@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
+use App\Scopes\BaseScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,7 @@ class CloseNumber extends Model
     protected $searchableFields = ['*'];
 
     protected $table = 'close_numbers';
+
 
     public function betGame()
     {

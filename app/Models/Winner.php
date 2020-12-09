@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
+use App\Scopes\BaseScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +17,7 @@ class Winner extends Model
     protected $fillable = ['bet_id', 'draw_result_id'];
 
     protected $searchableFields = ['*'];
+
 
     public function bet()
     {

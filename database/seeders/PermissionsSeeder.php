@@ -14,16 +14,17 @@ class PermissionsSeeder extends Seeder
     {
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+//      Web App Menu Permissions
         Permission::create(['name' => 'menu dashboard']);
         Permission::create(['name' => 'menu agents']);
         Permission::create(['name' => 'menu booths']);
-        Permission::create(['name' => 'menu gamedraws']);
         Permission::create(['name' => 'menu bets']);
         Permission::create(['name' => 'menu collections']);
         Permission::create(['name' => 'menu reports']);
         Permission::create(['name' => 'menu mobilesettings']);
         Permission::create(['name' => 'menu settings']);
-
+        Permission::create(['name' => 'menu bases']);
 
         // Create default permissions
         Permission::create(['name' => 'list collectionrecords']);
@@ -99,9 +100,6 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'delete betgames']);
 
         // Create user role and assign existing permissions
-        $currentPermissions = Permission::all();
-        $userRole = Role::create(['name' => 'user']);
-        $userRole->givePermissionTo($currentPermissions);
 
         // Create admin exclusive permissions
         Permission::create(['name' => 'list roles']);
@@ -122,36 +120,5 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'update users']);
         Permission::create(['name' => 'delete users']);
 
-        // Create admin role and assign all permissions
-        $allPermissions = Permission::all();
-        $adminRole = Role::create(['name' => 'super-admin']);
-        $adminRole->givePermissionTo($allPermissions);
-
-        $user = \App\Models\User::whereEmail('admin@admin.com')->first();
-
-        if ($user) {
-            $user->assignRole($adminRole);
-        }
-
-        $monitor = \App\Models\User::create([
-            'name' => 'Jim',
-            'email' => 'jimwellbuot@gmail.com',
-            'password' => Hash::make('password'),
-            'base_id' => 1
-        ]);
-
-        $monitoringMenu = Permission::all()->whereIn(
-            'name', ['menu dashboard', 'menu agents', 'menu booths', 'menu gamedraws', 'menu bets', 'menu collections', 'menu reports']);
-        $monitoringAccess = Permission::all()->whereIn(
-            'name',
-            [
-                'list agents', 'list booths', 'list bets', 'view bets', 'list closenumbers',
-                'create closenumbers', 'store closenumbers', 'list viewresults', 'list collectionrecords'
-            ]);
-
-        $monitorRole = Role::create(['name' => 'monitoring']);
-        $monitorRole->givePermissionTo($monitoringMenu);
-        $monitorRole->givePermissionTo($monitoringAccess);
-        $monitor->assignRole($monitorRole);
     }
 }

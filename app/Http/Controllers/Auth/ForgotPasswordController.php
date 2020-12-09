@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\uth;
 
-use App\Http\Controllers\API\v1\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class ForgotPasswordController extends Controller

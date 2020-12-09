@@ -36,15 +36,28 @@ class Agent extends Authenticatable
         'session_status' => 'boolean',
     ];
 
+    protected $hidden = ['password', 'api_token'];
+
+    //  Defining Scopes for Queries
+
     protected static function booted()
     {
         static::addGlobalScope(new BaseScope);
+    }
+
+    public function scopeAgentInBase($query)
+    {
+        $user = \Auth::user();
+        return $query->where('base_id', '=', $user ? $user->base_id:0);
     }
 
     public function scopeActive($query, $value)
     {
         return $query->where('session_status', $value);
     }
+
+
+    // Defining all relations
 
     public function collectionRecords()
     {

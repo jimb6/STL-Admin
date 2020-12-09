@@ -62,6 +62,20 @@ export default {
         getContentsByDate(date){
             this.date = (date == '') ? this.getDateToday() : date;
             return this.contents;
+        },
+
+        async fetchData(){
+            const response = await axios.get('/bets/index', {
+                headers: {
+                    'Content-type':'application/json',
+                    'Accept':'application/json',
+                },
+                body:{
+                    'abbreviation': this.betType
+                }
+
+            }).catch(err => { console.log(err)});
+            console.log(response.data);
         }
     }
 }
