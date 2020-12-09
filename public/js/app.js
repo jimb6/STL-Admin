@@ -2439,7 +2439,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_Table__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Table */ "./resources/js/components/Table.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Table__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Table */ "./resources/js/components/Table.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -2469,7 +2477,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Bet",
   components: {
-    Table: _components_Table__WEBPACK_IMPORTED_MODULE_0__["default"]
+    Table: _components_Table__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   props: {
     betType: String
@@ -2485,7 +2493,7 @@ __webpack_require__.r(__webpack_exports__);
         optionTitle: "Draw Period",
         options: ['10:30AM', '4PM', '9PM'],
         optionValues: ['1', '2', '3'],
-        optionSelected: '10:30AM'
+        optionSelected: '4PM'
       }]
     };
   },
@@ -2501,6 +2509,40 @@ __webpack_require__.r(__webpack_exports__);
     getContentsByDate: function getContentsByDate(date) {
       this.date = date == '' ? this.getDateToday() : date;
       return this.contents;
+    },
+    fetchData: function fetchData() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get('/bets/index', {
+                  headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json'
+                  },
+                  body: {
+                    'abbreviation': _this.betType
+                  }
+                })["catch"](function (err) {
+                  console.log(err);
+                });
+
+              case 2:
+                response = _context.sent;
+                console.log(response.data);
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   }
 });
@@ -24098,7 +24140,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.dashboard .card {\r\n    background: unset;\r\n    box-shadow: unset;\n}\n.dashboard .carditem-container {\r\n    display: grid;\r\n    grid-template-columns: 1fr 1fr 1fr 1fr;\r\n    grid-gap: 40px;\r\n    padding: 20px 0;\n}\n.dashboard .card-item {\r\n    position: relative;\r\n    padding: 20px;\r\n    background: #fff;\r\n    display: flex;\r\n    border-radius: 5px;\r\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.dashboard .card-item > div:first-child {\r\n    width: 40%;\n}\n.dashboard .card-item > div:last-child {\r\n    width: 60%;\n}\n.dashboard .card-item i {\r\n    position: absolute;\r\n    width: 30%;\r\n    height: 100px;\r\n    top: -20px;\r\n    text-align: center;\r\n    line-height: 100px;\r\n    font-size: 35px;\r\n    color: #fff;\r\n    border-radius: 5px;\r\n    background: linear-gradient(200DEG, rgb(75, 108, 183), rgb(24, 40, 72));\n}\n.dashboard .card-item h3 {\r\n    text-transform: uppercase;\r\n    font-size: 18px;\r\n    font-weight: 300;\r\n    letter-spacing: 1px;\r\n    text-align: right;\r\n    letter-spacing: 1px;\n}\n.dashboard .card-item p {\r\n    font-size: 40px;\r\n    text-align: right;\n}\n.dashboard .cstm-linechart {\r\n    padding: 40px 20px;\r\n    background: #fff;\r\n    border-radius: 5px;\r\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.linechart-title {\r\n    position: relative;\r\n    padding-bottom: 20px;\r\n    margin-bottom: 30px;\r\n    border-bottom: 1px solid #f3f3f3;\n}\n.linechart-title h3 {\r\n    text-transform: uppercase;\r\n    font-weight: 300;\r\n    letter-spacing: 1px;\r\n    margin: 0;\n}\n.linechart-title p {\r\n    padding: 10px 20px;\r\n    background: #a8dadc;\r\n    color: #fff;\r\n    border-radius: 5px;\r\n    font-weight: 600;\n}\n.linechart-title p:before {\r\n    content: \"\\20B1\";\r\n    margin-right: 5px;\n}\n.card-item-description {\r\n    font-size: 14px;\r\n    color: #555555;\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n.dashboard .card {\n    background: unset;\n    box-shadow: unset;\n}\n.dashboard .carditem-container {\n    display: grid;\n    grid-template-columns: 1fr 1fr 1fr 1fr;\n    grid-gap: 40px;\n    padding: 20px 0;\n}\n.dashboard .card-item {\n    position: relative;\n    padding: 20px;\n    background: #fff;\n    display: flex;\n    border-radius: 5px;\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.dashboard .card-item > div:first-child {\n    width: 40%;\n}\n.dashboard .card-item > div:last-child {\n    width: 60%;\n}\n.dashboard .card-item i {\n    position: absolute;\n    width: 30%;\n    height: 100px;\n    top: -20px;\n    text-align: center;\n    line-height: 100px;\n    font-size: 35px;\n    color: #fff;\n    border-radius: 5px;\n    background: linear-gradient(200DEG, rgb(75, 108, 183), rgb(24, 40, 72));\n}\n.dashboard .card-item h3 {\n    text-transform: uppercase;\n    font-size: 18px;\n    font-weight: 300;\n    letter-spacing: 1px;\n    text-align: right;\n    letter-spacing: 1px;\n}\n.dashboard .card-item p {\n    font-size: 40px;\n    text-align: right;\n}\n.dashboard .cstm-linechart {\n    padding: 40px 20px;\n    background: #fff;\n    border-radius: 5px;\n    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);\n}\n.linechart-title {\n    position: relative;\n    padding-bottom: 20px;\n    margin-bottom: 30px;\n    border-bottom: 1px solid #f3f3f3;\n}\n.linechart-title h3 {\n    text-transform: uppercase;\n    font-weight: 300;\n    letter-spacing: 1px;\n    margin: 0;\n}\n.linechart-title p {\n    padding: 10px 20px;\n    background: #a8dadc;\n    color: #fff;\n    border-radius: 5px;\n    font-weight: 600;\n}\n.linechart-title p:before {\n    content: \"\\20B1\";\n    margin-right: 5px;\n}\n.card-item-description {\n    font-size: 14px;\n    color: #555555;\n}\n\n", ""]);
 
 // exports
 
@@ -24117,7 +24159,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.loader-container {\r\n    position: absolute;\r\n    z-index: 99;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translateX(-50%) translateY(-50%);\n}\n.cstm-error {\r\n    padding: 8px;\r\n    border: 2px solid #EAF11B;\r\n    color: #EAF11B;\r\n    text-transform: uppercase;\r\n    font-weight: 600;\r\n    font-size: 14px;\r\n    margin-bottom: 20px;\r\n    transition-duration: 500ms;\n}\r\n\r\n/* CUSTOM LOGIN CSS */\nbody.login-page {\r\n    background: rgb(29,53,87);\r\n    background: linear-gradient(22deg, rgba(29,53,87,1) 0%, rgba(230,57,70,1) 100%);\n}\n.login-logo img {\r\n    position: relative;\r\n    top: -4px;\n}\n.login-logo a, .login-logo a b {\r\n     color: #EAF11B;\r\n     font-weight: 500;\n}\n.login-card-body {\r\n    border-radius: 10px;\n}\n.login-card-body:nth-of-type(1) {\r\n    background: unset;\n}\n.login-card-body:nth-of-type(2) {\r\n     border-radius: 10px;\r\n     background: unset;\r\n     border: 1px solid rgba(255,255,255,.75);\n}\nh3.login-box-msg {\r\n    font-weight: 200;\r\n    letter-spacing: 2px;\r\n    color: #FFFFFF;\n}\n.input-group-text {\r\n    border: 1px solid #ffffff !important;\r\n    border-right: unset !important;\r\n    border-radius: unset !important;\r\n    border-top-left-radius: 5px !important;\r\n    border-bottom-left-radius: 5px !important;\n}\n.login-page input.form-control.form__input {\r\n    border: unset;\n}\n.cstm-submit-btn {\r\n    text-transform: uppercase;\r\n    letter-spacing: 2px;\r\n    font-weight: 300;\r\n    background: #1d3557;\r\n    border: none;\r\n    padding: 10px;\r\n    transition-duration: 400ms;\r\n    color: #fff;\n}\n.cstm-submit-btn:hover {\r\n    background: #457b9d;\r\n    color: #fff;\n}\n.shake {\r\n    animation: shake 150ms 2 linear;\r\n    -moz-animation: shake 150ms 2 linear;\r\n    -webkit-animation: shake 150ms 2 linear;\r\n    -o-animation: shake 150ms 2 linear;\n}\n@keyframes shake {\n0% {\r\n        transform: translate(5px, 0);\n}\n50% {\r\n        transform: translate(-5px, 0);\n}\n100% {\r\n        transform: translate(0, 0);\n}\n}\n@-webkit-keyframes shake {\n0% {\r\n        -webkit-transform: translate(5px, 0);\n}\n50% {\r\n        -webkit-transform: translate(-5px, 0);\n}\n100% {\r\n        -webkit-transform: translate(0, 0);\n}\n}\r\n", ""]);
+exports.push([module.i, "\n.loader-container {\n    position: absolute;\n    z-index: 99;\n    top: 50%;\n    left: 50%;\n    transform: translateX(-50%) translateY(-50%);\n}\n.cstm-error {\n    padding: 8px;\n    border: 2px solid #EAF11B;\n    color: #EAF11B;\n    text-transform: uppercase;\n    font-weight: 600;\n    font-size: 14px;\n    margin-bottom: 20px;\n    transition-duration: 500ms;\n}\n\n/* CUSTOM LOGIN CSS */\nbody.login-page {\n    background: rgb(29,53,87);\n    background: linear-gradient(22deg, rgba(29,53,87,1) 0%, rgba(230,57,70,1) 100%);\n}\n.login-logo img {\n    position: relative;\n    top: -4px;\n}\n.login-logo a, .login-logo a b {\n    color: #EAF11B;\n    font-weight: 500;\n}\n.login-card-body {\n    border-radius: 10px;\n}\n.login-card-body:nth-of-type(1) {\n    background: unset;\n}\n.login-card-body:nth-of-type(2) {\n    border-radius: 10px;\n    background: unset;\n    border: 1px solid rgba(255,255,255,.75);\n}\nh3.login-box-msg {\n    font-weight: 200;\n    letter-spacing: 2px;\n    color: #FFFFFF;\n}\n.input-group-text {\n    border: 1px solid #ffffff !important;\n    border-right: unset !important;\n    border-radius: unset !important;\n    border-top-left-radius: 5px !important;\n    border-bottom-left-radius: 5px !important;\n}\n.login-page input.form-control.form__input {\n    border: unset;\n}\n.cstm-submit-btn {\n    text-transform: uppercase;\n    letter-spacing: 2px;\n    font-weight: 300;\n    background: #1d3557;\n    border: none;\n    padding: 10px;\n    transition-duration: 400ms;\n    color: #fff;\n}\n.cstm-submit-btn:hover {\n    background: #457b9d;\n    color: #fff;\n}\n.shake {\n    animation: shake 150ms 2 linear;\n    -moz-animation: shake 150ms 2 linear;\n    -webkit-animation: shake 150ms 2 linear;\n    -o-animation: shake 150ms 2 linear;\n}\n@keyframes shake {\n0% {\n        transform: translate(5px, 0);\n}\n50% {\n        transform: translate(-5px, 0);\n}\n100% {\n        transform: translate(0, 0);\n}\n}\n@-webkit-keyframes shake {\n0% {\n        -webkit-transform: translate(5px, 0);\n}\n50% {\n        -webkit-transform: translate(-5px, 0);\n}\n100% {\n        -webkit-transform: translate(0, 0);\n}\n}\n", ""]);
 
 // exports
 
@@ -90911,7 +90953,7 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-3" }, [_c("NotificationCard")], 1)
+      _c("div", { staticClass: "col-3" })
     ])
   ])
 }
@@ -90959,7 +91001,7 @@ var render = function() {
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "card" }, [
+    _c("div", [
       _c(
         "div",
         {
@@ -91090,9 +91132,9 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        "Password must have at least\n                            " +
+                        "Password must have at least\n                        " +
                           _vm._s(_vm.$v.password.$params.minLength.min) +
-                          " characters.\n                        "
+                          " characters.\n                    "
                       )
                     ]
                   )
@@ -91175,7 +91217,7 @@ var staticRenderFns = [
           { staticClass: "font-weight-light", attrs: { for: "remember" } },
           [
             _vm._v(
-              "\n                                    Remember Me\n                                "
+              "\n                                Remember Me\n                            "
             )
           ]
         )
@@ -119150,7 +119192,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
-  key: "0671ee87f21fe5a67c85",
+  key: "0bcaa65db2b597d6971a",
   cluster: "ap1",
   forceTLS: true
 });

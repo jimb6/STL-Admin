@@ -16,7 +16,7 @@ class BaseScope implements Scope
     {
         if (\Auth::check()){
             $user = \Auth::user();
-            $builder->where('base_id', '=', $user ? $user->baseId:0);
+            $builder->where('base_id', '=', $user ? $user->base_id:0);
         }
     }
 }

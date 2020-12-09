@@ -11,7 +11,7 @@
         </div>
 
         <!-- /.login-logo -->
-        <div class="card">
+        <div>
 
             <div :class="{'shake': error}" class="card-body login-card-body" >
                 <h3 class="login-box-msg">LOGIN</h3>
@@ -71,10 +71,10 @@
                     </div>
                 </form>
                 <!-- /.social-auth-links -->
-<!--                <hr/>-->
-<!--                <p class="mb-1">-->
-<!--                    &lt;!&ndash;                    <router-link :to="{}">I forgot my password</router-link>&ndash;&gt;-->
-<!--                </p>-->
+                <!--                <hr/>-->
+                <!--                <p class="mb-1">-->
+                <!--                    &lt;!&ndash;                    <router-link :to="{}">I forgot my password</router-link>&ndash;&gt;-->
+                <!--                </p>-->
             </div>
             <!-- /.login-card-body -->
         </div>
@@ -86,7 +86,7 @@
 import {email, minLength, required} from 'vuelidate/lib/validators'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
-import {AtomSpinner} from 'epic-spinners'
+import { AtomSpinner } from 'epic-spinners'
 
 Vue.use(Vuelidate)
 
@@ -182,8 +182,8 @@ body.login-page {
     top: -4px;
 }
 .login-logo a, .login-logo a b {
-     color: #EAF11B;
-     font-weight: 500;
+    color: #EAF11B;
+    font-weight: 500;
 }
 .login-card-body {
     border-radius: 10px;
@@ -192,9 +192,9 @@ body.login-page {
     background: unset;
 }
 .login-card-body:nth-of-type(2) {
-     border-radius: 10px;
-     background: unset;
-     border: 1px solid rgba(255,255,255,.75);;
+    border-radius: 10px;
+    background: unset;
+    border: 1px solid rgba(255,255,255,.75);;
 }
 h3.login-box-msg {
     font-weight: 200;

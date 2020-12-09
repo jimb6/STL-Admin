@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="col-3">
-                <NotificationCard></NotificationCard>
+<!--                <NotificationCard></NotificationCard>-->
             </div>
         </div>
     </div>

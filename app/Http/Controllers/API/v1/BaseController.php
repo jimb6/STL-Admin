@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\BaseStoreRequest;
 use App\Http\Requests\BaseUpdateRequest;
 use App\Models\Base;

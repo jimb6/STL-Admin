@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\API\v1\AgentController;
 use App\Http\Controllers\API\v1\BaseController;
+use App\Http\Controllers\API\v1\BetController;
 use App\Http\Controllers\API\v1\BoothController;
 use App\Http\Controllers\API\v1\CloseNumberController;
 use App\Http\Controllers\API\v1\CollectionRecordController;
@@ -61,7 +62,7 @@ Route::middleware('auth:web')->group(function (){
 Auth::routes(['register' => false]);
 
 Route::prefix('admin')
-    ->middleware('auth')
+    ->middleware('auth:web')
     ->group(function () {
         Route::get('/home', [HomeController::class, 'index'])->name('admin.home');
         Route::resource('roles', RoleController::class);
@@ -85,7 +86,7 @@ Route::prefix('admin')
 //        Route::get('/games/{any}', [BetController::class, 'show'])->name('game.bets');
 
         Route::get('user/profile', [UserController::class, 'showProfile'])->name('user.profile');
-        Route::get('/games/{any}', [BetCollectionController::class, 'index'])->name('game.bets');
+//        Route::get('/games/{any}', [BetCollectionController::class, 'index'])->name('game.bets');
 
 
 //        Customize Request

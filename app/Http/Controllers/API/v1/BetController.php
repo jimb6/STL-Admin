@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Http\Controllers\Controller;
+use App\Models\Agent;
+use App\Models\Bet;
+use App\Models\BetTransaction;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class BetController extends Controller
 {
@@ -15,12 +20,11 @@ class BetController extends Controller
      *
      * @return Application|Factory|View|Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $betType = \request('any');
-//        $betType = str_replace('-', '',$betType);
-        return view('bets.categorize', compact('betType'));
+        $bets = DB::table('bets_today')->where('abbreviation', '=', 'STL-2D')->get();
+        return \response([$bets], 200);
+//        return view('bets.categorize', compact('betType'));
     }
 
     /**

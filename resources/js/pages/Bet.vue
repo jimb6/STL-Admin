@@ -47,7 +47,7 @@ export default {
                     optionTitle: "Draw Period",
                     options: ['10:30AM', '4PM', '9PM'],
                     optionValues: ['1', '2', '3'],
-                    optionSelected: '10:30AM',
+                    optionSelected: '4PM',
                 }
             ],
         }
@@ -62,6 +62,20 @@ export default {
         getContentsByDate(date){
             this.date = (date == '') ? this.getDateToday() : date;
             return this.contents;
+        },
+
+        async fetchData(){
+            const response = await axios.get('/bets/index', {
+                headers: {
+                    'Content-type':'application/json',
+                    'Accept':'application/json',
+                },
+                body:{
+                    'abbreviation': this.betType
+                }
+
+            }).catch(err => { console.log(err)});
+            console.log(response.data);
         }
     }
 }
