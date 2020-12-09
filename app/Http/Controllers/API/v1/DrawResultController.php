@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DrawResultStoreRequest;
-use App\Http\Requests\DrawResultUpdateRequest;
 use App\Models\BetGame;
 use App\Models\DrawResult;
 use Illuminate\Http\Request;

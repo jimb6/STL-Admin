@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API\v1;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AgentStoreRequest;
 use App\Models\Agent;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -17,10 +16,7 @@ use Illuminate\Http\Response;
 
 class AgentController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return Application|Factory|View|JsonResponse|Response
-     */
+
     public function index(Request $request)
     {
         $this->authorize('view agents', Agent::class);
@@ -36,10 +32,7 @@ class AgentController extends Controller
             : view('agents.index', compact('agents', 'search', 'activeAgents'));
     }
 
-    /**
-     * @param Request $request
-     * @return Application|Factory|View|JsonResponse|Response
-     */
+
     public function create(Request $request)
     {
         $this->authorize('create agents', Agent::class);

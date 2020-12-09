@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\API\v1\API\v1\API\v1\AgentController;
-use App\Http\Controllers\API\v1\API\v1\API\v1\AgentLoginController;
+
+use App\Http\Controllers\API\v1\AgentController;
+use App\Http\Controllers\API\v1\AgentLoginController;
+use http\Client\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CollectionRecordStoreRequest;
-use App\Http\Requests\CollectionRecordUpdateRequest;
 use App\Models\Agent;
 use App\Models\CollectionRecord;
 use App\Models\CollectionStatus;

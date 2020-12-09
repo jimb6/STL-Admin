@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Table from '../components/Table';
+import Table from '../components/DataTable';
 export default {
     name: "Bet",
     components: {
