@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 //Auth::routes();
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth.basic')->group(function () {
    Route::get('/user', function (){
       return Auth::user();
    });

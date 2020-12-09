@@ -26,7 +26,7 @@ class UserController extends Controller
 
         $users = User::search($search)
             ->latest()
-            ->paginate()->toJSON();
+            ->paginate();
 
         return view('users.index', compact('users', 'search'));
     }

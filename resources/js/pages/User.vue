@@ -10,12 +10,13 @@
 import DataTable from "../components/DataTable";
 import Vue from "vue";
 import Vuetify from 'vuetify'
+
 Vue.use(Vuetify)
 
 export default {
     name: "User",
     props: {
-        userData: String,
+        userData: JSON,
     },
     components: {
         DataTable,
@@ -37,11 +38,20 @@ export default {
         contents: [],
     }),
     created() {
-        const data = JSON.parse(this.userData)['data'];
-        for( let content in data){
-            this.contents.push(data[content]);
+        // const data = JSON.parse(this.userData)['data'];
+        // for( let content in this.userData.data){
+        //     this.contents.push(data[content]);
+        // }
+        console.log( );
+        this.getUsers();
+    },
+    methods: {
+        async getUsers(){
+            const response = await axios.get('/api/user').catch(err => {
+                console.log(err)
+            });
+            console.log(response)
         }
-        console.log( this.contents );
     }
 }
 </script>

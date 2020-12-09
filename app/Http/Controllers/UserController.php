@@ -11,10 +11,7 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return Response
-     */
+
     public function index(Request $request)
     {
         $this->authorize('view-any', User::class);

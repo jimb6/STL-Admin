@@ -6,8 +6,7 @@ import $ from 'jquery';
 import axios from 'axios';
 import Vuelidate from 'vuelidate'
 import router from "./routes";
-
-import Vuetify from '../plugins/vuetify'
+import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
 
@@ -37,8 +36,7 @@ const options = {
 }
 
 // VUE USES
-Vue.use(VueRouter)
-Vue.use(VueProgressBar, options, axios, Vuelidate)
+Vue.use(VueProgressBar, options, axios, Vuelidate, Vuetify, VueRouter)
 
 // COMPONENT IMPORTS
 import Dashboard from "./pages/Dashboard";
@@ -48,8 +46,8 @@ import Register from "./pages/auth/Register";
 import Bet from './pages/Bet'
 import User from './pages/User'
 
-const app = new Vue({
-    vuetify: Vuetify,
+const app = new Vue(    {
+    vuetify: new Vuetify(),
     el: '#app',
     router,
     components: {
