@@ -2778,19 +2778,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.totalCollection += parseFloat(total);
               });
-              _this.totalCollection = _this.formatMoney(_this.totalCollection);
+              _this.totalCollection = _this.formatMoney(_this.totalCollection); // await this.getActiveAgents();
+              // await this.getActiveBooths();
+
               _context.next = 6;
-              return _this.getActiveAgents();
-
-            case 6:
-              _context.next = 8;
-              return _this.getActiveBooths();
-
-            case 8:
-              _context.next = 10;
               return _this.getDailyTotalCollections();
 
-            case 10:
+            case 6:
             case "end":
               return _context.stop();
           }
@@ -2800,8 +2794,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     getActiveAgents: function getActiveAgents() {
-      var _this2 = this;
-
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
         var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
@@ -2809,16 +2801,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios.get('/agents/count ')["catch"](function (error) {
-                  _this2.cards[0].description = "No Data";
+                return axios.get('/agents/count/')["catch"](function (error) {
+                  console.log(error);
                 });
 
               case 2:
                 response = _context2.sent;
-                _this2.cards[0].description = response.data['active'].toString() + '<span class="card-item-description">/' + response.data['total'].toString() + '</span>';
                 console.log(response);
 
-              case 5:
+              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -2827,8 +2818,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     getActiveBooths: function getActiveBooths() {
-      var _this3 = this;
-
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
         var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
@@ -2836,21 +2825,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios.get('/booths/count', {
+                return axios.get('/booths/count/', {
                   headers: {
                     'content-type': 'application/json',
                     'accept': 'application/json'
                   }
                 })["catch"](function (error) {
-                  return _this3.cards[1].description = "No Data";
+                  console.log(error);
                 });
 
               case 2:
                 response = _context3.sent;
-                _this3.cards[1].description = response.data['active'].toString() + '<span class="card-item-description">/' + response.data['total'].toString() + '</span>';
                 console.log(response.data);
 
-              case 5:
+              case 4:
               case "end":
                 return _context3.stop();
             }
@@ -2859,8 +2847,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     getDailyTotalCollections: function getDailyTotalCollections() {
-      var _this4 = this;
-
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
@@ -2868,21 +2854,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return axios.get('/collections/daily-sum', {
+                return axios.get('/api/user/', {
                   headers: {
                     'content-type': 'application/json',
                     'accept': 'application/json'
                   }
                 })["catch"](function (error) {
-                  return _this4.cards[3].description = "No Data";
+                  return console.log(error);
                 });
 
               case 2:
                 response = _context4.sent;
-                _this4.cards[3].description = response.data[0][0]['sum_amount'].toString();
                 console.log("Sa Total ni ha!", response);
 
-              case 5:
+              case 4:
               case "end":
                 return _context4.stop();
             }

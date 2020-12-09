@@ -16,7 +16,6 @@ class CreateBetTransactionsTable extends Migration
         Schema::create('bet_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('agent_id');
-
             $table->timestamps();
             $table->softDeletes();
         });

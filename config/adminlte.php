@@ -276,11 +276,13 @@ return [
                     'text' => 'All Agents',
                     'can' => 'list agents',
                     'route' => 'agents.index',
+                    'active' => ['pages', 'admin/agents'],
                 ],
                 [
                     'text' => 'Add New',
                     'can' => 'create agents',
                     'route' => 'agents.create',
+                    'active' => ['pages', 'admin/agents/create'],
                 ],
             ]
 
@@ -360,6 +362,7 @@ return [
             'label_color' => 'success',
             'can' => 'menu reports',
             'classes' => 'xs',
+
             'submenu' => [
                 [
                     'text' => 'All Reports',
