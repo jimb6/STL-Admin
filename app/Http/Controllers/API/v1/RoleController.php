@@ -9,11 +9,7 @@ use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller {
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
         $this->authorize('list', Role::class);
@@ -26,11 +22,6 @@ class RoleController extends Controller {
             ->with('search', $search);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $this->authorize('create', Role::class);
@@ -40,12 +31,6 @@ class RoleController extends Controller {
         return view('app.roles.create')->with('permissions', $permissions);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->authorize('create', Role::class);
@@ -63,12 +48,6 @@ class RoleController extends Controller {
         return redirect()->route('roles.edit', $role->id);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \Spatie\Permission\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
     public function show(Role $role)
     {
         $this->authorize('view', Role::class);
@@ -76,12 +55,6 @@ class RoleController extends Controller {
         return view('app.roles.show')->with('role', $role);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \Spatie\Permission\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Role $role)
     {
         $this->authorize('update', $role);
@@ -93,13 +66,6 @@ class RoleController extends Controller {
             ->with('permissions', $permissions);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Spatie\Permission\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Role $role)
     {
         $this->authorize('update', $role);
@@ -117,12 +83,6 @@ class RoleController extends Controller {
         return redirect()->route('roles.edit', $role->id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \Spatie\Permission\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Role $role)
     {
         $this->authorize('delete', $role);
@@ -131,4 +91,5 @@ class RoleController extends Controller {
 
         return redirect()->route('roles.index');
     }
+
 }

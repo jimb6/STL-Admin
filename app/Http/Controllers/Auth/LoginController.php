@@ -41,7 +41,9 @@ class LoginController extends Controller
 
     protected function loggedOut(Request $request)
     {
-        //
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 
 }

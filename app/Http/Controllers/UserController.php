@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
 use App\Models\Base;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,10 +11,7 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return Response
-     */
+
     public function index(Request $request)
     {
         $this->authorize('view-any', User::class);

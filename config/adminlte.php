@@ -266,7 +266,7 @@ return [
         ],
         [
             'text' => 'Agents',
-            // 'url'         => '/#',
+             'url'         => '/#',
             'icon' => 'fas fa-users',
             'label_color' => 'success',
             'can' => 'menu agents',
@@ -276,13 +276,13 @@ return [
                     'text' => 'All Agents',
                     'can' => 'list agents',
                     'route' => 'agents.index',
-                    'active' => ['pages', 'admin/agents'],
+                    'active' => ['admin/agents']
                 ],
                 [
                     'text' => 'Add New',
                     'can' => 'create agents',
                     'route' => 'agents.create',
-                    'active' => ['pages', 'admin/agents/create'],
+                    'active' => ['admin/agents/create']
                 ],
             ]
 
@@ -428,7 +428,7 @@ return [
                 ],
                 [
                     'text' => 'Users',
-                    'url' => '/#',
+                    'route' => 'users.index',
                 ],
                 [
                     'text' => 'Roles & Permissions',
