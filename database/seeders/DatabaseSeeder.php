@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call(DrawResultSeeder::class);
         $this->call(BetGameSeeder::class);
         $this->call(BetGameDrawPeriodFactory::class);
-
+        $this->call(RoleSeeder::class);
 
     }
 }

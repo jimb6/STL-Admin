@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CollectionStatusStoreRequest;
-use App\Http\Requests\CollectionStatusUpdateRequest;
 use App\Models\CollectionStatus;
 use Illuminate\Http\Request;
 

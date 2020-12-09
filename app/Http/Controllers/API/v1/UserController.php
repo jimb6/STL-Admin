@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
 use App\Models\Agent;
 use App\Models\Base;
 use App\Models\Booth;
@@ -12,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use function MongoDB\BSON\toJSON;
 
 class UserController extends Controller
 {
@@ -21,15 +20,15 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('view-any', User::class);
+        $this->authorize('list users', User::class);
 
         $search = $request->get('search', '');
 
         $users = User::search($search)
             ->latest()
-            ->paginate();
+            ->paginate()->toJSON();
 
-        return view('admin.profile', compact('users', 'search'));
+        return view('users.index', compact('users', 'search'));
     }
 
     /**
@@ -47,10 +46,6 @@ class UserController extends Controller
         return view('app.users.create', compact('bases', 'roles'));
     }
 
-    /**
-     * @param \App\Http\Requests\UserStoreRequest $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(UserStoreRequest $request)
     {
         $this->authorize('create', User::class);

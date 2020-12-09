@@ -16,13 +16,13 @@
 		<section>
 			<Table :labels="agentLabels" :contents="agents" :withIcon="withIcon"/>
 		</section>
-		
+
 	</div>
 </template>
 
 
 <script>
-	import Table from '../components/Table';
+	import Table from '../components/DataTable';
 	export default {
 	    name: "agent",
 	    components: {

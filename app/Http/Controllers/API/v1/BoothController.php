@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BoothStoreRequest;
-use App\Http\Requests\BoothUpdateRequest;
 use App\Models\Base;
 use App\Models\Booth;
 use Illuminate\Http\Request;
