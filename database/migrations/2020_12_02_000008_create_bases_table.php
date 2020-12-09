@@ -16,7 +16,6 @@ class CreateBasesTable extends Migration
         Schema::create('bases', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('base_name');
-
             $table->timestamps();
             $table->softDeletes();
         });

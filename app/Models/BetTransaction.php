@@ -8,12 +8,14 @@ use App\Scopes\TransactionBaseScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class BetTransaction extends Model
+class BetTransaction extends Model implements Auditable
 {
     use SoftDeletes;
     use HasFactory;
     use Searchable;
+    use \OwenIt\Auditing\Auditable;
 
     protected $fillable = ['agent_id'];
 
