@@ -7,6 +7,7 @@
 
             <v-tab-item>
                 <DataTable
+                    :tableName="tableName"
                     :contents="contents"
                     :headers="headers"/>
             </v-tab-item>
@@ -38,15 +39,11 @@ export default {
     },
 
     data: () => ({
+        tableName: "Roles",
         headers: [
             {text: "#", value: "count"},
             {text: "Name", value: "name"},
-            {text: "Age", value: "age"},
-            {text: "Gender", value: "gender"},
-            {text: "Contact #", value: "contact_number"},
-            {text: "Email", value: "email"},
-            {text: "Address", value: "address"},
-            {text: "Base", value: "base"},
+            {text: "Guard", value: "guard_name"},
             {text: "Last Update", value: "updated_at"},
             {text: "Actions", value: "actions", sortable: false},
         ],
@@ -57,30 +54,23 @@ export default {
     },
     methods: {
         async getRoles() {
-            const response = await axios.get('/api/users').catch(err => {
+            const response = await axios.get('/api/roles').catch(err => {
                 console.log(err)
             });
-            let user = {};
-            const data = response.data[0];
+            let role = {};
+            const data = response.data[0].data;
             let date = '';
             let count = 0;
             for (let item in data) {
                 date = this.getDateToday( new Date( data[item].updated_at ) );
                 count++;
-                user = {
+                role = {
                     count: count,
                     name: data[item].name,
-                    age: data[item].age,
-                    gender: data[item].gender,
-                    contact_number: data[item].contact_number,
-                    email: data[item].email,
-                    address: data[item].address.name,
-                    base: data[item].base.base_name,
+                    guard_name: data[item].guard_name,
                     updated_at: date,
                 }
-
-                console.log( date );
-                this.contents.push(user);
+                this.contents.push(role);
             }
         },
         getDateToday( date ) {
