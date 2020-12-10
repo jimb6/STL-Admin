@@ -1,0 +1,70 @@
+.cstm-table-options .v-input {
+    max-width: 250px !important;
+}
+.cstm-vuetify-table thead.v-data-table-header {
+    background: #1D3557;
+}
+.cstm-vuetify-table thead.v-data-table-header th span {
+    color: #ffffff;
+}
+.cstm-vuetify-table th.text-start.sortable {
+    position: relative;
+}
+.cstm-vuetify-table .v-data-table-header__icon {
+    color: #ffffff !important;
+    margin-left: 5px;
+    position: absolute !important;
+}
+.cstm-vuetify-table span.v-data-table-header__sort-badge {
+    background: #ffffffdd !important;
+    position: absolute;
+    top: 2px;
+    right: -4px;
+    font-size: 10px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    min-height: unset;
+    min-width: unset;
+}
+.cstm-vuetify-table nav {
+    box-shadow: unset;
+}
+.cstm-vuetify-table .v-pagination {
+    justify-content: flex-end !important;
+}
+.cstm-vuetify-table .v-pagination__item {
+    border-radius: 50%;
+    outline: unset;
+}
+.cstm-vuetify-table .v-pagination__item--active {
+    background: #1D3557 !important;
+}
+.cstm-vuetify-table td.text-start {
+    height: unset;
+    padding: 12px 16px !important;
+}
+.cstm-v-textfield.small {
+    width: unset !important;
+    flex: unset;
+}
+.cstm-v-textfield label.v-label {
+    position: unset !important;
+    transform: unset;
+    line-height: 1.85em;
+    font-weight: 300;
+    white-space: unset;
+    margin: unset;
+    margin-right: 15px;
+    height: unset;
+}
+.cstm-v-textfield input {
+    width: 50px !important;
+}
+.cstm-v-textfield.v-text-field>.v-input__control>.v-input__slot:after,
+.cstm-v-textfield.v-text-field>.v-input__control>.v-input__slot:before {
+    width: 50px;
+    right: 0;
+    left: unset;
+}
+
