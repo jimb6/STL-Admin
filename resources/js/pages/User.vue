@@ -27,15 +27,13 @@ export default {
             {text: "User ID", value: "userId"},
             {text: "Name", value: "id"},
             {text: "Email", value: "title"},
-            {text: "User ID", value: "userId"},
-            {text: "ID", value: "id"},
-            {text: "Title", value: "title"},
-            {text: "User ID", value: "userId"},
-            {text: "ID", value: "id"},
-            {text: "Title", value: "title"},
             {text: "Actions", value: "actions", sortable: false},
         ],
-        contents: [],
+        contents: [
+            {id: 1, name: "Dr. Amelie Waters PhD", email: "tschowalter@yahoo.com"},
+            {id: 2, name: "Dr. Amelie Waters PhD", email: "tschowalter@yahoo.com"},
+            {id: 3, name: "Dr. Amelie Waters PhD", email: "tschowalter@yahoo.com"}
+        ],
     }),
     created() {
         // const data = JSON.parse(this.userData)['data'];
