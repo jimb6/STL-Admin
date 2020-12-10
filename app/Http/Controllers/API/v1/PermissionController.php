@@ -14,7 +14,7 @@ class PermissionController extends Controller
 
     public function index(Request $request)
     {
-        $this->authorize('list', Permission::class);
+        $this->authorize('list permissions', Permission::class);
 
         $search = $request->get('search', '');
         $permissions = Permission::where('name', 'like', "%{$search}%")->paginate(10);
@@ -29,16 +29,17 @@ class PermissionController extends Controller
 
     public function create()
     {
-        $this->authorize('create', Permission::class);
+        $this->authorize('create permissions', Permission::class);
 
         $roles = Role::all();
-        return view('app.permissions.create')->with('roles', $roles);
+//        return view('app.permissions.create')->with('roles', $roles);
+        return response()->json([$roles], 202);
     }
 
 
     public function store(Request $request)
     {
-        $this->authorize('create', Permission::class);
+        $this->authorize('create permissions', Permission::class);
 
         $data = $this->validate($request, [
             'name' => 'required|max:64',
@@ -50,7 +51,8 @@ class PermissionController extends Controller
         $roles = Role::find($request->roles);
         $permission->syncRoles($roles);
 
-        return redirect()->route('permissions.edit', $permission->id);
+        return response()->json([$permission], 201);
+//        return redirect()->route('permissions.edit', $permission->id);
     }
 
 
@@ -58,7 +60,8 @@ class PermissionController extends Controller
     {
         $this->authorize('view', Permission::class);
 
-        return view('app.permissions.show')->with('permission', $permission);
+        return response()->json([$permission], 200);
+//        return view('app.permissions.show')->with('permission', $permission);
     }
 
 
@@ -68,9 +71,10 @@ class PermissionController extends Controller
 
         $roles = Role::get();
 
-        return view('app.permissions.edit')
-            ->with('permission', $permission)
-            ->with('roles', $roles);
+        return response()->json([$permission, $roles], 200);
+//        return view('app.permissions.edit')
+//            ->with('permission', $permission)
+//            ->with('roles', $roles);
     }
 
 
@@ -88,7 +92,8 @@ class PermissionController extends Controller
         $roles = Role::find($request->roles);
         $permission->syncRoles($roles);
 
-        return redirect()->route('permissions.edit', $permission->id);
+        return response()->json($permission, 202);
+//        return redirect()->route('permissions.edit', $permission->id);
     }
 
 
@@ -98,6 +103,7 @@ class PermissionController extends Controller
 
         $permission->delete();
 
-        return redirect()->route('permissions.index');
+//        return redirect()->route('permissions.index');
+        return response()->json([], 202);
     }
 }
