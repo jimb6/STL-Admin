@@ -35,9 +35,9 @@
                     class="elevation-1"
                     @page-count="pageCount = $event"
                 >
-                    <template v-slot:item.actions="{ item }">
-                        <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
-                    </template>
+<!--                    <template v-slot:item.actions="{ item }">-->
+<!--                        <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>-->
+<!--                    </template>-->
                 </v-data-table>
 
 
