@@ -424,11 +424,13 @@ return [
             'submenu' => [
                 [
                     'text' => 'Global Settings',
-                    'url' => '#',
+                    'route' => 'settings.global',
+                    'active' => ['admin/settings/app']
                 ],
                 [
                     'text' => 'Users',
                     'route' => 'users.index',
+                    'active' => ['admin/users'],
                 ],
                 [
                     'text' => 'Roles & Permissions',
@@ -439,19 +441,23 @@ return [
                     'submenu' => [
                         [
                             'text' => 'Permissions List',
-                            'url' => '#',
+                            'route' => 'permissions.index',
+                            'active' => ['admin/permissions'],
                         ],
                         [
                             'text' => 'Create Permission',
-                            'url' => '/#',
+                            'route' => 'permissions.create',
+                            'active' => ['admin/permissions/create'],
                         ],
                         [
                             'text' => 'Roles List',
-                            'url' => '/#',
+                            'route' => 'roles.index',
+                            'active' => ['admin/roles'],
                         ],
                         [
                             'text' => 'Create Role',
-                            'url' => '/#',
+                            'route' => 'roles.create',
+                            'active' => ['admin/roles/create'],
                         ],
                     ]
                 ],

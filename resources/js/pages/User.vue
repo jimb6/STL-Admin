@@ -45,7 +45,7 @@ export default {
     },
     methods: {
         async getUsers(){
-            const response = await axios.get('/api/user').catch(err => {
+            const response = await axios.get('/api/users').catch(err => {
                 console.log(err)
             });
             console.log(response)

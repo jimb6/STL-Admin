@@ -63,22 +63,19 @@ Route::prefix('admin')
     ->middleware('auth:web')
     ->group(function () {
         Route::get('/home', [HomeController::class, 'index'])->name('admin.home');
-        Route::resource('roles', RoleController::class);
-        Route::resource('permissions', PermissionController::class);
-        Route::resource('booths', BoothController::class);
-        Route::resource('bases', BaseController::class);
-        Route::resource('users', UserController::class);
-        Route::resource('agents', \App\Http\Controllers\AgentController::class);
-        Route::resource('draw-results', DrawResultController::class);
-        Route::resource(
-            'collection-records',
-            CollectionRecordController::class
-        );
-        Route::resource(
-            'collection-statuses',
-            CollectionStatusController::class
-        );
-        Route::resource('close-numbers', CloseNumberController::class);
+        Route::get('roles', function (){ return view('settings.roles.index');})->name('roles.index');
+        Route::get('permissions', function (){ return view('settings.permissions.index');})->name('permissions.index');
+        Route::get('booths', function (){ return view('booths.index');})->name('booths.index');
+        Route::get('booths/create', function (){ return view('booths.index');})->name('booths.create');
+        Route::get('bases', function (){ return view('bases.index');})->name('bases.index');
+        Route::get('users', function (){ return view('users.index');})->name('users.index');
+        Route::get('agents', function (){ return view('users.index');})->name('agents.index');
+        Route::get('agents/create', function (){ return view('users.index');})->name('agents.create');
+        Route::get('roles', function () { return view('settings.roles.index');})->name('roles.index');
+        Route::get('roles/create', function (){return view('settings.roles.create');})->name('roles.create');
+        Route::get('permissions', function () { return view('settings.permissions.index');})->name('permissions.index');
+        Route::get('permissions/create', function (){return view('settings.permissions.create');})->name('permissions.create');
+
 
         Route::get('/games/{any}', [BetController::class, 'index'])->name('game.bets');
 //        Route::get('/games/{any}', [BetController::class, 'show'])->name('game.bets');
@@ -87,6 +84,7 @@ Route::prefix('admin')
 //        Route::get('/games/{any}', [BetCollectionController::class, 'index'])->name('game.bets');
 
 
-//        Customize Request
+//      Settings Controller
+        Route::get('settings/app', [\App\Http\Controllers\AppSettingsController::class, 'globalSettings'])->name('settings.global');
 
     });

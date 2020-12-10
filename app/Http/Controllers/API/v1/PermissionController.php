@@ -9,11 +9,9 @@ use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
-    /**
-    * Display a listing of the resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
+
+
+
     public function index(Request $request)
     {
         $this->authorize('list', Permission::class);
@@ -21,16 +19,14 @@ class PermissionController extends Controller
         $search = $request->get('search', '');
         $permissions = Permission::where('name', 'like', "%{$search}%")->paginate(10);
 
-        return view('app.permissions.index')
-            ->with('permissions', $permissions)
-            ->with('search', $search);
+        return response([$permissions, $search], 200);
+
+//        return view('app.permissions.index')
+//            ->with('permissions', $permissions)
+//            ->with('search', $search);
     }
 
-    /**
-    * Show the form for creating a new resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
+
     public function create()
     {
         $this->authorize('create', Permission::class);
@@ -39,12 +35,7 @@ class PermissionController extends Controller
         return view('app.permissions.create')->with('roles', $roles);
     }
 
-    /**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @return \Illuminate\Http\Response
-    */
+
     public function store(Request $request)
     {
         $this->authorize('create', Permission::class);
@@ -62,12 +53,7 @@ class PermissionController extends Controller
         return redirect()->route('permissions.edit', $permission->id);
     }
 
-    /**
-    * Display the specified resource.
-    *
-    * @param  \Spatie\Permission\Models\Permission  $permission
-    * @return \Illuminate\Http\Response
-    */
+
     public function show(Permission $permission)
     {
         $this->authorize('view', Permission::class);
@@ -75,12 +61,7 @@ class PermissionController extends Controller
         return view('app.permissions.show')->with('permission', $permission);
     }
 
-    /**
-    * Show the form for editing the specified resource.
-    *
-    * @param  \Spatie\Permission\Models\Permission  $permission
-    * @return \Illuminate\Http\Response
-    */
+
     public function edit(Permission $permission)
     {
         $this->authorize('update', $permission);
@@ -92,13 +73,7 @@ class PermissionController extends Controller
             ->with('roles', $roles);
     }
 
-    /**
-    * Update the specified resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  \Spatie\Permission\Models\Permission  $permission
-    * @return \Illuminate\Http\Response
-    */
+
     public function update(Request $request, Permission $permission)
     {
         $this->authorize('update', $permission);
@@ -116,12 +91,7 @@ class PermissionController extends Controller
         return redirect()->route('permissions.edit', $permission->id);
     }
 
-    /**
-    * Remove the specified resource from storage.
-    *
-    * @param  \Spatie\Permission\Models\Permission  $permission
-    * @return \Illuminate\Http\Response
-    */
+
     public function destroy(Permission $permission)
     {
         $this->authorize('delete', $permission);

@@ -33,6 +33,7 @@
         "laravel-vue-semantic-ui-pagination": "^1.0.3",
         "moment": "^2.29.1",
         "pusher-js": "^7.0.2",
+        "vee-validate": "^4.0.4",
         "vform": "^1.0.1",
         "vue": "^2.5.17",
         "vue-chartjs": "^3.5.1",

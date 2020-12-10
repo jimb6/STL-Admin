@@ -11,6 +11,7 @@ import 'vuetify/dist/vuetify.min.css'
 
 
 
+
 require('./bootstrap');
 
 window.$ = window.jQuery = $;
@@ -45,8 +46,10 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Bet from './pages/Bet'
 import User from './pages/User'
+import GlobalSettings from './pages/GlobalSettings'
 
 const app = new Vue(    {
+    theme: { dark: true },
     vuetify: new Vuetify(),
     el: '#app',
     router,
@@ -56,6 +59,7 @@ const app = new Vue(    {
         Login,
         Register,
         Bet,
-        User
+        User,
+        GlobalSettings
     },
 });
