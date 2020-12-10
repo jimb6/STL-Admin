@@ -16,7 +16,8 @@ class UserController extends Controller
     {
         $this->authorize('list users', User::class);
         $search = $request->get('search', '');
-        $users = User::search($search)->get();
+        $users = User::search($search)->with('base')->get();
+
         return \response([$users], 200);
     }
 
