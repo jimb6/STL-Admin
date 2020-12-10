@@ -30,7 +30,7 @@ class AgentFactory extends Factory
             'address' => $this->faker->address(),
             'contact_number' => $this->faker->phoneNumber(),
             'age' => $this->faker->numberBetween(20, 40),
-            'sex' => $this->faker->boolean,
+            'gender' => $this->faker->randomElement(['Male', 'Female', 'Others']),
             'session_status' => $this->faker->boolean,
             'base_id' => Base::all()->random()->id,
             'password' => Hash::make('password'),

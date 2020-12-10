@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="col-3">
-<!--                <NotificationCard></NotificationCard>-->
+                <!--                <NotificationCard></NotificationCard>-->
             </div>
         </div>
     </div>
@@ -144,46 +144,39 @@ export default {
             this.totalCollection += parseFloat(total);
         });
         this.totalCollection = this.formatMoney(this.totalCollection);
-        await this.getActiveAgents();
-        await this.getActiveBooths();
+        // await this.getActiveAgents();
+        // await this.getActiveBooths();
         await this.getDailyTotalCollections();
     },
     methods: {
         async getActiveAgents() {
             // axios.get('/sanctum/csrf-cookie').then(response => {
-            const response = await axios.get('/agents/count ').catch(error => {
-                this.cards[0].description = "No Data"
+            const response = await axios.get('/agents/count/').catch(error => {
+                console.log(error)
             })
-            this.cards[0].description = response.data['active'].toString() +
-                '<span class="card-item-description">/' +
-                response.data['total'].toString() +
-                '</span>'
             console.log(response);
         },
 
         async getActiveBooths() {
-            const response = await axios.get('/booths/count',
+            const response = await axios.get('/booths/count/',
                 {
                     headers: {
                         'content-type': 'application/json',
                         'accept': 'application/json'
                     }
-                }).catch(error => this.cards[1].description = "No Data");
-            this.cards[1].description = response.data['active'].toString() +
-                '<span class="card-item-description">/' +
-                response.data['total'].toString() +
-                '</span>'
+                }).catch(error => {
+                console.log(error)
+            });
             console.log(response.data)
         },
 
         async getDailyTotalCollections() {
-            const response = await axios.get('/collections/daily-sum', {
+            const response = await axios.get('/api/user/', {
                 headers: {
                     'content-type': 'application/json',
                     'accept': 'application/json'
                 }
-            }).catch(error => this.cards[3].description = "No Data");
-            this.cards[3].description = response.data[0][0]['sum_amount'].toString()
+            }).catch(error => console.log(error));
             console.log("Sa Total ni ha!", response)
         },
 

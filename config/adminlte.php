@@ -362,6 +362,7 @@ return [
             'label_color' => 'success',
             'can' => 'menu reports',
             'classes' => 'xs',
+
             'submenu' => [
                 [
                     'text' => 'All Reports',

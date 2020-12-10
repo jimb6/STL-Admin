@@ -10,12 +10,13 @@
 import DataTable from "../components/DataTable";
 import Vue from "vue";
 import Vuetify from 'vuetify'
+
 Vue.use(Vuetify)
 
 export default {
     name: "User",
     props: {
-        userData: String,
+        userData: JSON,
     },
     components: {
         DataTable,

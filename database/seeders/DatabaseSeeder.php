@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,23 +16,14 @@ class DatabaseSeeder extends Seeder
     {
         // Adding an admin user
         $this->call(BaseSeeder::class);
+        $this->call(AddressSeeder::class);
         $this->call(BoothSeeder::class);
-        $this->call(AgentSeeder::class);
-//        $user = \App\Models\User::factory(5);
         $this->call(PermissionsSeeder::class);
-//        $this->call(CollectionRecordSeeder::class);
-
-        $this->call(DrawPeriodSeeder::class);
-//        $this->call(CloseNumberSeeder::class);
-        $this->call(CollectionStatusSeeder::class);
+//        $this->call(DrawPeriodSeeder::class);
+//        $this->call(CollectionStatusSeeder::class);
         $this->call(UserSeeder::class);
-
-//        $this->call(BetTransactionSeeder::class);
-//        $this->call(BetSeeder::class);
-//        $this->call(WinnerSeeder::class);
-//        $this->call(DrawResultSeeder::class);
-        $this->call(BetGameSeeder::class);
-        $this->call(BetGameDrawPeriodFactory::class);
+//        $this->call(BetGameSeeder::class);
+//        $this->call(BetGameDrawPeriodFactory::class);
         $this->call(RoleSeeder::class);
 
     }

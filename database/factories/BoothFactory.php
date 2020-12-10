@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Address;
 use App\Models\Base;
 use App\Models\Booth;
 use Illuminate\Support\Str;
@@ -24,11 +25,9 @@ class BoothFactory extends Factory
     public function definition()
     {
         return [
-            'location' => $this->faker->streetAddress(),
-            'status' => $this->faker->state([
-                'Active', 'Inactive', 'Removed'
-            ]),
+            'address_id' => Address::all()->random()->id,
             'base_id' => Base::all()->random()->id,
+            'user_id' => null,
         ];
     }
 }
