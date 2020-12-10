@@ -59,4 +59,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Models\Base');
     }
+    public function address()
+    {
+        return $this->belongsTo('App\Models\Address');
+    }
 }

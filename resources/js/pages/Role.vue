@@ -29,7 +29,7 @@ import Vuetify from 'vuetify'
 Vue.use(Vuetify)
 
 export default {
-    name: "User",
+    name: "Role",
     props: {
         userData: JSON,
     },
@@ -53,10 +53,10 @@ export default {
         contents: [],
     }),
     created() {
-        this.getUsers();
+        this.getRoles();
     },
     methods: {
-        async getUsers() {
+        async getRoles() {
             const response = await axios.get('/api/users').catch(err => {
                 console.log(err)
             });
