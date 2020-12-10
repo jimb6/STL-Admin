@@ -7,6 +7,7 @@
 
             <v-tab-item>
                 <DataTable
+                    :tableName="tableName"
                     :contents="contents"
                     :headers="headers"/>
             </v-tab-item>
@@ -38,6 +39,7 @@ export default {
     },
 
     data: () => ({
+        tableName: "Users",
         headers: [
             {text: "#", value: "count"},
             {text: "Name", value: "name"},
@@ -78,8 +80,6 @@ export default {
                     base: data[item].base.base_name,
                     updated_at: date,
                 }
-
-                console.log( date );
                 this.contents.push(user);
             }
         },

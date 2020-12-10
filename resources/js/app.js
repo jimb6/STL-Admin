@@ -46,6 +46,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Bet from './pages/Bet'
 import User from './pages/User'
+import Role from './pages/Role'
 import GlobalSettings from './pages/GlobalSettings'
 
 const app = new Vue(    {
@@ -60,6 +61,7 @@ const app = new Vue(    {
         Register,
         Bet,
         User,
+        Role,
         GlobalSettings
     },
 });

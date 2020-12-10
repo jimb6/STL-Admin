@@ -1,7 +1,7 @@
 <template>
 
     <div class="cstm-vuetify-table">
-        <h2>Users Table</h2>
+        <h2>{{ tableName }} Table</h2>
 
         <div class="flex-between cstm-table-options my-4 cstm-row col2">
             <div>
@@ -60,6 +60,7 @@
 export default {
     name: 'DataTable',
     props: {
+        tableName: String,
         headers: Array,
         contents: Array,
     },
@@ -80,22 +81,4 @@ export default {
 </script>
 
 <style scoped>
-.cstm-vuetify-table {
-    font-family: 'Poppins';
-    padding: 50px;
-}
-.cstm-vuetify-table h2 {
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: 300;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-}
-.cstm-table-options>div {
-    width: 25%;
-    display: block !important;
-    flex: unset;
-    padding: unset;
-    margin: unset;
-}
 </style>
