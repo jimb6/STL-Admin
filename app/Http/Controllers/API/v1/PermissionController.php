@@ -17,7 +17,7 @@ class PermissionController extends Controller
         $this->authorize('list permissions', Permission::class);
 
         $search = $request->get('search', '');
-        $permissions = Permission::where('name', 'like', "%{$search}%")->paginate(10);
+        $permissions = Permission::where('name', 'like', "%{$search}%")->get();
 
         return response([$permissions, $search], 200);
 
