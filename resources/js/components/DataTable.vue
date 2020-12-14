@@ -2,18 +2,6 @@
     <v-container class="cstm-vuetify-table">
         <h2>{{ tableName }} Table</h2>
 
-        <div class="flex-between cstm-table-options my-4 cstm-row col2">
-            <div>
-
-            </div>
-            <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-            ></v-text-field>
-        </div>
 
         <v-data-table
             :headers="headers"
@@ -22,75 +10,115 @@
             :items-per-page="itemsPerPage"
             :search="search"
             hide-default-footer
-            class="elevation-1"
+            class=""
             @page-count="pageCount = $event"
-            multi-sort
             loading
             loading-text="Loading... Please wait"
         >
 
             <template v-slot:top>
+                <div class="flex-between cstm-table-options my-4 cstm-row col2">
+                    <div>
+                        <v-dialog v-model="dialog" max-width="500px">
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn color="blue" class="text-white" v-bind="attrs" v-on="on">
+                                    <v-icon small class="mr-2">
+                                        mdi-plus
+                                    </v-icon>
+                                    Add New {{ tableName.substring(0, tableName.length - 1) }}
+                                </v-btn>
+                            </template>
+                            <v-card>
+                                <v-card-title>
+                                    <span class="headline">{{ formTitle }}</span>
+                                </v-card-title>
+
+                                <v-card-text>
+                                    <v-container>
+                                        <v-row>
+                                            <v-col cols="12" v-for="(item, index) in fillable" :key="index">
+                                                <v-text-field
+                                                    v-if="item.type== 'input'"
+                                                    v-model="editedItem[item.field]"
+                                                    :label="item.label">
+                                                </v-text-field>
+
+                                                <v-select
+                                                    v-if="item.type== 'select'"
+                                                    v-model="editedItem[item.field]"
+                                                    :items="item.options"
+                                                    :label="item.label" >
+                                                </v-select>
+
+                                                <Address
+                                                    v-model="editedItem[item.field]"
+                                                    v-if="item.type == 'address'"
+                                                    @changeAddress="changeAddress(item.field, $event)"
+                                                />
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </v-card-text>
+
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn outlined color="blue" @click="close">
+                                        <!--                                        <v-icon small class="mr-2">-->
+                                        <!--                                            mdi-cancel-->
+                                        <!--                                        </v-icon>-->
+                                        Cancel
+                                    </v-btn>
+                                    <v-btn color="blue" class="text-white" @click="save">
+                                        <!--                                        <v-icon small class="mr-2">-->
+                                        <!--                                            mdi-check-->
+                                        <!--                                        </v-icon>-->
+                                        Save
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </div>
+                    <v-text-field
+                        v-model="search"
+                        append-icon="mdi-magnify"
+                        label="Search"
+                        single-line
+                        hide-details
+                    ></v-text-field>
+                </div>
+
                 <v-dialog v-model="dialogDelete" max-width="500px">
                     <v-card>
-                        <v-card-title class="headline">Are you sure you want to delete this item?</v-card-title>
-                        <v-card-actions>
+                        <v-card-title class="headline">Delete this {{ tableName.substring(0, tableName.length - 1).toLowerCase() }}?</v-card-title>
+                        <v-card-actions class="pt-5">
                             <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                            <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                            <v-btn outlined color="blue" @click="closeDelete">
+                                Cancel
+                            </v-btn>
+                            <v-btn color="blue" class="text-white" @click="deleteItemConfirm">
+                                Yes
+                            </v-btn>
                             <v-spacer></v-spacer>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
             </template>
 
-
-            <template v-slot:item.age="props">
-                <v-edit-dialog
-                    :return-value.sync="props.item.age"
-                    large
-                    persistent
-                    @save="save"
-                    @cancel="cancel"
-                    @open="open"
-                    @close="close"
-                >
-                    <div>{{ props.item.age }}</div>
-                    <template v-slot:input>
-                        <div class="mt-4 title">
-                            Update Age
-                        </div>
-                        <v-text-field
-                            v-model="props.item.age"
-                            :rules="[max25chars]"
-                            label="Edit"
-                            single-line
-                            counter
-                            autofocus
-                        ></v-text-field>
-                    </template>
-                </v-edit-dialog>
-            </template>
-
             <template v-slot:item.actions="{ item }">
+                <v-icon small class="mr-2" @click="editItem(item)">
+                    mdi-pencil
+                </v-icon>
                 <v-icon small @click="deleteItem(item)">
                     mdi-delete
                 </v-icon>
             </template>
         </v-data-table>
 
-        <v-snackbar
-            v-model="snack"
-            :timeout="3000"
-            :color="snackColor"
-        >
+        <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
             {{ snackText }}
 
             <template v-slot:action="{ attrs }">
-                <v-btn
-                    v-bind="attrs"
-                    text
-                    @click="snack = false"
-                >
+                <v-btn v-bind="attrs" text @click="snack = false">
                     Close
                 </v-btn>
             </template>
@@ -113,43 +141,43 @@
                     :length="pageCount"
                     prev-icon="mdi-menu-left"
                     next-icon="mdi-menu-right"
+                    :total-visible="7"
+                    circle
                 ></v-pagination>
             </div>
         </div>
 
-<!--        <div class="cstm-card2-cont">-->
-<!--            <div class="card2" v-for="n in 4">-->
-<!--                <h3>John Doe</h3>-->
-<!--                <div class="overlay">-->
-<!--                    <h2 class="title">John Doe</h2>-->
-<!--                    <a class="link" href="#">Edit</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+
     </v-container>
 
 </template>
 
 <script>
+import Address from "./Address";
+
 export default {
     name: 'DataTable',
+    components:{
+        Address
+    },
     props: {
         tableName: String,
         headers: Array,
         contents: Array,
-        defaultItem: Array,
+        fillable: Array,
     },
 
     data: () => ({
         search: "",
         page: 1,
         pageCount: 0,
-        itemsPerPage: 10,
+        itemsPerPage: 8,
 
         dialog: false,
         dialogDelete: false,
         editedIndex: -1,
         editedItem: {},
+        defaultItem: {},
 
         snack: false,
         snackColor: '',
@@ -157,17 +185,25 @@ export default {
         max25chars: v => v.length <= 25 || 'Input too long!',
 
     }),
+
     created() {
-        this.editedItem = this.defaultItem;
+        this.initialize();
     },
+
     methods: {
-        // deleteItem(item) {
-        //     const index = this.contents.indexOf((x) => x.id === item.id);
-        //     this.contents.splice(index, 1);
-        // },
+        initialize() {
+            const fillable = this.fillable
+            for (let index in fillable) {
+                this.editedItem[fillable[index].field] = fillable[index].value
+                this.defaultItem[fillable[index].field] = fillable[index].value
+            }
+        },
         editItem(item) {
             this.editedIndex = this.contents.indexOf(item)
-            this.editedItem = Object.assign({}, item)
+            for (let index in this.editedItem) {
+                this.editedItem[index] = this.contents[this.editedIndex][index]
+            }
+            // this.editedItem = Object.assign({}, item)
             this.dialog = true
         },
 
@@ -175,6 +211,7 @@ export default {
             this.editedIndex = this.contents.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
+
         },
 
         deleteItemConfirm() {
@@ -185,7 +222,7 @@ export default {
         close() {
             this.dialog = false
             this.$nextTick(() => {
-                this.editedItem = this.defaultItem
+                this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             })
         },
@@ -193,12 +230,17 @@ export default {
         closeDelete() {
             this.dialogDelete = false
             this.$nextTick(() => {
-                this.editedItem = this.defaultItem
+                this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             })
         },
 
         save() {
+            if (this.editedIndex > -1) {
+                Object.assign(this.contents[this.editedIndex], this.editedItem)
+            } else {
+                this.contents.push(this.editedItem)
+            }
             this.snack = true
             this.snackColor = 'success'
             this.snackText = 'Item updated'
@@ -213,6 +255,25 @@ export default {
             this.snack = true
             this.snackColor = 'info'
             this.snackText = 'Update Item'
+        },
+        changeAddress(field, address){
+            this.editedItem[field] = address;
+        }
+    },
+
+    computed: {
+        formTitle() {
+            let title = this.tableName.substring(0, this.tableName.length - 1);
+            return this.editedIndex === -1 ? 'Add New ' + title : 'Edit ' + title
+        },
+    },
+
+    watch: {
+        dialog(val) {
+            val || this.close()
+        },
+        dialogDelete(val) {
+            val || this.closeDelete()
         },
     },
 };
