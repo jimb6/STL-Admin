@@ -1,29 +1,28 @@
 <template>
-    <div>
-        <v-tabs>
-            <v-tab>Table View</v-tab>
-            <v-tab>Card View</v-tab>
-            <v-tab>Add New</v-tab>
+    <v-main>
+        <v-container>
+            <v-tabs>
+                <v-tab>Table View</v-tab>
+                <v-tab>Card View</v-tab>
 
-            <v-tab-item>
-                <DataTable
-                    :tableName="tableName"
-                    :contents="contents"
-                    :headers="headers"/>
-            </v-tab-item>
-            <v-tab-item>
-                <h1>CardView</h1>
-            </v-tab-item>
-            <v-tab-item>
-                <h1>Add New</h1>
-            </v-tab-item>
-        </v-tabs>
-
-    </div>
+                <v-tab-item>
+                    <DataTable
+                        :tableName="tableName"
+                        :contents="contents"
+                        :headers="headers"
+                    />
+                </v-tab-item>
+                <v-tab-item>
+                    <DataTable2/>
+                </v-tab-item>
+            </v-tabs>
+        </v-container>
+    </v-main>
 </template>
 
 <script>
 import DataTable from "../components/DataTable";
+import DataTable2 from "../components/DataTable2";
 import Vue from "vue";
 import Vuetify from 'vuetify'
 
@@ -35,6 +34,7 @@ export default {
         userData: JSON,
     },
     components: {
+        DataTable2,
         DataTable,
     },
 
@@ -67,7 +67,7 @@ export default {
             let date = '';
             let count = 0;
             for (let item in data) {
-                date = this.getDateToday( new Date( data[item].updated_at ) );
+                date = this.getDateToday(new Date(data[item].updated_at));
                 count++;
                 user = {
                     count: count,
@@ -83,9 +83,9 @@ export default {
                 this.contents.push(user);
             }
         },
-        getDateToday( date ) {
+        getDateToday(date) {
             date = (date) ? date : new Date();
-            const month = date.toLocaleString('default', { month: 'long' });
+            const month = date.toLocaleString('default', {month: 'long'});
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
         }

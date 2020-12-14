@@ -31,6 +31,7 @@
         @endif
 
         {{-- Content Wrapper --}}
+        <v-app>
         <div class="content-wrapper {{ config('adminlte.classes_content_wrapper') ?? '' }}">
 
             {{-- Content Header --}}
@@ -47,6 +48,7 @@
                 </div>
             </div>
         </div>
+        </v-app>
 
         {{-- Footer --}}
         @hasSection('footer')
