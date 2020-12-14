@@ -10,19 +10,29 @@
                         :tableName="tableName"
                         :contents="contents"
                         :headers="headers"
+                        :fillable="fillable"
                     />
                 </v-tab-item>
                 <v-tab-item>
-                    <DataTable2/>
+                    <Card2
+                        :tableName="tableName"
+                        :contents="contents"
+                        :headers="headers"
+                        :fillable="fillable"
+                    />
                 </v-tab-item>
             </v-tabs>
+
+
+
+
         </v-container>
     </v-main>
 </template>
 
 <script>
 import DataTable from "../components/DataTable";
-import DataTable2 from "../components/DataTable2";
+import Card2 from "../components/Card2";
 import Vue from "vue";
 import Vuetify from 'vuetify'
 
@@ -34,7 +44,7 @@ export default {
         userData: JSON,
     },
     components: {
-        DataTable2,
+        Card2,
         DataTable,
     },
 
@@ -53,6 +63,15 @@ export default {
             {text: "Actions", value: "actions", sortable: false},
         ],
         contents: [],
+        fillable: [
+            {label: "Name", field: "name", value: "", type: "input"},
+            {label: "Age", field: "age", value: "", type: "input"},
+            {label: "Gender", field: "gender", value: "", type: "select", options: ["Male", "Female", "Others"]},
+            {label: "Contact #", field: "contact_number", value: "", type: "input"},
+            {label: "Email", field: "email", value: "", type: "input"},
+            {label: "Address", field: "address", value: "", type: "address"},
+            {label: "Base", field: "base", value: "", type: "select", options: ["Mati", "Lupon", "Baganga"]},
+        ],
     }),
     created() {
         this.getUsers();
@@ -88,7 +107,8 @@ export default {
             const month = date.toLocaleString('default', {month: 'long'});
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
-        }
+        },
+
     }
 }
 </script>

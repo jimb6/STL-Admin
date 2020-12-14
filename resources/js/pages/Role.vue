@@ -3,19 +3,21 @@
         <v-tabs>
             <v-tab>Table View</v-tab>
             <v-tab>Card View</v-tab>
-            <v-tab>Add New</v-tab>
 
             <v-tab-item>
                 <DataTable
                     :tableName="tableName"
                     :contents="contents"
-                    :headers="headers"/>
+                    :headers="headers"
+                    :fillable="fillable"/>
             </v-tab-item>
             <v-tab-item>
-                <h1>CardView</h1>
-            </v-tab-item>
-            <v-tab-item>
-                <h1>Add New</h1>
+                <Card2
+                    :tableName="tableName"
+                    :contents="contents"
+                    :headers="headers"
+                    :fillable="fillable"
+                />
             </v-tab-item>
         </v-tabs>
 
@@ -24,6 +26,7 @@
 
 <script>
 import DataTable from "../components/DataTable";
+import Card2 from "../components/Card2";
 import Vue from "vue";
 import Vuetify from 'vuetify'
 
@@ -36,6 +39,7 @@ export default {
     },
     components: {
         DataTable,
+        Card2
     },
 
     data: () => ({
@@ -48,6 +52,11 @@ export default {
             {text: "Actions", value: "actions", sortable: false},
         ],
         contents: [],
+        fillable: [
+            {label: "Name", field: "name", value:""},
+            {label: "Age", field: "age", value:""},
+            {label: "Guard", field: "guard_name", value:""},
+        ]
     }),
     created() {
         this.getRoles();
