@@ -25,6 +25,12 @@
             item-value="brgyCode"
             label="Barangay"
             return-object
+            @change="streetDisabled = false"
+        />
+        <v-text-field
+            v-model="selectStreet"
+            label="Street"
+            :disabled="streetDisabled"
             @change="changeAddress()"
         />
     </div>
@@ -39,13 +45,15 @@ export default {
         municipalities: [],
         selectMunicipality: {id: 0, psgcCode: "", citymunDesc: "", regDesc: "", provCode: "", citymunCode: ""},
         barangays: [],
-        selectBarangay: {id:0, brgyCode:"", brgyDesc:"", regCode:"", provCode:"", citymunCode:""},
+        selectBarangay: {id: 0, brgyCode: "", brgyDesc: "", regCode: "", provCode: "", citymunCode: ""},
+        selectStreet: '',
+        streetDisabled: true
     }),
     created() {
         this.getProvinces();
     },
     methods: {
-        async getProvinces(){
+        async getProvinces() {
             const api_url = 'https://raw.githubusercontent.com/clavearnel/philippines-region-province-citymun-brgy/master/json/refprovince.json';
             const request = {
                 method: 'GET',
@@ -54,7 +62,7 @@ export default {
             const data = await response.json();
             this.provinces = data.RECORDS;
         },
-        async getMunicipalities(){
+        async getMunicipalities() {
             const api_url = 'https://raw.githubusercontent.com/clavearnel/philippines-region-province-citymun-brgy/master/json/refcitymun.json';
             const request = {
                 method: 'GET',
@@ -64,13 +72,13 @@ export default {
             this.municipalities = [];
             this.barangays = [];
             const municipalities = data.RECORDS;
-            for(let item in municipalities){
-                if( municipalities[item].provCode == this.selectProvince.provCode ){
-                    this.municipalities.push( municipalities[item] );
+            for (let item in municipalities) {
+                if (municipalities[item].provCode == this.selectProvince.provCode) {
+                    this.municipalities.push(municipalities[item]);
                 }
             }
         },
-        async getBarangays(){
+        async getBarangays() {
             const api_url = 'https://raw.githubusercontent.com/clavearnel/philippines-region-province-citymun-brgy/master/json/refbrgy.json';
             const request = {
                 method: 'GET',
@@ -79,17 +87,26 @@ export default {
             const data = await response.json();
             this.barangays = [];
             const barangays = data.RECORDS;
-            for(let item in barangays){
-                if( barangays[item].citymunCode == this.selectMunicipality.citymunCode ){
-                    this.barangays.push( barangays[item] );
+            for (let item in barangays) {
+                if (barangays[item].citymunCode == this.selectMunicipality.citymunCode) {
+                    this.barangays.push(barangays[item]);
                 }
             }
         },
-        changeAddress(){
-            let barangay = this.selectBarangay.brgyDesc.charAt(0).toUpperCase() + this.selectBarangay.brgyDesc.toLowerCase().slice(1);
-            let municipalityCity = this.selectMunicipality.citymunDesc.charAt(0).toUpperCase() + this.selectMunicipality.citymunDesc.toLowerCase().slice(1);;
-            let province = this.selectProvince.provDesc.charAt(0).toUpperCase() + this.selectProvince.provDesc.toLowerCase().slice(1);
-            this.$emit('changeAddress', barangay + ", " + municipalityCity + ", " + province);
+        changeAddress() {
+            let street = this.selectStreet.toUpperCase();
+            let barangay = this.selectBarangay.brgyDesc.toUpperCase();
+            let municipality = this.selectMunicipality.citymunDesc.toUpperCase();
+            let province = this.selectProvince.provDesc.toUpperCase();
+            let address = [street, barangay, municipality, province];
+            this.$emit('changeAddress', address);
+        },
+        close() {
+            this.selectProvince= {id: 0, psgcCode: "", provDesc: "", regCode: "", provCode: ""}
+            this.selectMunicipality= {id: 0, psgcCode: "", citymunDesc: "", regDesc: "", provCode: "", citymunCode: ""}
+            this.selectBarangay= {id: 0, brgyCode: "", brgyDesc: "", regCode: "", provCode: "", citymunCode: ""},
+            this.selectStreet= ''
+            this.streetDisabled= true
         }
     }
 }

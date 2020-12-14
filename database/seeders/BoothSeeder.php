@@ -14,8 +14,6 @@ class BoothSeeder extends Seeder
      */
     public function run()
     {
-        Booth::factory()
-            ->count(5)
-            ->create();
+
     }
 }

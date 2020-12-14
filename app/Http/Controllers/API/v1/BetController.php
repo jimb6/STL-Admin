@@ -3,96 +3,72 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Agent;
 use App\Models\Bet;
-use App\Models\BetGame;
-use App\Models\BetTransaction;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 
 class BetController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View|Response
-     */
+
     public function index(Request $request)
     {
-        $bets = DB::table('bets_today')->get();
-        $gameTypes = BetGame::all();
-        return \response(["betGames" => $gameTypes, "bets" => $bets], 200);
+        $this->authorize('view bets', Bet::class);
+        $search = $request->get('search', '');
+        $bets = Bet::search($search)->with(['game', 'drawPeriod'])
+            ->withCasts(['is_voided' => 'boolean', 'is_rumbled' => 'boolean'])->get();
+        return $request->wantsJson() ? response(['bets' => $bets], 200) :
+            view('bets.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $this->authorize('create bets', Bet::class);
+        return response([], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return Response
-     */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create bets', Bet::class);
+        $validated = $request->validated();
+        $bet = Bet::create($validated);
+
+        return response(['bet' => $bet], 202);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Application|Factory|View|Response
-     */
-    public function show($id)
+    public function show(Request $request, Bet $bet)
     {
-        //
-//        $drawPreiodId = BetGame::with('drawPeriods')->where('abbreviation', '=', $id);
-//        Bet::with('transaction')->where('')
+        $this->authorize('view bets', $bet);
+        return response([], 204);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
+    public function edit(Request $request, Bet $bet)
     {
-        //
+        $this->authorize('update bets', $bet);
+        return response(['bet' => $bet], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, Bet $bet)
     {
-        //
+        $this->authorize('update bets', $bet);
+        $validated = $request->validated();
+        $bet->update($validated);
+        return response([$bet], 202);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
+    public function destroy(Request $request, Bet $bet)
     {
-        //
+        $this->authorize('delete bets', $bet);
+        $bet->delete();
+        return response([], 204);
+    }
+
+    public function topGames(Request $request){
+        $this->authorize('view bets', Bet::class);
+        $search = $request->get('search', '');
+        $bets = Bet::search($search)->with(['game', 'drawPeriod'])
+            ->withCasts(['is_voided' => 'boolean', 'is_rumbled' => 'boolean'])
+            ->groupBy('')->get();
+
+        return $request->wantsJson() ? response(['bets' => $bets], 200) :
+            view('bets.index');
     }
 }

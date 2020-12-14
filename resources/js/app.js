@@ -49,6 +49,9 @@ import User from './pages/User'
 import Role from './pages/Role'
 import Permission from './pages/Permission'
 import GlobalSettings from './pages/GlobalSettings'
+import Game from "./pages/Game";
+import Drawperiod from "./pages/DrawPeriod";
+import Device from "./pages/Device";
 
 const app = new Vue(    {
     theme: { dark: true },
@@ -63,7 +66,10 @@ const app = new Vue(    {
         Bet,
         User,
         Role,
+        Game,
+        Drawperiod,
         Permission,
-        GlobalSettings
+        GlobalSettings,
+        Device
     },
 });

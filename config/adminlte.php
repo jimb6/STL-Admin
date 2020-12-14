@@ -326,6 +326,40 @@ return [
                 ],
             ]
         ],
+        [
+            'text' => 'Games',
+            'key' => 'games',
+            'can' => 'menu games',
+            // 'url'         => '/#',
+            'icon' => 'fas fa-dice',
+            'label_color' => 'success',
+            'classes' => '',
+            'submenu' => [
+                [
+                    'text' => 'All Games',
+                    'can' => 'view games',
+                    'route' => 'games.index',
+                    'active' => ['admin/games', 'admin/games*']
+                ],
+            ]
+        ],
+        [
+            'text' => 'Draw Periods',
+            'key' => 'draw-periods',
+            'can' => 'menu draw periods',
+            // 'url'         => '/#',
+            'icon' => 'fas fa-clock',
+            'label_color' => 'success',
+            'classes' => '',
+            'submenu' => [
+                [
+                    'text' => 'All Draw Periods',
+                    'can' => 'view draw periods',
+                    'route' => 'draw-periods.index',
+                    'active' => ['admin/draw-periods', 'admin/draw-periods*']
+                ],
+            ]
+        ],
         ['header' => 'Accounting Management'],
         [
             'text' => 'Collections',
@@ -393,7 +427,7 @@ return [
             ]
         ],
         [
-            'text' => 'Mobile Settings',
+            'text' => 'Device Settings',
             // 'url'         => '/#',
             'icon' => 'fas fa-mobile-alt',
             'label_color' => 'success',
@@ -401,12 +435,12 @@ return [
             'classes' => '',
             'submenu' => [
                 [
-                    'text' => 'Global Settings',
-                    'url' => '/admin/settings/mobile/global',
+                    'text' => 'Registered Devices',
+                    'route' => 'devices.index',
                 ],
                 [
-                    'text' => 'Theme',
-                    'url' => '/admin/settings/mobile/theme',
+                    'text' => 'Global Settings',
+                    'route' => 'devices.create',
                 ],
             ]
         ],

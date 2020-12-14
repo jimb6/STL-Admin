@@ -4,13 +4,18 @@
             <v-tabs>
                 <v-tab>Table View</v-tab>
                 <v-tab>Card View</v-tab>
-
                 <v-tab-item>
                     <DataTable
                         :tableName="tableName"
                         :contents="contents"
                         :headers="headers"
                         :fillable="fillable"
+                        @storeUser="storeUser($event)"
+                        @changeAddress="changeAddress($event)"
+                        @destroyUser="destroyUser($event)"
+                        :canAdd="canAdd"
+                        :canEdit="canEdit"
+                        :canDelete="canDelete"
                     />
                 </v-tab-item>
                 <v-tab-item>
@@ -19,13 +24,15 @@
                         :contents="contents"
                         :headers="headers"
                         :fillable="fillable"
+                        @storeUser="storeUser($event)"
+                        @changeAddress="changeAddress($event)"
+                        @destroyUser="destroyUser($event)"
+                        :canAdd="canAdd"
+                        :canEdit="canEdit"
+                        :canDelete="canDelete"
                     />
                 </v-tab-item>
             </v-tabs>
-
-
-
-
         </v-container>
     </v-main>
 </template>
@@ -53,55 +60,116 @@ export default {
         headers: [
             {text: "#", value: "count"},
             {text: "Name", value: "name"},
-            {text: "Age", value: "age"},
+            {text: "Birthdate", value: "birthdate"},
             {text: "Gender", value: "gender"},
             {text: "Contact #", value: "contact_number"},
             {text: "Email", value: "email"},
             {text: "Address", value: "address"},
-            {text: "Base", value: "base"},
+            {text: "Cluster", value: "cluster"},
             {text: "Last Update", value: "updated_at"},
             {text: "Actions", value: "actions", sortable: false},
         ],
         contents: [],
         fillable: [
+            {label: "Roles", field: "roles", value: "", type: "chips", options: [] },
             {label: "Name", field: "name", value: "", type: "input"},
-            {label: "Age", field: "age", value: "", type: "input"},
+            {label: "Birthdate", field: "birthdate", value: "", type: "datepicker"},
             {label: "Gender", field: "gender", value: "", type: "select", options: ["Male", "Female", "Others"]},
             {label: "Contact #", field: "contact_number", value: "", type: "input"},
             {label: "Email", field: "email", value: "", type: "input"},
             {label: "Address", field: "address", value: "", type: "address"},
-            {label: "Base", field: "base", value: "", type: "select", options: ["Mati", "Lupon", "Baganga"]},
+            {label: "Cluster", field: "cluster", value: "", type: "select", options: Array},
         ],
+
+        editedItem: {},
+        roles: [],
+        address: Array,
+
+        canAdd: true,
+        canEdit: true,
+        canDelete: true,
     }),
     created() {
-        this.getUsers();
+        this.displayUsers();
+        this.getClusters();
+        this.getRoles();
     },
     methods: {
-        async getUsers() {
-            const response = await axios.get('/api/users').catch(err => {
+        async displayUsers() {
+            const response = await axios.get('users').catch(err => {
                 console.log(err)
             });
             let user = {};
-            const data = response.data[0];
+            const data = response.data.users;
             let date = '';
             let count = 0;
+            this.contents = []
             for (let item in data) {
                 date = this.getDateToday(new Date(data[item].updated_at));
                 count++;
                 user = {
                     count: count,
+                    id: data[item].id,
                     name: data[item].name,
-                    age: data[item].age,
+                    birthdate: data[item].birthdate,
                     gender: data[item].gender,
                     contact_number: data[item].contact_number,
                     email: data[item].email,
-                    address: data[item].address.name,
-                    base: data[item].base.base_name,
+                    address: data[item].address.street
+                        + ", " + data[item].address.barangay
+                        + ", " + data[item].address.municipality
+                        + ", " + data[item].address.province,
+                    cluster: data[item].cluster.name,
                     updated_at: date,
                 }
                 this.contents.push(user);
             }
         },
+        async storeUser(item) {
+            const response = await axios.post('users', {
+                'roles': item.roles,
+                'name': item.name,
+                'birthdate': item.birthdate,
+                'gender': item.gender,
+                'contact_number': item.contact_number,
+                'email': item.email,
+                'cluster_id': item.cluster.id,
+                'address': this.address
+
+            }).catch(err => console.log(err))
+            console.log(response);
+            await this.displayUsers()
+        },
+        async updateUser() {
+
+        },
+        async destroyUser(item) {
+            const response = await axios.delete('users/?' + item.id).catch(err => console.log(err))
+            await this.displayUsers();
+        },
+        async getRoles() {
+            const response = await axios.get('roles/?').catch(err => console.log(err))
+            let rolesData = response.data.roles;
+            for (let index in this.fillable) {
+                if (this.fillable[index].field == 'roles') {
+                    this.fillable[index].options = rolesData;
+                }
+            }
+        },
+        async getClusters() {
+            const response = await axios.get('clusters/?').catch(err => console.log(err))
+            let clustersData = response.data.clusters;
+            for (let index in this.fillable) {
+                if (this.fillable[index].field == 'cluster') {
+                    this.fillable[index].options = clustersData;
+                }
+            }
+        },
+        changeAddress(address) {
+            this.address = address;
+        },
+
+
         getDateToday(date) {
             date = (date) ? date : new Date();
             const month = date.toLocaleString('default', {month: 'long'});

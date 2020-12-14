@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Models\BetGame;
+use App\Models\Game;
 use App\Models\DrawResult;
 use Illuminate\Http\Request;
 
@@ -34,7 +34,7 @@ class DrawResultController extends Controller
     {
         $this->authorize('create', DrawResult::class);
 
-        $betGames = BetGame::pluck('game_name', 'id');
+        $betGames = Game::pluck('game_name', 'id');
 
         return view('app.draw_results.create', compact('betGames'));
     }
@@ -75,7 +75,7 @@ class DrawResultController extends Controller
     {
         $this->authorize('update', $drawResult);
 
-        $betGames = BetGame::pluck('game_name', 'id');
+        $betGames = Game::pluck('game_name', 'id');
 
         return view('app.draw_results.edit', compact('drawResult', 'betGames'));
     }

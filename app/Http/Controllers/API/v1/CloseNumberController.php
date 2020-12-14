@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Models\BetGame;
+use App\Models\Game;
 use App\Models\CloseNumber;
 use Illuminate\Http\Request;
 
@@ -37,7 +37,7 @@ class CloseNumberController extends Controller
     {
         $this->authorize('create', CloseNumber::class);
 
-        $betGames = BetGame::pluck('game_name', 'id');
+        $betGames = Game::pluck('game_name', 'id');
 
         return view('app.close_numbers.create', compact('betGames'));
     }
@@ -78,7 +78,7 @@ class CloseNumberController extends Controller
     {
         $this->authorize('update', $closeNumber);
 
-        $betGames = BetGame::pluck('game_name', 'id');
+        $betGames = Game::pluck('game_name', 'id');
 
         return view(
             'app.close_numbers.edit',

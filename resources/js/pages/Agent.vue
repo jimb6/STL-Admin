@@ -1,65 +1,174 @@
 <template>
-	<div class="cstm-container agents fit-modal">
-		<section>
-			<div class="cstm-row cstm-heading col2 flex-between">
-				<div class="flex">
-					<h1>All Agents</h1>
-					<button class="cstm-btn small">Add New</button>
-				</div>
-				<div id="cstm-table_filter" class="dataTables_filter flex-end cstm-search">
-					<p>Search</p>
-					<input type="text" name="search" id="cstm-search" class="cstm-input">
-				</div>
-			</div>
-		</section>
-
-		<section>
-			<Table :labels="agentLabels" :contents="agents" :withIcon="withIcon"/>
-		</section>
-
-	</div>
+    <v-main>
+        <v-container>
+            <v-tabs>
+                <v-tab>Table View</v-tab>
+                <v-tab>Card View</v-tab>
+                <v-tab-item>
+                    <DataTable
+                        :tableName="tableName"
+                        :contents="contents"
+                        :headers="headers"
+                        :fillable="fillable"
+                        @storeUser="storeAgent($event)"
+                        @changeAddress="changeAddress($event)"
+                        @destroyUser="destroyAgent($event)"
+                        :canAdd="canAdd"
+                        :canEdit="canEdit"
+                        :canDelete="canDelete"
+                    />
+                </v-tab-item>
+                <v-tab-item>
+                    <Card2
+                        :tableName="tableName"
+                        :contents="contents"
+                        :headers="headers"
+                        :fillable="fillable"
+                        @storeUser="storeAgent($event)"
+                        @changeAddress="changeAddress($event)"
+                        @destroyUser="destroyAgent($event)"
+                        :canAdd="canAdd"
+                        :canEdit="canEdit"
+                        :canDelete="canDelete"
+                    />
+                </v-tab-item>
+            </v-tabs>
+        </v-container>
+    </v-main>
 </template>
 
-
 <script>
-	import Table from '../components/DataTable';
-	export default {
-	    name: "agent",
-	    components: {
-	        Table,
-	    },
-	    data() {
-			return {
-				agentLabels: ["", "Name", "On Duty", "Time In", "Time out"],
-				agents: [
-                    { iconClass:'fas fa-user', name: 'Jonathan Dalisay', onduty: 'DAVOR_000001', time_in: '8:00 AM', time_out: '9:10 PM' },
-                    { iconClass:'fas fa-user', name: 'Mary Grace Dela Cruz', onduty: 'DAVOR_000003', time_in: '8:10 AM', time_out: '9:30 PM' },
-                    { iconClass:'fas fa-user', name: 'Claire Ann Guerrero', onduty: 'DAVOR_000002', time_in: '8:05 AM', time_out: '9:15 PM' },
-                    { iconClass:'fas fa-user', name: 'Richard Acebedo', onduty: 'DAVOR_000004', time_in: '8:01 AM', time_out: '9:20 PM' }
-				],
-				withIcon: true,
-	        };
-	    },
-	    created() {
-	    },
-	    methods: {
-	        fetchData(page = 1) {
-	            axios.get('/api/v1/agents?page='+page)
-	                .then((response) => {
-	                    this.active = response.data.activeAgents.length
-                        this.agentCount = response.data.agents.length
-                        console.log(response)
-	                })
-	                .catch(function (error) {
-	                    console.log(error);
-	                });
-	        },
-	    }
-	}
+import DataTable from "../components/DataTable";
+import Card2 from "../components/Card2";
+import Vue from "vue";
+import Vuetify from 'vuetify'
+
+Vue.use(Vuetify)
+
+export default {
+    name: "Agent",
+    props: {
+        userData: JSON,
+    },
+    components: {
+        Card2,
+        DataTable,
+    },
+
+    data: () => ({
+        tableName: "Agents",
+        headers: [
+            {text: "#", value: "count"},
+            {text: "Name", value: "name"},
+            {text: "Birthdate", value: "birthdate"},
+            {text: "Gender", value: "gender"},
+            {text: "Contact #", value: "contact_number"},
+            {text: "Email", value: "email"},
+            {text: "Address", value: "address"},
+            {text: "Cluster", value: "cluster"},
+            {text: "Last Update", value: "updated_at"},
+            {text: "Actions", value: "actions", sortable: false},
+        ],
+        contents: [],
+        fillable: [
+            {label: "Name", field: "name", value: "", type: "input"},
+            {label: "Birthdate", field: "birthdate", value: "", type: "datepicker"},
+            {label: "Gender", field: "gender", value: "", type: "select", options: ["Male", "Female", "Others"]},
+            {label: "Contact #", field: "contact_number", value: "", type: "input"},
+            {label: "Email", field: "email", value: "", type: "input"},
+            {label: "Address", field: "address", value: "", type: "address"},
+            {label: "Cluster", field: "cluster", value: "", type: "select", options: Array},
+        ],
+
+        editedItem: {},
+        address: Array,
+
+        canAdd: true,
+        canEdit: true,
+        canDelete: true,
+    }),
+    created() {
+        this.displayAgents();
+        this.getClusters();
+    },
+    methods: {
+        async displayAgents() {
+            const response = await axios.get('agents/?',{
+                headers:{
+                    'Content-Type':'application/json',
+                        'Accept':'application/json'
+                }
+            }).catch(err => {
+                console.log(err)
+            });
+            let agent = {};
+            const data = response.data.agents;
+            let date = '';
+            let count = 0;
+            this.contents = []
+            for (let item in data) {
+                date = this.getDateToday(new Date(data[item].updated_at));
+                count++;
+                agent = {
+                    count: count,
+                    id: data[item].id,
+                    name: data[item].name,
+                    birthdate: data[item].birthdate,
+                    gender: data[item].gender,
+                    contact_number: data[item].contact_number,
+                    email: data[item].email,
+                    address: data[item].address.street
+                        + ", " + data[item].address.barangay
+                        + ", " + data[item].address.municipality
+                        + ", " + data[item].address.province,
+                    cluster: data[item].cluster.name,
+                    updated_at: date,
+                }
+                this.contents.push(agent);
+            }
+        },
+        async storeAgent(item) {
+            const response = await axios.post('agents/?', {
+                'name': item.name,
+                'birthdate': item.birthdate,
+                'gender': item.gender,
+                'contact_number': item.contact_number,
+                'email': item.email,
+                'cluster_id': item.cluster.id,
+                'address': this.address
+
+            }).catch(err => console.log(err))
+            await this.displayUsers()
+        },
+        async updateUser() {
+
+        },
+        async destroyAgent(item) {
+            const response = await axios.delete('agents/?'+item.id).catch(err => console.log(err))
+            await this.displayAgents();
+        },
+
+        async getClusters() {
+            const response = await axios.get('clusters').catch(err => console.log(err))
+            let clustersData = response.data.clusters;
+            for (let index in this.fillable) {
+                if (this.fillable[index].field == 'cluster') {
+                    this.fillable[index].options = clustersData;
+                }
+            }
+        },
+        changeAddress(address) {
+            this.address = address;
+        },
+
+
+        getDateToday(date) {
+            date = (date) ? date : new Date();
+            const month = date.toLocaleString('default', {month: 'long'});
+            date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
+            return date;
+        },
+
+    }
+}
 </script>
-
-
-
-<style>
-
-</style>

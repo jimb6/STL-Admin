@@ -54,24 +54,24 @@ export default {
     },
     methods: {
         async getPermissions() {
-            const response = await axios.get('/api/permissions').catch(err => {
+            const response = await axios.get('permissions/?').catch(err => {
                 console.log(err)
             });
-            // let role = {};
-            // const data = response.data[0].data;
-            // let date = '';
-            // let count = 0;
-            // for (let item in data) {
-            //     date = this.getDateToday( new Date( data[item].updated_at ) );
-            //     count++;
-            //     role = {
-            //         count: count,
-            //         name: data[item].name,
-            //         guard_name: data[item].guard_name,
-            //         updated_at: date,
-            //     }
-            //     this.contents.push(role);
-            // }
+            let role = {};
+            const data = response.data.permissions;
+            let date = '';
+            let count = 0;
+            for (let item in data) {
+                date = this.getDateToday( new Date( data[item].updated_at ) );
+                count++;
+                role = {
+                    count: count,
+                    name: data[item].name,
+                    guard_name: data[item].guard_name,
+                    updated_at: date,
+                }
+                this.contents.push(role);
+            }
             console.log( response.data[0] );
         },
         getDateToday( date ) {

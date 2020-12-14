@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
-use App\Scopes\BaseScope;
 use App\Scopes\TransactionBaseScope;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
+use Ramsey\Uuid\Uuid;
 
 class BetTransaction extends Model implements Auditable
 {
@@ -17,12 +17,15 @@ class BetTransaction extends Model implements Auditable
     use Searchable;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['agent_id'];
+    protected $fillable = ['user_id'];
+
+    protected $keyType = 'string';
+
+    public $incrementing = false;
 
     protected $searchableFields = ['*'];
 
     protected $table = 'bet_transactions';
-
 
     //  Defining Scopes for Queries
 
@@ -31,10 +34,17 @@ class BetTransaction extends Model implements Auditable
         static::addGlobalScope(new TransactionBaseScope);
     }
 
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function (Model $model) {
+            $model->setAttribute($model->getKeyName(), Uuid::uuid4());
+        });
+    }
+
     public function scopeWithAgent($query)
     {
-        return $query->with(['agent' => function($q)
-        {
+        return $query->with(['agent' => function ($q) {
             $q->agentInBase();
         }]);
     }
@@ -44,12 +54,11 @@ class BetTransaction extends Model implements Auditable
         return $query->with('agent');
     }
 
-
     //  Defining All Relationship
 
-    public function agent()
+    public function user()
     {
-        return $this->belongsTo(Agent::class);
+        return $this->belongsTo(User::class);
     }
 
     public function bets()

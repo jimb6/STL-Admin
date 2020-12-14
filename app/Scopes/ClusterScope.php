@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
-class BaseScope implements Scope
+class ClusterScope implements Scope
 {
 
 
@@ -16,7 +16,7 @@ class BaseScope implements Scope
     {
         if (\Auth::check()){
             $user = \Auth::user();
-            $builder->where('base_id', '=', $user ? $user->base_id:0);
+            $builder->where('cluster_id', '=', $user ? $user->cluster_id:0);
         }
     }
 }

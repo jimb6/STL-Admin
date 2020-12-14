@@ -3,8 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Address;
-use App\Models\Base;
-use App\Models\Booth;
+use App\Models\Cluster;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -31,13 +30,16 @@ class  UserFactory extends Factory
             'email' => $this->faker->email,
             'address_id' => Address::all()->random()->id,
             'contact_number' => $this->faker->phoneNumber,
-            'birth_date' => $this->faker->date(),
+            'birthdate' => $this->faker->date(),
             'gender' => $this->faker->randomElement(['Male', 'Female', 'Others']),
             'session_status' => $this->faker->boolean,
-            'base_id' => Base::all()->random()->id,
+            'cluster_id' => Cluster::all()->random()->id,
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
+
+
+//            'name', 'birthdate', 'gender', 'address_id', 'contact_number', 'email', 'cluster_id', 'password'
         ];
     }
 }

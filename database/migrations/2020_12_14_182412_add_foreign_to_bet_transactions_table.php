@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddForeignsToBooths extends Migration
+class AddForeignToBetTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class AddForeignsToBooths extends Migration
      */
     public function up()
     {
-        Schema::table('booths', function (Blueprint $table) {
-            $table->foreign('address_id')
+        Schema::table('bet_transactions', function (Blueprint $table) {
+            $table->foreign('user_id')
                 ->references('id')
-                ->on('addresses');
-            $table->foreign('base_id')
-                ->references('id')
-                ->on('addresses');
+                ->on('users');
         });
     }
 
@@ -30,8 +27,8 @@ class AddForeignsToBooths extends Migration
      */
     public function down()
     {
-        Schema::table('booths', function (Blueprint $table) {
-            //
+        Schema::table('bet_transactions', function (Blueprint $table) {
+            $table->dropForeign('user_id');
         });
     }
 }

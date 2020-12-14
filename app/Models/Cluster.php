@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Base extends Model
+class Cluster extends Model
 {
     use SoftDeletes;
     use HasFactory;
     use Searchable;
 
-    protected $fillable = ['base_name'];
+    protected $fillable = ['name'];
 
     protected $searchableFields = ['*'];
 

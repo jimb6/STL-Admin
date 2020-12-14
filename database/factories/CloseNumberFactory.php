@@ -24,7 +24,7 @@ class CloseNumberFactory extends Factory
     {
         return [
 //            'number_value' => $this->faker->text(255),
-//            'bet_game_id' => \App\Models\BetGame::factory(),
+//            'bet_game_id' => \App\Models\Game::factory(),
         ];
     }
 }

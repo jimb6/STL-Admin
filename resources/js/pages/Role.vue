@@ -63,11 +63,13 @@ export default {
     },
     methods: {
         async getRoles() {
-            const response = await axios.get('/api/roles').catch(err => {
+            const response = await axios.get('roles/?').catch(err => {
                 console.log(err)
             });
+            console.log(response);
             let role = {};
-            const data = response.data[0].data;
+            const data = response.data.roles;
+            console.log(data);
             let date = '';
             let count = 0;
             for (let item in data) {

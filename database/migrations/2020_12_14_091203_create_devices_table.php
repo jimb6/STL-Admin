@@ -6,24 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateDevicesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+
     public function up()
     {
         Schema::create('devices', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->string('serial_number')->unique();
+            $table->unsignedBigInteger('user_id')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('devices');

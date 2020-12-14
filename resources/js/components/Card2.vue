@@ -23,24 +23,50 @@
                                 <v-row>
                                     <v-col cols="12" v-for="(item, index) in fillable" :key="index">
                                         <v-text-field
-                                            v-if="item.type== 'input'"
+                                            v-if="item.type === 'input'"
                                             v-model="editedItem[item.field]"
                                             :label="item.label">
                                         </v-text-field>
 
                                         <v-select
-                                            v-if="item.type== 'select'"
+                                            v-if="item.type === 'select'"
                                             v-model="editedItem[item.field]"
                                             :items="item.options"
-                                            :label="item.label" >
-                                        </v-select>
+                                            item-text="name"
+                                            item-value="id"
+                                            :label="item.label"
+                                            return-object
+                                        />
+
+                                        <v-menu
+                                            v-if="item.type === 'datepicker'"
+                                            ref="menu"
+                                            v-model="menuDate"
+                                            :close-on-content-click="false"
+                                            transition="scale-transition"
+                                            offset-y
+                                            min-width="290px">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-text-field
+                                                    v-model="editedItem[item.field]"
+                                                    label="Birthdate"
+                                                    readonly
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                ></v-text-field>
+                                            </template>
+                                            <v-date-picker
+                                                ref="picker"
+                                                v-model="editedItem[item.field]"
+                                                :max="new Date().toISOString().substr(0, 10)"
+                                                min="1950-01-01"
+                                            ></v-date-picker>
+                                        </v-menu>
 
                                         <Address
                                             v-model="editedItem[item.field]"
-                                            v-if="item.type == 'address'"
-                                            @changeAddress="changeAddress(item.field, $event)"
-                                        />
-
+                                            v-if="item.type === 'address'"
+                                            @changeAddress="changeAddress(item.field, $event)" />
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -49,15 +75,9 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn outlined color="blue" @click="close">
-                                <!--                                        <v-icon small class="mr-2">-->
-                                <!--                                            mdi-cancel-->
-                                <!--                                        </v-icon>-->
                                 Cancel
                             </v-btn>
                             <v-btn color="blue" class="text-white" @click="save">
-                                <!--                                        <v-icon small class="mr-2">-->
-                                <!--                                            mdi-check-->
-                                <!--                                        </v-icon>-->
                                 Save
                             </v-btn>
                         </v-card-actions>
@@ -99,9 +119,7 @@
             :items-per-page="itemsPerPage"
             :search="search"
             @page-count="pageCount = $event"
-            hide-default-footer
-
-        >
+            hide-default-footer>
 
             <template v-slot:default="{ items }">
                 <div class="card2" v-for="(item, i) in items">
@@ -182,7 +200,9 @@
 import Address from "./Address";
 export default {
     name: "Card2",
-    components: {Address},
+    components:{
+        Address
+    },
     props: {
         tableName: String,
         headers: Array,
@@ -194,7 +214,7 @@ export default {
         search: "",
         page: 1,
         pageCount: 0,
-        itemsPerPage: 8,
+        itemsPerPage: 9,
 
         dialog: false,
         dialogDelete: false,
@@ -207,11 +227,15 @@ export default {
         snackText: '',
         max25chars: v => v.length <= 25 || 'Input too long!',
 
+        birthdate: null,
+        menuDate: false,
+
     }),
 
     created() {
         this.initialize();
     },
+
 
     methods: {
         initialize() {
@@ -232,13 +256,14 @@ export default {
 
         deleteItem(item) {
             this.editedIndex = this.contents.indexOf(item)
-            this.editedItem = Object.assign({}, item)
+            // this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
 
         },
 
         deleteItemConfirm() {
             this.contents.splice(this.editedIndex, 1)
+            this.$emit('destroyUser', this.editedItem)
             this.closeDelete()
         },
 
@@ -261,12 +286,15 @@ export default {
         save() {
             if (this.editedIndex > -1) {
                 Object.assign(this.contents[this.editedIndex], this.editedItem)
+                this.snackText = 'Item updated!'
             } else {
-                this.contents.push(this.editedItem)
+                // this.contents.push(this.editedItem)
+                this.$emit('storeUser', this.editedItem)
+                this.snackText = 'Item saved!'
             }
             this.snack = true
             this.snackColor = 'success'
-            this.snackText = 'Item updated'
+
             this.close()
         },
         cancel() {
@@ -279,6 +307,11 @@ export default {
             this.snackColor = 'info'
             this.snackText = 'Update Item'
         },
+        changeAddress(field, address){
+            this.editedItem[field] = address.join(', ');
+            this.$emit('changeAddress', address);
+        },
+
         itemInitials(name){
             let initials = name.match(/\b\w/g) || [];
             initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
@@ -287,9 +320,6 @@ export default {
         getRandomColor(){
             return '#' + Math.floor(Math.random()*16777215).toString(16);
         },
-        changeAddress(field, address){
-            this.editedItem[field] = address;
-        }
     },
 
     computed: {

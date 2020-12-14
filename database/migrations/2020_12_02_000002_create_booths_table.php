@@ -14,10 +14,10 @@ class CreateBoothsTable extends Migration
     public function up()
     {
         Schema::create('booths', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id');
             $table->unsignedBigInteger('address_id');
             $table->unsignedBigInteger('cluster_id');
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('active_user')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

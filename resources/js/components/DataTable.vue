@@ -13,13 +13,12 @@
             class=""
             @page-count="pageCount = $event"
             loading
-            loading-text="Loading... Please wait"
-        >
+            loading-text="Loading... Please wait">
 
             <template v-slot:top>
                 <div class="flex-between cstm-table-options my-4 cstm-row col2">
                     <div>
-                        <v-dialog v-model="dialog" max-width="500px">
+                        <v-dialog v-model="dialog" max-width="500px" v-if="canAdd">
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn color="blue" class="text-white" v-bind="attrs" v-on="on">
                                     <v-icon small class="mr-2">
@@ -38,23 +37,90 @@
                                         <v-row>
                                             <v-col cols="12" v-for="(item, index) in fillable" :key="index">
                                                 <v-text-field
-                                                    v-if="item.type== 'input'"
+                                                    v-if="item.type === 'input'"
                                                     v-model="editedItem[item.field]"
                                                     :label="item.label">
                                                 </v-text-field>
 
                                                 <v-select
-                                                    v-if="item.type== 'select'"
+                                                    v-if="item.type === 'select'"
                                                     v-model="editedItem[item.field]"
                                                     :items="item.options"
-                                                    :label="item.label" >
-                                                </v-select>
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    :label="item.label"
+                                                    return-object/>
+
+                                                <v-select
+                                                    v-if="item.type === 'chips'"
+                                                    v-model="editedItem[item.field]"
+                                                    :items="item.options"
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    :label="item.label"
+                                                    attach
+                                                    chips
+                                                    multiple
+                                                    return-object/>
+
+                                                <v-menu
+                                                    v-if="item.type === 'timepicker'"
+                                                    ref="menu"
+                                                    v-model="menuTime"
+                                                    :close-on-content-click="false"
+                                                    :nudge-right="40"
+                                                    transition="scale-transition"
+                                                    offset-y
+                                                    max-width="290px"
+                                                    min-width="290px">
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-text-field
+                                                            v-model="editedItem[item.field]"
+                                                            label="Draw Time"
+                                                            readonly
+                                                            v-bind="attrs"
+                                                            v-on="on"
+                                                        />
+                                                    </template>
+                                                    <v-time-picker
+                                                        v-if="menuTime"
+                                                        v-model="time"
+                                                        full-width
+                                                        ampm-in-title
+                                                        @click:hour="editedItem[item.field] = time"
+                                                        @click:minute="editedItem[item.field] = time"
+                                                        @update:period="editedItem[item.field] = time"
+                                                    />
+                                                </v-menu>
+
+                                                <v-menu
+                                                    v-if="item.type === 'datepicker'"
+                                                    ref="menu"
+                                                    v-model="menuDate"
+                                                    :close-on-content-click="false"
+                                                    transition="scale-transition"
+                                                    offset-y
+                                                    min-width="290px">
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-text-field
+                                                            v-model="editedItem[item.field]"
+                                                            label="Birthdate"
+                                                            readonly
+                                                            v-bind="attrs"
+                                                            v-on="on"></v-text-field>
+                                                    </template>
+                                                    <v-date-picker
+                                                        ref="picker"
+                                                        v-model="editedItem[item.field]"
+                                                        :max="new Date().toISOString().substr(0, 10)"
+                                                        min="1950-01-01"
+                                                    ></v-date-picker>
+                                                </v-menu>
 
                                                 <Address
                                                     v-model="editedItem[item.field]"
-                                                    v-if="item.type == 'address'"
-                                                    @changeAddress="changeAddress(item.field, $event)"
-                                                />
+                                                    v-if="item.type === 'address'"
+                                                    @changeAddress="changeAddress(item.field, $event)" />
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -63,15 +129,9 @@
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn outlined color="blue" @click="close">
-                                        <!--                                        <v-icon small class="mr-2">-->
-                                        <!--                                            mdi-cancel-->
-                                        <!--                                        </v-icon>-->
                                         Cancel
                                     </v-btn>
                                     <v-btn color="blue" class="text-white" @click="save">
-                                        <!--                                        <v-icon small class="mr-2">-->
-                                        <!--                                            mdi-check-->
-                                        <!--                                        </v-icon>-->
                                         Save
                                     </v-btn>
                                 </v-card-actions>
@@ -105,10 +165,10 @@
             </template>
 
             <template v-slot:item.actions="{ item }">
-                <v-icon small class="mr-2" @click="editItem(item)">
+                <v-icon small class="mr-2" @click="editItem(item)" v-if="canEdit">
                     mdi-pencil
                 </v-icon>
-                <v-icon small @click="deleteItem(item)">
+                <v-icon small @click="deleteItem(item)" v-if="canDelete">
                     mdi-delete
                 </v-icon>
             </template>
@@ -165,13 +225,16 @@ export default {
         headers: Array,
         contents: Array,
         fillable: Array,
+        canAdd: Boolean,
+        canEdit: Boolean,
+        canDelete: Boolean,
     },
 
     data: () => ({
         search: "",
         page: 1,
         pageCount: 0,
-        itemsPerPage: 8,
+        itemsPerPage: 10,
 
         dialog: false,
         dialogDelete: false,
@@ -184,10 +247,17 @@ export default {
         snackText: '',
         max25chars: v => v.length <= 25 || 'Input too long!',
 
+        birthdate: null,
+        menuDate: false,
+
+        time: null,
+        menuTime: false,
+
     }),
 
     created() {
         this.initialize();
+        console.log( this.canEdit );
     },
 
     methods: {
@@ -215,8 +285,10 @@ export default {
         },
 
         deleteItemConfirm() {
+            this.$emit('destroyUser', this.editedItem);
             this.contents.splice(this.editedIndex, 1)
-            this.closeDelete()
+            this.deletedSnack();
+            this.closeDelete();
         },
 
         close() {
@@ -238,12 +310,15 @@ export default {
         save() {
             if (this.editedIndex > -1) {
                 Object.assign(this.contents[this.editedIndex], this.editedItem)
+                this.snackText = 'Item updated!'
             } else {
-                this.contents.push(this.editedItem)
+                // this.contents.push(this.editedItem)
+                this.$emit('storeUser', this.editedItem)
+                this.snackText = 'Item saved!'
             }
             this.snack = true
             this.snackColor = 'success'
-            this.snackText = 'Item updated'
+            this.snackText = 'Item saved!'
             this.close()
         },
         cancel() {
@@ -251,14 +326,20 @@ export default {
             this.snackColor = 'error'
             this.snackText = 'Canceled'
         },
+        deletedSnack(){
+            this.snack = true
+            this.snackColor = 'success'
+            this.snackText = 'Deleted'
+        },
         open() {
             this.snack = true
             this.snackColor = 'info'
             this.snackText = 'Update Item'
         },
         changeAddress(field, address){
-            this.editedItem[field] = address;
-        }
+            this.editedItem[field] = address.join(', ');
+            this.$emit('changeAddress', address);
+        },
     },
 
     computed: {
@@ -275,103 +356,9 @@ export default {
         dialogDelete(val) {
             val || this.closeDelete()
         },
+        menu (val) {
+            val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+        },
     },
 };
 </script>
-
-<style scoped>
-.cstm-card2-cont {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-}
-
-/* --- Card2 ---- */
-
-.card2 {
-    position: relative;
-    display: inline-block;
-    min-width: 300px;
-    min-height: 300px;
-    margin: 1em;
-    background-size: cover;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
-    transition: 0.5s;
-    padding: 15px;
-    background-color: #fff;
-}
-
-.card2 .overlay {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    padding: 1em;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    color: #fff;
-    -moz-transition: 0.5s;
-    -o-transition: 0.5s;
-    -webkit-transition: 0.5s;
-    transition: 0.5s;
-    text-align: center;
-}
-
-.card2 .overlay h2 {
-    position: relative;
-    margin: 2em 0px;
-    top: -200px;
-    -moz-transition: 0.5s;
-    -o-transition: 0.5s;
-    -webkit-transition: 0.5s;
-    transition: 0.5s;
-}
-
-.card2 .overlay a {
-    position: relative;
-    width: 60%;
-    top: 200px;
-    padding: 0.5em 2em;
-    border: 2px solid #fff;
-    text-decoration: none;
-    color: #FFFFFF;
-    border-radius: 3px;
-    -moz-transition: 0.5s;
-    -o-transition: 0.5s;
-    -webkit-transition: 0.5s;
-    transition: 0.5s;
-}
-
-.card2 a:hover {
-    background: #fff;
-    color: #5c5c5c;
-}
-
-.card2:hover .overlay {
-    background: rgba(0, 0, 0, 0.8);
-}
-
-.card2:hover h2 {
-    top: 0px;
-}
-
-.card2:hover a {
-    top: 0px;
-}
-
-@media screen and (max-width: 700px) {
-    /* --- Card2 ---- */
-    .card2 {
-        position: relative;
-        display: block;
-        width: 100%;
-        height: 300px;
-        margin: 3em 0em;
-        border-radius: 0px;
-        box-shadow: 0px 25px 50px rgba(0, 0, 0, 0.5);
-        overflow: hidden;
-        transition: all .4s ease;
-    }
-}
-</style>

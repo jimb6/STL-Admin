@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Device;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DeviceFactory extends Factory
@@ -22,7 +23,8 @@ class DeviceFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'serial_number' => $this->faker->unique(),
+            'user_id' => User::all()->random()->id
         ];
     }
 }

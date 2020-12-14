@@ -14,19 +14,20 @@ class Bet extends Model
     use Searchable;
 
     protected $fillable = [
-        'voided',
-        'rumbled',
         'combination',
         'amount',
-        'bet_game_id',
+        'is_rumbled',
+        'is_voided',
         'bet_transaction_id',
+        'draw_period_id',
+        'game_id'
     ];
 
     protected $searchableFields = ['*'];
 
     protected $casts = [
-        'voided' => 'boolean',
-        'rumbled' => 'boolean',
+        'is_voided' => 'boolean',
+        'is_rumbled' => 'boolean',
     ];
 
 
@@ -48,14 +49,9 @@ class Bet extends Model
 
 //    Defining relations
 
-    public function winner()
+    public function game()
     {
-        return $this->hasOne(Winner::class);
-    }
-
-    public function betGame()
-    {
-        return $this->belongsTo(BetGame::class);
+        return $this->belongsTo(Game::class);
     }
 
     public function betTransaction()
@@ -68,8 +64,9 @@ class Bet extends Model
         return $this->belongsTo(DrawPeriod::class);
     }
 
-    public function agent()
+    public function user()
     {
-        return $this->hasOneThrough(Agent::class, BetTransaction::class,);
+        return $this->hasOneThrough(User::class, BetTransaction::class,);
     }
+
 }

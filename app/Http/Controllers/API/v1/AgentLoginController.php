@@ -21,7 +21,7 @@ class AgentLoginController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (!Auth::guard('agent')->attempt([
+        if (!Auth::guard('sanctum')->attempt([
             'contact_number' => request('username'),
             'password' => request('password')
         ])) {

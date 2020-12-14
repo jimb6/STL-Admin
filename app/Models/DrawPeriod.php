@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
-use App\Scopes\BaseScope;
+use App\Scopes\ClusterScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,7 +22,7 @@ class DrawPeriod extends Model
 
     public function betGames()
     {
-        return $this->belongsToMany(BetGame::class);
+        return $this->belongsToMany(Game::class);
     }
 
     public function bets()

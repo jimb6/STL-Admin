@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateBasesTable extends Migration
+class CreateBetTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateBasesTable extends Migration
      */
     public function up()
     {
-        Schema::create('clusters', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
+        Schema::create('bet_transactions', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +28,6 @@ class CreateBasesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clusters');
+        Schema::dropIfExists('bet_transactions');
     }
 }

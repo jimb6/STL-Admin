@@ -3,23 +3,20 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
-use OwenIt\Auditing\Contracts\Auditable;
-use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Scopes\ClusterScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles, HasApiTokens;
-    use Searchable;
-    use SoftDeletes;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens, Searchable, SoftDeletes;
 
-    protected $fillable = ['name', 'email', 'password', 'base_id', 'address_id', 'contact_number', 'gender', 'birth_date'];
+    protected $fillable = ['name', 'birthdate', 'gender', 'address_id', 'contact_number', 'email', 'cluster_id', 'password'];
 
     protected $searchableFields = ['*'];
 
@@ -29,9 +26,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected static function boot()
+
+    public static function booted()
     {
-        parent::boot();
+//        static::addGlobalScope(new ClusterScope);
     }
 
 
@@ -42,7 +40,7 @@ class User extends Authenticatable
 
     public function adminlte_desc()
     {
-        return Auth::user()->email.' - '.strtoupper(implode("", $this->userRole()->toArray()));
+        return Auth::user()->email . ' - ' . strtoupper(implode("", $this->userRole()->toArray()));
     }
 
     public function adminlte_profile_url()
@@ -55,12 +53,13 @@ class User extends Authenticatable
         return Auth::user()->getRoleNames();
     }
 
-    public function base()
+    public function cluster()
     {
-        return $this->belongsTo('App\Models\Base');
+        return $this->belongsTo(Cluster::class);
     }
+
     public function address()
     {
-        return $this->belongsTo('App\Models\Address');
+        return $this->belongsTo(Address::class);
     }
 }

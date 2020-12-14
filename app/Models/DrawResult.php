@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
-use App\Scopes\BaseScope;
+use App\Scopes\ClusterScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +23,7 @@ class DrawResult extends Model
 
     public function betGame()
     {
-        return $this->belongsTo(BetGame::class);
+        return $this->belongsTo(Game::class);
     }
 
     public function winners()

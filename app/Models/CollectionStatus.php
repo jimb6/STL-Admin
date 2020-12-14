@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
-use App\Scopes\BaseScope;
+use App\Scopes\ClusterScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

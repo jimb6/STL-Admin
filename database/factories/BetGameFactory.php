@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\BetGame;
+use App\Models\Game;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -13,7 +13,7 @@ class BetGameFactory extends Factory
      *
      * @var string
      */
-    protected $model = BetGame::class;
+    protected $model = Game::class;
 
     /**
      * Define the model's default state.

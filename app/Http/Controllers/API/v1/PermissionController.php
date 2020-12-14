@@ -11,15 +11,15 @@ class PermissionController extends Controller
 {
 
 
-
     public function index(Request $request)
     {
 //        $this->authorize('list permissions', Permission::class);
 
         $search = $request->get('search', '');
-        $permissions = Permission::where('name', 'like', "%{$search}%")->paginate(10);
+        $permissions = Permission::where('name', 'like', "%{$search}%")->get();
         $roles = Role::with('permissions')->get();
-        return response(['permissions' => $permissions, 'search' => $search, 'roles' => $roles], 200);
+        return $request->expectsJson() ? response(['permissions' => $permissions, 'roles' => $roles], 200) :
+            view('settings.permissions.index');
     }
 
 

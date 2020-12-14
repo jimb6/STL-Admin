@@ -23,7 +23,7 @@ class DrawResultFactory extends Factory
     public function definition()
     {
         return [
-//            'bet_game_id' => \App\Models\BetGame::factory(),
+//            'bet_game_id' => \App\Models\Game::factory(),
         ];
     }
 }

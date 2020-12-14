@@ -15,9 +15,9 @@ class RoleController extends Controller {
         $this->authorize('list roles', Role::class);
 
         $search = $request->get('search', '');
-        $roles = Role::where('name', 'like', "%{$search}%")->paginate(10);
-
-        return response()->json([$roles], 200);
+        $roles = Role::where('name', 'like', "%{$search}%")->get();
+        return $request->wantsJson() ? response(['roles' => $roles], 200) :
+            view('settings.roles.index');
     }
 
     public function create()

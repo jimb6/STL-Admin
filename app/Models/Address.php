@@ -9,7 +9,7 @@ class Address extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'latitude', 'longitude'];
+    protected $fillable = ['province', 'municipality', 'barangay', 'street', 'longitude', 'latitude'];
 
     protected $searchableFields = ['*'];
 

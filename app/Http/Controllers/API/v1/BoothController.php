@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Base;
 use App\Models\Booth;
+use App\Models\Cluster;
 use Illuminate\Http\Request;
 
 class BoothController extends Controller
@@ -25,10 +26,10 @@ class BoothController extends Controller
     public function create(Request $request)
     {
         $this->authorize('create booths', Booth::class);
-        $bases = Base::pluck('name', 'id');
+        $clusters = Cluster::pluck('name', 'id');
         return $request->wantsJson() ?
-            response(['bases' => $bases], 200) :
-            view('booths.create', compact('bases'));
+            response(['clusters' => $clusters], 200) :
+            view('booths.create', compact('clusters'));
     }
 
     public function store(Request $request)
@@ -52,10 +53,10 @@ class BoothController extends Controller
     public function edit(Request $request, Booth $booth)
     {
         $this->authorize('update booths', $booth);
-        $bases = Base::pluck('base_name', 'id');
+        $clusters = Base::pluck('base_name', 'id');
         return $request->wantsJson() ?
-            response(['bases' => $bases, 'booth' => $booth], 200) :
-            view('app.booths.edit', compact('booth', 'bases'));
+            response(['clusters' => $clusters, 'booth' => $booth], 200) :
+            view('app.booths.edit', compact('booth', 'clusters'));
     }
 
     public function update(Request $request, Booth $booth)

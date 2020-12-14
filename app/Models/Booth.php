@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
-use App\Scopes\BaseScope;
+use App\Scopes\ClusterScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,23 +14,18 @@ class Booth extends Model
     use HasFactory;
     use Searchable;
 
-    protected $fillable = ['address_id', 'base_id', 'user_id'];
+    protected $fillable = ['address_id', 'cluster_id', 'active_user_id'];
 
     protected $searchableFields = ['*'];
 
     protected static function booted()
     {
-        static::addGlobalScope(new BaseScope);
-    }
-
-    public function scopeActive($query, $value)
-    {
-        return $query->where('status', $value);
+        static::addGlobalScope(new ClusterScope);
     }
 
     public function base()
     {
-        return $this->belongsTo(Base::class);
+        return $this->belongsTo(Cluster::class);
     }
 
     public function  address()
@@ -40,7 +35,7 @@ class Booth extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'active_user_id', 'id');
     }
 
 }

@@ -1,45 +1,15 @@
 <?php
 
 
-use App\Http\Controllers\API\v1\BaseController;
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\API\v1\BetController;
 use App\Http\Controllers\API\v1\BoothController;
-use App\Http\Controllers\API\v1\CloseNumberController;
-use App\Http\Controllers\API\v1\CollectionRecordController;
-use App\Http\Controllers\API\v1\CollectionStatusController;
-use App\Http\Controllers\API\v1\DrawResultController;
 use App\Http\Controllers\API\v1\HomeController;
-use App\Http\Controllers\API\v1\PermissionController;
-use App\Http\Controllers\API\v1\RoleController;
 use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\BetCollectionController;
+use App\Http\Controllers\GameController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
-
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 //Route::get('/{any}', function () {
 //    return redirect()->route('home');
@@ -63,19 +33,18 @@ Route::prefix('admin')
     ->middleware('auth:web')
     ->group(function () {
         Route::get('/home', [HomeController::class, 'index'])->name('admin.home');
-        Route::get('roles', function (){ return view('settings.roles.index');})->name('roles.index');
-        Route::get('permissions', function (){ return view('settings.permissions.index');})->name('permissions.index');
-        Route::get('booths', function (){ return view('booths.index');})->name('booths.index');
-        Route::get('booths/create', function (){ return view('booths.index');})->name('booths.create');
-        Route::get('bases', function (){ return view('bases.index');})->name('bases.index');
-        Route::get('users', function (){ return view('users.index');})->name('users.index');
-        Route::get('agents', function (){ return view('users.index');})->name('agents.index');
-        Route::get('agents/create', function (){ return view('users.index');})->name('agents.create');
-        Route::get('bets', function (){ return view('bets.categorize');})->name('bets.index');
-        Route::get('roles', function () { return view('settings.roles.index');})->name('roles.index');
-        Route::get('roles/create', function (){return view('settings.roles.create');})->name('roles.create');
-        Route::get('permissions', function () { return view('settings.permissions.index');})->name('permissions.index');
-        Route::get('permissions/create', function (){return view('settings.permissions.create');})->name('permissions.create');
+        Route::resource('agents', AgentController::class);
+        Route::resource('users', \App\Http\Controllers\UserController::class);
+        Route::resource('booths', \App\Http\Controllers\API\v1\BoothController::class);
+        Route::resource('clusters', \App\Http\Controllers\ClusterController::class);
+        Route::resource('addresses', \App\Http\Controllers\AddressController::class);
+        Route::resource('bets', \App\Http\Controllers\API\v1\BetController::class);
+        Route::resource('roles', \App\Http\Controllers\API\v1\RoleController::class);
+        Route::resource('permissions', \App\Http\Controllers\API\v1\PermissionController::class);
+        Route::resource('devices', \App\Http\Controllers\DeviceController::class);
+        Route::resource('bet-transactions', \App\Http\Controllers\BetTransactionController::class);
+        Route::resource('draw-periods', \App\Http\Controllers\DrawPeriodController::class);
+        Route::resource('games', \App\Http\Controllers\GameController::class);
 
 
         Route::get('/games/{any}', [BetController::class, 'index'])->name('game.bets');
