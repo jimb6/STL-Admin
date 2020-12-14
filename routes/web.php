@@ -71,6 +71,7 @@ Route::prefix('admin')
         Route::get('users', function (){ return view('users.index');})->name('users.index');
         Route::get('agents', function (){ return view('users.index');})->name('agents.index');
         Route::get('agents/create', function (){ return view('users.index');})->name('agents.create');
+        Route::get('bets', function (){ return view('bets.categorize');})->name('bets.index');
         Route::get('roles', function () { return view('settings.roles.index');})->name('roles.index');
         Route::get('roles/create', function (){return view('settings.roles.create');})->name('roles.create');
         Route::get('permissions', function () { return view('settings.permissions.index');})->name('permissions.index');

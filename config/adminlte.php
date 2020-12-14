@@ -255,12 +255,12 @@ return [
                 [
                     'text' => 'All Bases',
                     'can' => 'list bases',
-                    'url' => '#',
+                    'route' => 'bases.index',
                 ],
                 [
                     'text' => 'Add New',
                     'can' => 'create bases',
-                    'url' => '#',
+                    'route' => 'bases.index',
                 ],
             ],
         ],
@@ -321,12 +321,8 @@ return [
                 [
                     'text' => 'All Bets',
                     'can' => 'view booths',
-                    'route' => 'booths.index',
-                ],
-                [
-                    'text' => 'Add New',
-                    'can' => 'view booths',
-                    'route' => 'booths.create',
+                    'route' => 'bets.index',
+                    'active' => ['admin/bets', 'admin/bets*']
                 ],
             ]
         ],

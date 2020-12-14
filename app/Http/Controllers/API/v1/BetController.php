@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Agent;
 use App\Models\Bet;
+use App\Models\BetGame;
 use App\Models\BetTransaction;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -22,9 +23,9 @@ class BetController extends Controller
      */
     public function index(Request $request)
     {
-        $bets = DB::table('bets_today')->where('abbreviation', '=', 'STL-2D')->get();
-        return \response([$bets], 200);
-//        return view('bets.categorize', compact('betType'));
+        $bets = DB::table('bets_today')->get();
+        $gameTypes = BetGame::all();
+        return \response(["betGames" => $gameTypes, "bets" => $bets], 200);
     }
 
     /**

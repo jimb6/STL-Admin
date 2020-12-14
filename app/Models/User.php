@@ -19,7 +19,7 @@ class User extends Authenticatable
     use Searchable;
     use SoftDeletes;
 
-    protected $fillable = ['name', 'email', 'password', 'base_id', 'api_token'];
+    protected $fillable = ['name', 'email', 'password', 'base_id', 'address_id', 'contact_number', 'gender', 'birth_date'];
 
     protected $searchableFields = ['*'];
 

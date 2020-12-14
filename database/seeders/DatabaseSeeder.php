@@ -25,6 +25,6 @@ class DatabaseSeeder extends Seeder
 //        $this->call(BetGameSeeder::class);
 //        $this->call(BetGameDrawPeriodFactory::class);
         $this->call(RoleSeeder::class);
-
+        $this->call(AppSettingsSeeder::class);
     }
 }

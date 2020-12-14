@@ -19,7 +19,7 @@ class BaseSeeder extends Seeder
 
         DB::table('bases')->insert(
             [
-                'base_name' => 'Banay-Banay',
+                'name' => 'Banay-Banay',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -27,7 +27,7 @@ class BaseSeeder extends Seeder
 
         DB::table('bases')->insert(
             [
-                'base_name' => 'Mati City',
+                'name' => 'Mati City',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -35,7 +35,7 @@ class BaseSeeder extends Seeder
 
         DB::table('bases')->insert(
             [
-                'base_name' => 'Governor Generoso',
+                'name' => 'Governor Generoso',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -43,7 +43,7 @@ class BaseSeeder extends Seeder
 
         DB::table('bases')->insert(
             [
-                'base_name' => 'San Isidro',
+                'name' => 'San Isidro',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -51,7 +51,7 @@ class BaseSeeder extends Seeder
 
         DB::table('bases')->insert(
             [
-                'base_name' => 'Tarragona',
+                'name' => 'Tarragona',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -59,7 +59,7 @@ class BaseSeeder extends Seeder
 
         DB::table('bases')->insert(
             [
-                'base_name' => 'Manay',
+                'name' => 'Manay',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -67,7 +67,7 @@ class BaseSeeder extends Seeder
 
         DB::table('bases')->insert(
             [
-                'base_name' => 'Caraga',
+                'name' => 'Caraga',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -75,7 +75,7 @@ class BaseSeeder extends Seeder
 
         DB::table('bases')->insert(
             [
-                'base_name' => 'Bagangga',
+                'name' => 'Bagangga',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -83,7 +83,7 @@ class BaseSeeder extends Seeder
 
         DB::table('bases')->insert(
             [
-                'base_name' => 'Cateel',
+                'name' => 'Cateel',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -91,7 +91,7 @@ class BaseSeeder extends Seeder
 
         DB::table('bases')->insert(
             [
-                'base_name' => 'Boston',
+                'name' => 'Boston',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -99,7 +99,7 @@ class BaseSeeder extends Seeder
 
         DB::table('bases')->insert(
             [
-                'base_name' => 'Lupon',
+                'name' => 'Lupon',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],

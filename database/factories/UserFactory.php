@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class UserFactory extends Factory
+class  UserFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
@@ -31,7 +31,7 @@ class UserFactory extends Factory
             'email' => $this->faker->email,
             'address_id' => Address::all()->random()->id,
             'contact_number' => $this->faker->phoneNumber,
-            'age' => $this->faker->numberBetween(20, 40),
+            'birth_date' => $this->faker->date(),
             'gender' => $this->faker->randomElement(['Male', 'Female', 'Others']),
             'session_status' => $this->faker->boolean,
             'base_id' => Base::all()->random()->id,

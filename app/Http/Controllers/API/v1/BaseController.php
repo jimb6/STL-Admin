@@ -8,100 +8,60 @@ use Illuminate\Http\Request;
 
 class BaseController extends Controller
 {
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
-        $this->authorize('view-any', Base::class);
-
+        $this->authorize('view bases', Base::class);
         $search = $request->get('search', '');
-
-        $bases = Base::search($search)
-            ->latest()
-            ->paginate();
-
-        return view('app.bases.index', compact('bases', 'search'));
+        $bases = Base::search($search)->get();
+//        return view('app.bases.index', compact('bases', 'search'));
+        return response(['bases' => $bases], 200);
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
-        $this->authorize('create', Base::class);
+        $this->authorize('create bases', Base::class);
 
-        return view('app.bases.create');
+        return response([], 200);
     }
 
-    /**
-     * @param \App\Http\Requests\BaseStoreRequest $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(BaseStoreRequest $request)
+    public function store(Request $request)
     {
-        $this->authorize('create', Base::class);
-
+        $this->authorize('create bases', Base::class);
         $validated = $request->validated();
-
         $base = Base::create($validated);
 
-        return redirect()->route('bases.edit', $base);
+//        return redirect()->route('bases.edit', $base);
+        return response(['base' => $base], 202);
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Base $base
-     * @return \Illuminate\Http\Response
-     */
     public function show(Request $request, Base $base)
     {
-        $this->authorize('view', $base);
-
-        return view('app.bases.show', compact('base'));
+        $this->authorize('view bases', $base);
+//        return view('app.bases.show', compact('base'));
+        return response([], 204);
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Base $base
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Request $request, Base $base)
     {
-        $this->authorize('update', $base);
+        $this->authorize('update base', $base);
 
-        return view('app.bases.edit', compact('base'));
+//        return view('app.bases.edit', compact('base'));
+        return response(['base' => $base], 200);
     }
 
-    /**
-     * @param \App\Http\Requests\BaseUpdateRequest $request
-     * @param \App\Models\Base $base
-     * @return \Illuminate\Http\Response
-     */
-    public function update(BaseUpdateRequest $request, Base $base)
+    public function update(Request $request, Base $base)
     {
-        $this->authorize('update', $base);
-
+        $this->authorize('update base', $base);
         $validated = $request->validated();
-
         $base->update($validated);
-
-        return redirect()->route('bases.edit', $base);
+        return response([$base], 202);
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Base $base
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Request $request, Base $base)
     {
         $this->authorize('delete', $base);
-
         $base->delete();
-
-        return redirect()->route('bases.index');
+        return response(['base' => $base], 202);
     }
 }
