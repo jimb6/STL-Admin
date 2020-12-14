@@ -18,6 +18,10 @@ class AddForeignsToUsersTable extends Migration
                 ->foreign('base_id')
                 ->references('id')
                 ->on('bases');
+            $table
+                ->foreign('address_id')
+                ->references('id')
+                ->on('addresses');
         });
     }
 
@@ -29,7 +33,7 @@ class AddForeignsToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['base_id']);
+            $table->dropForeign(['address_id']);
         });
     }
 }

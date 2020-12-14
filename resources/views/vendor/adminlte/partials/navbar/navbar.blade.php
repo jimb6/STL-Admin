@@ -19,7 +19,7 @@
     @php
       $userBase = Auth::user()->base;
     @endphp
-    <h3 class="text-uppercase m-0 py-2 text-center" style="width: 100%; letter-spacing: 1px; font-weight: 200;">{{$userBase['base_name']}} Base</h3>
+    <h3 class="text-uppercase m-0 py-2 text-center" style="width: 100%; letter-spacing: 1px; font-weight: 200;">{{$userBase['name']}} Base</h3>
 
     {{-- Navbar right links --}}
     <ul class="navbar-nav ml-auto">

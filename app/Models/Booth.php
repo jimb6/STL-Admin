@@ -14,7 +14,7 @@ class Booth extends Model
     use HasFactory;
     use Searchable;
 
-    protected $fillable = ['location', 'base_id', 'status'];
+    protected $fillable = ['address_id', 'base_id', 'user_id'];
 
     protected $searchableFields = ['*'];
 
@@ -33,8 +33,14 @@ class Booth extends Model
         return $this->belongsTo(Base::class);
     }
 
-    public function agents()
+    public function  address()
     {
-        return $this->hasMany(Agent::class);
+        return $this->belongsTo(Address::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

@@ -14,16 +14,12 @@ class PermissionController extends Controller
 
     public function index(Request $request)
     {
-        $this->authorize('list permissions', Permission::class);
+//        $this->authorize('list permissions', Permission::class);
 
         $search = $request->get('search', '');
-        $permissions = Permission::where('name', 'like', "%{$search}%")->get();
-
-        return response([$permissions, $search], 200);
-
-//        return view('app.permissions.index')
-//            ->with('permissions', $permissions)
-//            ->with('search', $search);
+        $permissions = Permission::where('name', 'like', "%{$search}%")->paginate(10);
+        $roles = Role::with('permissions')->get();
+        return response(['permissions' => $permissions, 'search' => $search, 'roles' => $roles], 200);
     }
 
 

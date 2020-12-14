@@ -22,11 +22,6 @@ class Base extends Model
         return $this->hasMany(Booth::class);
     }
 
-    public function agents()
-    {
-        return $this->hasMany(Agent::class);
-    }
-
     public function users()
     {
         return $this->hasMany(User::class);

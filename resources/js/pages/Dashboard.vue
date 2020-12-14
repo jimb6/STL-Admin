@@ -147,6 +147,7 @@ export default {
         // await this.getActiveAgents();
         // await this.getActiveBooths();
         await this.getDailyTotalCollections();
+        await this.getPermission();
     },
     methods: {
         async getActiveAgents() {
@@ -179,6 +180,12 @@ export default {
             }).catch(error => console.log(error));
             console.log("Sa Total ni ha!", response)
         },
+
+        async getPermission(){
+            const response = await axios.get('/api/permissions').catch(err => console.log(err))
+            console.log(response)
+        },
+
 
         formatMoney(money) {
             money = (Math.round(money * 100) / 100).toFixed(2);

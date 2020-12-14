@@ -23,7 +23,7 @@ class BaseFactory extends Factory
     public function definition()
     {
         return [
-//            'base_name' => $this->faker->text(255),
+            'name' => $this->faker->text(255),
         ];
     }
 }

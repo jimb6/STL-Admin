@@ -13,9 +13,9 @@ class CreateBasesTable extends Migration
      */
     public function up()
     {
-        Schema::create('bases', function (Blueprint $table) {
+        Schema::create('clusters', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('base_name');
+            $table->string('name');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +28,6 @@ class CreateBasesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bases');
+        Schema::dropIfExists('clusters');
     }
 }

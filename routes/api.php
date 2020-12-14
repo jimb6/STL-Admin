@@ -19,7 +19,7 @@ use Spatie\Permission\Models\Permission;
 |
 */
 //Auth::routes();
-Route::middleware(['auth.basic'])->group(function () {
+Route::middleware(['guest'])->group(function () {
    Route::get('/user', function (){
       return Auth::user();
    });
@@ -29,6 +29,7 @@ Route::middleware(['auth.basic'])->group(function () {
    Route::resource('booths', \App\Http\Controllers\API\v1\BoothController::class);
    Route::resource('bases', \App\Http\Controllers\API\v1\BaseController::class);
    Route::resource('addresses', \App\Http\Controllers\AddressController::class);
+   Route::resource('bets', \App\Http\Controllers\API\v1\BetController::class);
    Route::resource('roles', \App\Http\Controllers\API\v1\RoleController::class);
    Route::resource('permissions', \App\Http\Controllers\API\v1\PermissionController::class);
 

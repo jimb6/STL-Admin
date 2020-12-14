@@ -9,107 +9,73 @@ use Illuminate\Http\Request;
 
 class BoothController extends Controller
 {
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
         $this->authorize('view booths', Booth::class);
-
         $search = $request->get('search', '');
-
-        $booths = Booth::search($search)
-            ->latest()
-            ->paginate();
-
-        return view('booths.index', compact('booths', 'search'));
+        $booths = Booth::search($search)->get();
+//       return view('booths.index', compact('booths', 'search'));
+        return $request->wantsJson() ?
+            response(['booths' => $booths, 'search' => $search]) :
+            view('booths.index', compact('booths', 'search'));
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function create(Request $request)
     {
         $this->authorize('create booths', Booth::class);
-
-        $bases = Base::pluck('base_name', 'id');
-
-        return view('booths.create', compact('bases'));
+        $bases = Base::pluck('name', 'id');
+        return $request->wantsJson() ?
+            response(['bases' => $bases], 200) :
+            view('booths.create', compact('bases'));
     }
 
-    /**
-     * @param \App\Http\Requests\BoothStoreRequest $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(BoothStoreRequest $request)
+    public function store(Request $request)
     {
         $this->authorize('create booths', Booth::class);
-
         $validated = $request->validated();
-
         $booth = Booth::create($validated);
-
-        return redirect()->route('booths.edit', $booth);
+        return $request->wantsJson() ?
+            response(['booths'], 202) :
+            redirect()->route('booths.edit', $booth);
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Booth $booth
-     * @return \Illuminate\Http\Response
-     */
     public function show(Request $request, Booth $booth)
     {
         $this->authorize('view booths', $booth);
-
-        return view('app.booths.show', compact('booth'));
+        return $request->wantsJson() ?
+            response(['booth' => $booth], 200) :
+            view('app.booths.show', compact('booth'));
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Booth $booth
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Request $request, Booth $booth)
     {
         $this->authorize('update booths', $booth);
-
         $bases = Base::pluck('base_name', 'id');
-
-        return view('app.booths.edit', compact('booth', 'bases'));
+        return $request->wantsJson() ?
+            response(['bases' => $bases, 'booth' => $booth], 200) :
+            view('app.booths.edit', compact('booth', 'bases'));
     }
 
-    /**
-     * @param \App\Http\Requests\BoothUpdateRequest $request
-     * @param \App\Models\Booth $booth
-     * @return \Illuminate\Http\Response
-     */
-    public function update(BoothUpdateRequest $request, Booth $booth)
+    public function update(Request $request, Booth $booth)
     {
         $this->authorize('update booths', $booth);
-
         $validated = $request->validated();
-
         $booth->update($validated);
-
-        return redirect()->route('booths.edit', $booth);
+        return $request->wantsJson() ?
+            response(['booth' => $booth], 202) :
+            redirect()->route('booths.edit', $booth);
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Booth $booth
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Request $request, Booth $booth)
     {
         $this->authorize('delete booths', $booth);
-
         $booth->delete();
-
-        return redirect()->route('booths.index');
+        return $request->wantsJson() ?
+            response([], 204) :
+            redirect()->route('booths.index');
     }
-
 
     public function getActiveBooths()
     {
