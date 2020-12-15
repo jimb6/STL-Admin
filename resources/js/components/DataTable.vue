@@ -172,6 +172,21 @@
                     mdi-delete
                 </v-icon>
             </template>
+
+            <template v-slot:item.is_rumbled="{ item }">
+                <v-checkbox
+                    :input-value="item.is_rumbled"
+                    value
+                    disabled
+                ></v-checkbox>
+            </template>
+            <template v-slot:item.is_voided="{ item }">
+                <v-checkbox
+                    :input-value="item.is_voided"
+                    value
+                    disabled
+                ></v-checkbox>
+            </template>
         </v-data-table>
 
         <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
