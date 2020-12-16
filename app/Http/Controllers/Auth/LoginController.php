@@ -75,25 +75,48 @@ class LoginController extends Controller
 
     public function loginAgent(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'username' => 'required|string',
             'password' => 'required|string',
             'device_serial_number' => 'required'
         ]);
 
-        if (!Auth::attempt([
-            'email' => request('username'),
-            'password' => request('password')
-        ])) {
-            return response(['messages' => 'invalid username or password.'], 401);
+        if (filter_var($request->get('username'), FILTER_VALIDATE_EMAIL))
+        {
+            if (!Auth::attempt([
+                'email' => request('username'),
+                'password' => request('password')
+            ])) {
+                return response(['messages' => 'invalid username or password.'], 401);
+            }
+        }
+        else
+        {
+            if (!Auth::attempt([
+                'contact_number' => request('username'),
+                'password' => request('password')
+            ])) {
+                return response(['messages' => 'invalid username or password.'], 401);
+            }
+        }
+        $user = $request->user('sanctum');
+        $isDeviceOwnedByUser = $user->whereHas('device', function ($query) use ($validated) {
+            $query->where('serial_number', '=', $validated['device_serial_number']);
+        })->count() > 0;
+
+        if ($isDeviceOwnedByUser){
+            $accessToken = $user->createToken(request('username'))->plainTextToken;
+            $user->update();
+            return response([
+                $accessToken
+            ], 200);
+        }
+        else{
+            return response([
+                'Message' => 'The device have been used not owned by the agent!'
+            ], 200);
         }
 
-        $user = $request->user('sanctum');
-        $accessToken = $user->createToken(request('username'))->plainTextToken;
-        $user->update();
-        return response([
-            $accessToken
-        ], 200);
     }
 
 

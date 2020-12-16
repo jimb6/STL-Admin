@@ -21,10 +21,8 @@ Route::post('v1/agent/login', [\App\Http\Controllers\Auth\LoginController::class
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function () {
-        return Auth::user();
+        return response(Auth::user(), 200);
     });
-
-
 
     Route::resource('agents', AgentController::class);
     Route::resource('users', \App\Http\Controllers\UserController::class);
