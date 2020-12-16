@@ -2,34 +2,6 @@
     <v-main>
         <v-container>
             <div>
-                <div class="col-lg-3 ">
-                    <v-card>
-                        <v-subheader :inset="inset">Top Games</v-subheader>
-
-                        <v-list>
-                            <template v-for="(item, index) in items">
-                                <v-list-item
-                                    v-if="item.action"
-                                    :key="item.title"
-                                    @click=""
-                                >
-                                    <v-list-item-action>
-                                        <v-icon>{{ item.action }}</v-icon>
-                                    </v-list-item-action>
-
-                                    <v-list-item-content>
-                                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                                    </v-list-item-content>
-                                </v-list-item>
-
-                                <v-divider
-                                    v-else-if="item.divider"
-                                    :key="index"
-                                ></v-divider>
-                            </template>
-                        </v-list>
-                    </v-card>
-                </div>
                 <div class="col-lg-9 ">
                     <v-tabs>
                         <v-tab>Table View</v-tab>

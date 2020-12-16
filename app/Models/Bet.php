@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Bet extends Model
 {
@@ -33,9 +35,11 @@ class Bet extends Model
 
 //    Defining scope for queries
 
-//    public function scopeToday($query)
+//    public static function booted()
 //    {
-//        return $query->where()
+//        static::addGlobalScope('user', function (Builder $builder) {
+//            $builder->where('cluster_id', '=', Auth::user()->cluster_id);
+//        });
 //    }
 
     public function scopeBase($query, $value)

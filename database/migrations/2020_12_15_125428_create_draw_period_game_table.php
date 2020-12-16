@@ -16,7 +16,6 @@ class CreateDrawPeriodGameTable extends Migration
         Schema::create('draw_period_game', function (Blueprint $table) {
             $table->unsignedBigInteger('game_id');
             $table->unsignedBigInteger('draw_period_id');
-            $table->timestamps();
         });
     }
 

@@ -2,26 +2,27 @@
 
 
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\API\v1\BetCollectionController;
 use App\Http\Controllers\API\v1\BetController;
 use App\Http\Controllers\API\v1\BoothController;
 use App\Http\Controllers\API\v1\HomeController;
 use App\Http\Controllers\API\v1\UserController;
-use App\Http\Controllers\API\v1\BetCollectionController;
-use App\Http\Controllers\GameController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-//Route::get('/{any}', function () {
-//    return redirect()->route('home');
-//})->where('any', '.*');
+Route::get('/device/unsubscribe/{device}', [\App\Http\Controllers\DeviceController::class, 'unsubscribe'])
+    ->name('device.unsubscribe');
+
+
+Route::get('/device/subscribe/', [\App\Http\Controllers\DeviceController::class, 'subscribe'])
+    ->name('device.subscribe');
 
 Route::get('/', function () {
     return redirect()->route('admin.home');
 });
 
-//Route::post('/login', [AgentLoginController::class, 'login']);
 
-Route::middleware('auth:web')->group(function (){
+Route::middleware('auth:web')->group(function () {
     Route::get('/booths/count', [BoothController::class, 'getActiveBooths'])->name('booths.active.count');
     Route::get('/collections/daily-sum', [BetCollectionController::class, 'todayBaseCollection'])->name('bet.collection.daily.sum');
 });
