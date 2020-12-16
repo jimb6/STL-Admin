@@ -15,7 +15,7 @@ class CreateBetsTable extends Migration
             $table->double('amount');
             $table->boolean('is_rumbled')->default(false);
             $table->boolean('is_voided')->default(false);
-            $table->foreignUuid('bet_transaction_id');
+            $table->uuid('bet_transaction_id');
             $table->unsignedBigInteger('draw_period_id');
             $table->unsignedBigInteger('game_id');
             $table->timestamps();

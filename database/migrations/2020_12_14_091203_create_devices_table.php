@@ -11,7 +11,7 @@ class CreateDevicesTable extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('serial_number')->unique();
+            $table->string('serial_number')->unique()->nullable();
             $table->unsignedBigInteger('user_id')->unique();
             $table->timestamps();
             $table->softDeletes();

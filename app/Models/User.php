@@ -17,21 +17,16 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasRoles, HasApiTokens, Searchable, SoftDeletes;
 
     protected $fillable = ['name', 'birthdate', 'gender', 'address_id', 'contact_number', 'email', 'cluster_id', 'password'];
-
     protected $searchableFields = ['*'];
-
     protected $hidden = ['password', 'remember_token'];
-
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
 
     public static function booted()
     {
 //        static::addGlobalScope(new ClusterScope);
     }
-
 
     public function adminlte_image()
     {
@@ -61,5 +56,10 @@ class User extends Authenticatable
     public function address()
     {
         return $this->belongsTo(Address::class);
+    }
+
+    public function device()
+    {
+        return $this->hasOne(Device::class);
     }
 }

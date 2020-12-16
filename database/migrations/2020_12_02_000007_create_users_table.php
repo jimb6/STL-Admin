@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('api_token')->nullable();
             $table->string('remember_token', 100)->nullable();
             $table->unsignedBigInteger('cluster_id');
             $table->unsignedBigInteger('address_id');

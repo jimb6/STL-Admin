@@ -1,38 +1,70 @@
 <template>
     <v-main>
         <v-container>
-            <v-tabs>
-                <v-tab>Table View</v-tab>
-                <v-tab>Card View</v-tab>
-                <v-tab-item>
-                    <DataTable
-                        :tableName="tableName"
-                        :contents="contents"
-                        :headers="headers"
-                        :fillable="fillable"
-                        @storeUser="storeDevice($event)"
-                        @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyDevice($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-                <v-tab-item>
-                    <Card2
-                        :tableName="tableName"
-                        :contents="contents"
-                        :headers="headers"
-                        :fillable="fillable"
-                        @storeUser="storeDevice($event)"
-                        @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyDevice($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-            </v-tabs>
+            <div>
+                <div class="col-lg-3 ">
+                    <v-card>
+                        <v-subheader :inset="inset">Top Games</v-subheader>
+
+                        <v-list>
+                            <template v-for="(item, index) in items">
+                                <v-list-item
+                                    v-if="item.action"
+                                    :key="item.title"
+                                    @click=""
+                                >
+                                    <v-list-item-action>
+                                        <v-icon>{{ item.action }}</v-icon>
+                                    </v-list-item-action>
+
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+
+                                <v-divider
+                                    v-else-if="item.divider"
+                                    :key="index"
+                                ></v-divider>
+                            </template>
+                        </v-list>
+                    </v-card>
+                </div>
+                <div class="col-lg-9 ">
+                    <v-tabs>
+                        <v-tab>Table View</v-tab>
+                        <v-tab>Card View</v-tab>
+                        <v-tab-item>
+                            <DataTable
+                                :tableName="tableName"
+                                :contents="contents"
+                                :headers="headers"
+                                :fillable="fillable"
+                                @storeUser="storeDevice($event)"
+                                @changeAddress="changeAddress($event)"
+                                @destroyUser="destroyDevice($event)"
+                                :canAdd="canAdd"
+                                :canEdit="canEdit"
+                                :canDelete="canDelete"
+                            />
+                        </v-tab-item>
+                        <v-tab-item>
+                            <Card2
+                                :tableName="tableName"
+                                :contents="contents"
+                                :headers="headers"
+                                :fillable="fillable"
+                                @storeUser="storeDevice($event)"
+                                @changeAddress="changeAddress($event)"
+                                @destroyUser="destroyDevice($event)"
+                                :canAdd="canAdd"
+                                :canEdit="canEdit"
+                                :canDelete="canDelete"
+                            />
+                        </v-tab-item>
+                    </v-tabs>
+                </div>
+            </div>
         </v-container>
     </v-main>
 </template>
@@ -42,6 +74,7 @@ import DataTable from "../components/DataTable";
 import Card2 from "../components/Card2";
 import Vue from "vue";
 import Vuetify from 'vuetify'
+import Card from "../components/Card";
 
 Vue.use(Vuetify)
 export default {
@@ -50,6 +83,7 @@ export default {
         userData: JSON,
     },
     components: {
+        Card,
         Card2,
         DataTable,
     },
@@ -65,7 +99,13 @@ export default {
         ],
         contents: [],
         fillable: [
-            {label: "Agent Name", field: "agent_name", value: "", type: "select", options: ["Male", "Female", "Others"]},
+            {
+                label: "Agent Name",
+                field: "agent_name",
+                value: "",
+                type: "select",
+                options: ["Male", "Female", "Others"]
+            },
             {label: "Serial Number", field: "serial_number", value: "", type: "input"},
         ],
 
@@ -83,9 +123,9 @@ export default {
     methods: {
         async displayDevices() {
             const response = await axios.get('devices/?', {
-                headers:{
-                    'Content-Type':'application/json',
-                    'Accept':'application/json'
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 }
             }).catch(err => {
                 console.log(err)

@@ -17,9 +17,11 @@ class AddForeignToBetsTable extends Migration
             $table->foreign('bet_transaction_id')
                 ->references('id')
                 ->on('bet_transactions');
+
             $table->foreign('draw_period_id')
                 ->references('id')
                 ->on('draw_periods');
+
             $table->foreign('game_id')
                 ->references('id')
                 ->on('games');
