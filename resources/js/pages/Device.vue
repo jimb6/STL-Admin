@@ -1,68 +1,43 @@
 <template>
     <v-main>
         <v-container>
-            <div>
-                <div class="col-lg-3 ">
-                    <v-card>
-                        <v-subheader :inset="inset">Top Games</v-subheader>
-
-                        <v-list>
-                            <template v-for="(item, index) in items">
-                                <v-list-item
-                                    v-if="item.action"
-                                    :key="item.title"
-                                    @click=""
-                                >
-                                    <v-list-item-action>
-                                        <v-icon>{{ item.action }}</v-icon>
-                                    </v-list-item-action>
-
-                                    <v-list-item-content>
-                                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                                    </v-list-item-content>
-                                </v-list-item>
-
-                                <v-divider
-                                    v-else-if="item.divider"
-                                    :key="index"
-                                ></v-divider>
-                            </template>
-                        </v-list>
-                    </v-card>
-                </div>
-                <div class="col-lg-9 ">
-                    <v-tabs>
-                        <v-tab>Table View</v-tab>
-                        <v-tab>Card View</v-tab>
-                        <v-tab-item>
-                            <DataTable
-                                :tableName="tableName"
-                                :contents="contents"
-                                :headers="headers"
-                                :fillable="fillable"
-                                @storeUser="storeDevice($event)"
-                                @changeAddress="changeAddress($event)"
-                                @destroyUser="destroyDevice($event)"
-                                :canAdd="canAdd"
-                                :canEdit="canEdit"
-                                :canDelete="canDelete"
-                            />
-                        </v-tab-item>
-                        <v-tab-item>
-                            <Card2
-                                :tableName="tableName"
-                                :contents="contents"
-                                :headers="headers"
-                                :fillable="fillable"
-                                @storeUser="storeDevice($event)"
-                                @changeAddress="changeAddress($event)"
-                                @destroyUser="destroyDevice($event)"
-                                :canAdd="canAdd"
-                                :canEdit="canEdit"
-                                :canDelete="canDelete"
-                            />
-                        </v-tab-item>
-                    </v-tabs>
+            <v-tabs>
+                <v-tab>Table View</v-tab>
+                <v-tab>Card View</v-tab>
+                <v-tab-item>
+                    <DataTable
+                        :tableName="tableName"
+                        :contents="contents"
+                        :headers="headers"
+                        :fillable="fillable"
+                        @storeUser="storeDevice($event)"
+                        @changeAddress="changeAddress($event)"
+                        @destroyUser="destroyDevice($event)"
+                        :canAdd="canAdd"
+                        :canEdit="canEdit"
+                        :canDelete="canDelete"
+                    />
+                </v-tab-item>
+                <v-tab-item>
+                    <Card2
+                        :tableName="tableName"
+                        :contents="contents"
+                        :headers="headers"
+                        :fillable="fillable"
+                        @storeUser="storeDevice($event)"
+                        @changeAddress="changeAddress($event)"
+                        @destroyUser="destroyDevice($event)"
+                        :canAdd="canAdd"
+                        :canEdit="canEdit"
+                        :canDelete="canDelete"
+                    />
+                </v-tab-item>
+            </v-tabs>
+            <div class="cstm-side-floating">
+                <button><i class="fas fa-qrcode"></i></button>
+                <div>
+                    <h3>Register New Device</h3>
+                    <img src="https://www.iconsdb.com/icons/preview/white/qr-code-xxl.png" alt="">
                 </div>
             </div>
         </v-container>
@@ -189,11 +164,63 @@ export default {
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
         },
-
     }
 }
+$(document).ready(function () {
+    $(".cstm-side-floating button").click(function () {
+        $(".cstm-side-floating").toggleClass('active');
+    });
+});
 </script>
 
 <style scoped>
-
+.cstm-side-floating{
+    position: fixed;
+    top: 50%;
+    right: -280px;
+    transform: translateY(-50%);
+    z-index: 1000;
+    padding: 50px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    transition-duration: 500ms;
+    background: #2196f3;
+}
+.cstm-side-floating.active {
+    transform: translateY(-50%) translateX(-280px) !important;
+    box-shadow: 0 0 3px 3px rgba(0,0,0,.05);
+}
+.cstm-side-floating button {
+    position: absolute;
+    top: 50%;
+    left: -50px;
+    transform: translateY(-50%);
+    background: #fff;
+    color: #2196f3;
+    width: 50px;
+    height: 50px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    outline: unset;
+    box-shadow: 0 0 3px 3px rgba(0,0,0,.05);
+    transition-duration: 500ms;
+    font-size: 25px;
+}
+.cstm-side-floating.active button {
+    background: #2196f3;
+    color: #fff;
+    box-shadow: 0 0 3px 3px rgba(0,0,0,.05);
+}
+.cstm-side-floating img {
+    width: 180px;
+}
+.cstm-side-floating h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-align: center;
+    font-weight: 600;
+}
 </style>
