@@ -434,10 +434,12 @@ return [
                 [
                     'text' => 'Registered Devices',
                     'route' => 'devices.index',
+                    'active' => ['admin/devices']
                 ],
                 [
                     'text' => 'Global Settings',
                     'route' => 'devices.create',
+                    'active' => ['admin/devices/*']
                 ],
             ]
         ],
