@@ -62,7 +62,7 @@
                         <div class="col-12 mt-4">
                             <div class="icheck-primary text-white">
                                 <input type="checkbox" id="remember">
-                                <label for="remember" class="font-weight-light">
+                                <label for="remember" class="font-weight-light" v-model="remember">
                                     Remember Me
                                 </label>
                             </div>
@@ -98,7 +98,8 @@ export default {
             email: '',
             password: '',
             error: '',
-            loading: false
+            loading: false,
+            remember: false,
         };
     },
 
@@ -135,8 +136,7 @@ export default {
         handleLogin() {
             this.loading = true
             axios.get('/sanctum/csrf-cookie').then(response => {
-                axios.post('/login', {email: this.email, password: this.password}).then(response => {
-                    this.getSecrets();
+                axios.post('login', {email: this.email, password: this.password, remember: this.remember}).then(response => {
                     window.location.href = "/"
                 }).catch(error => {
                     this.error = "Invalid username or password"

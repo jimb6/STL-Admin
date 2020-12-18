@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+Broadcast::channel('device-added', function ($user, $deviceId) {
+//    return $user->id === Dev::findOrNew($orderId)->user_id;\
+    return true;
+});

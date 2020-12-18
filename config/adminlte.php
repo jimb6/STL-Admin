@@ -278,12 +278,7 @@ return [
                     'route' => 'agents.index',
                     'active' => ['admin/agents']
                 ],
-                [
-                    'text' => 'Add New',
-                    'can' => 'create agents',
-                    'route' => 'agents.create',
-                    'active' => ['admin/agents/create']
-                ],
+
             ]
 
         ],
@@ -300,11 +295,13 @@ return [
                     'text' => 'All Booths',
                     'can' => 'view booths',
                     'route' => 'booths.index',
+                    'active' => ['admin/booths']
                 ],
                 [
                     'text' => 'Add New',
                     'can' => 'view booths',
                     'route' => 'booths.create',
+                    'active' => ['admin/booths/create']
                 ],
 
             ]

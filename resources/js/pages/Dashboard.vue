@@ -1,5 +1,8 @@
 <template>
     <div class="dashboard">
+        <div v-if="errors.length>0" v-for="error in errors">
+            <error-notif :message="error.message"></error-notif>
+        </div>
         <div class="row">
             <div class="col-lg-12">
                 <Card v-bind:cards="cards"/>
@@ -25,7 +28,7 @@
 
                     <v-card-text class="pt-0">
                         <div class="title font-weight-light mb-2">Today's Bets Performance</div>
-<!--                        <div class="subheading font-weight-light grey&#45;&#45;text">Last Campaign Performance</div>-->
+                        <!--                        <div class="subheading font-weight-light grey&#45;&#45;text">Last Campaign Performance</div>-->
                         <v-divider class="my-2"></v-divider>
                         <v-icon
                             class="mr-2"
@@ -220,24 +223,23 @@ export default {
             headers: [
                 {text: "#", value: "count"},
                 {text: "Name", value: "name"},
-                {text: "Birthdate", value: "birthdate"},
-                {text: "Gender", value: "gender"},
+                // {text: "Birthdate", value: "birthdate"},
+                // {text: "Gender", value: "gender"},
                 {text: "Contact #", value: "contact_number"},
-                {text: "Email", value: "email"},
-                {text: "Address", value: "address"},
-                {text: "Cluster", value: "cluster"},
-                {text: "Last Update", value: "updated_at"},
+                {text: "IP", value: "ip_address"},
+                {text: "Active", value: "last_active"},
+                // {text: "Last Update", value: "updated_at"},
                 {text: "Actions", value: "actions", sortable: false},
             ],
             contents: [],
             fillable: [
                 {label: "Name", field: "name", value: "", type: "input"},
-                {label: "Birthdate", field: "birthdate", value: "", type: "datepicker"},
-                {label: "Gender", field: "gender", value: "", type: "select", options: ["Male", "Female", "Others"]},
+                // {label: "Birthdate", field: "birthdate", value: "", type: "datepicker"},
+                // {label: "Gender", field: "gender", value: "", type: "select", options: ["Male", "Female", "Others"]},
                 {label: "Contact #", field: "contact_number", value: "", type: "input"},
-                {label: "Email", field: "email", value: "", type: "input"},
-                {label: "Address", field: "address", value: "", type: "address"},
-                {label: "Cluster", field: "cluster", value: "", type: "select", options: Array},
+                {label: "IP", field: "ip_address", value: "", type: "input"},
+                {label: "Active", field: "last_active", value: "", type: "input"},
+                // {label: "Cluster", field: "cluster", value: "", type: "select", options: Array},
             ],
 
             editedItem: {},
@@ -246,11 +248,12 @@ export default {
             canAdd: true,
             canEdit: true,
             canDelete: true,
+
+            errors: [],
         };
     },
 
     async created() {
-        console.log("Created");
         const data = {
             collections: [
                 {date: "Dec 1", total: "300000"},
@@ -294,60 +297,20 @@ export default {
             this.arrCollections.push({date, total: total});
             this.totalCollection += parseFloat(total);
         });
-        this.totalCollection = this.formatMoney(this.totalCollection);
-        // await this.getActiveAgents();
-        // await this.getActiveBooths();
-        await this.getDailyTotalCollections();
-        await this.getPermission();
-        this.displayAgents();
-        this.getClusters();
+        this.totalCollection = this.formatCurrencies(this.totalCollection);
+        await this.displayActiveAgents();
     },
     methods: {
 
-        async getActiveAgents() {
-            // axios.get('/sanctum/csrf-cookie').then(response => {
-            const response = await axios.get('agents/count/?').catch(error => {
-                console.log(error)
-            })
-            console.log(response);
-        },
-
-        async getActiveBooths() {
-            const response = await axios.get('booths/count/?',
-                {
-                    headers: {
-                        'content-type': 'application/json',
-                        'accept': 'application/json'
-                    }
-                }).catch(error => {
-                console.log(error)
-            });
-            console.log(response.data)
-        },
-
-        async getDailyTotalCollections() {
-            const response = await axios.get('user/?', {
-                headers: {
-                    'content-type': 'application/json',
-                    'accept': 'application/json'
-                }
-            }).catch(error => console.log(error));
-            console.log("Sa Total ni ha!", response)
-        },
-
-        async getPermission() {
-            const response = await axios.get('permissions/?').catch(err => console.log(err))
-            console.log(response)
-        },
-
-        formatMoney(money) {
+        formatCurrencies(money) {
             money = (Math.round(money * 100) / 100).toFixed(2);
             return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
 
-        async displayAgents() {
-            const response = await axios.get('agents/?').catch(err => {
-                console.log(err)
+
+        async displayActiveAgents() {
+            const response = await axios.get('agents/active/all/?').catch(err => {
+                this.errors.push({message: "Error authenticating user", error: err})
             });
             let agent = {};
             const data = response.data.agents;
@@ -355,39 +318,20 @@ export default {
             let count = 0;
             this.contents = []
             for (let item in data) {
-                date = this.getDateToday(new Date(data[item].updated_at));
+                if (data[item].user == null)
+                    continue
                 count++;
+                date = this.getDateToday(new Date(data[item].last_activity));
                 agent = {
                     count: count,
-                    id: data[item].id,
-                    name: data[item].name,
-                    birthdate: data[item].birthdate,
-                    gender: data[item].gender,
-                    contact_number: data[item].contact_number,
-                    email: data[item].email,
-                    address: data[item].address.street
-                        + ", " + data[item].address.barangay
-                        + ", " + data[item].address.municipality
-                        + ", " + data[item].address.province,
-                    cluster: data[item].cluster.name,
-                    updated_at: date,
+                    id: data[item].user.id,
+                    name: data[item].user.name,
+                    contact_number: data[item].user.contact_number,
+                    ip_address: data[item].ip_address,
+                    last_active: date,
                 }
                 this.contents.push(agent);
             }
-        },
-
-        async storeAgent(item) {
-            const response = await axios.post('agents/?', {
-                'name': item.name,
-                'birthdate': item.birthdate,
-                'gender': item.gender,
-                'contact_number': item.contact_number,
-                'email': item.email,
-                'cluster_id': item.cluster.id,
-                'address': this.address
-
-            }).catch(err => console.log(err))
-            await this.displayUsers()
         },
 
         async updateUser() {
@@ -395,12 +339,12 @@ export default {
         },
 
         async destroyAgent(item) {
-            const response = await axios.delete('agents/'+item.id).catch(err => console.log(err))
+            const response = await axios.delete('agents/' + item.id).catch(err => this.errors.push({message: "Error authenticating user", error: err}))
             await this.displayAgents();
         },
 
         async getClusters() {
-            const response = await axios.get('clusters').catch(err => console.log(err))
+            const response = await axios.get('clusters').catch(err => this.errors.push({message: "Error authenticating user", error: err}))
             let clustersData = response.data.clusters;
             for (let index in this.fillable) {
                 if (this.fillable[index].field == 'cluster') {

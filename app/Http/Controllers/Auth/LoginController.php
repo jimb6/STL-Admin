@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,13 +42,6 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    protected function loggedOut(Request $request)
-    {
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect('/');
-    }
-
     public function login(Request $request)
     {
         $this->validateLogin($request);
@@ -57,11 +52,14 @@ class LoginController extends Controller
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-
             return $this->sendLockoutResponse($request);
         }
 
         if ($this->attemptLogin($request)) {
+            $user = Auth::user();
+            $user->update([
+                'api_token' => $user->createToken($user->name)->plainTextToken
+            ]);
             return $this->sendLoginResponse($request);
         }
 
@@ -71,6 +69,36 @@ class LoginController extends Controller
         $this->incrementLoginAttempts($request);
 
         return $this->sendFailedLoginResponse($request);
+    }
+
+    public function logout(Request $request)
+    {
+        $user = Auth::user();
+        $user->tokens()->delete();
+        $user->update([
+            'api_token' => null
+        ]);
+        $this->guard()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect('/');
+    }
+
+    public function authenticated(Request $request, User $user)
+    {
+        return $request->ajax()?//if it's an AJAX request just return the user,no redirect needed!
+            response()->json([
+                'name'=>$user->name,
+                'email'=>$user->email,
+                'api_token' => $user->api_token
+            ]) :
+            redirect()->intended($this->redirectPath());//if it's a normal login redirect to page
     }
 
     public function loginAgent(Request $request)
@@ -118,6 +146,5 @@ class LoginController extends Controller
         }
 
     }
-
 
 }

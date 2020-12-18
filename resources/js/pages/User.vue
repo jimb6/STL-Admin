@@ -96,7 +96,7 @@ export default {
     },
     methods: {
         async displayUsers() {
-            const response = await axios.get('users').catch(err => {
+            const response = await axios.get('users/?').catch(err => {
                 console.log(err)
             });
             let user = {};
@@ -126,7 +126,7 @@ export default {
             }
         },
         async storeUser(item) {
-            const response = await axios.post('users', {
+            const response = await axios.post('users/?', {
                 'roles': item.roles,
                 'name': item.name,
                 'birthdate': item.birthdate,

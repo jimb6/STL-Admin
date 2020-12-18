@@ -10,20 +10,26 @@
     "require": {
         "php": "^7.3|^8.0",
         "ext-json": "*",
+        "ext-pcntl": "*",
         "endroid/qr-code": "^3.9",
         "fakerphp/faker": "^1.9.1",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.5.x-dev|^7.0.1",
         "jeroennoten/laravel-adminlte": "^3.5",
+        "joshrainwater/active-users": "^2.1",
         "laravel/framework": "^8.12",
+        "laravel/homestead": "^11.4",
+        "laravel/horizon": "^5.6",
         "laravel/sanctum": "^2.8",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.1",
         "livewire/livewire": "^2.3",
         "owen-it/laravel-auditing": "^11.0",
+        "predis/predis": "^1.1",
         "pusher/pusher-php-server": "^4.1",
-        "spatie/laravel-permission": "^3.18"
+        "spatie/laravel-permission": "^3.18",
+        "spatie/laravel-url-signer": "^2.6"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
@@ -35,7 +41,11 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "ext-pcntl": "7.3",
+            "ext-posix": "7.3"
+        }
     },
     "extra": {
         "laravel": {

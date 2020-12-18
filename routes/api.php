@@ -19,10 +19,28 @@ use Spatie\Permission\Models\Permission;
 //Auth::routes();
 Route::post('v1/agent/login', [\App\Http\Controllers\Auth\LoginController::class, 'loginAgent'])->name('agent.login');
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', function () {
-        return response(Auth::user(), 200);
-    });
+Route::get('v1/devices/{device}', function ($serial){
+    $device = \App\Models\Device::where('serial_number', $serial)->get();
+    return response($device, 200);
+})->name('device.validate');
+
+
+Route::apiResources([
+    'agents' => AgentController::class,
+    'users' => \App\Http\Controllers\UserController::class,
+    'booths' => \App\Http\Controllers\API\v1\BoothController::class,
+    'clusters' => \App\Http\Controllers\ClusterController::class,
+    'addresses' => \App\Http\Controllers\AddressController::class,
+    'bets' => \App\Http\Controllers\BetTransactionController::class,
+    'roles' => \App\Http\Controllers\API\v1\RoleController::class,
+    'permissions' => \App\Http\Controllers\API\v1\PermissionController::class,
+    'devices' => \App\Http\Controllers\DeviceController::class,
+    'bet-transactions' => \App\Http\Controllers\BetTransactionController::class,
+    'draw-periods' => \App\Http\Controllers\DrawPeriodController::class,
+    'games' => \App\Http\Controllers\GameController::class,
+]);
+
+Route::middleware(['auth:api'])->group(function () {
 
     Route::resource('agents', AgentController::class);
     Route::resource('users', \App\Http\Controllers\UserController::class);
@@ -43,13 +61,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         $role->givePermissionTo(Permission::find($request->input('permission_id')));
         return response([], 200);
     })->name('role.assign.permission');
-
-});
-
-
-Route::group([
-    'prefix' => '/v1/agents'
-], function () {
 
 });
 

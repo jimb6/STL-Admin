@@ -15,7 +15,7 @@ class DeviceScope implements Scope
     {
         if( Auth::hasUser() ) {
             $user = Auth::user();
-            $builder->where('user_id', '!=', null)->with('user');
+            $builder->where('cluster_id',  $user->cluster_id)->with('user');
         }
     }
 }

@@ -10,17 +10,15 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
 
-
-
 require('./bootstrap');
 
 window.$ = window.jQuery = $;
 window.Vue = require('vue');
-
+Vue.prototype.$token = document.querySelector("meta[name='csrf-token']").getAttribute('content');
 
 // const files = require.context('./', true, /\.vue$/i)
 Vue.component('pagination', require('laravel-vue-pagination'));
-// Vue.component('pagination', require('laravel-vue-semantic-ui-pagination'));
+Vue.component('QrcodeVue', require('qrcode.vue'));
 
 const options = {
     color: '#ffd609',
@@ -52,6 +50,7 @@ import GlobalSettings from './pages/GlobalSettings'
 import Game from "./pages/Game";
 import Drawperiod from "./pages/DrawPeriod";
 import Device from "./pages/Device";
+import ErrorNotif from "./components/Notification/ErrorNotif";
 
 const app = new Vue(    {
     theme: { dark: true },
@@ -70,6 +69,7 @@ const app = new Vue(    {
         Drawperiod,
         Permission,
         GlobalSettings,
-        Device
+        Device,
+        ErrorNotif
     },
 });

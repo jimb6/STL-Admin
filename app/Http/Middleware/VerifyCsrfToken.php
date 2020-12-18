@@ -13,5 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
+        'subscribe*',
+        'http://2d59d861b5fa.ngrok.io/device/subscribe*'
     ];
 }

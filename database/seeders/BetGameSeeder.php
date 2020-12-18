@@ -16,66 +16,94 @@ class BetGameSeeder extends Seeder
     public function run()
     {
 
-        DB::table('bet_games')->insert(
+        DB::table('games')->insert(
             [
-                'game_name' => 'STL-2 Digits',
-                'game_days' => json_encode([
+                'description' => 'STL-2 Digits',
+                'days_availability' => json_encode([
                     'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
                 ]),
-                'game_abbreviation' => 'STL-2D',
-                'game_prize' => 70.00,
+                'abbreviation' => 'STL-2D',
+                'prize' => 70.00,
+                'field_set' => 1,
+                'digit_per_field_set' => 2,
+                'min_number' => 0,
+                'max_number' => 99,
+                'has_repetition' => true,
+
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
         );
 
-        DB::table('bet_games')->insert(
+        DB::table('games')->insert(
             [
-                'game_name' => 'STL-3 Digits',
-                'game_days' => json_encode([
+                'description' => 'STL-3 Digits',
+                'days_availability' => json_encode([
                     'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
                 ]),
-                'game_abbreviation' => 'STL-3D',
-                'game_prize' => 450.00,
+                'abbreviation' => 'STL-3D',
+                'prize' => 500.00,
+                'field_set' => 1,
+                'digit_per_field_set' => 3,
+                'min_number' => 0,
+                'max_number' => 999,
+                'has_repetition' => true,
+
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
         );
 
-        DB::table('bet_games')->insert(
+        DB::table('games')->insert(
             [
-                'game_name' => 'STL-4 Digits',
-                'game_days' => json_encode([
+                'description' => 'STL-4 Digits',
+                'days_availability' => json_encode([
                     'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
                 ]),
-                'game_abbreviation' => 'STL-4D',
-                'game_prize' => 450.00,
+                'abbreviation' => 'STL-4D',
+                'prize' => 500.00,
+                'field_set' => 1,
+                'digit_per_field_set' => 4,
+                'min_number' => 0,
+                'max_number' => 9999,
+                'has_repetition' => true,
+
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
         );
 
-        DB::table('bet_games')->insert(
+        DB::table('games')->insert(
             [
-                'game_name' => 'Pick 3',
-                'game_days' => json_encode([
+                'description' => 'Pick 3',
+                'days_availability' => json_encode([
                     'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
                 ]),
-                'game_abbreviation' => 'P3',
-                'game_prize' => 450.00,
+                'abbreviation' => 'P3',
+                'prize' => 450.00,
+                'field_set' => 3,
+                'digit_per_field_set' => 2,
+                'min_number' => 1,
+                'max_number' => 58,
+                'has_repetition' => false,
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
         );
 
-        DB::table('bet_games')->insert(
+        DB::table('games')->insert(
             [
-                'game_name' => 'STL Pares',
-                'game_days' => json_encode([
+                'description' => 'STL Pares',
+                'days_availability' => json_encode([
                     'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
                 ]),
-                'game_abbreviation' => 'P',
-                'game_prize' => 450.00,
+                'abbreviation' => 'P',
+                'prize' => 450.00,
+                'field_set' => 2,
+                'digit_per_field_set' => 2,
+                'min_number' => 1,
+                'max_number' => 40,
+                'has_repetition' => false,
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],

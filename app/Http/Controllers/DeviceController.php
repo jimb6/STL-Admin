@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewDeviceAdded;
 use App\Models\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,7 @@ class DeviceController extends Controller
     {
         $this->authorize('create devices', Device::class);
         $url = URL::temporarySignedRoute(
-            'device.subscribe', now()->addMinutes(5));
+            'device.subscribe', now()->addMinutes(30));
         $customRequest = Request::create($url);
         $data = [
             'created_by' => \Auth::user()->id,
@@ -40,6 +41,7 @@ class DeviceController extends Controller
         $this->authorize('create devices', Device::class);
         $validated = $request->validated();
         $device = Device::create($validated);
+        broadcast(new NewDeviceAdded($device));
 
         return response(['device' => $device], 202);
     }
@@ -75,14 +77,18 @@ class DeviceController extends Controller
     public function subscribe(Request $request)
     {
         if (!$request->hasValidSignature()) abort(401);
-        $request->validate([
-            'serial_number' => 'required'
+        $validated = $request->validate([
+            'yyy' => 'required'
         ]);
 
         $isUsed = DB::table('device_registration')->where('token', '=', $request->get('signature'))->count();
         if (!$isUsed) return response([], 403);
         else {
             DB::table('device_registration')->where(['token' => $request->get('signature')])->delete();
+            $device = Device::create([
+                'serial_number' => $validated['yyy']
+            ]);
+            broadcast(new NewDeviceAdded($device));
             return response([], 202);
         }
     }

@@ -1,5 +1,8 @@
 <template>
     <v-main>
+        <div v-if="errors.length>0" v-for="error in errors">
+            <error-notif :message="error.message"></error-notif>
+        </div>
         <v-container>
             <v-tabs>
                 <v-tab>Table View</v-tab>
@@ -34,10 +37,23 @@
                 </v-tab-item>
             </v-tabs>
             <div class="cstm-side-floating">
-                <button><i class="fas fa-qrcode"></i></button>
+                <button>
+                    <i class="fas fa-qrcode" @click="this.getRegistrationQr"></i></button>
                 <div>
                     <h3>Register New Device</h3>
-                    <img src="https://www.iconsdb.com/icons/preview/white/qr-code-xxl.png" alt="">
+                    <v-progress-circular v-show="isQrCreating"
+                                         :size="70"
+                                         :width="7"
+                                         color="#ffffff"
+                                         indeterminate
+                    ></v-progress-circular>
+                    <qrcode-vue v-if="qrValue !== ''"
+                                v-show="!isQrCreating"
+                                :value="qrValue"
+                                :size="size"
+                                background="#2196F3"
+                                foreground="#1D3557"
+                                level="L"></qrcode-vue>
                 </div>
             </div>
         </v-container>
@@ -50,6 +66,8 @@ import Card2 from "../components/Card2";
 import Vue from "vue";
 import Vuetify from 'vuetify'
 import Card from "../components/Card";
+import QrcodeVue from 'qrcode.vue'
+import ErrorNotif from "../components/Notification/ErrorNotif";
 
 Vue.use(Vuetify)
 export default {
@@ -58,11 +76,12 @@ export default {
         userData: JSON,
     },
     components: {
+        ErrorNotif,
         Card,
         Card2,
         DataTable,
+        QrcodeVue
     },
-
     data: () => ({
         tableName: "Registered Agent Devices",
         headers: [
@@ -83,27 +102,45 @@ export default {
             },
             {label: "Serial Number", field: "serial_number", value: "", type: "input"},
         ],
-
+        qrValue: '',
+        size: 180,
         editedItem: {},
         address: Array,
 
         canAdd: true,
-        canEdit: true,
+        canEdit: false,
         canDelete: true,
+
+        requestHeaders: {},
+        user: {},
+        errors: [],
+
+        isQrCreating: false
     }),
     created() {
-        this.displayDevices();
-        this.getUsers();
+        this.errors = [];
+        this.getUser();
     },
+
     methods: {
-        async displayDevices() {
-            const response = await axios.get('devices/?', {
-                headers: {
+        async getUser() {
+            axios.get('user/info/?').then((response) => {
+                this.user = response.data;
+                this.requestHeaders = {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + this.user.api_token
+                };
+                this.displayDevices();
+                this.getRegistrationQr();
+                this.listen();
             }).catch(err => {
-                console.log(err)
+                this.errors.push({message: "Error authenticating user", error: err})
+            })
+        },
+        async displayDevices() {
+            const response = await axios.get('devices/?').catch(err => {
+                this.errors.push({message: "Error fetching devices.", error: err})
             });
             let device = {};
             const data = response.data.devices;
@@ -116,47 +153,27 @@ export default {
                 device = {
                     count: count,
                     id: data[item].id,
-                    agent_name: data[item].user.name,
+                    agent_name: data[item].user ? data[item].user.name : "NOT ASSIGNED",
                     serial_number: data[item].serial_number,
                     updated_at: date,
                 }
                 this.contents.push(device);
             }
         },
-        async storeDevice(item) {
-            // const response = await axios.post('devices', {
-            //     'name': item.name,
-            //     'birthdate': item.birthdate,
-            //     'gender': item.gender,
-            //     'contact_number': item.contact_number,
-            //     'email': item.email,
-            //     'cluster_id': item.cluster.id,
-            //     'address': this.address
-            //
-            // }).catch(err => console.log(err))
-            // await this.displayUsers()
-        },
-        async updateDevice() {
-
-        },
-        async destroyDevice(item) {
-            // const response = await axios.delete('agents/'+item.id).catch(err => console.log(err))
-            // await this.displayAgents();
+        async getRegistrationQr() {
+            this.isQrCreating = true;
+            const response = await axios.get('devices/create')
+                .catch(err => {
+                    this.errors.push({message: "Error Generating QR", error: err})
+                    this.isQrCreating = false;
+                })
+            this.qrValue = response.data
+            this.isQrCreating = false;
         },
 
-        async getUsers() {
-            // const response = await axios.get('clusters').catch(err => console.log(err))
-            // let clustersData = response.data.clusters;
-            // for (let index in this.fillable) {
-            //     if (this.fillable[index].field == 'cluster') {
-            //         this.fillable[index].options = clustersData;
-            //     }
-            // }
-        },
         changeAddress(address) {
             this.address = address;
         },
-
 
         getDateToday(date) {
             date = (date) ? date : new Date();
@@ -164,17 +181,26 @@ export default {
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
         },
+        async listen() {
+            Echo.channel('device-store')
+                .listen('NewDeviceAdded', (data) => {
+                    this.getRegistrationQr();
+                    this.displayDevices();
+                })
+        }
     }
 }
+
 $(document).ready(function () {
     $(".cstm-side-floating button").click(function () {
         $(".cstm-side-floating").toggleClass('active');
     });
 });
+
 </script>
 
 <style scoped>
-.cstm-side-floating{
+.cstm-side-floating {
     position: fixed;
     top: 50%;
     right: -280px;
@@ -186,10 +212,12 @@ $(document).ready(function () {
     transition-duration: 500ms;
     background: #2196f3;
 }
+
 .cstm-side-floating.active {
     transform: translateY(-50%) translateX(-280px) !important;
-    box-shadow: 0 0 3px 3px rgba(0,0,0,.05);
+    box-shadow: 0 0 3px 3px rgba(0, 0, 0, .05);
 }
+
 .cstm-side-floating button {
     position: absolute;
     top: 50%;
@@ -202,18 +230,21 @@ $(document).ready(function () {
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
     outline: unset;
-    box-shadow: 0 0 3px 3px rgba(0,0,0,.05);
+    box-shadow: 0 0 3px 3px rgba(0, 0, 0, .05);
     transition-duration: 500ms;
     font-size: 25px;
 }
+
 .cstm-side-floating.active button {
     background: #2196f3;
     color: #fff;
-    box-shadow: 0 0 3px 3px rgba(0,0,0,.05);
+    box-shadow: 0 0 3px 3px rgba(0, 0, 0, .05);
 }
+
 .cstm-side-floating img {
     width: 180px;
 }
+
 .cstm-side-floating h3 {
     font-size: 12px;
     text-transform: uppercase;

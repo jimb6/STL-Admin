@@ -179,10 +179,13 @@ return [
         App\Providers\AuthServiceProvider::class,
          App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
 
         OwenIt\Auditing\AuditingServiceProvider::class, // -> Audit Provider
+        Spatie\UrlSigner\Laravel\UrlSignerServiceProvider::class,
+        Rainwater\Active\ActiveServiceProvider::class // Session Provider
     ],
 
     /*
@@ -197,7 +200,7 @@ return [
     */
 
     'aliases' => [
-
+        'Active' => Rainwater\Active\ActiveFacade::class,
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
@@ -234,7 +237,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'UrlSigner' => Spatie\UrlSigner\Laravel\UrlSignerFacade::class,
     ],
 
 ];

@@ -7,6 +7,7 @@ use App\Models\Cluster;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Rainwater\Active\Active;
 use Spatie\Permission\Models\Role;
 
 class AgentController extends Controller
@@ -16,11 +17,20 @@ class AgentController extends Controller
     {
         $this->authorize('list users', User::class);
         $search = $request->get('search', '');
-        $agents = User::search($search)
-            ->with(['cluster', 'address'])
-            ->whereHas('roles', function ($query) {
-                $query->where('name', 'agent');
-            })->get();
+        $agents = null;
+        if ($request->has('type')){
+            $agents = User::onlyTrashed()
+                ->with(['cluster', 'address'])
+                ->whereHas('roles', function ($query) {
+                    $query->where('name', 'agent');
+                })->get();
+        }else{
+            $agents = User::search($search)
+                ->with(['cluster', 'address'])
+                ->whereHas('roles', function ($query) {
+                    $query->where('name', 'agent');
+                })->get();
+        }
         return $request->wantsJson() ? response(['agents' => $agents], 200) :
             view('agents.index');
     }
@@ -31,9 +41,9 @@ class AgentController extends Controller
         $this->authorize('create users', User::class);
         $clusters = Cluster::pluck('name', 'id');
         $roles = Role::get();
-        return \response(['clusters' => $clusters, 'roles' => $roles], 200);
+        return $request->wantsJson() ? \response(['clusters' => $clusters, 'roles' => $roles], 200) :
+            view('agents.create');
     }
-
 
     public function store(Request $request)
     {
@@ -68,14 +78,12 @@ class AgentController extends Controller
         return response($user, 202);
     }
 
-
     public function show(Request $request, User $user)
     {
         $this->authorize('view users', $user);
         return \response(['user' => $user], 200);
 //        return view('app.users.show', compact('user'));
     }
-
 
     public function edit(Request $request, User $user)
     {
@@ -84,7 +92,6 @@ class AgentController extends Controller
         $roles = Role::get();
         return \response(['bases' => $bases, 'roles' => $roles], 200);
     }
-
 
     public function update(Request $request, User $user)
     {
@@ -101,7 +108,6 @@ class AgentController extends Controller
 //        return redirect()->route('users.edit', $user);
     }
 
-
     public function destroy(Request $request, User $user)
     {
         $this->authorize('delete users', $user);
@@ -110,5 +116,14 @@ class AgentController extends Controller
 //        return redirect()->route('users.index');
     }
 
+    public function activeIndex(){
+        $this->authorize('list agents', User::class);
+        $agents = Active::usersWithinHours(1)->with(['user' => function($query){
+            $query->whereHas('roles',  function ($query) {
+                $query->where('name', 'agent');
+            });
+        }])->get();
+        return response(['agents' => $agents], 200);
+    }
 
 }

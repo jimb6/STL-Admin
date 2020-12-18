@@ -4,8 +4,8 @@ namespace App\Models;
 
 use App\Models\Scopes\Searchable;
 use App\Scopes\ClusterScope;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -17,7 +17,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, HasApiTokens, Searchable, SoftDeletes;
 
-    protected $fillable = ['name', 'birthdate', 'gender', 'address_id', 'contact_number', 'email', 'cluster_id', 'password'];
+    protected $fillable = ['name', 'birthdate', 'gender', 'address_id', 'contact_number', 'email', 'cluster_id', 'password', 'api_token'];
     protected $searchableFields = ['*'];
     protected $hidden = ['password', 'remember_token'];
     protected $casts = [
@@ -28,6 +28,7 @@ class User extends Authenticatable
     {
         static::addGlobalScope(new ClusterScope);
     }
+
 
     public function adminlte_image()
     {
