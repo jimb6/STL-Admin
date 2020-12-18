@@ -21,8 +21,8 @@ use Spatie\Permission\Models\Permission;
 Route::post('v1/agent/login', [\App\Http\Controllers\Auth\LoginController::class, 'loginAgent'])->name('agent.login');
 
 Route::get('v1/devices/{device}', function ($serial){
-    $device = \App\Models\Device::where('serial_number', $serial)->get();
-    return $device ? response($device, 200) : response(['message' => 'UNREGISTERED'], 204);
+    $device = \App\Models\Device::where('serial_number', $serial)->count() > 0;
+    return $device? response(['message' => 'REGISTERED'], 200) : response(['message' => 'UNREGISTERED'], 204);
 })->name('device.validate');
 
 Route::middleware(['auth:api'])->group(function () {
