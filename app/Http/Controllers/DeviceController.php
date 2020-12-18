@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Laravel\Horizon\Horizon;
 
 class DeviceController extends Controller
 {
@@ -16,6 +17,7 @@ class DeviceController extends Controller
         $this->authorize('list devices', Device::class);
         $search = $request->get('search', '');
         $devices = Device::search($search)->get();
+        $this->sendSMS();
         return $request->wantsJson() ? response(['devices' => $devices], 200) :
             view('devices.index');
     }
@@ -32,7 +34,7 @@ class DeviceController extends Controller
         ];
         DB::table('device_registration')->where(['created_by' => Auth::user()->id])->delete();
         DB::table('device_registration')->insertOrIgnore($data);
-        return $request->wantsJson()? response($url, 200) :
+        return $request->wantsJson() ? response($url, 200) :
             view('devices.index');
     }
 
@@ -102,5 +104,12 @@ class DeviceController extends Controller
             'device_serial_number' => 'required',
         ]);
         response($validated);
+    }
+
+    public function sendSMS()
+    {
+        Horizon::routeSmsNotificationsTo('+639187043388');
+        Horizon::routeMailNotificationsTo('jimwellbuot@gmail.com');
+//        Horizon::routeSlackNotificationsTo('slack-webhook-url', '#channel');
     }
 }

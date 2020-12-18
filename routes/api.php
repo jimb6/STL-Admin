@@ -22,7 +22,7 @@ Route::post('v1/agent/login', [\App\Http\Controllers\Auth\LoginController::class
 
 Route::get('v1/devices/{device}', function ($serial){
     $device = \App\Models\Device::where('serial_number', $serial)->get();
-    return response($device, 200);
+    return $device ? response($device, 200) : response(['message' => 'UNREGISTERED'], 204);
 })->name('device.validate');
 
 Route::middleware(['auth:api'])->group(function () {
