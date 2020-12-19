@@ -9,7 +9,7 @@
                 <v-tab>Card View</v-tab>
                 <v-tab-item>
                     <DataTable
-                        :title="title"
+                        :tableName="tableName"
                         :contents="contents"
                         :headers="headers"
                         :fillable="fillable"
@@ -23,7 +23,7 @@
                 </v-tab-item>
                 <v-tab-item>
                     <Card2
-                        :title="title"
+                        :tableName="tableName"
                         :contents="contents"
                         :headers="headers"
                         :fillable="fillable"
@@ -83,7 +83,7 @@ export default {
         QrcodeVue
     },
     data: () => ({
-        title: "Registered Agent Device",
+        tableName: "Registered Agent Devices",
         headers: [
             {text: "#", value: "count"},
             {text: "Agent Name", value: "agent_name"},
