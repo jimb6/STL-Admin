@@ -14,14 +14,18 @@
         <div>
 
             <div :class="{'shake': error}" class="card-body login-card-body" >
-                <h3 class="login-box-msg">LOGIN</h3>
+<!--                <v-icon class="cstm-icon-title">-->
+<!--                    mdi-account-circle-->
+<!--                </v-icon>-->
                 <form>
 
                     <div class="mb-4">
                         <div class="input-group" :class="{ 'form-group--error': $v.email.$error }">
                             <div class="input-group-append">
                                 <div class="input-group-text">
-                                    <span class="fas fa-envelope text-white"></span>
+                                    <v-icon class="text-white">
+                                        mdi-email-outline
+                                    </v-icon>
                                 </div>
                             </div>
                             <input type="email" class="form-control form__input"
@@ -37,7 +41,9 @@
                         <div class="input-group" :class="{ 'form-group--error': $v.password.$error }">
                             <div class="input-group-append">
                                 <div class="input-group-text">
-                                    <span class="fas fa-lock text-white"></span>
+                                    <v-icon class="text-white">
+                                        mdi-key
+                                    </v-icon>
                                 </div>
                             </div>
                             <input type="password"
@@ -154,6 +160,18 @@ export default {
 </script>
 
 <style>
+.login-page #app {
+    background: #00000033;
+    width: 400px;
+    padding: 40px !important;
+    border-radius: 5px;
+}
+.login-page .login-logo {
+    margin-bottom: 40px;
+}
+.login-box, .register-box {
+    width: unset;
+}
 .loader-container {
     position: absolute;
     z-index: 99;
@@ -187,6 +205,7 @@ body.login-page {
 }
 .login-card-body {
     border-radius: 10px;
+    padding: unset;
 }
 .login-card-body:nth-of-type(1) {
     background: unset;
@@ -194,7 +213,15 @@ body.login-page {
 .login-card-body:nth-of-type(2) {
     border-radius: 10px;
     background: unset;
-    border: 1px solid rgba(255,255,255,.75);;
+    /*border: 1px solid rgba(255,255,255,.75);*/
+}
+.login-page .cstm-icon-title {
+    font-size: 90px;
+    color: #FFFFFF;
+    display: block;
+    margin: auto;
+    width: fit-content;
+    margin-bottom: 30px;
 }
 h3.login-box-msg {
     font-weight: 200;
@@ -210,19 +237,39 @@ h3.login-box-msg {
 }
 .login-page input.form-control.form__input {
     border: unset;
+    background: unset;
+    border-radius: unset;
+    padding: 25px 25px 25px 56px !important;
+    color: #fff;
+    border-bottom: 1px solid #ffffff44;
+    transition-duration: 400ms;
 }
+.login-page input.form-control.form__input:focus {
+    border-bottom: 1px solid #ffffff99;
+}
+.input-group {
+    position: relative;
+}
+.login-page .input-group-text {
+    border: unset !important;
+    padding-right: 20px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .cstm-submit-btn {
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 5px;
     font-weight: 300;
-    background: #1d3557;
+    background: var(--gray2);
+    padding: 12px;
     border: none;
-    padding: 10px;
     transition-duration: 400ms;
     color: #fff;
 }
 .cstm-submit-btn:hover {
-    background: #457b9d;
+    background: var(--gray);
     color: #fff;
 }
 .shake {

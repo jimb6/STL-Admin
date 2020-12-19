@@ -1,6 +1,6 @@
 <template>
     <v-container class="cstm-vuetify-table">
-        <h2>{{ tableName.substring(0, tableName.length - 1) }} Cards</h2>
+        <h2>{{ title }} Cards</h2>
 
         <div class="flex-between cstm-table-options my-4 cstm-row col2">
             <div>
@@ -10,7 +10,7 @@
                             <v-icon small class="mr-2">
                                 mdi-plus
                             </v-icon>
-                            Add New {{ tableName.substring(0, tableName.length - 1) }}
+                            Add New {{ title }}
                         </v-btn>
                     </template>
                     <v-card>
@@ -35,8 +35,49 @@
                                             item-text="name"
                                             item-value="id"
                                             :label="item.label"
-                                            return-object
-                                        />
+                                            return-object/>
+
+                                        <v-select
+                                            v-if="item.type === 'chips'"
+                                            v-model="editedItem[item.field]"
+                                            :items="item.options"
+                                            item-text="name"
+                                            item-value="id"
+                                            :label="item.label"
+                                            attach
+                                            chips
+                                            multiple
+                                            return-object/>
+
+                                        <v-menu
+                                            v-if="item.type === 'timepicker'"
+                                            ref="menu"
+                                            v-model="menuTime"
+                                            :close-on-content-click="false"
+                                            :nudge-right="40"
+                                            transition="scale-transition"
+                                            offset-y
+                                            max-width="290px"
+                                            min-width="290px">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-text-field
+                                                    v-model="editedItem[item.field]"
+                                                    label="Draw Time"
+                                                    readonly
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                />
+                                            </template>
+                                            <v-time-picker
+                                                v-if="menuTime"
+                                                v-model="time"
+                                                full-width
+                                                ampm-in-title
+                                                @click:hour="editedItem[item.field] = time"
+                                                @click:minute="editedItem[item.field] = time"
+                                                @update:period="editedItem[item.field] = time"
+                                            />
+                                        </v-menu>
 
                                         <v-menu
                                             v-if="item.type === 'datepicker'"
@@ -52,8 +93,7 @@
                                                     label="Birthdate"
                                                     readonly
                                                     v-bind="attrs"
-                                                    v-on="on"
-                                                ></v-text-field>
+                                                    v-on="on"></v-text-field>
                                             </template>
                                             <v-date-picker
                                                 ref="picker"
@@ -95,7 +135,7 @@
 
         <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
-                <v-card-title class="headline">Delete this {{ tableName.substring(0, tableName.length - 1).toLowerCase() }}?</v-card-title>
+                <v-card-title class="headline">Delete this {{ title.toLowerCase() }}?</v-card-title>
                 <v-card-actions class="pt-5">
                     <v-spacer></v-spacer>
                     <v-btn outlined color="blue" @click="closeDelete">
@@ -125,20 +165,25 @@
                 <div class="card2" v-for="(item, i) in items">
                     <div class="flex-between cstm-card2-header">
                         <div>
-                            <h4 class="p-3">{{ item.name }}</h4>
+                            <h4 class="p-3" v-if="item.name">{{ item.name }}</h4>
+                            <h4 class="p-3" v-else-if="item.description">{{ item.description }}</h4>
                         </div>
-                        <v-avatar :color="getRandomColor()" class="white--text " size="30">
+                        <v-avatar :color="getRandomColor()" class="white--text " size="30" v-if="item.name">
                             {{ itemInitials(item.name) }}
+                        </v-avatar>
+                        <v-avatar :color="getRandomColor()" class="white--text " size="30" v-else-if="item.description">
+                            {{ itemInitials(item.description) }}
                         </v-avatar>
                     </div>
 
                     <v-list dense>
                         <v-list-item v-for="(value, index) in item" :key="index" v-if="index != 'count' && index != 'name'">
-                            <v-list-item-content v-for="(header, i) in headers" v-if="header.value === index" :key="i">
-                                <span>{{header.text}}</span> <p>{{ value }}</p>
+                            <v-list-item-content v-for="(fillItem, i) in fillable" v-if="fillItem.field === index" :key="i">
+                                <span>{{fillItem.label}}</span> <p>{{ value }}</p>
                             </v-list-item-content>
                         </v-list-item>
                     </v-list>
+
                     <div class="overlay">
                         <v-card-actions>
                             <v-spacer></v-spacer>
@@ -204,7 +249,7 @@ export default {
         Address
     },
     props: {
-        tableName: String,
+        title: String,
         headers: Array,
         contents: Array,
         fillable: Array,
@@ -245,6 +290,7 @@ export default {
                 this.defaultItem[fillable[index].field] = fillable[index].value
             }
         },
+
         editItem(item) {
             this.editedIndex = this.contents.indexOf(item)
             for (let index in this.editedItem) {
@@ -256,15 +302,15 @@ export default {
 
         deleteItem(item) {
             this.editedIndex = this.contents.indexOf(item)
-            // this.editedItem = Object.assign({}, item)
+            this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
 
         },
 
         deleteItemConfirm() {
+            this.$emit('destroyModel', this.editedItem);
             this.contents.splice(this.editedIndex, 1)
-            this.$emit('destroyUser', this.editedItem)
-            this.closeDelete()
+            this.closeDelete();
         },
 
         close() {
@@ -286,27 +332,23 @@ export default {
         save() {
             if (this.editedIndex > -1) {
                 Object.assign(this.contents[this.editedIndex], this.editedItem)
-                this.snackText = 'Item updated!'
             } else {
                 // this.contents.push(this.editedItem)
-                this.$emit('storeUser', this.editedItem)
-                this.snackText = 'Item saved!'
+                this.$emit('storeModel', this.editedItem)
             }
-            this.snack = true
-            this.snackColor = 'success'
-
             this.close()
         },
+
         cancel() {
-            this.snack = true
-            this.snackColor = 'error'
-            this.snackText = 'Canceled'
+
+        },
+        deletedSnack(){
+
         },
         open() {
-            this.snack = true
-            this.snackColor = 'info'
-            this.snackText = 'Update Item'
+
         },
+
         changeAddress(field, address){
             this.editedItem[field] = address.join(', ');
             this.$emit('changeAddress', address);
@@ -324,7 +366,7 @@ export default {
 
     computed: {
         formTitle() {
-            let title = this.tableName.substring(0, this.tableName.length - 1);
+            let title = this.title;
             return this.editedIndex === -1 ? 'Add New ' + title : 'Edit ' + title
         },
     },
@@ -437,6 +479,11 @@ export default {
 .v-list-item__content span {
     color: #ccc;
     font-weight: 300;
+    padding-right: 15px;
+    line-height: 1.5em;
+}
+.v-list-item__content p {
+    line-height: 1.5em;
 }
 
 
