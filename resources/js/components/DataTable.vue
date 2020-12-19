@@ -1,6 +1,6 @@
 <template>
     <v-container class="cstm-vuetify-table">
-        <h2>{{ tableName }} Table</h2>
+        <h2>{{ title }}s Table</h2>
 
 
         <v-data-table
@@ -24,7 +24,7 @@
                                     <v-icon small class="mr-2">
                                         mdi-plus
                                     </v-icon>
-                                    Add New {{ tableName.substring(0, tableName.length - 1) }}
+                                    Add New {{ title }}
                                 </v-btn>
                             </template>
                             <v-card>
@@ -149,7 +149,7 @@
 
                 <v-dialog v-model="dialogDelete" max-width="500px">
                     <v-card>
-                        <v-card-title class="headline">Delete this {{ tableName.substring(0, tableName.length - 1).toLowerCase() }}?</v-card-title>
+                        <v-card-title class="headline">Delete this {{ title.toLowerCase() }}?</v-card-title>
                         <v-card-actions class="pt-5">
                             <v-spacer></v-spacer>
                             <v-btn outlined color="blue" @click="closeDelete">
@@ -236,7 +236,7 @@ export default {
         Address
     },
     props: {
-        tableName: String,
+        title: String,
         headers: Array,
         contents: Array,
         fillable: Array,
@@ -272,7 +272,6 @@ export default {
 
     created() {
         this.initialize();
-        console.log( this.canEdit );
     },
 
     methods: {
@@ -283,6 +282,7 @@ export default {
                 this.defaultItem[fillable[index].field] = fillable[index].value
             }
         },
+
         editItem(item) {
             this.editedIndex = this.contents.indexOf(item)
             for (let index in this.editedItem) {
@@ -300,9 +300,8 @@ export default {
         },
 
         deleteItemConfirm() {
-            this.$emit('destroyUser', this.editedItem);
+            this.$emit('destroyModel', this.editedItem);
             this.contents.splice(this.editedIndex, 1)
-            this.deletedSnack();
             this.closeDelete();
         },
 
@@ -325,32 +324,23 @@ export default {
         save() {
             if (this.editedIndex > -1) {
                 Object.assign(this.contents[this.editedIndex], this.editedItem)
-                this.snackText = 'Item updated!'
             } else {
                 // this.contents.push(this.editedItem)
-                this.$emit('storeUser', this.editedItem)
-                this.snackText = 'Item saved!'
+                this.$emit('storeModel', this.editedItem)
             }
-            this.snack = true
-            this.snackColor = 'success'
-            this.snackText = 'Item saved!'
             this.close()
         },
+
         cancel() {
-            this.snack = true
-            this.snackColor = 'error'
-            this.snackText = 'Canceled'
+
         },
         deletedSnack(){
-            this.snack = true
-            this.snackColor = 'success'
-            this.snackText = 'Deleted'
+
         },
         open() {
-            this.snack = true
-            this.snackColor = 'info'
-            this.snackText = 'Update Item'
+
         },
+
         changeAddress(field, address){
             this.editedItem[field] = address.join(', ');
             this.$emit('changeAddress', address);
@@ -359,7 +349,7 @@ export default {
 
     computed: {
         formTitle() {
-            let title = this.tableName.substring(0, this.tableName.length - 1);
+            let title = this.title;
             return this.editedIndex === -1 ? 'Add New ' + title : 'Edit ' + title
         },
     },

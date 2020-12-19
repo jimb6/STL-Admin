@@ -1,18 +1,22 @@
 <template>
     <v-main>
         <v-container>
+            <div v-if="notifications.length > 0" v-for="notification in notifications">
+                <Notification :notification="notification"></Notification>
+            </div>
             <v-tabs>
                 <v-tab>Table View</v-tab>
                 <v-tab>Card View</v-tab>
                 <v-tab-item>
                     <DataTable
-                        :tableName="tableName"
-                        :contents="contents"
+                        :title="title"
                         :headers="headers"
+                        :contents="contents"
                         :fillable="fillable"
-                        @storeUser="storeUser($event)"
+                        @storeModel="storeUser($event)"
+                        @updateModel="updateUser($event)"
+                        @destroyModel="destroyUser($event)"
                         @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyUser($event)"
                         :canAdd="canAdd"
                         :canEdit="canEdit"
                         :canDelete="canDelete"
@@ -20,13 +24,14 @@
                 </v-tab-item>
                 <v-tab-item>
                     <Card2
-                        :tableName="tableName"
-                        :contents="contents"
+                        :title="title"
                         :headers="headers"
+                        :contents="contents"
                         :fillable="fillable"
-                        @storeUser="storeUser($event)"
+                        @storeModel="storeUser($event)"
+                        @updateModel="updateUser($event)"
+                        @destroyModel="destroyUser($event)"
                         @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyUser($event)"
                         :canAdd="canAdd"
                         :canEdit="canEdit"
                         :canDelete="canDelete"
@@ -40,6 +45,7 @@
 <script>
 import DataTable from "../components/DataTable";
 import Card2 from "../components/Card2";
+import Notification from "../components/Notification";
 import Vue from "vue";
 import Vuetify from 'vuetify'
 
@@ -47,16 +53,13 @@ Vue.use(Vuetify)
 
 export default {
     name: "User",
-    props: {
-        userData: JSON,
-    },
     components: {
-        Card2,
         DataTable,
+        Card2,
+        Notification,
     },
-
     data: () => ({
-        tableName: "Users",
+        title: "User",
         headers: [
             {text: "#", value: "count"},
             {text: "Name", value: "name"},
@@ -71,7 +74,7 @@ export default {
         ],
         contents: [],
         fillable: [
-            {label: "Roles", field: "roles", value: "", type: "chips", options: [] },
+            {label: "Roles", field: "roles", value: "", type: "select", options: Array},
             {label: "Name", field: "name", value: "", type: "input"},
             {label: "Birthdate", field: "birthdate", value: "", type: "datepicker"},
             {label: "Gender", field: "gender", value: "", type: "select", options: ["Male", "Female", "Others"]},
@@ -80,10 +83,9 @@ export default {
             {label: "Address", field: "address", value: "", type: "address"},
             {label: "Cluster", field: "cluster", value: "", type: "select", options: Array},
         ],
-
         editedItem: {},
-        roles: [],
         address: Array,
+        notifications: [],
 
         canAdd: true,
         canEdit: true,
@@ -96,35 +98,39 @@ export default {
     },
     methods: {
         async displayUsers() {
-            const response = await axios.get('users/?').catch(err => {
-                console.log(err)
-            });
-            let user = {};
-            const data = response.data.users;
-            let date = '';
-            let count = 0;
-            this.contents = []
-            for (let item in data) {
-                date = this.getDateToday(new Date(data[item].updated_at));
-                count++;
-                user = {
-                    count: count,
-                    id: data[item].id,
-                    name: data[item].name,
-                    birthdate: data[item].birthdate,
-                    gender: data[item].gender,
-                    contact_number: data[item].contact_number,
-                    email: data[item].email,
-                    address: data[item].address.street
-                        + ", " + data[item].address.barangay
-                        + ", " + data[item].address.municipality
-                        + ", " + data[item].address.province,
-                    cluster: data[item].cluster.name,
-                    updated_at: date,
-                }
-                this.contents.push(user);
-            }
+            const response = await axios.get('users/?')
+                .then(response=>{
+                    let user = {};
+                    const data = response.data.users;
+                    let date = '';
+                    let count = 0;
+                    this.contents = []; // Resetting contents to null
+                    for (let item in data) {
+                        date = this.getDateToday(new Date(data[item].updated_at));
+                        count++;
+                        user = {
+                            count: count,
+                            id: data[item].id,
+                            name: data[item].name,
+                            birthdate: data[item].birthdate,
+                            gender: data[item].gender,
+                            contact_number: data[item].contact_number,
+                            email: data[item].email,
+                            address: data[item].address.street
+                                + ", " + data[item].address.barangay
+                                + ", " + data[item].address.municipality
+                                + ", " + data[item].address.province,
+                            cluster: data[item].cluster.name,
+                            updated_at: date,
+                        }
+                        this.contents.push(user);
+                    }
+                })
+                .catch(err => {
+                    this.addNotification("Failed to load " + this.title + "s", "error", "400");
+                });
         },
+
         async storeUser(item) {
             const response = await axios.post('users/?', {
                 'roles': item.roles,
@@ -135,18 +141,31 @@ export default {
                 'email': item.email,
                 'cluster_id': item.cluster.id,
                 'address': this.address
-
-            }).catch(err => console.log(err))
-            console.log(response);
-            await this.displayUsers()
+            })
+                .then(response => {
+                    this.addNotification(item.name + " added successfully!", "success", "200");
+                })
+                .catch(err => {
+                    this.addNotification(item.name + " unsuccessfully added!", "error", "400");
+                });
+            await this.displayUsers();
         },
+
         async updateUser() {
 
         },
+
         async destroyUser(item) {
-            const response = await axios.delete('users/?' + item.id).catch(err => console.log(err))
+            const response = await axios.delete('users/' + item.id)
+                .then(response => {
+                    this.addNotification(item.name + " deleted successfully!", "success", "200")
+                })
+                .catch(err => {
+                    this.addNotification(item.name + " unsuccessfully deleted!", "error", "400")
+                });
             await this.displayUsers();
         },
+
         async getRoles() {
             const response = await axios.get('roles/?').catch(err => console.log(err))
             let rolesData = response.data.roles;
@@ -156,6 +175,7 @@ export default {
                 }
             }
         },
+
         async getClusters() {
             const response = await axios.get('clusters/?').catch(err => console.log(err))
             let clustersData = response.data.clusters;
@@ -165,10 +185,10 @@ export default {
                 }
             }
         },
+
         changeAddress(address) {
             this.address = address;
         },
-
 
         getDateToday(date) {
             date = (date) ? date : new Date();
@@ -176,6 +196,10 @@ export default {
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
         },
+
+        addNotification(message, type, statusCode){
+            this.notifications.push({ message: message, type: type, statusCode: statusCode });
+        }
 
     }
 }

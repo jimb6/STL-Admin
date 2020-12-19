@@ -1,29 +1,38 @@
 <template>
     <v-main>
         <v-container>
+            <div v-if="notifications.length > 0" v-for="notification in notifications">
+                <Notification :notification="notification"></Notification>
+            </div>
             <v-tabs>
                 <v-tab>Table View</v-tab>
                 <v-tab>Card View</v-tab>
                 <v-tab-item>
                     <DataTable
-                        :tableName="tableName"
-                        :contents="contents"
+                        :title="title"
                         :headers="headers"
+                        :contents="contents"
                         :fillable="fillable"
-                        @storeUser="storeDrawPeriod($event)"
-                        @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyDrawPeriod($event)"
+                        @storeModel="storeDrawPeriod($event)"
+                        @updateModel="updateDrawPeriod($event)"
+                        @destroyModel="destroyDrawPeriod($event)"
+                        :canAdd="canAdd"
+                        :canEdit="canEdit"
+                        :canDelete="canDelete"
                     />
                 </v-tab-item>
                 <v-tab-item>
                     <Card2
-                        :tableName="tableName"
-                        :contents="contents"
+                        :title="title"
                         :headers="headers"
+                        :contents="contents"
                         :fillable="fillable"
-                        @storeUser="storeDrawPeriod($event)"
-                        @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyDrawPeriod($event)"
+                        @storeModel="storeDrawPeriod($event)"
+                        @updateModel="updateDrawPeriod($event)"
+                        @destroyModel="destroyDrawPeriod($event)"
+                        :canAdd="canAdd"
+                        :canEdit="canEdit"
+                        :canDelete="canDelete"
                     />
                 </v-tab-item>
             </v-tabs>
@@ -34,6 +43,7 @@
 <script>
 import DataTable from "../components/DataTable";
 import Card2 from "../components/Card2";
+import Notification from "../components/Notification";
 import Vue from "vue";
 import Vuetify from 'vuetify'
 
@@ -41,16 +51,14 @@ Vue.use(Vuetify)
 
 export default {
     name: "DrawPeriod",
-    props: {
-        userData: JSON,
-    },
     components: {
         Card2,
         DataTable,
+        Notification,
     },
 
     data: () => ({
-        tableName: "Draw Periods",
+        title: "Draw Period",
         headers: [
             {text: "#", value: "count"},
             {text: "Draw Time", value: "draw_time"},
@@ -63,68 +71,72 @@ export default {
             {label: "Draw Time", field: "draw_time", value: "", type: "timepicker"},
             {label: "Draw Type", field: "draw_type", value: "", type: "select", options: ["Local", "National"]},
         ],
-
         editedItem: {},
-        address: Array,
+        notifications: [],
+
+        canAdd: true,
+        canEdit: true,
+        canDelete: true,
     }),
     created() {
         this.displayDrawPeriods();
-        // this.getClusters();
     },
     methods: {
         async displayDrawPeriods() {
-            const response = await axios.get('draw-periods/?').catch(err => {
-                console.log(err)
-            });
-            let drawPeriod = {};
-            const data = response.data.drawPeriods;
-            let date = '';
-            let count = 0;
-            this.contents = []
-            for (let item in data) {
-                date = this.getDateToday(new Date(data[item].updated_at));
-                count++;
-                drawPeriod = {
-                    count: count,
-                    id: data[item].id,
-                    draw_time: data[item].draw_time,
-                    draw_type: data[item].draw_type,
-                    updated_at: date,
-                }
-                this.contents.push(drawPeriod);
-            }
+            const response = await axios.get('draw-periods/?')
+                .then(response=> {
+                    let drawPeriod = {};
+                    const data = response.data.drawPeriods;
+                    let date = '';
+                    let count = 0;
+                    this.contents = []
+                    for (let item in data) {
+                        date = this.getDateToday(new Date(data[item].updated_at));
+                        count++;
+                        drawPeriod = {
+                            count: count,
+                            id: data[item].id,
+                            draw_time: data[item].draw_time,
+                            draw_type: data[item].draw_type,
+                            updated_at: date,
+                        }
+                        this.contents.push(drawPeriod);
+                    }
+                })
+                .catch(err => {
+                    this.addNotification("Failed to load " + this.title + "s", "error", "400");
+                });
         },
+
         async storeDrawPeriod(item) {
-            const response = await axios.post('draw-periods/?',
+            const response = await axios.post('draw-period/?',
                 {
                     'draw_time': item.draw_time,
                     'draw_type': item.draw_type,
-                }).catch(err => {
-                    console.log(err)
-            })
+                })
+                .then(response => {
+                    this.addNotification(item.draw_time + " added successfully!", "success", "200");
+                })
+                .catch(err => {
+                    this.addNotification(item.draw_time + " unsuccessfully added!", "error", "400");
+                });
             await this.displayDrawPeriods()
         },
-        async updateUser() {
+
+        async updateDrawPeriod() {
 
         },
+
         async destroyDrawPeriod(item) {
-            const response = await axios.delete('draw-periods/?' + item.id).catch(err => console.log(err))
+            const response = await axios.delete('draw-periods/' + item.id)
+                .then(response => {
+                    this.addNotification(item.draw_time + " deleted successfully!", "success", "200")
+                })
+                .catch(err => {
+                    this.addNotification(item.draw_time + " unsuccessfully deleted!", "error", "400")
+                });
             await this.displayDrawPeriods();
         },
-
-        async getClusters() {
-            const response = await axios.get('clusters/?').catch(err => console.log(err))
-            let clustersData = response.data.clusters;
-            for (let index in this.fillable) {
-                if (this.fillable[index].field == 'cluster') {
-                    this.fillable[index].options = clustersData;
-                }
-            }
-        },
-        changeAddress(address) {
-            this.address = address;
-        },
-
 
         getDateToday(date) {
             date = (date) ? date : new Date();
@@ -132,6 +144,11 @@ export default {
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
         },
+
+        addNotification(message, type, statusCode) {
+            this.notifications.push({message: message, type: type, statusCode: statusCode});
+        },
+
 
     }
 }

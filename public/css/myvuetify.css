@@ -1,4 +1,13 @@
 /* VUETIFY DEFAULT EDIT*/
+:root {
+    --darkGray: #1f2129;
+    --gray2: #343a40;
+    --gray: #4e5468;
+    --lightGray: #F7F2FF;
+    --myBlue: #2196f3;
+    --myRed: #E63946;
+}
+
 .v-tabs {
     padding: 0 20px;
 }
@@ -41,10 +50,13 @@
     border-bottom: 1px solid #ddd;
 }
 .cstm-vuetify-table thead.v-data-table-header {
-    background: #1D3557;
+    background: var(--lightGray);
 }
 .cstm-vuetify-table thead.v-data-table-header th span {
-    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--gray);
+    letter-spacing: 1px;
 }
 .cstm-vuetify-table th.text-start.sortable {
     position: relative;

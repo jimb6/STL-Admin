@@ -1,29 +1,38 @@
 <template>
     <v-main>
         <v-container>
+            <div v-if="notifications.length > 0" v-for="notification in notifications">
+                <Notification :notification="notification"></Notification>
+            </div>
             <v-tabs>
                 <v-tab>Table View</v-tab>
                 <v-tab>Card View</v-tab>
                 <v-tab-item>
                     <DataTable
-                        :tableName="tableName"
-                        :contents="contents"
+                        :title="title"
                         :headers="headers"
+                        :contents="contents"
                         :fillable="fillable"
-                        @storeUser="storeGame($event)"
-                        @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyGame($event)"
+                        @storeModel="storeGame($event)"
+                        @updateModel="updateGame($event)"
+                        @destroyModel="destroyGame($event)"
+                        :canAdd="canAdd"
+                        :canEdit="canEdit"
+                        :canDelete="canDelete"
                     />
                 </v-tab-item>
                 <v-tab-item>
                     <Card2
-                        :tableName="tableName"
-                        :contents="contents"
+                        :title="title"
                         :headers="headers"
+                        :contents="contents"
                         :fillable="fillable"
-                        @storeUser="storeGame($event)"
-                        @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyGame($event)"
+                        @storeModel="storeGame($event)"
+                        @updateModel="updateGame($event)"
+                        @destroyModel="destroyGame($event)"
+                        :canAdd="canAdd"
+                        :canEdit="canEdit"
+                        :canDelete="canDelete"
                     />
                 </v-tab-item>
             </v-tabs>
@@ -34,6 +43,7 @@
 <script>
 import DataTable from "../components/DataTable";
 import Card2 from "../components/Card2";
+import Notification from "../components/Notification";
 import Vue from "vue";
 import Vuetify from 'vuetify'
 
@@ -41,16 +51,13 @@ Vue.use(Vuetify)
 
 export default {
     name: "Game",
-    props: {
-        userData: JSON,
-    },
     components: {
-        Card2,
         DataTable,
+        Card2,
+        Notification,
     },
-
     data: () => ({
-        tableName: "Games",
+        title: "Game",
         headers: [
             {text: "#", value: "count"},
             {text: "Description", value: "description"},
@@ -69,7 +76,7 @@ export default {
             {label: "Digit Per Field Set", field: "digit_per_field_set", value: "", type: "input"},
             {label: "Min Number", field: "min_number", value: "", type: "input"},
             {label: "Max Number", field: "max_number", value: "", type: "input"},
-            {label: "Has Repetition", field: "has_repetition", value: "", type: "select", options: ["True", "False"]},
+            {label: "Has Repetition", field: "has_repetition", value: "", type: "select", options: [true, false]},
             {
                 label: "Days Availability",
                 field: "days_availability",
@@ -78,44 +85,50 @@ export default {
                 options: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
             },
         ],
-
         editedItem: {},
-        address: Array,
+        notifications: [],
+
+        canAdd: true,
+        canEdit: true,
+        canDelete: true,
     }),
     created() {
         this.displayGames();
-        // this.getClusters();
     },
     methods: {
         async displayGames() {
-            const response = await axios.get('games/?').catch(err => {
-                console.log(err)
-            });
-            let game = {};
-            const data = response.data.games;
-            let date = '';
-            let count = 0;
-            this.contents = []
-            for (let item in data) {
-                date = this.getDateToday(new Date(data[item].updated_at));
-                count++;
-                game = {
-                    count: count,
-                    id: data[item].id,
-                    description: data[item].description,
-                    abbreviation: data[item].abbreviation,
-                    prize: data[item].prize,
-                    field_set: data[item].field_set,
-                    digit_per_field_set: data[item].digit_per_field_set,
-                    min_number: data[item].min_number,
-                    max_number: data[item].max_number,
-                    has_repetition: data[item].has_repetition,
-                    days_availability: data[item].days_availability,
-                    updated_at: date,
-                }
-                this.contents.push(game);
-            }
+            const response = await axios.get('games/?')
+                .then(response => {
+                    let game = {};
+                    const data = response.data.games;
+                    let count = 0;
+                    let date = '';
+                    this.contents = []
+                    for (let item in data) {
+                        date = this.getDateToday(new Date(data[item].updated_at));
+                        count++;
+                        game = {
+                            count: count,
+                            id: data[item].id,
+                            description: data[item].description,
+                            abbreviation: data[item].abbreviation,
+                            prize: data[item].prize,
+                            field_set: data[item].field_set,
+                            digit_per_field_set: data[item].digit_per_field_set,
+                            min_number: data[item].min_number,
+                            max_number: data[item].max_number,
+                            has_repetition: data[item].has_repetition,
+                            days_availability: data[item].days_availability,
+                            updated_at: date,
+                        }
+                        this.contents.push(game);
+                    }
+                })
+                .catch(err => {
+                    this.addNotification("Failed to load " + this.title + "s", "error", "400");
+                });
         },
+
         async storeGame(item) {
             const response = await axios.post('games/?',
                 {
@@ -128,30 +141,31 @@ export default {
                     'max_number': item.max_number,
                     'has_repetition': item.has_repetition,
                     'days_availability': item.days_availability,
-                }).catch(err => console.log(err))
+                })
+                .then(response => {
+                    this.addNotification(item.description + " added successfully!", "success", "200");
+                })
+                .catch(err => {
+                    this.addNotification(item.description + " unsuccessfully added!", "error", "400");
+                });
+
             await this.displayGames()
         },
-        async updateUser() {
+
+        async updateGame() {
 
         },
+
         async destroyGame(item) {
-            const response = await axios.delete('games/?' + item.id).catch(err => console.log(err))
+            const response = await axios.delete('games/' + item.id)
+                .then(response => {
+                    this.addNotification(item.description + " deleted successfully!", "success", "200")
+                })
+                .catch(err => {
+                    this.addNotification(item.description + " unsuccessfully deleted!", "error", "400")
+                });
             await this.displayGames();
         },
-
-        async getClusters() {
-            const response = await axios.get('clusters/?').catch(err => console.log(err))
-            let clustersData = response.data.clusters;
-            for (let index in this.fillable) {
-                if (this.fillable[index].field == 'cluster') {
-                    this.fillable[index].options = clustersData;
-                }
-            }
-        },
-        changeAddress(address) {
-            this.address = address;
-        },
-
 
         getDateToday(date) {
             date = (date) ? date : new Date();
@@ -159,6 +173,11 @@ export default {
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
         },
+
+        addNotification(message, type, statusCode) {
+            this.notifications.push({message: message, type: type, statusCode: statusCode});
+        }
+
 
     }
 }
