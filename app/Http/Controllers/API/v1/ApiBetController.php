@@ -24,11 +24,7 @@ class ApiBetController extends Controller
         $this->authorize('list bets', User::class);
         $search = $request->get('search', '');
         $bets = Bet::with(['drawPeriod', 'game'])->get();
-        $device = Device::find(1)->get();
-//        NewDeviceAdded::dispatch($device);
-        broadcast(new NewDeviceAdded($device));
         return response(['bets' => $bets], 200);
-
     }
 
     public function store(Request $request)

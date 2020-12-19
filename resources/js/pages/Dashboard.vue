@@ -1,7 +1,7 @@
 <template>
     <div class="dashboard">
-        <div v-if="errors.length>0" v-for="error in errors">
-            <error-notif :message="error.message"></error-notif>
+        <div v-if="notifications.length > 0" v-for="notification in notifications">
+            <Notification :notification="notification"></Notification>
         </div>
         <div class="row">
             <div class="col-lg-12">
@@ -45,9 +45,9 @@
                     <v-subheader :inset="inset">Top Games</v-subheader>
                     <v-list>
                         <template v-for="(game, index) in games">
-                            <v-list-item >
+                            <v-list-item>
                                 <v-list-item-action>
-                                    {{ game.abbreviation + - + game.max_number}}
+                                    {{ game.abbreviation + -+game.max_number }}
                                 </v-list-item-action>
                             </v-list-item>
                         </template>
@@ -60,13 +60,10 @@
                     <v-tab>Card View</v-tab>
                     <v-tab-item>
                         <DataTable
-                            :tableName="tableName"
+                            :title="title"
                             :contents="contents"
                             :headers="headers"
                             :fillable="fillable"
-                            @storeUser="storeAgent($event)"
-                            @changeAddress="changeAddress($event)"
-                            @destroyUser="destroyAgent($event)"
                             :canAdd="canAdd"
                             :canEdit="canEdit"
                             :canDelete="canDelete"
@@ -74,13 +71,10 @@
                     </v-tab-item>
                     <v-tab-item>
                         <Card2
-                            :tableName="tableName"
+                            :title="title"
                             :contents="contents"
                             :headers="headers"
                             :fillable="fillable"
-                            @storeUser="storeAgent($event)"
-                            @changeAddress="changeAddress($event)"
-                            @destroyUser="destroyAgent($event)"
                             :canAdd="canAdd"
                             :canEdit="canEdit"
                             :canDelete="canDelete"
@@ -101,6 +95,7 @@ import DataTable from "../components/DataTable";
 import Card2 from "../components/Card2";
 import Vue from "vue";
 import Vuetify from 'vuetify'
+import Notification from '../components/Notification'
 
 Vue.use(Vuetify)
 
@@ -112,6 +107,7 @@ export default {
         LineChart,
         Card2,
         DataTable,
+        Notification,
     },
     data() {
         return {
@@ -135,29 +131,8 @@ export default {
                     description: "",
                 },
             ],
-            labels: [],
-            value: [],
             inset: false,
-            items: [
-                {
-                    action: 'STL 2D',
-                    title: '12,241.00',
-                },
-                {
-                    divider: true,
-                },
-                {
-                    action: 'send',
-                    title: 'send',
-                },
-                {
-                    divider: true,
-                },
-                {
-                    action: 'delete',
-                    title: 'trash',
-                },
-            ],
+
             arrCollections: [],
             collectionsChartColors: {
                 borderColor: "#1d3557",
@@ -184,7 +159,7 @@ export default {
             activeBooths: 0,
 
 
-            tableName: "Active Agents",
+            title: "Active Agent",
             headers: [
                 {text: "#", value: "count"},
                 {text: "Name", value: "name"},
@@ -210,7 +185,7 @@ export default {
             editedItem: {},
             address: Array,
 
-            canAdd: true,
+            canAdd: false,
             canEdit: true,
             canDelete: true,
 
@@ -218,7 +193,10 @@ export default {
             canViewBets: false,
             canViewTransactions: false,
 
-            errors: [],
+            labels: [],
+            value: [],
+
+            notifications: [],
             games: [],
         };
     },
@@ -228,43 +206,31 @@ export default {
         this.totalCollection = this.formatCurrencies(this.totalCollection);
         await this.displayActiveAgents();
         await this.getDrawPeriods();
-        await this.getBets();
         await this.getBetsPerformance();
         await this.getGamesPerformance();
-        await this.listen();
     },
     methods: {
 
-        async getDrawPeriods(){
+        async getDrawPeriods() {
             await axios.get('/api/v1/draw-periods').then(response => {
-                for (let item in response.data.drawPeriods){
-                    console.log(response.data.drawPeriods[item].draw_time)
+                for (let item in response.data.drawPeriods) {
                     this.labels.push(response.data.drawPeriods[item].draw_time)
                     this.value.push(response.data.drawPeriods[item].id)
                 }
-            }).catch(err => console.log(err))
-        },
-
-        async getBets(){
-            await axios.get('/api/v1/bets').then(response => {
-                console.log(response)
-            }).catch(err => console.log(err))
+            }).catch(err => this.addNotification("Error fetching draw periods", 'error', err.status))
         },
 
         async getGamesPerformance() {
             await axios.get('/api/v1/games').then(response => {
                 this.canViewTransactions = true
                 this.games = response.data.games
-            }).catch(err => this.errors.push({
-                message: "Error authenticating user",
-                error: err
-            }))
+            }).catch(err => this.addNotification("Error fetching games", 'error', err.status))
         },
 
         async getBetsPerformance() {
             await axios.get('/api/v1/bets').then(response => {
                 this.canViewBets = true
-            }).catch(err => console.log(err))
+            }).catch(err => this.addNotification("Error fetching bets", 'error', err.status))
         },
 
         async displayActiveAgents() {
@@ -290,31 +256,22 @@ export default {
                     }
                     this.contents.push(agent);
                 }
-            }).catch(err => {
-                this.errors.push({message: "Error authenticating user", error: err})
-                this.canViewActiveAgents = false
-            });
+            }).catch(err => this.addNotification("Error fetching active agents", 'error', err.status));
 
         },
 
         async getClusters() {
-            const response = await axios.get('clusters').catch(err => this.errors.push({
-                message: "Error authenticating user",
-                error: err
-            }))
-            let clustersData = response.data.clusters;
-            for (let index in this.fillable) {
-                if (this.fillable[index].field == 'cluster') {
-                    this.fillable[index].options = clustersData;
-                }
-            }
-        },
+            await axios.get('clusters')
+                .then(response => {
+                    let clustersData = response.data.clusters;
+                    for (let index in this.fillable) {
+                        if (this.fillable[index].field == 'cluster') {
+                            this.fillable[index].options = clustersData;
+                        }
+                    }
+                })
+                .catch(err => this.addNotification("Error fetching clusters", 'error', err.status))
 
-        async listen() {
-            Echo.private('device-store')
-                .listen('NewDeviceAdded', (data) => {
-                   console.log(data)
-                });
         },
 
         changeAddress(address) {
@@ -332,6 +289,10 @@ export default {
             money = (Math.round(money * 100) / 100).toFixed(2);
             return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
+
+        addNotification(message, type, statusCode) {
+            this.notifications.push({message: message, type: type, statusCode: statusCode});
+        }
     }
 };
 </script>
