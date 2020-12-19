@@ -111,35 +111,39 @@ export default {
         canEdit: false,
         canDelete: true,
 
-        requestHeaders: {},
-        user: {},
         errors: [],
 
-        isQrCreating: false
+        isQrCreating: false,
+        deviceId: 0,
+        clusterId: 0,
     }),
+
+    beforeCreate() {
+
+    },
+
+
+
     created() {
         this.errors = [];
-        this.getUser();
+        this.displayDevices()
+        this.getRegistrationQr()
+        this.listen()
     },
 
     methods: {
-        async getUser() {
-            axios.get('user/info/?').then((response) => {
-                this.user = response.data;
-                this.requestHeaders = {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + this.user.api_token
-                };
-                this.displayDevices();
-                this.getRegistrationQr();
-                this.listen();
+
+        async getClusterId(){
+            const response = await axios.get('').then(data => {
+
             }).catch(err => {
-                this.errors.push({message: "Error authenticating user", error: err})
-            })
+                    this.errors.push({message: "Error Generating QR", error: err})
+                    this.isQrCreating = false;
+                })
         },
+
         async displayDevices() {
-            const response = await axios.get('devices/?').catch(err => {
+            const response = await axios.get('/api/v1/devices').catch(err => {
                 this.errors.push({message: "Error fetching devices.", error: err})
             });
             let device = {};
@@ -160,14 +164,17 @@ export default {
                 this.contents.push(device);
             }
         },
+
         async getRegistrationQr() {
             this.isQrCreating = true;
-            const response = await axios.get('devices/create')
+            const response = await axios.get('/api/v1/devices/create')
                 .catch(err => {
                     this.errors.push({message: "Error Generating QR", error: err})
                     this.isQrCreating = false;
                 })
+
             this.qrValue = response.data
+            console.log(this.qrValue)
             this.isQrCreating = false;
         },
 
@@ -181,12 +188,15 @@ export default {
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
         },
+
         async listen() {
-            Echo.channel('device-store')
-                .listen('NewDeviceAdded', (data) => {
-                    this.getRegistrationQr();
-                    this.displayDevices();
-                })
+            axios.get('/api/user').then(response => {
+                Echo.channel('device-store.' + response.data.user.cluster_id )
+                    .listen('NewDeviceAdded', (device) => {
+                        console.log(device.id);
+                        this.displayDevices();
+                    });
+            }).catch(err => console.log(err))
         }
     }
 }

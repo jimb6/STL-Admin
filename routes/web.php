@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/device/unsubscribe/{device}', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'unsubscribe'])
     ->name('device.unsubscribe');
 
-
-Route::post('/device/subscribe/', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'subscribe'])
+Route::post('/device/subscribe/{cluster_id}', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'subscribe'])
     ->name('device.subscribe')->middleware('signed');
 
 Route::get('/', function () {
@@ -56,6 +55,7 @@ Route::prefix('admin')
         Route::get('bets', function (Request $request) {
             return view('bets.index');
         })->name('bets.index');                                    // Bets
+//        Route::resource('devices', \App\Http\Controllers\API\v1\ApiDeviceController::class);
 
 
         Route::get('user/profile', [\App\Http\Controllers\API\v1\ApiUserController::class, 'showProfile'])->name('user.profile');

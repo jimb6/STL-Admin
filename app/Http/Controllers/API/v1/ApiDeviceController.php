@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Events\NewDeviceAdded;
 use App\Http\Controllers\Controller;
+use App\Models\Device;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 
 class ApiDeviceController extends Controller
 {
@@ -12,15 +17,17 @@ class ApiDeviceController extends Controller
         $this->authorize('list devices', Device::class);
         $search = $request->get('search', '');
         $devices = Device::search($search)->get();
-        $this->sendSMS();
         return response(['devices' => $devices], 200);
     }
 
     public function create(Request $request)
     {
         $this->authorize('create devices', Device::class);
+
         $url = URL::temporarySignedRoute(
-            'device.subscribe', now()->addMinutes(30));
+            'device.subscribe', now()->addMinutes(30), ['cluster_id' => Auth::user()->cluster_id]
+        );
+
         $customRequest = Request::create($url);
         $data = [
             'created_by' => \Auth::user()->id,
@@ -69,21 +76,24 @@ class ApiDeviceController extends Controller
         return response([], 204);
     }
 
-    public function subscribe(Request $request)
+    public function subscribe(Request $request, $cluster_id)
     {
         if (!$request->hasValidSignature()) abort(401);
         $validated = $request->validate([
-            'yyy' => 'required'
+            'yyy' => 'required',
         ]);
 
-        $isUsed = DB::table('device_registration')->where('token', '=', $request->get('signature'))->count();
+        $isUsed = DB::table('device_registration')
+            ->where('token', '=', $request->get('signature'))->count();
         if (!$isUsed) return response([], 403);
         else {
             DB::table('device_registration')->where(['token' => $request->get('signature')])->delete();
             $device = Device::create([
-                'serial_number' => $validated['yyy']
+                'serial_number' => $validated['yyy'],
+                'cluster_id' => $cluster_id
             ]);
-            broadcast(new NewDeviceAdded($device));
+//            broadcast(new NewDeviceAdded($device));
+            NewDeviceAdded::dispatch($device);
             return response([], 202);
         }
     }
@@ -99,10 +109,4 @@ class ApiDeviceController extends Controller
         return response($validated);
     }
 
-    public function sendSMS()
-    {
-        Horizon::routeSmsNotificationsTo('+639187043388');
-        Horizon::routeMailNotificationsTo('jimwellbuot@gmail.com');
-//        Horizon::routeSlackNotificationsTo('slack-webhook-url', '#channel');
-    }
 }

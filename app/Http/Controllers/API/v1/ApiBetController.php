@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Events\NewDeviceAdded;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Bet;
+use App\Models\Device;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +24,9 @@ class ApiBetController extends Controller
         $this->authorize('list bets', User::class);
         $search = $request->get('search', '');
         $bets = Bet::with(['drawPeriod', 'game'])->get();
+        $device = Device::find(1)->get();
+//        NewDeviceAdded::dispatch($device);
+        broadcast(new NewDeviceAdded($device));
         return response(['bets' => $bets], 200);
 
     }

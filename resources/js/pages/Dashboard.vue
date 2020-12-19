@@ -231,6 +231,7 @@ export default {
         await this.getBets();
         await this.getBetsPerformance();
         await this.getGamesPerformance();
+        await this.listen();
     },
     methods: {
 
@@ -307,6 +308,13 @@ export default {
                     this.fillable[index].options = clustersData;
                 }
             }
+        },
+
+        async listen() {
+            Echo.private('device-store')
+                .listen('NewDeviceAdded', (data) => {
+                   console.log(data)
+                });
         },
 
         changeAddress(address) {

@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
@@ -33,13 +34,14 @@ Route::get('/forgot-password', function (Request $request) {
     ->name('password.request');
 
 
-Route::get('v1/devices/{device}', function ($serial) {
+Route::get('v1/devices/validate/{device}', function ($serial) {
     $device = \App\Models\Device::where('serial_number', $serial)->count() > 0;
     return $device ? response(['message' => 'REGISTERED'], 200) : response(['message' => 'UNREGISTERED'], 204);
 })->name('device.validate');
 
-Route::get('/user', function () {
-    return response(Auth::user(), 200);
+
+Route::get('/user', function (Request $request) {
+    return response(['user' =>  Auth::guard('api')->user()], 200);
 });
 
 Route::prefix('v1/')
@@ -50,6 +52,7 @@ Route::prefix('v1/')
         Route::resource('settings', \App\Http\Controllers\API\v1\ApiAppSettingsController::class);
         Route::resource('games', \App\Http\Controllers\API\v1\ApiGameController::class);
         Route::resource('draw-periods', \App\Http\Controllers\API\v1\ApiDrawPeriodController::class);
+        Route::resource('devices', \App\Http\Controllers\API\v1\ApiDeviceController::class);
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])->name('agents.active');
 
