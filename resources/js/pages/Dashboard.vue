@@ -8,7 +8,7 @@
                 <Card v-bind:cards="cards"/>
             </div>
 
-            <div class="col-lg-9">
+            <div class="col-lg-9" v-show="canViewBets">
                 <v-card
                     class="mt-4 mx-auto"
                     max-width="100%">
@@ -16,6 +16,7 @@
                         class="v-sheet--offset mx-auto"
                         color="#1D3557"
                         elevation="12"
+
                         max-width="calc(100% - 32px)">
                         <v-sparkline
                             :labels="labels"
@@ -39,36 +40,21 @@
                     </v-card-text>
                 </v-card>
             </div>
-            <div class="col-3">
-
+            <div class="col-3" v-show="canViewTransactions">
                 <v-card>
                     <v-subheader :inset="inset">Top Games</v-subheader>
-
                     <v-list>
-                        <template v-for="(item, index) in items">
-                            <v-list-item
-                                v-if="item.action"
-                                :key="item.title"
-                                @click=""
-                            >
+                        <template v-for="(game, index) in games">
+                            <v-list-item >
                                 <v-list-item-action>
-                                    <v-icon>{{ item.action }}</v-icon>
+                                    {{ game.abbreviation + - + game.max_number}}
                                 </v-list-item-action>
-
-                                <v-list-item-content>
-                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                                </v-list-item-content>
                             </v-list-item>
-
-                            <v-divider
-                                v-else-if="item.divider"
-                                :key="index"
-                            ></v-divider>
                         </template>
                     </v-list>
                 </v-card>
             </div>
-            <div class="col-12">
+            <div class="col-12" v-show="canViewActiveAgents">
                 <v-tabs>
                     <v-tab>Table View</v-tab>
                     <v-tab>Card View</v-tab>
@@ -120,9 +106,6 @@ Vue.use(Vuetify)
 
 export default {
     name: "Dashboard",
-    props: {
-        userData: JSON,
-    },
     components: {
         NotificationCard,
         Card,
@@ -152,26 +135,8 @@ export default {
                     description: "",
                 },
             ],
-            labels: [
-                '12am',
-                '3am',
-                '6am',
-                '9am',
-                '12pm',
-                '3pm',
-                '6pm',
-                '9pm',
-            ],
-            value: [
-                200,
-                675,
-                410,
-                390,
-                310,
-                460,
-                250,
-                240,
-            ],
+            labels: [],
+            value: [],
             inset: false,
             items: [
                 {
@@ -249,102 +214,93 @@ export default {
             canEdit: true,
             canDelete: true,
 
+            canViewActiveAgents: false,
+            canViewBets: false,
+            canViewTransactions: false,
+
             errors: [],
+            games: [],
         };
     },
 
     async created() {
-        const data = {
-            collections: [
-                {date: "Dec 1", total: "300000"},
-                {date: "Dec 2", total: "350000"},
-                {date: "Dec 3", total: "250000"},
-                {date: "Dec 4", total: "370350"},
-                {date: "Dec 5", total: "208100"},
-                {date: "Dec 6", total: "208900"},
-                {date: "Dec 7", total: "304420"},
-                {date: "Dec 8", total: "300100"},
-                {date: "Dec 9", total: "389300.50"},
-                {date: "Dec 10", total: "357010"},
-                {date: "Dec 11", total: "300000"},
-                {date: "Dec 12", total: "350000"},
-                {date: "Dec 13", total: "250000"},
-                {date: "Dec 14", total: "370350"},
-                {date: "Dec 15", total: "258100"},
-                {date: "Dec 16", total: "208900"},
-                {date: "Dec 17", total: "304420"},
-                {date: "Dec 18", total: "300100"},
-                {date: "Dec 19", total: "389300"},
-                {date: "Dec 20", total: "357010"},
-                {date: "Dec 21", total: "300000"},
-                {date: "Dec 22", total: "350000"},
-                {date: "Dec 23", total: "250000"},
-                {date: "Dec 24", total: "370350"},
-                {date: "Dec 25", total: "0"},
-                {date: "Dec 26", total: "208900"},
-                {date: "Dec 27", total: "304420"},
-                {date: "Dec 28", total: "300100"},
-                {date: "Dec 29", total: "389300"},
-                {date: "Dec 30", total: "357010"},
-                {date: "Dec 31", total: "357010"},
-            ],
-        };
-        data["collections"].forEach(d => {
-            const date = d.date;
-            const {
-                total,
-            } = d;
-            this.arrCollections.push({date, total: total});
-            this.totalCollection += parseFloat(total);
-        });
+        const data = {};
         this.totalCollection = this.formatCurrencies(this.totalCollection);
         await this.displayActiveAgents();
+        await this.getDrawPeriods();
+        await this.getBets();
+        await this.getBetsPerformance();
+        await this.getGamesPerformance();
     },
     methods: {
 
-        formatCurrencies(money) {
-            money = (Math.round(money * 100) / 100).toFixed(2);
-            return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        async getDrawPeriods(){
+            await axios.get('/api/v1/draw-periods').then(response => {
+                for (let item in response.data.drawPeriods){
+                    console.log(response.data.drawPeriods[item].draw_time)
+                    this.labels.push(response.data.drawPeriods[item].draw_time)
+                    this.value.push(response.data.drawPeriods[item].id)
+                }
+            }).catch(err => console.log(err))
         },
 
+        async getBets(){
+            await axios.get('/api/v1/bets').then(response => {
+                console.log(response)
+            }).catch(err => console.log(err))
+        },
+
+        async getGamesPerformance() {
+            await axios.get('/api/v1/games').then(response => {
+                this.canViewTransactions = true
+                this.games = response.data.games
+            }).catch(err => this.errors.push({
+                message: "Error authenticating user",
+                error: err
+            }))
+        },
+
+        async getBetsPerformance() {
+            await axios.get('/api/v1/bets').then(response => {
+                this.canViewBets = true
+            }).catch(err => console.log(err))
+        },
 
         async displayActiveAgents() {
-            const response = await axios.get('agents/active/all/?').catch(err => {
-                this.errors.push({message: "Error authenticating user", error: err})
-            });
-            let agent = {};
-            const data = response.data.agents;
-            let date = '';
-            let count = 0;
-            this.contents = []
-            for (let item in data) {
-                if (data[item].user == null)
-                    continue
-                count++;
-                date = this.getDateToday(new Date(data[item].last_activity));
-                agent = {
-                    count: count,
-                    id: data[item].user.id,
-                    name: data[item].user.name,
-                    contact_number: data[item].user.contact_number,
-                    ip_address: data[item].ip_address,
-                    last_active: date,
+            await axios.get('/api/v1/agents/active/').then(response => {
+                this.canViewActiveAgents = true
+                let agent = {};
+                const data = response.data.agents;
+                let date = '';
+                let count = 0;
+                this.contents = []
+                for (let item in data) {
+                    if (data[item].user == null)
+                        continue
+                    count++;
+                    date = this.getDateToday(new Date(data[item].last_activity));
+                    agent = {
+                        count: count,
+                        id: data[item].user.id,
+                        name: data[item].user.name,
+                        contact_number: data[item].user.contact_number,
+                        ip_address: data[item].ip_address,
+                        last_active: date,
+                    }
+                    this.contents.push(agent);
                 }
-                this.contents.push(agent);
-            }
-        },
+            }).catch(err => {
+                this.errors.push({message: "Error authenticating user", error: err})
+                this.canViewActiveAgents = false
+            });
 
-        async updateUser() {
-
-        },
-
-        async destroyAgent(item) {
-            const response = await axios.delete('agents/' + item.id).catch(err => this.errors.push({message: "Error authenticating user", error: err}))
-            await this.displayAgents();
         },
 
         async getClusters() {
-            const response = await axios.get('clusters').catch(err => this.errors.push({message: "Error authenticating user", error: err}))
+            const response = await axios.get('clusters').catch(err => this.errors.push({
+                message: "Error authenticating user",
+                error: err
+            }))
             let clustersData = response.data.clusters;
             for (let index in this.fillable) {
                 if (this.fillable[index].field == 'cluster') {
@@ -362,6 +318,11 @@ export default {
             const month = date.toLocaleString('default', {month: 'long'});
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
+        },
+
+        formatCurrencies(money) {
+            money = (Math.round(money * 100) / 100).toFixed(2);
+            return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
     }
 };

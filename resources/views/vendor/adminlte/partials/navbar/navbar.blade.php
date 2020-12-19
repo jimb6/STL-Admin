@@ -17,9 +17,14 @@
 
 
     @php
-      $userCluster = Auth::user()->cluster;
+      $user = Auth::user();
     @endphp
-    <h3 class="text-uppercase m-0 py-2 text-center" style="width: 100%; letter-spacing: 1px; font-weight: 200;">{{$userCluster['name']}} Cluster</h3>
+    @if($user->hasRole('super-admin'))
+        <h3 class="text-uppercase m-0 py-2 text-center" style="width: 100%; letter-spacing: 1px; font-weight: 200;">{{$user->cluster['name']}}</h3>
+    @else
+        <h3 class="text-uppercase m-0 py-2 text-center" style="width: 100%; letter-spacing: 1px; font-weight: 200;">{{$user->cluster['name']}} Cluster</h3>
+    @endif
+
 
     {{-- Navbar right links --}}
     <ul class="navbar-nav ml-auto">

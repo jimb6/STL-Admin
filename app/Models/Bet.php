@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
+use App\Scopes\BetScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,12 +36,10 @@ class Bet extends Model
 
 //    Defining scope for queries
 
-//    public static function booted()
-//    {
-//        static::addGlobalScope('user', function (Builder $builder) {
-//            $builder->where('cluster_id', '=', Auth::user()->cluster_id);
-//        });
-//    }
+    public static function booted()
+    {
+        static::addGlobalScope(new BetScope);
+    }
 
     public function scopeBase($query, $value)
     {

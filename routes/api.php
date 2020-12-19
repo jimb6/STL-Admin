@@ -1,7 +1,6 @@
 <?php
 
 
-use App\Http\Controllers\AgentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
@@ -18,38 +17,49 @@ use Spatie\Permission\Models\Permission;
 */
 
 //Auth::routes();
-Route::post('v1/agent/login', [\App\Http\Controllers\Auth\LoginController::class, 'loginAgent'])->name('agent.login');
+Route::post('v1/agent/login', [\App\Http\Controllers\API\v1\ApiLoginController::class, 'loginAgent'])
+    ->name('agent.login');
 
-Route::get('v1/devices/{device}', function ($serial){
+Route::get('/forgot-password', function (Request $request) {
+    $request->validate(['contact_number' => 'required|max:11']);
+    $status = Password::sendResetLink(
+        $request->only('mobile')
+    );
+
+    return $status === Password::RESET_LINK_SENT
+        ? back()->with(['status' => __($status)])
+        : back()->withErrors(['email' => __($status)]);
+})->middleware('guest')
+    ->name('password.request');
+
+
+Route::get('v1/devices/{device}', function ($serial) {
     $device = \App\Models\Device::where('serial_number', $serial)->count() > 0;
-    return $device? response(['message' => 'REGISTERED'], 200) : response(['message' => 'UNREGISTERED'], 204);
+    return $device ? response(['message' => 'REGISTERED'], 200) : response(['message' => 'UNREGISTERED'], 204);
 })->name('device.validate');
 
-Route::middleware(['auth:api'])->group(function () {
-    Route::get('/user', function () {
-        return response(Auth::user(), 200);
-    });
-    Route::resource('agents', AgentController::class);
-    Route::resource('users', \App\Http\Controllers\UserController::class);
-    Route::resource('booths', \App\Http\Controllers\API\v1\BoothController::class);
-    Route::resource('clusters', \App\Http\Controllers\ClusterController::class);
-    Route::resource('addresses', \App\Http\Controllers\AddressController::class);
-    Route::resource('bets', \App\Http\Controllers\API\v1\BetController::class);
-    Route::resource('roles', \App\Http\Controllers\API\v1\RoleController::class);
-    Route::resource('permissions', \App\Http\Controllers\API\v1\PermissionController::class);
-    Route::resource('devices', \App\Http\Controllers\DeviceController::class);
-    Route::resource('bet-transactions', \App\Http\Controllers\BetTransactionController::class);
-    Route::resource('draw-periods', \App\Http\Controllers\DrawPeriodController::class);
-    Route::resource('games', \App\Http\Controllers\GameController::class);
-
-    // Assigning Permissions in every roles
-    Route::post('assign-role-permission', function ($request) {
-        $role = $request->input('role');
-        $role->givePermissionTo(Permission::find($request->input('permission_id')));
-        return response([], 200);
-    })->name('role.assign.permission');
-
+Route::get('/user', function () {
+    return response(Auth::user(), 200);
 });
+
+Route::prefix('v1/')
+    ->middleware(['auth:sanctum'])
+    ->group(function () {
+        Route::resource('agents', \App\Http\Controllers\API\v1\ApiAgentController::class);
+        Route::resource('bets', \App\Http\Controllers\API\v1\ApiBetController::class);
+        Route::resource('settings', \App\Http\Controllers\API\v1\ApiAppSettingsController::class);
+        Route::resource('games', \App\Http\Controllers\API\v1\ApiGameController::class);
+        Route::resource('draw-periods', \App\Http\Controllers\API\v1\ApiDrawPeriodController::class);
+
+        Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])->name('agents.active');
+
+        // Assigning Permissions in every roles
+        Route::post('assign-role-permission', function ($request) {
+            $role = $request->input('role');
+            $role->givePermissionTo(Permission::find($request->input('permission_id')));
+            return response([], 200);
+        })->name('role.assign.permission');
+    });
 
 
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Scopes\Searchable;
 use App\Scopes\ClusterScope;
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,7 +16,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles, HasApiTokens, Searchable, SoftDeletes;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens, Searchable, SoftDeletes, CanResetPassword;
 
     protected $fillable = ['name', 'birthdate', 'gender', 'address_id', 'contact_number', 'email', 'cluster_id', 'password', 'api_token'];
     protected $searchableFields = ['*'];
@@ -27,6 +28,11 @@ class User extends Authenticatable
     public static function booted()
     {
         static::addGlobalScope(new ClusterScope);
+    }
+
+    public function routeNotificationForNexmo($notification)
+    {
+        return $this->contact_number;
     }
 
 

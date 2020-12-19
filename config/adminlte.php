@@ -297,13 +297,6 @@ return [
                     'route' => 'booths.index',
                     'active' => ['admin/booths']
                 ],
-                [
-                    'text' => 'Add New',
-                    'can' => 'view booths',
-                    'route' => 'booths.create',
-                    'active' => ['admin/booths/create']
-                ],
-
             ]
         ],
         [
@@ -352,7 +345,7 @@ return [
                 [
                     'text' => 'All Draw Periods',
                     'can' => 'view draw periods',
-                    'route' => 'draw-periods.index',
+                    'route' => 'draw_periods.index',
                     'active' => ['admin/draw-periods', 'admin/draw-periods*']
                 ],
             ]
@@ -370,11 +363,6 @@ return [
                     'text' => 'All Collections',
                     'can' => 'view booths',
                     'route' => 'booths.index',
-                ],
-                [
-                    'text' => 'Add New',
-                    'can' => 'view booths',
-                    'route' => 'booths.create',
                 ],
             ]
         ],
@@ -395,11 +383,6 @@ return [
                     'text' => 'All Reports',
                     'can' => 'view booths',
                     'route' => 'booths.index',
-                ],
-                [
-                    'text' => 'Add New',
-                    'can' => 'view booths',
-                    'route' => 'booths.create',
                 ],
             ]
         ],
@@ -436,11 +419,6 @@ return [
                     'route' => 'devices.index',
                     'active' => ['admin/devices']
                 ],
-                [
-                    'text' => 'Global Settings',
-                    'route' => 'devices.create',
-                    'active' => ['admin/devices/*']
-                ],
             ]
         ],
         [
@@ -474,19 +452,9 @@ return [
                             'active' => ['admin/permissions'],
                         ],
                         [
-                            'text' => 'Create Permission',
-                            'route' => 'permissions.create',
-                            'active' => ['admin/permissions/create'],
-                        ],
-                        [
                             'text' => 'Roles List',
                             'route' => 'roles.index',
                             'active' => ['admin/roles'],
-                        ],
-                        [
-                            'text' => 'Create Role',
-                            'route' => 'roles.create',
-                            'active' => ['admin/roles/create'],
                         ],
                     ]
                 ],
