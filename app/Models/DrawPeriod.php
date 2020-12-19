@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
-use App\Scopes\ClusterScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,6 +18,13 @@ class DrawPeriod extends Model
     protected $searchableFields = ['*'];
 
     protected $table = 'draw_periods';
+
+    protected $dateFormat = 'U';
+
+    public function getDrawTimeAttribute($time)
+    {
+        return date("g:i a", strtotime($time));
+    }
 
     public function betGames()
     {

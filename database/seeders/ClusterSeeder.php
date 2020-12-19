@@ -102,5 +102,13 @@ class ClusterSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
         );
+
+        DB::table('clusters')->insert(
+            [
+                'name' => 'Davao Oriental',
+                'updated_at' => Carbon::now(),
+                'created_at' => Carbon::now(),
+            ],
+        );
     }
 }

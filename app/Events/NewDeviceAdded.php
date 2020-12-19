@@ -5,8 +5,6 @@ namespace App\Events;
 use App\Models\Device;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -17,24 +15,15 @@ class NewDeviceAdded implements ShouldBroadcast
 
     public $device;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param Device $device
-     */
     public function __construct(Device $device)
     {
         $this->device = $device;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
+
     public function broadcastOn()
     {
-        return new Channel('device-store');
+        return new Channel('device-store.'.$this->device->cluster_id);
     }
 
     public function broadcastWith()
@@ -48,4 +37,5 @@ class NewDeviceAdded implements ShouldBroadcast
             ]
         ];
     }
+
 }

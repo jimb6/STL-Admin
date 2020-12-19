@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SendSMSPasswordReset extends Notification
+class SendSMSPasswordReset extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -29,7 +29,7 @@ class SendSMSPasswordReset extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['sms'];
     }
 
     /**

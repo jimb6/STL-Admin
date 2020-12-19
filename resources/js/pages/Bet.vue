@@ -81,9 +81,10 @@ export default {
     },
     methods: {
         async displayBets() {
-            const response = await axios.get('bets/?').catch(err => {
+            const response = await axios.get('/api/v1/bets').catch(err => {
                 console.log(err)
             });
+            console.log(response)
             let bet = {};
             const data = response.data.bets;
             let date = '';
@@ -110,25 +111,23 @@ export default {
             }
         },
         async storeBets(item) {
-            const response = await axios.post('bets',
-                {
-                    'draw_time': item.draw_time,
-                    'draw_type': item.draw_type,
-                }).catch(err => {
+            const response = await axios.post('/api/v1/bets').catch(err => {
                 console.log(err)
             })
+            console.log(response)
             await this.displayBets()
         },
         async updateUser() {
 
         },
         async destroyBets(item) {
-            const response = await axios.delete('draw-periods/?' + item.id).catch(err => console.log(err))
+            const response = await axios.delete('/api/v1/draw-periods' + item.id).catch(err => console.log(err))
+            console.log(response)
             await this.displayBets();
         },
 
         async getClusters() {
-            const response = await axios.get('clusters/?').catch(err => console.log(err))
+            const response = await axios.get('/api/v1/clusters').catch(err => console.log(err))
             let clustersData = response.data.clusters;
             for (let index in this.fillable) {
                 if (this.fillable[index].field == 'cluster') {

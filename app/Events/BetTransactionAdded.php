@@ -16,6 +16,7 @@ class BetTransactionAdded implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     protected $betTransaction;
+    public $afterCommit = true;
 
     public function __construct(BetTransaction $betTransaction)
     {
@@ -26,5 +27,10 @@ class BetTransactionAdded implements ShouldBroadcast
     public function broadcastOn()
     {
         return new PrivateChannel('new-bet-transaction');
+    }
+
+    public function broadcastWhen()
+    {
+        return $this->betTransaction->amount > 100;
     }
 }

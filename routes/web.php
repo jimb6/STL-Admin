@@ -1,27 +1,22 @@
 <?php
 
 
-use App\Http\Controllers\AgentController;
-use App\Http\Controllers\API\v1\BetController;
-use App\Http\Controllers\API\v1\HomeController;
-use App\Http\Controllers\API\v1\UserController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-//header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
-//header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, Authorization, Accept,charset,boundary,Content-Length');
-//header('Access-Control-Allow-Origin: *');
-
-
-Route::get('/device/unsubscribe/{device}', [\App\Http\Controllers\DeviceController::class, 'unsubscribe'])
+Route::get('/device/unsubscribe/{device}', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'unsubscribe'])
     ->name('device.unsubscribe');
 
-
-Route::post('/device/subscribe/', [\App\Http\Controllers\DeviceController::class, 'subscribe'])
+Route::post('/device/subscribe/{cluster_id}', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'subscribe'])
     ->name('device.subscribe')->middleware('signed');
 
 Route::get('/', function () {
     return redirect()->route('admin.home');
+});
+
+Route::get('/user', function () {
+    return response(Auth::user(), 200);
 });
 
 
@@ -30,33 +25,42 @@ Route::prefix('admin')
     ->middleware(['auth:web'])
     ->group(function () {
         Route::get('/home', [HomeController::class, 'index'])->name('admin.home');
-        Route::resource('agents', AgentController::class);
-        Route::resource('users', \App\Http\Controllers\UserController::class);
-        Route::resource('booths', \App\Http\Controllers\API\v1\BoothController::class);
-        Route::resource('clusters', \App\Http\Controllers\ClusterController::class);
-        Route::resource('addresses', \App\Http\Controllers\AddressController::class);
-        Route::resource('bets', \App\Http\Controllers\API\v1\BetController::class)->only([
-            'index', 'store', 'show'
-        ]);
-        Route::resource('roles', \App\Http\Controllers\API\v1\RoleController::class)->only([
-            'index', 'store', 'show'
-        ]);
-        Route::resource('permissions', \App\Http\Controllers\API\v1\PermissionController::class)->only([
-            'index', 'store', 'show'
-        ]);
-        Route::resource('devices', \App\Http\Controllers\DeviceController::class);
-        Route::resource('bet-transactions', \App\Http\Controllers\BetTransactionController::class)->only([
-            'index', 'store', 'show'
-        ]);
-        Route::resource('draw-periods', \App\Http\Controllers\DrawPeriodController::class);
-        Route::resource('games', \App\Http\Controllers\GameController::class);
+        Route::get('agents', function (Request $request) {
+            return view('agents.index');
+        })->name('agents.index');                                   // Agents
+        Route::get('users', function (Request $request) {
+            return view('users.index');
+        })->name('users.index');                                    // Users
+        Route::get('addresses', function (Request $request) {
+            return view('addresses.index');
+        })->name('addresses.index');                                // Address
+        Route::get('devices', function (Request $request) {
+            return view('devices.index');
+        })->name('devices.index');                                  // Devices
+        Route::get('draw-periods', function (Request $request) {
+            return view('draw_periods.index.index');
+        })->name('draw_periods.index');                             // Draw Periods
+        Route::get('games', function (Request $request) {
+            return view('games.index');
+        })->name('games.index');                                    // Games
+        Route::get('booths', function (Request $request) {
+            return view('booths.index');
+        })->name('booths.index');                                    // Booths
+        Route::get('permissions', function (Request $request) {
+            return view('settings.permissions.index');
+        })->name('permissions.index');                               // Permissions
+        Route::get('roles', function (Request $request) {
+            return view('settings.roles.index');
+        })->name('roles.index');                                    // Roles
+        Route::get('bets', function (Request $request) {
+            return view('bets.index');
+        })->name('bets.index');                                    // Bets
+//        Route::resource('devices', \App\Http\Controllers\API\v1\ApiDeviceController::class);
 
-        Route::get('/games/{any}', [BetController::class, 'index'])->name('game.bets');
-        Route::get('/agents/active/all', [AgentController::class, 'activeIndex'])->name('game.bets');
-        Route::get('user/profile', [UserController::class, 'showProfile'])->name('user.profile');
-        Route::get('settings/app', [\App\Http\Controllers\AppSettingsController::class, 'globalSettings'])->name('settings.global');
 
-        Route::get('user/info', function (){
-            return Auth::check()? Auth::user()->toJson():null;
+        Route::get('user/profile', [\App\Http\Controllers\API\v1\ApiUserController::class, 'showProfile'])->name('user.profile');
+        Route::get('settings/app', [\App\Http\Controllers\API\v1\ApiAppSettingsController::class, 'globalSettings'])->name('settings.global');
+        Route::get('user/info', function () {
+            return Auth::check() ? Auth::user()->toJson() : null;
         })->name('user.info');
     });

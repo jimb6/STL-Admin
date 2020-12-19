@@ -185,7 +185,8 @@ return [
 
         OwenIt\Auditing\AuditingServiceProvider::class, // -> Audit Provider
         Spatie\UrlSigner\Laravel\UrlSignerServiceProvider::class,
-        Rainwater\Active\ActiveServiceProvider::class // Session Provider
+        Rainwater\Active\ActiveServiceProvider::class, // Login Session Provider
+        Nexmo\Laravel\NexmoServiceProvider::class// SMS Provider
     ],
 
     /*

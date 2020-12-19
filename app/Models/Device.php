@@ -16,7 +16,7 @@ class Device extends Model
     use HasFactory;
     use Searchable;
 
-    protected $fillable = ['serial_number', 'user_id'];
+    protected $fillable = ['serial_number', 'user_id', 'cluster_id'];
 
     protected $searchableFields = ['*'];
 
