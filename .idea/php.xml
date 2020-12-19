@@ -128,11 +128,6 @@
       <path value="$PROJECT_DIR$/vendor/dasprid/enum" />
       <path value="$PROJECT_DIR$/vendor/bacon/bacon-qr-code" />
       <path value="$PROJECT_DIR$/vendor/khanamiryan/qrcode-detector-decoder" />
-      <path value="$PROJECT_DIR$/vendor/league/uri-interfaces" />
-      <path value="$PROJECT_DIR$/vendor/spatie/url-signer" />
-      <path value="$PROJECT_DIR$/vendor/spatie/laravel-url-signer" />
-      <path value="$PROJECT_DIR$/vendor/league/uri-components" />
-      <path value="$PROJECT_DIR$/vendor/league/uri" />
       <path value="$PROJECT_DIR$/vendor/predis/predis" />
       <path value="$PROJECT_DIR$/vendor/laravel/horizon" />
       <path value="$PROJECT_DIR$/vendor/laravel/homestead" />
@@ -148,7 +143,6 @@
       <path value="$PROJECT_DIR$/vendor/psr/http-factory" />
       <path value="$PROJECT_DIR$/vendor/laravel/nexmo-notification-channel" />
       <path value="$PROJECT_DIR$/vendor/lcobucci/jwt" />
-      <path value="$PROJECT_DIR$/vendor/tightenco/ziggy" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3" />
