@@ -1,7 +1,7 @@
 <template>
     <v-main>
-        <div v-if="errors.length>0" v-for="error in errors">
-            <error-notif :message="error.message"></error-notif>
+        <div v-if="notifications.length > 0" v-for="notification in notifications">
+            <Notification :notification="notification"></Notification>
         </div>
         <v-container>
             <v-tabs>
@@ -9,13 +9,12 @@
                 <v-tab>Card View</v-tab>
                 <v-tab-item>
                     <DataTable
-                        :tableName="tableName"
+                        :title="title"
                         :contents="contents"
                         :headers="headers"
                         :fillable="fillable"
-                        @storeUser="storeDevice($event)"
-                        @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyDevice($event)"
+                        @storeModel="storeDevice($event)"
+                        @destoryModel="destroyDevice($event)"
                         :canAdd="canAdd"
                         :canEdit="canEdit"
                         :canDelete="canDelete"
@@ -23,17 +22,15 @@
                 </v-tab-item>
                 <v-tab-item>
                     <Card2
-                        :tableName="tableName"
+                        :title="title"
                         :contents="contents"
                         :headers="headers"
                         :fillable="fillable"
-                        @storeUser="storeDevice($event)"
-                        @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyDevice($event)"
+                        @storeModel="storeDevice($event)"
+                        @destroyModel="destroyDevice($event)"
                         :canAdd="canAdd"
                         :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
+                        :canDelete="canDelete"/>
                 </v-tab-item>
             </v-tabs>
             <div class="cstm-side-floating">
@@ -72,9 +69,6 @@ import ErrorNotif from "../components/Notification/ErrorNotif";
 Vue.use(Vuetify)
 export default {
     name: "Device",
-    props: {
-        userData: JSON,
-    },
     components: {
         ErrorNotif,
         Card,
@@ -83,7 +77,7 @@ export default {
         QrcodeVue
     },
     data: () => ({
-        tableName: "Registered Agent Devices",
+        title: "Agent Device",
         headers: [
             {text: "#", value: "count"},
             {text: "Agent Name", value: "agent_name"},
@@ -111,18 +105,12 @@ export default {
         canEdit: false,
         canDelete: true,
 
-        errors: [],
+        notifications: [],
 
         isQrCreating: false,
         deviceId: 0,
         clusterId: 0,
     }),
-
-    beforeCreate() {
-
-    },
-
-
 
     created() {
         this.errors = [];
@@ -133,36 +121,29 @@ export default {
 
     methods: {
 
-        async getClusterId(){
-            const response = await axios.get('').then(data => {
-
-            }).catch(err => {
-                    this.errors.push({message: "Error Generating QR", error: err})
-                    this.isQrCreating = false;
-                })
-        },
-
         async displayDevices() {
-            const response = await axios.get('/api/v1/devices').catch(err => {
-                this.errors.push({message: "Error fetching devices.", error: err})
-            });
-            let device = {};
-            const data = response.data.devices;
-            let date = '';
-            let count = 0;
-            this.contents = []
-            for (let item in data) {
-                date = this.getDateToday(new Date(data[item].updated_at));
-                count++;
-                device = {
-                    count: count,
-                    id: data[item].id,
-                    agent_name: data[item].user ? data[item].user.name : "NOT ASSIGNED",
-                    serial_number: data[item].serial_number,
-                    updated_at: date,
-                }
-                this.contents.push(device);
-            }
+            await axios.get('/api/v1/devices')
+                .then(response => {
+                    let device = {};
+                    const data = response.data.devices;
+                    let date = '';
+                    let count = 0;
+                    this.contents = []
+                    for (let item in data) {
+                        date = this.getDateToday(new Date(data[item].updated_at));
+                        count++;
+                        device = {
+                            count: count,
+                            id: data[item].id,
+                            agent_name: data[item].user ? data[item].user.name : "NOT ASSIGNED",
+                            serial_number: data[item].serial_number,
+                            updated_at: date,
+                        }
+                        this.contents.push(device);
+                    }
+                }).catch(err => {
+                    this.addNotification("Error fetching devices.", "error", err.status)
+                });
         },
 
         async getRegistrationQr() {
@@ -178,6 +159,14 @@ export default {
             this.isQrCreating = false;
         },
 
+        async storeDevice($event) {
+
+        },
+
+        async destroyDevice($event) {
+
+        },
+
         changeAddress(address) {
             this.address = address;
         },
@@ -189,9 +178,13 @@ export default {
             return date;
         },
 
+        addNotification(message, type, statusCode) {
+            this.notifications.push({message: message, type: type, statusCode: statusCode});
+        },
+
         async listen() {
             axios.get('/api/user').then(response => {
-                Echo.channel('device-store.' + response.data.user.cluster_id )
+                Echo.channel('device-store.' + response.data.user.cluster_id)
                     .listen('NewDeviceAdded', (device) => {
                         console.log(device.id);
                         this.displayDevices();
