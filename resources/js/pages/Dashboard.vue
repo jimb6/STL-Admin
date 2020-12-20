@@ -60,7 +60,7 @@
                     <v-tab>Card View</v-tab>
                     <v-tab-item>
                         <DataTable
-                            :tableName="tableName"
+                            :title="title"
                             :contents="contents"
                             :headers="headers"
                             :fillable="fillable"
@@ -74,7 +74,7 @@
                     </v-tab-item>
                     <v-tab-item>
                         <Card2
-                            :tableName="tableName"
+                            :title="title"
                             :contents="contents"
                             :headers="headers"
                             :fillable="fillable"
@@ -184,7 +184,7 @@ export default {
             activeBooths: 0,
 
 
-            tableName: "Active Agents",
+            title: "Active Agents",
             headers: [
                 {text: "#", value: "count"},
                 {text: "Name", value: "name"},
