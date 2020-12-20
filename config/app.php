@@ -184,7 +184,6 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
 
         OwenIt\Auditing\AuditingServiceProvider::class, // -> Audit Provider
-        Spatie\UrlSigner\Laravel\UrlSignerServiceProvider::class,
         Rainwater\Active\ActiveServiceProvider::class, // Login Session Provider
         Nexmo\Laravel\NexmoServiceProvider::class// SMS Provider
     ],
@@ -238,7 +237,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'UrlSigner' => Spatie\UrlSigner\Laravel\UrlSignerFacade::class,
     ],
 
 ];
