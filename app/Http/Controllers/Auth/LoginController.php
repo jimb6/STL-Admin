@@ -151,7 +151,7 @@ class LoginController extends Controller
 
     public function logoutAgent(Request $request)
     {
-        $user =  $request->user();
+        $user =  $request->user('sanctum');
         $user->session_status = false;
         $user->update();
         NewActiveAgent::broadcast($user);

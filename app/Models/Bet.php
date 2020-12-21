@@ -50,6 +50,11 @@ class Bet extends Model
         return date("g:i a", strtotime($time));
     }
 
+    public function getWinningPrize()
+    {
+        return $this->amount * $this->game()->prize;
+    }
+
 //    Defining relations
 
     public function game()
