@@ -14,6 +14,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         //
         'subscribe*',
-        (string) env('APP_URL').'device/subscribe*',
+        'http://stl-application-v2.herokuapp.com/device/subscribe*',
     ];
 }
