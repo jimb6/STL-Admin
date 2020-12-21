@@ -55,6 +55,9 @@ Route::prefix('admin')
         Route::get('bets', function (Request $request) {
             return view('bets.index');
         })->name('bets.index');                                    // Bets
+        Route::get('bases', function (Request $request) {
+            return view('bases.index');
+        })->name('bases.index');                                    // Bets
 //        Route::resource('devices', \App\Http\Controllers\API\v1\ApiDeviceController::class);
 
 

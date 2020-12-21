@@ -6,7 +6,7 @@
                 <v-tab>Card View</v-tab>
                 <v-tab-item>
                     <DataTable
-                        :tableName="tableName"
+                        :title="title"
                         :contents="contents"
                         :headers="headers"
                         :fillable="fillable"
@@ -20,7 +20,7 @@
                 </v-tab-item>
                 <v-tab-item>
                     <Card2
-                        :tableName="tableName"
+                        :title="title"
                         :contents="contents"
                         :headers="headers"
                         :fillable="fillable"
@@ -56,7 +56,7 @@ export default {
     },
 
     data: () => ({
-        tableName: "Agents",
+        title: "Agent",
         headers: [
             {text: "#", value: "count"},
             {text: "Name", value: "name"},
@@ -93,42 +93,39 @@ export default {
     },
     methods: {
         async displayAgents() {
-            const response = await axios.get('agents/?',{
-                headers:{
-                    'Content-Type':'application/json',
-                        'Accept':'application/json'
+            await axios.get('/api/v1/agents').then(response => {
+                let agent = {};
+                const data = response.data.agents;
+                let date = '';
+                let count = 0;
+                this.contents = []
+                for (let item in data) {
+                    date = this.getDateToday(new Date(data[item].updated_at));
+                    count++;
+                    agent = {
+                        count: count,
+                        id: data[item].id,
+                        name: data[item].name,
+                        birthdate: data[item].birthdate,
+                        gender: data[item].gender,
+                        contact_number: data[item].contact_number,
+                        email: data[item].email,
+                        address: data[item].address.street
+                            + ", " + data[item].address.barangay
+                            + ", " + data[item].address.municipality
+                            + ", " + data[item].address.province,
+                        cluster: data[item].cluster.name,
+                        updated_at: date,
+                    }
+                    this.contents.push(agent);
                 }
             }).catch(err => {
                 console.log(err)
             });
-            let agent = {};
-            const data = response.data.agents;
-            let date = '';
-            let count = 0;
-            this.contents = []
-            for (let item in data) {
-                date = this.getDateToday(new Date(data[item].updated_at));
-                count++;
-                agent = {
-                    count: count,
-                    id: data[item].id,
-                    name: data[item].name,
-                    birthdate: data[item].birthdate,
-                    gender: data[item].gender,
-                    contact_number: data[item].contact_number,
-                    email: data[item].email,
-                    address: data[item].address.street
-                        + ", " + data[item].address.barangay
-                        + ", " + data[item].address.municipality
-                        + ", " + data[item].address.province,
-                    cluster: data[item].cluster.name,
-                    updated_at: date,
-                }
-                this.contents.push(agent);
-            }
+
         },
         async storeAgent(item) {
-            const response = await axios.post('agents/?', {
+            const response = await axios.post('/api/v1/agents', {
                 'name': item.name,
                 'birthdate': item.birthdate,
                 'gender': item.gender,
@@ -137,6 +134,8 @@ export default {
                 'cluster_id': item.cluster.id,
                 'address': this.address
 
+            }).then(response => {
+                console.log(response.status)
             }).catch(err => console.log(err))
             await this.displayUsers()
         },

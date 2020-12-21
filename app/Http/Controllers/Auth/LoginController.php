@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\NewActiveAgent;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -60,6 +61,7 @@ class LoginController extends Controller
             $user->update([
                 'api_token' => $user->createToken($user->name)->plainTextToken
             ]);
+            NewActiveAgent::broadcast($user);
             return $this->sendLoginResponse($request);
         }
 
@@ -73,7 +75,9 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+
         $user = Auth::user();
+        NewActiveAgent::broadcast($user);
         $user->tokens()->delete();
         $user->update([
             'api_token' => null

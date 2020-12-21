@@ -411,7 +411,7 @@ return [
             // 'url'         => '/#',
             'icon' => 'fas fa-mobile-alt',
             'label_color' => 'success',
-            'can' => 'menu mobilesettings',
+            'can' => 'menu mobile settings',
             'classes' => '',
             'submenu' => [
                 [

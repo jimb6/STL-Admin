@@ -1,7 +1,7 @@
 <template>
     <div class="dashboard">
-        <div v-if="errors.length>0" v-for="error in errors">
-            <error-notif :message="error.message"></error-notif>
+        <div v-if="notifications.length > 0" v-for="notification in notifications">
+            <Notification :notification="notification"></Notification>
         </div>
         <div class="row">
             <div class="col-lg-12">
@@ -45,9 +45,9 @@
                     <v-subheader :inset="inset">Top Games</v-subheader>
                     <v-list>
                         <template v-for="(game, index) in games">
-                            <v-list-item >
+                            <v-list-item>
                                 <v-list-item-action>
-                                    {{ game.abbreviation + - + game.max_number}}
+                                    {{ game.abbreviation + -+game.max_number }}
                                 </v-list-item-action>
                             </v-list-item>
                         </template>
@@ -64,9 +64,6 @@
                             :contents="contents"
                             :headers="headers"
                             :fillable="fillable"
-                            @storeUser="storeAgent($event)"
-                            @changeAddress="changeAddress($event)"
-                            @destroyUser="destroyAgent($event)"
                             :canAdd="canAdd"
                             :canEdit="canEdit"
                             :canDelete="canDelete"
@@ -78,9 +75,6 @@
                             :contents="contents"
                             :headers="headers"
                             :fillable="fillable"
-                            @storeUser="storeAgent($event)"
-                            @changeAddress="changeAddress($event)"
-                            @destroyUser="destroyAgent($event)"
                             :canAdd="canAdd"
                             :canEdit="canEdit"
                             :canDelete="canDelete"
@@ -96,18 +90,19 @@
 <script>
 import Card from "../components/Card";
 import LineChart from "../components/LineChart";
-import NotificationCard from "../components/NotificationCard";
 import DataTable from "../components/DataTable";
 import Card2 from "../components/Card2";
 import Vue from "vue";
 import Vuetify from 'vuetify'
+import Notification from '../components/Notification'
+import moment from 'moment'
 
 Vue.use(Vuetify)
 
 export default {
     name: "Dashboard",
     components: {
-        NotificationCard,
+        Notification,
         Card,
         LineChart,
         Card2,
@@ -180,8 +175,6 @@ export default {
                     }
                 }
             },
-            activeAgents: 0,
-            activeBooths: 0,
 
 
             title: "Active Agents",
@@ -218,7 +211,7 @@ export default {
             canViewBets: false,
             canViewTransactions: false,
 
-            errors: [],
+            notifications: [],
             games: [],
         };
     },
@@ -228,53 +221,49 @@ export default {
         this.totalCollection = this.formatCurrencies(this.totalCollection);
         await this.displayActiveAgents();
         await this.getDrawPeriods();
-        await this.getBets();
         await this.getBetsPerformance();
         await this.getGamesPerformance();
         await this.listen();
     },
     methods: {
 
-        async getDrawPeriods(){
+        async getDrawPeriods() {
             await axios.get('/api/v1/draw-periods').then(response => {
-                for (let item in response.data.drawPeriods){
-                    console.log(response.data.drawPeriods[item].draw_time)
+                for (let item in response.data.drawPeriods) {
                     this.labels.push(response.data.drawPeriods[item].draw_time)
                     this.value.push(response.data.drawPeriods[item].id)
                 }
-            }).catch(err => console.log(err))
+            }).catch(err => this.addNotification("Error fetching draw periods.", "error", err.status))
         },
-
-        async getBets(){
-            await axios.get('/api/v1/bets').then(response => {
-                console.log(response)
-            }).catch(err => console.log(err))
-        },
-
         async getGamesPerformance() {
             await axios.get('/api/v1/games').then(response => {
                 this.canViewTransactions = true
                 this.games = response.data.games
-            }).catch(err => this.errors.push({
-                message: "Error authenticating user",
-                error: err
-            }))
+            }).catch(err => this.addNotification("Error fetching games.", "error", err.status))
         },
 
         async getBetsPerformance() {
-            await axios.get('/api/v1/bets').then(response => {
+            await axios.get('/api/v1/bets', {
+                body: {
+                    'date': moment(new Date()).format('YYYY-MM-DD'),
+                }
+            }).then(response => {
+
                 this.canViewBets = true
-            }).catch(err => console.log(err))
+                console.log(response)
+            }).catch(err => this.addNotification("Error fetching draw periods.", "error", err.status))
         },
 
         async displayActiveAgents() {
-            await axios.get('/api/v1/agents/active/').then(response => {
+            await axios.get('/api/v1/agents/active/all').then(response => {
+                console.log(response)
                 this.canViewActiveAgents = true
                 let agent = {};
                 const data = response.data.agents;
                 let date = '';
                 let count = 0;
                 this.contents = []
+                this.cards[0].description = data.length
                 for (let item in data) {
                     if (data[item].user == null)
                         continue
@@ -291,29 +280,31 @@ export default {
                     this.contents.push(agent);
                 }
             }).catch(err => {
-                this.errors.push({message: "Error authenticating user", error: err})
+                console.log(err)
+                this.addNotification("Error fetching active agents.", "error", err.status)
                 this.canViewActiveAgents = false
             });
 
         },
 
         async getClusters() {
-            const response = await axios.get('clusters').catch(err => this.errors.push({
-                message: "Error authenticating user",
-                error: err
-            }))
+            await axios.get('clusters')
+                .then(response => {
+                    for (let index in this.fillable) {
+                        if (this.fillable[index].field == 'cluster') {
+                            this.fillable[index].options = clustersData;
+                        }
+                    }
+                })
+                .catch(err => this.addNotification("Error fetching clusters.", "error", err.status))
             let clustersData = response.data.clusters;
-            for (let index in this.fillable) {
-                if (this.fillable[index].field == 'cluster') {
-                    this.fillable[index].options = clustersData;
-                }
-            }
+
         },
 
         async listen() {
-            Echo.private('device-store')
-                .listen('NewDeviceAdded', (data) => {
-                   console.log(data)
+            Echo.channel('active.agent')
+                .listen('NewActiveAgent', (device) => {
+                    this.displayActiveAgents();
                 });
         },
 
@@ -332,6 +323,11 @@ export default {
             money = (Math.round(money * 100) / 100).toFixed(2);
             return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
+
+
+        addNotification(message, type, statusCode) {
+            this.notifications.push({message: message, type: type, statusCode: statusCode});
+        }
     }
 };
 </script>

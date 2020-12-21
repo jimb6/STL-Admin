@@ -13,9 +13,10 @@ class DeviceScope implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        if( Auth::hasUser() ) {
+        if (Auth::hasUser()) {
             $user = Auth::user();
-            $builder->where('cluster_id',  $user->cluster_id)->with('user');
+            if (!$user->hasRole('Super-Admin'))
+                $builder->where('cluster_id', $user->cluster_id)->with('user');
         }
     }
 }

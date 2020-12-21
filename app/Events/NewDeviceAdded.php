@@ -5,6 +5,7 @@ namespace App\Events;
 use App\Models\Device;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -23,7 +24,7 @@ class NewDeviceAdded implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new Channel('device-store.'.$this->device->cluster_id);
+        return new Channel('device-store.' . $this->device->cluster_id);
     }
 
     public function broadcastWith()

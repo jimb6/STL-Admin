@@ -20,7 +20,7 @@ class User extends Authenticatable
 
     protected $fillable = ['name', 'birthdate', 'gender', 'address_id', 'contact_number', 'email', 'cluster_id', 'password', 'api_token'];
     protected $searchableFields = ['*'];
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'api_token'];
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
@@ -43,7 +43,7 @@ class User extends Authenticatable
 
     public function adminlte_desc()
     {
-        return Auth::user()->email . ' - ' . strtoupper(implode("", $this->userRole()->toArray()));
+        return $this->email . ' - ' . strtoupper(implode("", $this->userRole()->toArray()));
     }
 
     public function adminlte_profile_url()

@@ -14,7 +14,7 @@ class ApiBetTransactionController extends Controller
     {
         $this->authorize('list bet transactions', BetTransaction::class);
         $search = $request->get('search', '');
-        $betTransactions = BetTransaction::search($search)->get();
+        $betTransactions = BetTransaction::search($search)->with('bets')->get();
         return response(['betTransactions' => $betTransactions], 200);
     }
 

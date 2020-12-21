@@ -15,7 +15,7 @@ class ClusterScope implements Scope
     {
         if( Auth::hasUser() ) {
             $user = Auth::user();
-            if (!$user->hasRole('super-admin'))
+            if (!$user->hasRole('Super-Admin'))
                 $builder->where('cluster_id', '=', $user->cluster_id);
         }
     }
