@@ -135,6 +135,7 @@ class LoginController extends Controller
         if ($isDeviceOwnedByUser){
             $accessToken = $user->createToken(request('username'))->plainTextToken;
             $user->session_status = true;
+            $user->api_token = $accessToken;
             $user->update();
             NewActiveAgent::broadcast($user);
             return response([

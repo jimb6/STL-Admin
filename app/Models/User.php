@@ -20,7 +20,7 @@ class User extends Authenticatable
 
     protected $fillable = ['name', 'birthdate', 'gender', 'address_id', 'contact_number', 'email', 'cluster_id', 'password', 'api_token'];
     protected $searchableFields = ['*'];
-    protected $hidden = ['password', 'remember_token', 'api_token'];
+    protected $hidden = ['password', 'remember_token'];
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
