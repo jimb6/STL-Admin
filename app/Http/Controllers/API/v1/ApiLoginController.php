@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Events\NewActiveAgent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,6 +32,7 @@ class ApiLoginController extends ApiController
         $accessToken = $user->createToken(request('username'))->plainTextToken;
         $user->api_token = $accessToken;
         $user->update();
+
         return response([
             'agent' =>
                 [

@@ -248,18 +248,18 @@ return [
             'text' => 'Bases',
             'icon' => 'fas fa-house-user',
             'label_color' => 'success',
-            'can' => 'menu bases',
+            'can' => 'menu clusters',
             'classes' => '',
             'key' => 'bases',
             'submenu' => [
                 [
                     'text' => 'All Bases',
-                    'can' => 'list bases',
+                    'can' => 'list clusters',
                     'route' => 'bases.index',
                 ],
                 [
                     'text' => 'Add New',
-                    'can' => 'create bases',
+                    'can' => 'create clusters',
                     'route' => 'bases.index',
                 ],
             ],
@@ -303,14 +303,13 @@ return [
             'text' => 'Bets',
             'key' => 'bets',
             'can' => 'menu bets',
-            // 'url'         => '/#',
             'icon' => 'fas fa-coins',
             'label_color' => 'success',
             'classes' => '',
             'submenu' => [
                 [
                     'text' => 'All Bets',
-                    'can' => 'view booths',
+                    'can' => 'view bets',
                     'route' => 'bets.index',
                     'active' => ['admin/bets', 'admin/bets*']
                 ],
@@ -320,7 +319,6 @@ return [
             'text' => 'Games',
             'key' => 'games',
             'can' => 'menu games',
-            // 'url'         => '/#',
             'icon' => 'fas fa-dice',
             'label_color' => 'success',
             'classes' => '',
@@ -353,7 +351,6 @@ return [
         ['header' => 'Accounting Management'],
         [
             'text' => 'Collections',
-            // 'url'         => '/#',
             'icon' => 'fas fa-briefcase',
             'label_color' => 'success',
             'can' => 'menu collections',
@@ -393,7 +390,7 @@ return [
             // 'url'         => '/#',
             'icon' => 'fas fa-user-lock',
             'label_color' => 'success',
-//            'can' => 'menu settings',
+//            'can' => 'menu mobile settings',
             'classes' => '',
             'submenu' => [
                 [
@@ -407,7 +404,7 @@ return [
             ]
         ],
         [
-            'text' => 'Device Settings',
+            'text' => 'Devices',
             // 'url'         => '/#',
             'icon' => 'fas fa-mobile-alt',
             'label_color' => 'success',

@@ -135,14 +135,15 @@ class LoginController extends Controller
         if ($isDeviceOwnedByUser){
             $accessToken = $user->createToken(request('username'))->plainTextToken;
             $user->update();
+            NewActiveAgent::broadcast($user);
             return response([
                 $accessToken
             ], 200);
         }
         else{
             return response([
-                'Message' => 'The device have been used not owned by the agent!'
-            ], 200);
+                'Message' => 'The device not owned by the agent!'
+            ], 401);
         }
 
     }

@@ -18,7 +18,7 @@ use Spatie\Permission\Models\Permission;
 */
 
 //Auth::routes();
-Route::post('v1/agent/login', [\App\Http\Controllers\API\v1\ApiLoginController::class, 'loginAgent'])
+Route::post('v1/agent/login', [\App\Http\Controllers\Auth\LoginController::class, 'loginAgent'])
     ->name('agent.login');
 
 Route::get('/forgot-password', function (Request $request) {

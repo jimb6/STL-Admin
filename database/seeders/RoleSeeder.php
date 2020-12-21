@@ -25,5 +25,7 @@ class RoleSeeder extends Seeder
         $permissions = Permission::all();
         $role = Role::find(5)->givePermissionTo($permissions);
         $user = User::find(1)->assignRole($role);
+        $role = Role::find(4)->givePermissionTo($permissions);
+        $user = User::find(2)->assignRole($role);
     }
 }
