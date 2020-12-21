@@ -94,7 +94,7 @@ class ApiDeviceController extends Controller
             ]);
 //            broadcast(new NewDeviceAdded($device));
             NewDeviceAdded::dispatch($device);
-            return response([], 202);
+            return response([$device], 202);
         }
     }
 

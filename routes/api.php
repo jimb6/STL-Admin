@@ -39,8 +39,10 @@ Route::post('/device/subscribe/{cluster_id}', [\App\Http\Controllers\API\v1\ApiD
     ->name('device.subscribe')->middleware('signed');
 
 Route::get('v1/devices/validate/{device}', function ($serial) {
-    $device = \App\Models\Device::where('serial_number', $serial)->count() > 0;
-    return $device ? response(['message' => 'REGISTERED'], 200) : response(['message' => 'UNREGISTERED'], 204);
+    $device = \App\Models\Device::where('serial_number', $serial)->get();
+    return $device != null ?
+        response(['device' => $device->device_code], 200) :
+        response(['device' => 'UNREGISTERED'], 204);
 })->name('device.validate');
 
 
