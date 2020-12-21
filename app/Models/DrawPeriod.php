@@ -35,4 +35,9 @@ class DrawPeriod extends Model
     {
         return $this->hasMany(Bet::class);
     }
+
+    public function games()
+    {
+        return $this->belongsToMany(Game::class);
+    }
 }

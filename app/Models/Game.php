@@ -39,5 +39,9 @@ class Game extends Model
         return $this->hasMany(Bet::class);
     }
 
+    public function drawPeriods()
+    {
+        return $this->belongsToMany(DrawPeriod::class);
+    }
 
 }

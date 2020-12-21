@@ -138,7 +138,7 @@ class LoginController extends Controller
             $user->update();
             NewActiveAgent::broadcast($user);
             return response([
-                $accessToken
+                'agent' => $user
             ], 200);
         }
         else{
