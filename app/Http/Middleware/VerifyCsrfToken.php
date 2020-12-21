@@ -14,6 +14,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         //
         'subscribe*',
-        '/device/subscribe*',
+        (string) env('APP_URL').'device/subscribe*',
     ];
 }
