@@ -65,9 +65,6 @@ class LoginController extends Controller
             return $this->sendLoginResponse($request);
         }
 
-        // If the login attempt was unsuccessful we will increment the number of attempts
-        // to login and redirect the user back to the login form. Of course, when this
-        // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
 
         return $this->sendFailedLoginResponse($request);
@@ -78,7 +75,6 @@ class LoginController extends Controller
 
         $user = Auth::user();
         NewActiveAgent::broadcast($user);
-        $user->tokens()->delete();
         $user->update([
             'api_token' => null
         ]);

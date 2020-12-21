@@ -55,7 +55,7 @@ Route::prefix('v1/')
         Route::resource('devices', \App\Http\Controllers\API\v1\ApiDeviceController::class);
         Route::resource('bet-transactions', \App\Http\Controllers\API\v1\ApiBetTransactionController::class);
 
-        Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeInde   x'])->name('agents.active');
+        Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])->name('agents.active');
 
         // Assigning Permissions in every roles
         Route::post('assign-role-permission', function ($request) {
