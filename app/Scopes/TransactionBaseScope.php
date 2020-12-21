@@ -14,7 +14,6 @@ class TransactionBaseScope implements Scope
 
     public function apply(Builder $builder, Model $model)
     {
-
         if (Auth::hasUser()) {
             $user = Auth::user();
             if (!$user->hasRole(['Super-Admin'])) {

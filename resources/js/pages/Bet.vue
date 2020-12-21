@@ -81,11 +81,12 @@ export default {
     },
     methods: {
         async displayBets() {
-            await axios.get('/api/v1/bet-transactions')
+            await axios.get('/api/v1/bets')
                 .then(response => {
                     console.log(response)
                     let bet = {};
                     const data = response.data.bets;
+                    console.log(data)
                     let date = '';
                     let count = 0;
                     this.contents = []
@@ -93,21 +94,21 @@ export default {
                     // for (let item in data) {
                     //     sum += data[item].amount;
                     // }
-                    for (let item in data) {
-                        date = this.getDateToday(new Date(data[item].updated_at));
-                        count++;
-                        bet = {
-                            count: count,
-                            id: data[item].id,
-                            combination: data[item].combination,
-                            is_rumbled: data[item].is_rumbled,
-                            is_voided: data[item].is_voided,
-                            bet_amount: data[item].amount,
-                            winning_amount: (data[item].amount * data[item].game.prize),
-                            net_amount: sum - (data[item].amount * data[item].game.prize),
-                        }
-                        this.contents.push(bet);
-                    }
+                    // for (let item in data) {
+                    //     date = this.getDateToday(new Date(data[item].updated_at));
+                    //     count++;
+                    //     bet = {
+                    //         count: count,
+                    //         id: data[item].id,
+                    //         combination: data[item].combination,
+                    //         is_rumbled: data[item].is_rumbled,
+                    //         is_voided: data[item].is_voided,
+                    //         bet_amount: data[item].amount,
+                    //         winning_amount: (data[item].amount * data[item].game.prize),
+                    //         net_amount: sum - (data[item].amount * data[item].game.prize),
+                    //     }
+                    //     this.contents.push(bet);
+                    // }
                 }).catch(err => {
                     console.log(err)
                 });
