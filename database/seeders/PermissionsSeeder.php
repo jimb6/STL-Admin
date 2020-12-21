@@ -22,18 +22,18 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'menu bets']);
         Permission::create(['name' => 'menu collections']);
         Permission::create(['name' => 'menu reports']);
-        Permission::create(['name' => 'menu mobilesettings']);
+        Permission::create(['name' => 'menu mobile settings']);
         Permission::create(['name' => 'menu settings']);
         Permission::create(['name' => 'menu clusters']);
         Permission::create(['name' => 'menu games']);
         Permission::create(['name' => 'menu draw periods']);
 
         // Create default permissions
-        Permission::create(['name' => 'list collectionrecords']);
-        Permission::create(['name' => 'view collectionrecords']);
-        Permission::create(['name' => 'create collectionrecords']);
-        Permission::create(['name' => 'update collectionrecords']);
-        Permission::create(['name' => 'delete collectionrecords']);
+        Permission::create(['name' => 'list collection records']);
+        Permission::create(['name' => 'view collection records']);
+        Permission::create(['name' => 'create collection records']);
+        Permission::create(['name' => 'update collection records']);
+        Permission::create(['name' => 'delete collection records']);
 
         Permission::create(['name' => 'list agents']);
         Permission::create(['name' => 'view agents']);
@@ -53,17 +53,11 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'update draw periods']);
         Permission::create(['name' => 'delete draw periods']);
 
-        Permission::create(['name' => 'list closenumbers']);
-        Permission::create(['name' => 'view closenumbers']);
-        Permission::create(['name' => 'create closenumbers']);
-        Permission::create(['name' => 'update closenumbers']);
-        Permission::create(['name' => 'delete closenumbers']);
-
-        Permission::create(['name' => 'list collectionstatuses']);
-        Permission::create(['name' => 'view collectionstatuses']);
-        Permission::create(['name' => 'create collectionstatuses']);
-        Permission::create(['name' => 'update collectionstatuses']);
-        Permission::create(['name' => 'delete collectionstatuses']);
+        Permission::create(['name' => 'list close numbers']);
+        Permission::create(['name' => 'view close numbers']);
+        Permission::create(['name' => 'create close numbers']);
+        Permission::create(['name' => 'update close numbers']);
+        Permission::create(['name' => 'delete close numbers']);
 
         Permission::create(['name' => 'list clusters']);
         Permission::create(['name' => 'view clusters']);
@@ -71,11 +65,11 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'update clusters']);
         Permission::create(['name' => 'delete clusters']);
 
-        Permission::create(['name' => 'list bettransactions']);
-        Permission::create(['name' => 'view bettransactions']);
-        Permission::create(['name' => 'create bettransactions']);
-        Permission::create(['name' => 'update bettransactions']);
-        Permission::create(['name' => 'delete bettransactions']);
+        Permission::create(['name' => 'list bet transactions']);
+        Permission::create(['name' => 'view bet transactions']);
+        Permission::create(['name' => 'create bet transactions']);
+        Permission::create(['name' => 'update bet transactions']);
+        Permission::create(['name' => 'delete bet transactions']);
 
         Permission::create(['name' => 'list bets']);
         Permission::create(['name' => 'view bets']);
@@ -89,11 +83,11 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'update winners']);
         Permission::create(['name' => 'delete winners']);
 
-        Permission::create(['name' => 'list drawresults']);
-        Permission::create(['name' => 'view drawresults']);
-        Permission::create(['name' => 'create drawresults']);
-        Permission::create(['name' => 'update drawresults']);
-        Permission::create(['name' => 'delete drawresults']);
+        Permission::create(['name' => 'list draw results']);
+        Permission::create(['name' => 'view draw results']);
+        Permission::create(['name' => 'create draw results']);
+        Permission::create(['name' => 'update draw results']);
+        Permission::create(['name' => 'delete draw results']);
 
         Permission::create(['name' => 'list games']);
         Permission::create(['name' => 'view games']);
@@ -134,11 +128,6 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'update addresses']);
         Permission::create(['name' => 'delete addresses']);
 
-        Permission::create(['name' => 'list bet transactions']);
-        Permission::create(['name' => 'view bet transactions']);
-        Permission::create(['name' => 'create bet transactions']);
-        Permission::create(['name' => 'update bet transactions']);
-        Permission::create(['name' => 'delete bet transactions']);
 
     }
 }

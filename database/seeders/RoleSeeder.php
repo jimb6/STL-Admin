@@ -16,11 +16,11 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        Role::create(['name' => 'agent']);
-        Role::create(['name' => 'monitoring']);
-        Role::create(['name' => 'controller']);
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'super-admin']);
+        Role::create(['name' => 'Agent']);
+        Role::create(['name' => 'Monitoring']);
+        Role::create(['name' => 'Controller']);
+        Role::create(['name' => 'Admin']);
+        Role::create(['name' => 'Super-Admin']);
 
         $permissions = Permission::all();
         $role = Role::find(5)->givePermissionTo($permissions);

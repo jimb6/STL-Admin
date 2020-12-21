@@ -42,15 +42,14 @@
                                          :size="70"
                                          :width="7"
                                          color="#ffffff"
-                                         indeterminate
-                    ></v-progress-circular>
+                                         indeterminate/>
                     <qrcode-vue v-if="qrValue !== ''"
                                 v-show="!isQrCreating"
                                 :value="qrValue"
                                 :size="size"
                                 background="#2196F3"
                                 foreground="#1D3557"
-                                level="L"></qrcode-vue>
+                                level="L"/>
                 </div>
             </div>
         </v-container>
@@ -136,7 +135,7 @@ export default {
                             count: count,
                             id: data[item].id,
                             agent_name: data[item].user ? data[item].user.name : "NOT ASSIGNED",
-                            serial_number: data[item].serial_number,
+                            serial_number: data[item].device_code,
                             updated_at: date,
                         }
                         this.contents.push(device);
@@ -149,14 +148,17 @@ export default {
         async getRegistrationQr() {
             this.isQrCreating = true;
             const response = await axios.get('/api/v1/devices/create')
+                .then(response => {
+                    this.qrValue = response.data
+                    console.log(this.qrValue)
+                })
                 .catch(err => {
                     this.errors.push({message: "Error Generating QR", error: err})
-                    this.isQrCreating = false;
+                }).finally(() => {
+                    this.isQrCreating = false
                 })
 
-            this.qrValue = response.data
-            console.log(this.qrValue)
-            this.isQrCreating = false;
+
         },
 
         async storeDevice($event) {
@@ -186,7 +188,7 @@ export default {
             axios.get('/api/user').then(response => {
                 Echo.channel('device-store.' + response.data.user.cluster_id)
                     .listen('NewDeviceAdded', (device) => {
-                        console.log(device.id);
+                        this.getRegistrationQr();
                         this.displayDevices();
                     });
             }).catch(err => console.log(err))

@@ -51,6 +51,7 @@ import Game from "./pages/Game";
 import Drawperiod from "./pages/DrawPeriod";
 import Device from "./pages/Device";
 import ErrorNotif from "./components/Notification/ErrorNotif";
+import Booth from "./pages/Booth";
 
 const app = new Vue(    {
     theme: { dark: true },
@@ -66,6 +67,7 @@ const app = new Vue(    {
         User,
         Role,
         Game,
+        Booth,
         Drawperiod,
         Permission,
         GlobalSettings,

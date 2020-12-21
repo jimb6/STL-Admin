@@ -4,11 +4,9 @@ namespace App\Models;
 
 use App\Models\Scopes\Searchable;
 use App\Scopes\BetScope;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
 
 class Bet extends Model
 {
@@ -41,13 +39,15 @@ class Bet extends Model
         static::addGlobalScope(new BetScope);
     }
 
-    public function scopeBase($query, $value)
+
+    public function getCreatedAtAttribute($time)
     {
-        return $query->with('betTransaction.agent', function ($query) use ($value) {
-            $query->from('agents')
-                ->where('agents.id', 'betTransaction.agent_id')
-                ->where('agents.base_id', $value);
-        });
+        return date("g:i a", strtotime($time));
+    }
+
+    public function getUpdatedAtAttribute($time)
+    {
+        return date("g:i a", strtotime($time));
     }
 
 //    Defining relations

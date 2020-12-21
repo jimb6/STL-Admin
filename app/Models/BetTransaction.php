@@ -44,14 +44,14 @@ class BetTransaction extends Model implements Auditable
 
     public function scopeWithAgent($query)
     {
-        return $query->with(['agent' => function ($q) {
+        return $query->with(['user' => function ($q) {
             $q->agentInBase();
         }]);
     }
 
     public function scopeBase($query, $baseId)
     {
-        return $query->with('agent');
+        return $query->with('user');
     }
 
     //  Defining All Relationship
