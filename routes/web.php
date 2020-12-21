@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/device/unsubscribe/{device}', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'unsubscribe'])
     ->name('device.unsubscribe');
 
-Route::post('/device/subscribe/{cluster_id}', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'subscribe'])
-    ->name('device.subscribe')->middleware('signed');
-
 Route::get('/', function () {
     return redirect()->route('admin.home');
 });

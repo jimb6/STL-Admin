@@ -13,7 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
-        'subscribe*',
-        'http://stl-application-v2.herokuapp.com/device/subscribe*',
+        'stripe*',
+        '/device/subscribe*',
     ];
 }

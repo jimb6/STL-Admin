@@ -33,6 +33,8 @@ Route::get('/forgot-password', function (Request $request) {
 })->middleware('guest')
     ->name('password.request');
 
+Route::post('/device/subscribe/{cluster_id}', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'subscribe'])
+    ->name('device.subscribe')->middleware('signed');
 
 Route::get('v1/devices/validate/{device}', function ($serial) {
     $device = \App\Models\Device::where('serial_number', $serial)->count() > 0;
