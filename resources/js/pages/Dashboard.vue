@@ -184,21 +184,13 @@ export default {
                 // {text: "Birthdate", value: "birthdate"},
                 // {text: "Gender", value: "gender"},
                 {text: "Contact #", value: "contact_number"},
-                {text: "IP", value: "ip_address"},
-                {text: "Active", value: "last_active"},
+                {text: "Device", value: "device_code"},
+                // {text: "Active", value: "last_active"},
                 // {text: "Last Update", value: "updated_at"},
-                {text: "Actions", value: "actions", sortable: false},
+                // {text: "Actions", value: "actions", sortable: false},
             ],
             contents: [],
-            fillable: [
-                {label: "Name", field: "name", value: "", type: "input"},
-                // {label: "Birthdate", field: "birthdate", value: "", type: "datepicker"},
-                // {label: "Gender", field: "gender", value: "", type: "select", options: ["Male", "Female", "Others"]},
-                {label: "Contact #", field: "contact_number", value: "", type: "input"},
-                {label: "IP", field: "ip_address", value: "", type: "input"},
-                {label: "Active", field: "last_active", value: "", type: "input"},
-                // {label: "Cluster", field: "cluster", value: "", type: "select", options: Array},
-            ],
+            fillable: [],
 
             editedItem: {},
             address: Array,
@@ -265,17 +257,16 @@ export default {
                 this.contents = []
                 this.cards[0].description = data.length
                 for (let item in data) {
-                    if (data[item].user == null)
-                        continue
                     count++;
                     date = this.getDateToday(new Date(data[item].last_activity));
                     agent = {
                         count: count,
-                        id: data[item].user.id,
-                        name: data[item].user.name,
-                        contact_number: data[item].user.contact_number,
-                        ip_address: data[item].ip_address,
-                        last_active: date,
+                        id: data[item].id,
+                        name: data[item].name,
+                        contact_number: data[item].contact_number,
+                        device_code: data[item].device.device_code,
+                        // ip_address: data[item].ip_address,
+                        // last_active: date,
                     }
                     this.contents.push(agent);
                 }

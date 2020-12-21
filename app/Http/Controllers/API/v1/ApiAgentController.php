@@ -102,11 +102,9 @@ class ApiAgentController extends ApiController
 
     public function activeIndex(){
         $this->authorize('list agents', User::class);
-        $agents = Active::usersWithinHours(1)->with(['user' => function($query){
-            $query->whereHas('roles',  function ($query) {
-                $query->where('name', '=', 'Agent');
-            });
-        }])->get();
+        $agents = User::whereHas('roles', function ($query){
+            $query->where('name', '=', 'Agent');
+        })->where('session_status', true)->with('device')->get();
 
         $totalAgents = User::with(['user' => function($query){
             $query->whereHas('roles',  function ($query) {
