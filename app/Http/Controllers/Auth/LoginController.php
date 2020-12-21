@@ -127,7 +127,7 @@ class LoginController extends Controller
                 return response(['messages' => 'invalid username or password.'], 401);
             }
         }
-        $user = $request->user('sanctum');
+        $user = $request->user();
         $isDeviceOwnedByUser = $user->whereHas('device', function ($query) use ($validated) {
             $query->where('serial_number', '=', $validated['device_serial_number']);
         })->count() > 0;
@@ -146,6 +146,16 @@ class LoginController extends Controller
             ], 401);
         }
 
+    }
+
+    public function logoutAgent(Request $request)
+    {
+        $user =  $request->user();
+        NewActiveAgent::broadcast($user);
+        $user->currentAccessToken()->delete();
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect('/');
     }
 
 }

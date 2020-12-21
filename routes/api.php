@@ -20,6 +20,8 @@ use Spatie\Permission\Models\Permission;
 //Auth::routes();
 Route::post('v1/agent/login', [\App\Http\Controllers\Auth\LoginController::class, 'loginAgent'])
     ->name('agent.login');
+Route::post('v1/agent/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logoutAgent'])
+    ->name('agent.logout');
 
 Route::get('/forgot-password', function (Request $request) {
     $request->validate(['contact_number' => 'required|max:11']);
