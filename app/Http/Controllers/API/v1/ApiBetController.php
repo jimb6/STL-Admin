@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bet;
+use App\Models\CloseNumber;
 use Illuminate\Http\Request;
 
 class ApiBetController extends Controller
@@ -12,8 +13,9 @@ class ApiBetController extends Controller
     {
         $this->authorize('list bet transactions', Bet::class);
         $search = $request->get('search', '');
-        $bets = Bet::with(['game', 'drawPeriod', 'betTransaction'])->get();
-        return response(['bets' => $bets], 200);
+        $bets = Bet::with(['game', 'drawPeriod', 'betTransaction'])->get()->sortBy('amount');
+        $closeNumbers = CloseNumber::with(['game', 'drawPeriod'])->get();
+        return response(['bets' => $bets, 'closeNumbers' => $closeNumbers], 200);
     }
 
     public function create(Request $request)

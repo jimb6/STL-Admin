@@ -79,4 +79,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Device::class);
     }
+
+    public function betTransactions()
+    {
+        return $this->hasMany(BetTransaction::class);
+    }
 }

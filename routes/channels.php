@@ -21,7 +21,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 //Broadcast::channel('devices.{device}', \App\Broadcasting\DeviceChannel::class);
 
 Broadcast::channel('device-store.{cluster_id}', function ($user, $cluster_id) {
-    if ($user->hasRole('Super-Admin'))
+    if ($user->hasRole('super-admin'))
         return true;
     return $user->cluster_id == $cluster_id;
 //    return true;ssSSS
@@ -31,9 +31,8 @@ Broadcast::channel('active.agent', function ($user) {
         return true;
 }, ['guards' => ['web']]);
 
-Broadcast::channel('bet.transaction.{cluster_id}', function ($user, $cluster_id) {
-    if ($user->hasRole('Super-Admin'))
+Broadcast::channel('bet.transaction', function ($user) {
+    if ($user->hasRole('super-admin'))
         return true;
-    return $user->cluster == $cluster_id;
-//    return true;
+    return true;
 }, ['guards' => ['web']]);

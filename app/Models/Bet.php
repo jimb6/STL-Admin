@@ -77,4 +77,9 @@ class Bet extends Model
         return $this->hasOneThrough(User::class, BetTransaction::class,);
     }
 
+    public function closeNumber()
+    {
+        return $this->hasOneThrough(CloseNumber::class, DrawPeriod::class);
+    }
+
 }

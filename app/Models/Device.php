@@ -39,7 +39,7 @@ class Device extends Model
                 ->orderBy('device_code', 'DESC')
                 ->count();
             $generatedKey = $devicesCount!=null
-                ?$generatedKey.'-'.str_pad($devicesCount+2,5,"0",STR_PAD_LEFT)
+                ?$generatedKey.'-'.str_pad($devicesCount++,5,"0",STR_PAD_LEFT)
                 :$generatedKey.'-'.str_pad(1,5,"0",STR_PAD_LEFT);
 
             $model->setAttribute('device_code', $generatedKey);

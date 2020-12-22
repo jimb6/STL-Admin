@@ -14,10 +14,10 @@ class AddForeignsToDevicesTable extends Migration
     public function up()
     {
         Schema::table('devices', function (Blueprint $table) {
-//            $table
-//                ->foreign('cluster_id')
-//                ->references('id')
-//                ->on('clusters');
+            $table
+                ->foreign('cluster_id')
+                ->references('id')
+                ->on('clusters');
         });
     }
 

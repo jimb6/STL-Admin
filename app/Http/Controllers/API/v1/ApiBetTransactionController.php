@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Events\BetTransactionAdded;
+use App\Events\NewBetTransactionAdded;
 use App\Http\Controllers\Controller;
 use App\Models\Bet;
 use App\Models\BetTransaction;
@@ -14,7 +15,7 @@ class ApiBetTransactionController extends Controller
     {
         $this->authorize('list bet transactions', BetTransaction::class);
         $search = $request->get('search', '');
-        $betTransactions = BetTransaction::search($search)->with('bets')->get();
+        $betTransactions = BetTransaction::search($search)->with('bets')->get()->sortBy('bets.amount');
         return response(['betTransactions' => $betTransactions], 200);
     }
 
@@ -27,17 +28,15 @@ class ApiBetTransactionController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create bet transactions', BetTransaction::class);
-
-        $request->user()->id;
+        //Validate the user inputs
         $validated = $request->validate([
-            'agent_id' => 'required',
             'bets.*' => 'required',
             'bets.*.amount' => 'required|numeric|min:1|max:10000',
             'bets' => 'required|array|min:1|max:10',
         ]);
 
         $bets = $validated['bets'];
-        $agentId = $validated['agent_id'];
+        $agentId = $request->user('sanctum')->id;
 
 //        $hasCloseNumbers =
         $transaction = BetTransaction::create([
@@ -54,8 +53,9 @@ class ApiBetTransactionController extends Controller
                 array_push($saveBets, $save);
             }
         }
-        event(new BetTransactionAdded($transaction));
-        return response(['bets' => $saveBets, 'code' => $transaction->id], 202);
+
+        broadcast(new NewBetTransactionAdded($transaction));
+        return response(['bets' => $bets, 'code' => $transaction->id], 202);
     }
 
     public function show(Request $request, BetTransaction $betTransaction)

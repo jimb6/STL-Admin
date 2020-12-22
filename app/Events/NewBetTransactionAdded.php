@@ -25,13 +25,13 @@ class NewBetTransactionAdded implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PrivateChannel('bet.transaction.'.$this->betTransaction->user()->cluster_id);
+        return new Channel('bet.transaction');
     }
 
     public function broadcastWith()
     {
         return [
-
+            'betTransaction' => $this->betTransaction
         ];
     }
 }

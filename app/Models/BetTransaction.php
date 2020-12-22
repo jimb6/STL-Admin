@@ -63,6 +63,6 @@ class BetTransaction extends Model implements Auditable
 
     public function bets()
     {
-        return $this->hasMany(Bet::class);
+        return $this->hasMany(Bet::class)->orderBy('amount', 'asc');
     }
 }

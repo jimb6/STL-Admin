@@ -1,40 +1,21 @@
 <template>
     <v-main>
         <v-container>
-            <v-tabs>
-                <v-tab>Table View</v-tab>
-                <v-tab>Card View</v-tab>
-                <v-tab-item>
-                    <DataTable
-                        :title="title"
-                        :contents="contents"
-                        :headers="headers"
-                        :fillable="fillable"
-                        :canAdd="!canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="!canDelete"
-
-                    />
-                </v-tab-item>
-                <v-tab-item>
-                    <Card2
-                        :title="title"
-                        :contents="contents"
-                        :headers="headers"
-                        :fillable="fillable"
-                        :canAdd="!canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="!canDelete"
-                    />
-                </v-tab-item>
-            </v-tabs>
+            <BetsDatatable
+                :title="title"
+                :contents="contents"
+                :headers="headers"
+                :fillable="fillable"
+                :canAdd="canAdd"
+                :canEdit="canEdit"
+                :canDelete="canDelete"
+            />
         </v-container>
     </v-main>
 </template>
 
 <script>
-import DataTable from "../components/DataTable";
-import Card2 from "../components/Card2";
+import BetsDatatable from "../components/BetsDatatable";
 import Vue from "vue";
 import Vuetify from 'vuetify'
 
@@ -46,8 +27,7 @@ export default {
         userData: JSON,
     },
     components: {
-        Card2,
-        DataTable,
+        BetsDatatable,
     },
 
     data: () => ({
@@ -71,9 +51,9 @@ export default {
         editedItem: {},
         address: Array,
 
-        canAdd: true,
+        canAdd: false,
         canEdit: true,
-        canDelete: true,
+        canDelete: false,
     }),
     created() {
         this.displayBets();
@@ -127,13 +107,11 @@ export default {
         },
 
         async listen() {
-            axios.get('/api/user').then(response => {
-                Echo.channel('bet.transaction.' + response.data.user.cluster_id)
-                    .listen('NewBetTransactionAdded', (device) => {
-                        this.getRegistrationQr();
-                        this.displayDevices();
-                    });
-            }).catch(err => console.log(err))
+            Echo.channel('bet.transaction')
+                .listen('NewBetTransactionAdded', (bets) => {
+                    console.log(bets)
+                    this.displayBets();
+                });
         }
 
     }

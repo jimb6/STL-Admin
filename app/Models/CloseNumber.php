@@ -14,14 +14,11 @@ class CloseNumber extends Model
     use HasFactory;
     use Searchable;
 
-    protected $fillable = ['number_value', 'bet_game_id'];
+    protected $fillable = ['combination', 'game_id', 'draw_period_id'];
 
     protected $searchableFields = ['*'];
 
-    protected $table = 'close_numbers';
-
-
-    public function betGame()
+    public function game()
     {
         return $this->belongsTo(Game::class);
     }
@@ -30,4 +27,5 @@ class CloseNumber extends Model
     {
         return $this->belongsTo(DrawPeriod::class);
     }
+
 }
