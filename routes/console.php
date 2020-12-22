@@ -18,6 +18,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Artisan::command('close_number:truncate', function () {
-    $this->info("Truncating close number table.");
-});
+//Artisan::command('close_number:truncate', function () {
+//    $this->info("Truncating close number table.");
+//});

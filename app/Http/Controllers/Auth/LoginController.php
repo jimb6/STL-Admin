@@ -154,7 +154,6 @@ class LoginController extends Controller
     {
         $user =  $request->user('sanctum');
         $user->session_status = false;
-        $user->currentAccessToken()->delete();
         $user->update();
         NewActiveAgent::broadcast($user);
         $user->currentAccessToken()->delete();

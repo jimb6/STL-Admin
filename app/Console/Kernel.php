@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        CloseNumberAutoTruncate::class
+//        CloseNumberAutoTruncate::class
     ];
 
     /**
@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 //         $schedule->command('inspire')->hourly();
-        $schedule->command('close_number:truncate')->dailyAt('03:47');
+//        $schedule->command('close_number:truncate')->dailyAt('03:47');
     }
 
     /**
@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');
-        $this->load(__DIR__.'/Commands/CloseNumberAutoTruncate');
+//        $this->load(__DIR__.'/Commands/CloseNumberAutoTruncate');
         require base_path('routes/console.php');
     }
 }
