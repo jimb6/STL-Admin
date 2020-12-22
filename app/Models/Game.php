@@ -23,6 +23,7 @@ class Game extends Model
         'min_number',
         'max_number',
         'has_repetition',
+        'is_rumbled',
         'days_availability',
     ];
 
@@ -30,7 +31,8 @@ class Game extends Model
 
     protected $casts = [
         'days_availability' => 'array',
-        'has_repetition' => 'boolean'
+        'has_repetition' => 'boolean',
+        'is_rumbled' => 'boolean'
     ];
 
 

@@ -23,6 +23,7 @@ class CreateGamesTable extends Migration
             $table->integer('min_number');
             $table->integer('max_number');
             $table->boolean('has_repetition');
+            $table->boolean('is_rumbled')->default(false);
             $table->json('days_availability');
             $table->timestamps();
             $table->softDeletes();

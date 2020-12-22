@@ -4,16 +4,30 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\DrawPeriod;
+use App\Models\Game;
 use Illuminate\Http\Request;
 
 class ApiDrawPeriodController extends Controller
 {
     public function index(Request $request)
     {
-        $this->authorize('view draw periods', DrawPeriod::class);
+        $this->authorize('list draw periods', DrawPeriod::class);
         $search = $request->get('search', '');
-        $drawPeriods = DrawPeriod::search($search)->get();
-        return response(['drawPeriods' => $drawPeriods], 200);
+        $drawPeriods = DrawPeriod::search($search)->with('games:description')->get()
+            ->mapWithKeys(function ($item) {
+                return [
+                    strtoupper(substr($item['draw_type'], 0, 1) . '-' . $item['draw_time']) => $item['games'],
+                ];
+            });
+
+        $games = Game::search($search)->get()
+            ->mapWithKeys(function ($item) {
+                return [
+                    $item['description'] => $item,
+                ];
+            });
+
+        return response([$games, $drawPeriods], 200);
     }
 
     public function create(Request $request)
