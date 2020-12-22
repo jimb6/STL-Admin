@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,7 +20,10 @@ class DrawPeriod extends Model
 
     protected $table = 'draw_periods';
 
-    protected $dateFormat = 'U';
+    public function getUpdatedAtAttribute($date)
+    {
+        return Carbon::parse($this->attributes['updated_at'])->diffForHumans();
+    }
 
     public function getDrawTimeAttribute($time)
     {

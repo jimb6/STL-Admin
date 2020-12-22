@@ -37,7 +37,7 @@ Route::prefix('admin')
             return view('devices.index');
         })->name('devices.index');                                  // Devices
         Route::get('draw-periods', function (Request $request) {
-            return view('draw_periods.index.index');
+            return view('draw_periods.index');
         })->name('draw_periods.index');                             // Draw Periods
         Route::get('games', function (Request $request) {
             return view('games.index');

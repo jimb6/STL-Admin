@@ -64,6 +64,7 @@ export default {
             {text: "Draw Time", value: "draw_time"},
             {text: "Draw Type", value: "draw_type"},
             {text: "Last Update", value: "updated_at"},
+            {text: "Games", value: "games"},
             {text: "Actions", value: "actions", sortable: false},
         ],
         contents: [],
@@ -83,22 +84,26 @@ export default {
     },
     methods: {
         async displayDrawPeriods() {
-            const response = await axios.get('draw-periods/?')
+            await axios.get('/api/v1/draw-periods')
                 .then(response=> {
+                    console.log(response)
                     let drawPeriod = {};
                     const data = response.data.drawPeriods;
-                    let date = '';
                     let count = 0;
                     this.contents = []
                     for (let item in data) {
-                        date = this.getDateToday(new Date(data[item].updated_at));
+                        let games = [];
+                        for (let gameItem in data[item].games){
+                            games.push(data[item].games[gameItem].description)
+                        }
                         count++;
                         drawPeriod = {
                             count: count,
                             id: data[item].id,
                             draw_time: data[item].draw_time,
                             draw_type: data[item].draw_type,
-                            updated_at: date,
+                            updated_at: data[item].updated_at,
+                            games: games
                         }
                         this.contents.push(drawPeriod);
                     }
@@ -109,7 +114,7 @@ export default {
         },
 
         async storeDrawPeriod(item) {
-            const response = await axios.post('draw-period/?',
+            axios.post('/api/v1/draw-periods',
                 {
                     'draw_time': item.draw_time,
                     'draw_type': item.draw_type,
@@ -128,7 +133,7 @@ export default {
         },
 
         async destroyDrawPeriod(item) {
-            const response = await axios.delete('draw-periods/' + item.id)
+            const response = await axios.delete('/api/draw-periods/' + item.id)
                 .then(response => {
                     this.addNotification(item.draw_time + " deleted successfully!", "success", "200")
                 })

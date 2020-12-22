@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Console\Commands\CloseNumberAutoTruncate;
 use App\Events\BetTransactionAdded;
 use App\Events\NewBetTransactionAdded;
 use App\Http\Controllers\Controller;
 use App\Models\Bet;
 use App\Models\BetTransaction;
+use App\Models\CloseNumber;
 use Illuminate\Http\Request;
 
 class ApiBetTransactionController extends Controller
@@ -38,7 +40,11 @@ class ApiBetTransactionController extends Controller
         $bets = $validated['bets'];
         $agentId = $request->user('sanctum')->id;
 
-//        $hasCloseNumbers =
+        $hasCloseNumbers = CloseNumber::whereIn('combination', array_column($bets, 'combination'))->count();
+        if ($hasCloseNumbers > 0)
+        {
+            return response(['close_numbers' => CloseNumber::all()], 406);
+        }
         $transaction = BetTransaction::create([
             'user_id' => $agentId
         ]);

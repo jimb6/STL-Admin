@@ -13,7 +13,7 @@ class ApiBetController extends Controller
     {
         $this->authorize('list bet transactions', Bet::class);
         $search = $request->get('search', '');
-        $bets = Bet::with(['game', 'drawPeriod', 'betTransaction'])->get();
+        $bets = Bet::selectRaw('*')->groupBy('combination')->get();
         $closeNumbers = CloseNumber::with(['game', 'drawPeriod'])->get();
         return response(['bets' => $bets, 'closeNumbers' => $closeNumbers], 200);
     }

@@ -13,21 +13,8 @@ class ApiDrawPeriodController extends Controller
     {
         $this->authorize('list draw periods', DrawPeriod::class);
         $search = $request->get('search', '');
-        $drawPeriods = DrawPeriod::search($search)->with('games:description')->get()
-            ->mapWithKeys(function ($item) {
-                return [
-                    strtoupper(substr($item['draw_type'], 0, 1) . '-' . $item['draw_time']) => $item['games'],
-                ];
-            });
-
-        $games = Game::search($search)->get()
-            ->mapWithKeys(function ($item) {
-                return [
-                    $item['description'] => $item,
-                ];
-            });
-
-        return response([$games, $drawPeriods], 200);
+        $drawPeriods = DrawPeriod::search($search)->with('games:description')->get();
+        return response(['drawPeriods' => $drawPeriods], 200);
     }
 
     public function create(Request $request)
@@ -44,8 +31,7 @@ class ApiDrawPeriodController extends Controller
             'draw_type' => 'required'
         ]);
         $drawPeriod = DrawPeriod::create($validated);
-
-        return response(['drawPeriod' => $validated], 202);
+        return response(['drawPeriod' => $drawPeriod], 202);
     }
 
     public function show(Request $request, DrawPeriod $drawPeriod)
@@ -74,5 +60,26 @@ class ApiDrawPeriodController extends Controller
         $this->authorize('delete draw periods', $drawPeriod);
         $drawPeriod->delete();
         return response([], 204);
+    }
+
+    public function getDrawPeriodGames(Request $request)
+    {
+        $this->authorize('list draw periods', DrawPeriod::class);
+        $search = $request->get('search', '');
+        $drawPeriods = DrawPeriod::search($search)->with('games:description')->get()
+            ->mapWithKeys(function ($item) {
+                return [
+                    strtoupper(substr($item['draw_type'], 0, 1) . '-' . $item['draw_time']) => $item['games'],
+                ];
+            });
+
+        $games = Game::search($search)->get()
+            ->mapWithKeys(function ($item) {
+                return [
+                    $item['description'] => $item,
+                ];
+            });
+
+        return response([$games, $drawPeriods], 200);
     }
 }

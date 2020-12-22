@@ -245,24 +245,19 @@ return [
             'header' => 'App Management',
         ],
         [
-            'text' => 'Bases',
+            'text' => 'Clusters',
             'icon' => 'fas fa-house-user',
             'label_color' => 'success',
             'can' => 'menu clusters',
             'classes' => '',
-            'key' => 'bases',
+            'key' => 'clusters',
             'submenu' => [
                 [
                     'text' => 'All Bases',
                     'can' => 'list clusters',
                     'route' => 'bases.index',
                 ],
-                [
-                    'text' => 'Add New',
-                    'can' => 'create clusters',
-                    'route' => 'bases.index',
-                ],
-            ],
+            ]
         ],
         [
             'text' => 'Agents',

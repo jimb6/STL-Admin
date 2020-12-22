@@ -53,7 +53,8 @@ class ApiUserController extends Controller
             'province' => $validated['address']['3'],
         ]);
 
-        $generated_password = substr(str_shuffle(str_repeat(config('app.key'), 5)), 0, 8);
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $generated_password = substr(str_shuffle(str_repeat($chars, 5)), 0, 8);
         $user = User::firstOrCreate([
             'name' => $validated['name'],
             'birthdate' => $validated['birthdate'],

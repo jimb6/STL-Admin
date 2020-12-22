@@ -179,6 +179,12 @@
                 </v-chip>
             </template>
 
+            <template v-slot:item.games ="{ item }">
+                <v-chip  v-for="game in item.games" :key="game.description" dark close small>
+                    {{ game }}
+                </v-chip>
+            </template>
+
             <template v-slot:item.is_voided="{ item }">
                 <v-checkbox
                     :input-value="item.is_voided"

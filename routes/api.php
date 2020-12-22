@@ -71,6 +71,8 @@ Route::prefix('v1/')
         Route::resource('users', \App\Http\Controllers\API\v1\ApiUserController::class);
         Route::resource('clusters', \App\Http\Controllers\API\v1\ApiClusterController::class);
 
+        Route::get('draw-periods-games', [\App\Http\Controllers\API\v1\ApiDrawPeriodController::class, 'getDrawPeriodGames']);
+
 //        Route::post('send-custom-message', [\App\Http\Controllers\SMSController::class, 'sendCustomMessage']);
         Route::post('send-default-message', [\App\Http\Controllers\SMSController::class, 'sendMessage']);
 
