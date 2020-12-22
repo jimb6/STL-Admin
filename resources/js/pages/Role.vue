@@ -6,14 +6,14 @@
 
             <v-tab-item>
                 <DataTable
-                    :tableName="tableName"
+                    :title="title"
                     :contents="contents"
                     :headers="headers"
                     :fillable="fillable"/>
             </v-tab-item>
             <v-tab-item>
                 <Card2
-                    :tableName="tableName"
+                    :title="title"
                     :contents="contents"
                     :headers="headers"
                     :fillable="fillable"
@@ -43,7 +43,7 @@ export default {
     },
 
     data: () => ({
-        tableName: "Roles",
+        title: "Role",
         headers: [
             {text: "#", value: "count"},
             {text: "Name", value: "name"},
@@ -63,7 +63,7 @@ export default {
     },
     methods: {
         async getRoles() {
-            const response = await axios.get('roles/?').catch(err => {
+            const response = await axios.get('/api/v1/roles').catch(err => {
                 console.log(err)
             });
             console.log(response);

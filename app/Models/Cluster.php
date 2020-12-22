@@ -6,6 +6,8 @@ use App\Models\Scopes\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class Cluster extends Model
 {
@@ -16,6 +18,10 @@ class Cluster extends Model
     protected $fillable = ['name'];
 
     protected $searchableFields = ['*'];
+
+    protected $casts = [
+    ];
+
 
     public function booths()
     {

@@ -16,7 +16,7 @@ class TransactionBaseScope implements Scope
     {
         if (Auth::hasUser()) {
             $user = Auth::user();
-            if (!$user->hasRole(['Super-Admin'])) {
+            if (!$user->hasRole(['super-admin'])) {
                 $builder->with('user', function ($query) use ($user) {
                     $query->where('cluster_id', 2);
                 });

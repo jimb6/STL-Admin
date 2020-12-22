@@ -17,8 +17,8 @@ class ApiUserController extends Controller
         $this->authorize('list users', User::class);
         $search = $request->get('search', '');
         $users = User::search($search)->with(['cluster', 'address', 'roles'])->get();
+//
         return response(['users' => $users], 200);
-
     }
 
     public function create(Request $request)
@@ -33,7 +33,7 @@ class ApiUserController extends Controller
     {
         $this->authorize('create users', User::class);
         $validated = $request->validate([
-            'roles.*' => 'required',
+            'role.*' => 'required',
             'name' => 'required',
             'birthdate' => 'required|date',
             'gender' => 'required',
@@ -43,25 +43,28 @@ class ApiUserController extends Controller
             'address.*' => 'required'
         ]);
 
+        $this->authorize('create user '.$validated['role']['name'].'s', User::class);
         $address = Address::firstOrCreate([
             'street' => $validated['address']['0'],
             'barangay' => $validated['address']['1'],
             'municipality' => $validated['address']['2'],
             'province' => $validated['address']['3'],
         ]);
+
+        $generated_password = substr(str_shuffle(str_repeat(config('app.key'), 5)), 0, 16);
         $user = User::firstOrCreate([
             'name' => $validated['name'],
             'birthdate' => $validated['birthdate'],
             'gender' => $validated['gender'],
             'contact_number' => $validated['contact_number'],
             'email' => $validated['email'],
-            'password' => Hash::make('password'),
+            'password' => Hash::make($generated_password),
             'cluster_id' => $validated['cluster_id'],
             'address_id' => $address->id
         ]);
 
-        $user->syncRoles(array_column($validated['roles'], 'id'));
-        return response($user, 202);
+        $user->assignRole($validated['role']['name']);
+        return response(['user' => $user, 'password' => $generated_password], 202);
     }
 
     public function show(Request $request, User $user)
@@ -98,5 +101,19 @@ class ApiUserController extends Controller
         $this->authorize('delete users', $user);
         $user->delete();
         return response([], 204);
+    }
+
+
+    public function baseRoleIndex(Request $request, $role)
+    {
+        $this->authorize('list users', User::class);
+        $search = $request->get('search', '');
+        $users = User::search($search)->with(['cluster', 'address', 'roles' => function($query) use ($role) {
+            $query->whereIn('name', [$role]);
+        }])->get()
+        ->reject(function ($value, $key)  {
+            return $value['roles']->isEmpty();
+        });
+        return response(['users' => $users], 200);
     }
 }

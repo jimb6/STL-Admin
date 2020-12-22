@@ -173,11 +173,10 @@
                 </v-icon>
             </template>
 
-            <template v-slot:item.is_rumbled="{ item }">
-                <v-checkbox
-                    :input-value="item.is_rumbled"
-                    disabled
-                ></v-checkbox>
+            <template v-slot:item.roles ="{ item }">
+                <v-chip  v-for="role in item.roles" :key="role.name" dark close small>
+                    {{ role }}
+                </v-chip>
             </template>
 
             <template v-slot:item.is_voided="{ item }">

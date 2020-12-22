@@ -13,7 +13,7 @@ class AgentScope implements Scope
     public function apply(Builder $builder, Model $model)
     {
             $builder->whereHas('roles', function ($query){
-                $query->where('name', '=', 'Agent');
+                $query->where('name', '=', 'agent');
             });
     }
 }

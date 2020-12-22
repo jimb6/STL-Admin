@@ -3,16 +3,23 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cluster;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ApiClusterController extends Controller
 {
     public function index(Request $request)
     {
-        $this->authorize('view clusters', Cluster::class);
+        $this->authorize('list clusters', Cluster::class);
         $search = $request->get('search', '');
         $clusters = Cluster::search($search)->get();
-//        return view('app.clusters.index', compact('clusters', 'search'));
+        $user = Auth::check()? Auth::user():null;
+        if ($user && !$user->hasRole('Super-Admin')){
+            $clusters = $clusters->reject(function ($value, $key) {
+                return $value['cluster_type'] == 'Main';
+            });
+        }
         return response(['clusters' => $clusters], 200);
     }
 

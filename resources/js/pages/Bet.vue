@@ -91,24 +91,24 @@ export default {
                     let count = 0;
                     this.contents = []
                     let sum = 0;
-                    // for (let item in data) {
-                    //     sum += data[item].amount;
-                    // }
-                    // for (let item in data) {
-                    //     date = this.getDateToday(new Date(data[item].updated_at));
-                    //     count++;
-                    //     bet = {
-                    //         count: count,
-                    //         id: data[item].id,
-                    //         combination: data[item].combination,
-                    //         is_rumbled: data[item].is_rumbled,
-                    //         is_voided: data[item].is_voided,
-                    //         bet_amount: data[item].amount,
-                    //         winning_amount: (data[item].amount * data[item].game.prize),
-                    //         net_amount: sum - (data[item].amount * data[item].game.prize),
-                    //     }
-                    //     this.contents.push(bet);
-                    // }
+                    for (let item in data) {
+                        sum += data[item].amount;
+                    }
+                    for (let item in data) {
+                        date = this.getDateToday(new Date(data[item].updated_at));
+                        count++;
+                        bet = {
+                            count: count,
+                            id: data[item].id,
+                            combination: data[item].combination,
+                            is_rumbled: data[item].is_rumbled,
+                            is_voided: data[item].is_voided,
+                            bet_amount: data[item].amount,
+                            winning_amount: (data[item].amount * data[item].game.prize),
+                            net_amount: sum - (data[item].amount * data[item].game.prize),
+                        }
+                        this.contents.push(bet);
+                    }
                 }).catch(err => {
                     console.log(err)
                 });

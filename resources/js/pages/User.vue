@@ -53,6 +53,7 @@ Vue.use(Vuetify)
 
 export default {
     name: "User",
+    props: ['role'],
     components: {
         DataTable,
         Card2,
@@ -92,21 +93,22 @@ export default {
         canDelete: true,
     }),
     created() {
+        this.title = this.$props.role + ' User';
         this.displayUsers();
         this.getClusters();
         this.getRoles();
     },
+
     methods: {
         async displayUsers() {
-            const response = await axios.get('users/?')
-                .then(response=>{
+            await axios.get(`/api/v1/users-list/${this.$props.role}`)
+                .then(response => {
+                    console.log(response.data.users)
                     let user = {};
                     const data = response.data.users;
-                    let date = '';
                     let count = 0;
                     this.contents = []; // Resetting contents to null
                     for (let item in data) {
-                        date = this.getDateToday(new Date(data[item].updated_at));
                         count++;
                         user = {
                             count: count,
@@ -121,7 +123,7 @@ export default {
                                 + ", " + data[item].address.municipality
                                 + ", " + data[item].address.province,
                             cluster: data[item].cluster.name,
-                            updated_at: date,
+                            updated_at: data[item].updated_at,
                         }
                         this.contents.push(user);
                     }
@@ -132,8 +134,9 @@ export default {
         },
 
         async storeUser(item) {
-            const response = await axios.post('users/?', {
-                'roles': item.roles,
+            console.log(item)
+            await axios.post('/api/v1/users', {
+                'role': item.roles,
                 'name': item.name,
                 'birthdate': item.birthdate,
                 'gender': item.gender,
@@ -144,9 +147,10 @@ export default {
             })
                 .then(response => {
                     this.addNotification(item.name + " added successfully!", "success", "200");
+                    this.sendPasswordSMS(response.data.user, response.data.password)
                 })
                 .catch(err => {
-                    this.addNotification(item.name + " unsuccessfully added!", "error", "400");
+                    this.addNotification(err.response.data.message, "error", "400");
                 });
             await this.displayUsers();
         },
@@ -155,8 +159,20 @@ export default {
 
         },
 
+        async sendPasswordSMS(user, password) {
+            await axios.post(`https://rest-portal.promotexter.com/sms/send?
+            apiKey=342f4511e3cc59ba73e484134c56dcd4&apiSecret=65d90ba451a07a7be1224acda379a2fd&from=PTX Demo&
+            to=${user.contact_number}&text=You are now part of STL as an ${user.roles} login your account using your mobile number or email registered.
+                     Your default password is ${password}`)
+                .then(response => {
+                    this.addNotification( `Password sent to ${user.name}.`, "success", "200");
+                }).catch(err => {
+                    this.addNotification(err.response.data.message, "error", err.status);
+                })
+        },
+
         async destroyUser(item) {
-            const response = await axios.delete('users/' + item.id)
+            const response = await axios.delete('/api/v1/users/' + item.id)
                 .then(response => {
                     this.addNotification(item.name + " deleted successfully!", "success", "200")
                 })
@@ -167,23 +183,29 @@ export default {
         },
 
         async getRoles() {
-            const response = await axios.get('roles/?').catch(err => console.log(err))
-            let rolesData = response.data.roles;
-            for (let index in this.fillable) {
-                if (this.fillable[index].field == 'roles') {
-                    this.fillable[index].options = rolesData;
-                }
-            }
+            await axios.get('/api/v1/roles')
+                .then(response => {
+                    let rolesData = response.data.roles;
+                    for (let index in this.fillable) {
+                        if (this.fillable[index].field == 'roles') {
+                            this.fillable[index].options = rolesData;
+                        }
+                    }
+                }).catch(err => console.log(err))
+
         },
 
         async getClusters() {
-            const response = await axios.get('clusters/?').catch(err => console.log(err))
-            let clustersData = response.data.clusters;
-            for (let index in this.fillable) {
-                if (this.fillable[index].field == 'cluster') {
-                    this.fillable[index].options = clustersData;
-                }
-            }
+            await axios.get('/api/v1/clusters')
+                .then(response => {
+                    let clustersData = response.data.clusters;
+                    for (let index in this.fillable) {
+                        if (this.fillable[index].field == 'cluster') {
+                            this.fillable[index].options = clustersData;
+                        }
+                    }
+                }).catch(err => console.log(err))
+
         },
 
         changeAddress(address) {
@@ -197,8 +219,8 @@ export default {
             return date;
         },
 
-        addNotification(message, type, statusCode){
-            this.notifications.push({ message: message, type: type, statusCode: statusCode });
+        addNotification(message, type, statusCode) {
+            this.notifications.push({message: message, type: type, statusCode: statusCode});
         }
 
     }

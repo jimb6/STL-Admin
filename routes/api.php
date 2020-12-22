@@ -45,6 +45,12 @@ Route::get('v1/devices/validate/{device}', function ($serial) {
         response(['device' => 'UNREGISTERED'], 204);
 })->name('device.validate');
 
+Route::get('test', function (){
+    return User::whereHas('roles', function ($query) {
+        $query->where('name', 'super-admin');
+    })->get();
+});
+
 
 Route::get('/user', function (Request $request) {
     return response(['user' =>  Auth::guard('api')->user()], 200);
@@ -60,6 +66,12 @@ Route::prefix('v1/')
         Route::resource('draw-periods', \App\Http\Controllers\API\v1\ApiDrawPeriodController::class);
         Route::resource('devices', \App\Http\Controllers\API\v1\ApiDeviceController::class);
         Route::resource('bet-transactions', \App\Http\Controllers\API\v1\ApiBetTransactionController::class);
+        Route::resource('roles', \App\Http\Controllers\API\v1\ApiRoleController::class);
+        Route::resource('permissions', \App\Http\Controllers\API\v1\ApiPermissionController::class);
+        Route::resource('users', \App\Http\Controllers\API\v1\ApiUserController::class);
+        Route::resource('clusters', \App\Http\Controllers\API\v1\ApiClusterController::class);
+
+        Route::get('users-list/{role}', [\App\Http\Controllers\API\v1\ApiUserController::class, 'baseRoleIndex']);
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])->name('agents.active');
 

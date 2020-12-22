@@ -266,7 +266,7 @@ return [
         ],
         [
             'text' => 'Agents',
-             'url'         => '/#',
+            'url' => '/#',
             'icon' => 'fas fa-users',
             'label_color' => 'success',
             'can' => 'menu agents',
@@ -311,7 +311,7 @@ return [
                     'text' => 'All Bets',
                     'can' => 'view bets',
                     'route' => 'bets.index',
-                    'active' => ['admin/bets', 'admin/bets*']
+                    'active' => ['admin/bets', 'admin/bets']
                 ],
             ]
         ],
@@ -419,6 +419,18 @@ return [
             ]
         ],
         [
+            'text' => 'Users',
+            'icon' => 'fas fa-user-shield',
+            'label_color' => 'success',
+            'can' => 'menu mobile settings',
+            'classes' => '',
+            'key' => 'users',
+            'active' => ['admin/users*'],
+            'submenu' => [
+
+            ]
+        ],
+        [
             'text' => 'Settings',
             // 'url'         => '/#',
             'icon' => 'fas fa-cogs',
@@ -430,11 +442,6 @@ return [
                     'text' => 'Global Settings',
                     'route' => 'settings.global',
                     'active' => ['admin/settings/app']
-                ],
-                [
-                    'text' => 'Users',
-                    'route' => 'users.index',
-                    'active' => ['admin/users'],
                 ],
                 [
                     'text' => 'Roles & Permissions',

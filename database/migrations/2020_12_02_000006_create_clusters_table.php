@@ -16,6 +16,7 @@ class CreateClustersTable extends Migration
         Schema::create('clusters', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->enum('cluster_type', ['Sub-Main', 'Main']);
             $table->timestamps();
             $table->softDeletes();
         });

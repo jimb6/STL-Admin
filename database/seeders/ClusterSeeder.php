@@ -18,6 +18,7 @@ class ClusterSeeder extends Seeder
         DB::table('clusters')->insert(
             [
                 'name' => 'Banay-Banay',
+                'cluster_type' => 'Sub-Main',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -26,6 +27,7 @@ class ClusterSeeder extends Seeder
         DB::table('clusters')->insert(
             [
                 'name' => 'Mati',
+                'cluster_type' => 'Sub-Main',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -34,6 +36,7 @@ class ClusterSeeder extends Seeder
         DB::table('clusters')->insert(
             [
                 'name' => 'Governor Generoso',
+                'cluster_type' => 'Sub-Main',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -42,6 +45,7 @@ class ClusterSeeder extends Seeder
         DB::table('clusters')->insert(
             [
                 'name' => 'San Isidro',
+                'cluster_type' => 'Sub-Main',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -50,6 +54,7 @@ class ClusterSeeder extends Seeder
         DB::table('clusters')->insert(
             [
                 'name' => 'Tarragona',
+                'cluster_type' => 'Sub-Main',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -58,6 +63,7 @@ class ClusterSeeder extends Seeder
         DB::table('clusters')->insert(
             [
                 'name' => 'Manay',
+                'cluster_type' => 'Sub-Main',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -66,6 +72,7 @@ class ClusterSeeder extends Seeder
         DB::table('clusters')->insert(
             [
                 'name' => 'Caraga',
+                'cluster_type' => 'Sub-Main',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -74,6 +81,7 @@ class ClusterSeeder extends Seeder
         DB::table('clusters')->insert(
             [
                 'name' => 'Bagangga',
+                'cluster_type' => 'Sub-Main',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -82,6 +90,7 @@ class ClusterSeeder extends Seeder
         DB::table('clusters')->insert(
             [
                 'name' => 'Cateel',
+                'cluster_type' => 'Sub-Main',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -90,6 +99,7 @@ class ClusterSeeder extends Seeder
         DB::table('clusters')->insert(
             [
                 'name' => 'Boston',
+                'cluster_type' => 'Sub-Main',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -98,6 +108,7 @@ class ClusterSeeder extends Seeder
         DB::table('clusters')->insert(
             [
                 'name' => 'Lupon',
+                'cluster_type' => 'Sub-Main',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -106,6 +117,7 @@ class ClusterSeeder extends Seeder
         DB::table('clusters')->insert(
             [
                 'name' => 'Davao Oriental',
+                'cluster_type' => 'Main',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],

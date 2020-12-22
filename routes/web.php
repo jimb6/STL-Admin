@@ -24,10 +24,12 @@ Route::prefix('admin')
         Route::get('/home', [HomeController::class, 'index'])->name('admin.home');
         Route::get('agents', function (Request $request) {
             return view('agents.index');
-        })->name('agents.index');                                   // Agents
-        Route::get('users', function (Request $request) {
-            return view('users.index');
+        })->name('agents.index');                                   // Agents\
+
+        Route::get('users/{role_name}', function (Request $request, $role_name) {
+            return view('users.index', with(['role' => $role_name]));
         })->name('users.index');                                    // Users
+
         Route::get('addresses', function (Request $request) {
             return view('addresses.index');
         })->name('addresses.index');                                // Address

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Scopes\Searchable;
 use App\Scopes\ClusterScope;
+use Carbon\Carbon;
+use DateTimeInterface;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,16 +27,23 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
+
     public static function booted()
     {
         static::addGlobalScope(new ClusterScope);
     }
 
-    public function routeNotificationForNexmo($notification)
+
+    protected function getUpdatedAtAttribute($date)
     {
-        return $this->contact_number;
+        return Carbon::parse($this->attributes['updated_at'])->diffForHumans();
     }
 
+    protected function getBirthdateAttribute($date)
+    {
+        return Carbon::parse($this->attributes['birthdate'])->format('m/d/Y');
+    }
 
     public function adminlte_image()
     {

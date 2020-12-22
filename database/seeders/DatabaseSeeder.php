@@ -19,11 +19,9 @@ class DatabaseSeeder extends Seeder
         $this->call(AddressSeeder::class);
         $this->call(BoothSeeder::class);
         $this->call(PermissionsSeeder::class);
-//        $this->call(DrawPeriodSeeder::class);
-//        $this->call(CollectionStatusSeeder::class);
+        $this->call(DrawPeriodSeeder::class);
         $this->call(UserSeeder::class);
-//        $this->call(BetGameSeeder::class);
-//        $this->call(BetGameDrawPeriodFactory::class);
+        $this->call(BetGameSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(AppSettingsSeeder::class);
     }

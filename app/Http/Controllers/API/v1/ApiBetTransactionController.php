@@ -27,6 +27,8 @@ class ApiBetTransactionController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create bet transactions', BetTransaction::class);
+
+        $request->user()->id;
         $validated = $request->validate([
             'agent_id' => 'required',
             'bets.*' => 'required',
