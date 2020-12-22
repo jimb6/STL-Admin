@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Twilio\Exceptions\ConfigurationException;
+use Twilio\Rest\Client;
 
 class ApiUserController extends Controller
 {
@@ -43,7 +45,7 @@ class ApiUserController extends Controller
             'address.*' => 'required'
         ]);
 
-        $this->authorize('create user '.$validated['role']['name'].'s', User::class);
+        $this->authorize('create user ' . $validated['role']['name'] . 's', User::class);
         $address = Address::firstOrCreate([
             'street' => $validated['address']['0'],
             'barangay' => $validated['address']['1'],
@@ -51,7 +53,7 @@ class ApiUserController extends Controller
             'province' => $validated['address']['3'],
         ]);
 
-        $generated_password = substr(str_shuffle(str_repeat(config('app.key'), 5)), 0, 16);
+        $generated_password = substr(str_shuffle(str_repeat(config('app.key'), 5)), 0, 8);
         $user = User::firstOrCreate([
             'name' => $validated['name'],
             'birthdate' => $validated['birthdate'],
@@ -108,12 +110,13 @@ class ApiUserController extends Controller
     {
         $this->authorize('list users', User::class);
         $search = $request->get('search', '');
-        $users = User::search($search)->with(['cluster', 'address', 'roles' => function($query) use ($role) {
+        $users = User::search($search)->with(['cluster', 'address', 'roles' => function ($query) use ($role) {
             $query->whereIn('name', [$role]);
         }])->get()
-        ->reject(function ($value, $key)  {
-            return $value['roles']->isEmpty();
-        });
+            ->reject(function ($value, $key) {
+                return $value['roles']->isEmpty();
+            });
         return response(['users' => $users], 200);
     }
+
 }

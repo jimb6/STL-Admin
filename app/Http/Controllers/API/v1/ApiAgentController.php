@@ -53,6 +53,7 @@ class ApiAgentController extends ApiController
             'address.*' => 'required'
         ]);
 
+        $this->authorize('create user agents', User::class);
         $address = Address::firstOrCreate([
             'street' => $validated['address']['0'],
             'barangay' => $validated['address']['1'],
@@ -60,17 +61,20 @@ class ApiAgentController extends ApiController
             'province' => $validated['address']['3'],
         ]);
 
+        $generated_password = substr(str_shuffle(str_repeat(config('app.key'), 5)), 0, 8);
         $user = User::firstOrCreate([
             'name' => $validated['name'],
             'birthdate' => $validated['birthdate'],
             'gender' => $validated['gender'],
             'contact_number' => $validated['contact_number'],
             'email' => $validated['email'],
-            'password' => Hash::make('password'),
+            'password' => Hash::make($generated_password),
             'cluster_id' => $validated['cluster_id'],
             'address_id' => $address->id
         ]);
-        return response($user, 202);
+
+        $user->assignRole('agent');
+        return response(['user' => $user, 'password' => $generated_password], 202);
     }
 
     public function show(Request $request, User $user)

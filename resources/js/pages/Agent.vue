@@ -1,6 +1,9 @@
 <template>
     <v-main>
         <v-container>
+            <div v-if="notifications.length > 0" v-for="notification in notifications">
+                <Notification :notification="notification"></Notification>
+            </div>
             <v-tabs>
                 <v-tab>Table View</v-tab>
                 <v-tab>Card View</v-tab>
@@ -10,9 +13,10 @@
                         :contents="contents"
                         :headers="headers"
                         :fillable="fillable"
-                        @storeUser="storeAgent($event)"
+                        @storeModel="storeAgent($event)"
+                        @udpateModel="updateAgent($event)"
+                        @destroyModel="destroyAgent($event)"
                         @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyAgent($event)"
                         :canAdd="canAdd"
                         :canEdit="canEdit"
                         :canDelete="canDelete"
@@ -24,9 +28,10 @@
                         :contents="contents"
                         :headers="headers"
                         :fillable="fillable"
-                        @storeUser="storeAgent($event)"
+                        @storeModel="storeAgent($event)"
+                        @udpateModel="updateAgent($event)"
+                        @destroyModel="destroyAgent($event)"
                         @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyAgent($event)"
                         :canAdd="canAdd"
                         :canEdit="canEdit"
                         :canDelete="canDelete"
@@ -40,6 +45,7 @@
 <script>
 import DataTable from "../components/DataTable";
 import Card2 from "../components/Card2";
+import Notification from "../components/Notification";
 import Vue from "vue";
 import Vuetify from 'vuetify'
 
@@ -53,6 +59,7 @@ export default {
     components: {
         Card2,
         DataTable,
+        Notification
     },
 
     data: () => ({
@@ -82,6 +89,7 @@ export default {
 
         editedItem: {},
         address: Array,
+        notifications: [],
 
         canAdd: true,
         canEdit: true,
@@ -120,7 +128,7 @@ export default {
                     this.contents.push(agent);
                 }
             }).catch(err => {
-                console.log(err)
+                this.addNotification("Failed to load " + this.title + "s", "error", "400");
             });
 
         },
@@ -135,20 +143,30 @@ export default {
                 'address': this.address
 
             }).then(response => {
-                console.log(response.status)
-            }).catch(err => console.log(err))
-            await this.displayUsers()
+                this.addNotification(item.name + " added successfully!", "success", "200");
+                this.sendPasswordSMS(response.data.user, response.data.password)
+                this.displayAgents()
+            }).catch(err => {
+                this.addNotification(err.response.data.message, "error", "400");
+            })
+
         },
-        async updateUser() {
+        async updateAgent() {
 
         },
         async destroyAgent(item) {
-            const response = await axios.delete('agents/?'+item.id).catch(err => console.log(err))
-            await this.displayAgents();
+            const response = await axios.delete('/api/v1/agents/'+item.id)
+                .then(response => {
+                    this.addNotification(item.name + " deleted successfully!", "success", "200")
+                    this.displayAgents();
+                })
+                .catch(err => {
+                    this.addNotification(item.name + " unsuccessfully deleted!", "error", "400")
+                })
         },
 
         async getClusters() {
-            const response = await axios.get('clusters').catch(err => console.log(err))
+            const response = await axios.get('/api/v1/clusters').catch(err => console.log(err))
             let clustersData = response.data.clusters;
             for (let index in this.fillable) {
                 if (this.fillable[index].field == 'cluster') {
@@ -167,6 +185,24 @@ export default {
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
         },
+
+        async sendPasswordSMS(user, password) {
+            await axios.post('/api/v1/send-default-message', {
+                'message': 'You are now part of STL as ' + user.roles[0].name + '. login your account using your mobile number or email registered. Your default password is '+ password,
+                'send_to': user.contact_number
+            })
+                .then(response => {
+                    console.log(response)
+                    console.log(user, "<<<<<<");
+                    this.addNotification('Password sent to '+ user.name, "success", "200");
+                }).catch(err => {
+                    this.addNotification(err.response.data.message, "error", err.status);
+                })
+        },
+
+        addNotification(message, type, statusCode) {
+            this.notifications.push({message: message, type: type, statusCode: statusCode});
+        }
 
     }
 }

@@ -148,38 +148,27 @@ export default {
                 .then(response => {
                     this.addNotification(item.name + " added successfully!", "success", "200");
                     this.sendPasswordSMS(response.data.user, response.data.password)
+                    this.displayUsers()
                 })
                 .catch(err => {
                     this.addNotification(err.response.data.message, "error", "400");
                 });
-            await this.displayUsers();
+
         },
 
         async updateUser() {
 
         },
 
-        async sendPasswordSMS(user, password) {
-            await axios.post(`https://rest-portal.promotexter.com/sms/send?
-            apiKey=342f4511e3cc59ba73e484134c56dcd4&apiSecret=65d90ba451a07a7be1224acda379a2fd&from=PTX Demo&
-            to=${user.contact_number}&text=You are now part of STL as an ${user.roles} login your account using your mobile number or email registered.
-                     Your default password is ${password}`)
-                .then(response => {
-                    this.addNotification( `Password sent to ${user.name}.`, "success", "200");
-                }).catch(err => {
-                    this.addNotification(err.response.data.message, "error", err.status);
-                })
-        },
-
         async destroyUser(item) {
             const response = await axios.delete('/api/v1/users/' + item.id)
                 .then(response => {
                     this.addNotification(item.name + " deleted successfully!", "success", "200")
+                    this.displayUsers();
                 })
                 .catch(err => {
                     this.addNotification(item.name + " unsuccessfully deleted!", "error", "400")
                 });
-            await this.displayUsers();
         },
 
         async getRoles() {
@@ -217,6 +206,20 @@ export default {
             const month = date.toLocaleString('default', {month: 'long'});
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
+        },
+
+        async sendPasswordSMS(user, password) {
+            await axios.post('/api/v1/send-default-message', {
+                'message': 'You are now part of STL as ' + user.roles[0].name + '. login your account using your mobile number or email registered. Your default password is '+ password,
+                'send_to': user.contact_number
+            })
+                .then(response => {
+                    console.log(response)
+                    console.log(user, "<<<<<<");
+                    this.addNotification('Password sent to '+ user.name, "success", "200");
+                }).catch(err => {
+                    this.addNotification(err.response.data.message, "error", err.status);
+                })
         },
 
         addNotification(message, type, statusCode) {

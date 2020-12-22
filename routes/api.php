@@ -71,6 +71,9 @@ Route::prefix('v1/')
         Route::resource('users', \App\Http\Controllers\API\v1\ApiUserController::class);
         Route::resource('clusters', \App\Http\Controllers\API\v1\ApiClusterController::class);
 
+//        Route::post('send-custom-message', [\App\Http\Controllers\SMSController::class, 'sendCustomMessage']);
+        Route::post('send-default-message', [\App\Http\Controllers\SMSController::class, 'sendMessage']);
+
         Route::get('users-list/{role}', [\App\Http\Controllers\API\v1\ApiUserController::class, 'baseRoleIndex']);
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])->name('agents.active');
