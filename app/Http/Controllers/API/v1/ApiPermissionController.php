@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class ApiPermissionController extends Controller
 {
@@ -47,9 +48,15 @@ class ApiPermissionController extends Controller
     public function update(Request $request, Permission $permission)
     {
         $this->authorize('update permissions', $permission);
-        $validated = $request->validated();
-        $permission->update($validated);
-        return response([$permission], 202);
+        $validated = $request->validate([
+            'roles' => 'array',
+        ]);
+
+        $roles = [];
+        foreach ($validated['roles'] as $role)
+            array_push($roles, Role::findByName($role, 'web'));
+        $permission->syncRoles($roles);
+        return response([$roles], 202);
     }
 
     public function destroy(Request $request, Permission $permission)

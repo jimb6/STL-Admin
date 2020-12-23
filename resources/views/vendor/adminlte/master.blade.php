@@ -130,6 +130,11 @@
 
 @once
     <script>
+        window.Laravel = {!! json_encode([
+       'csrfToken' => csrf_token(),
+       'apiToken' => Auth::user()->api_token ?? null,
+   ]) !!};
+
         @auth
             window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
         @else

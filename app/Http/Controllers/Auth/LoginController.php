@@ -58,6 +58,7 @@ class LoginController extends Controller
 //        if (filter_var($request->get('username'), FILTER_VALIDATE_EMAIL))
         if ($this->attemptLogin($request)) {
             $user = Auth::user();
+            Auth::logoutOtherDevices($request->password);
             if ($user->hasRole('agent'))
                 abort(401);
 

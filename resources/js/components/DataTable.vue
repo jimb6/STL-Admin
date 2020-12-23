@@ -18,9 +18,9 @@
             <template v-slot:top>
                 <div class="flex-between cstm-table-options my-4 cstm-row col2">
                     <div>
-                        <v-dialog v-model="dialog" max-width="500px" v-if="canAdd">
+                        <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn color="blue" class="text-white" v-bind="attrs" v-on="on">
+                                <v-btn color="blue" class="text-white" v-bind="attrs" v-on="on" v-if="canAdd">
                                     <v-icon small class="mr-2">
                                         mdi-plus
                                     </v-icon>
@@ -40,6 +40,15 @@
                                                     v-if="item.type === 'input'"
                                                     v-model="editedItem[item.field]"
                                                     :label="item.label">
+                                                </v-text-field>
+
+                                                <v-text-field
+                                                    v-if="item.type === 'input-disabled'"
+                                                    v-model="editedItem[item.field]"
+                                                    :label="item.label"
+                                                    disabled
+                                                >
+
                                                 </v-text-field>
 
                                                 <v-select
@@ -62,6 +71,16 @@
                                                     chips
                                                     multiple
                                                     return-object/>
+
+                                                <v-select
+                                                    v-if="item.type === 'chips-single'"
+                                                    v-model="editedItem[item.field]"
+                                                    :items="item.options"
+                                                    item-text="name"
+                                                    :label="item.label"
+                                                    attach
+                                                    chips
+                                                    multiple/>
 
                                                 <v-menu
                                                     v-if="item.type === 'timepicker'"
@@ -174,13 +193,13 @@
             </template>
 
             <template v-slot:item.roles ="{ item }">
-                <v-chip  v-for="role in item.roles" :key="role.name" dark close small>
+                <v-chip  v-for="role in item.roles" :key="role.name" dark small>
                     {{ role }}
                 </v-chip>
             </template>
 
             <template v-slot:item.games ="{ item }">
-                <v-chip  v-for="game in item.games" :key="game.description" dark close small>
+                <v-chip class="ma-2" v-for="game in item.games" :key="game.description"  dark small>
                     {{ game }}
                 </v-chip>
             </template>
@@ -334,8 +353,16 @@ export default {
 
         save() {
             if (this.editedIndex > -1) {
-                Object.assign(this.contents[this.editedIndex], this.editedItem)
+                // EDIT
+                // Object.assign(this.contents[this.editedIndex], this.editedItem)
+                try {
+                    let id = this.contents[this.editedIndex].id;
+                    this.editedItem["id"] = id;
+                }catch (e) {
+                }
+                this.$emit('updateModel', this.editedItem)
             } else {
+                // SAVE
                 // this.contents.push(this.editedItem)
                 this.$emit('storeModel', this.editedItem)
             }

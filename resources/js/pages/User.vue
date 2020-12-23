@@ -103,7 +103,6 @@ export default {
         async displayUsers() {
             await axios.get(`/api/v1/users-list/${this.$props.role}`)
                 .then(response => {
-                    console.log(response.data.users)
                     let user = {};
                     const data = response.data.users;
                     let count = 0;

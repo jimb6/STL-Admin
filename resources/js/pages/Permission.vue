@@ -2,21 +2,16 @@
     <div>
         <v-tabs>
             <v-tab>Table View</v-tab>
-            <v-tab>Card View</v-tab>
-            <v-tab>Add New</v-tab>
 
             <v-tab-item>
                 <DataTable
                     :title="title"
+                    :headers="headers"
                     :contents="contents"
-                    class="elevation-1"
-                    :headers="headers"/>
-            </v-tab-item>
-            <v-tab-item>
-                <h1>CardView</h1>
-            </v-tab-item>
-            <v-tab-item>
-                <h1>Add New</h1>
+                    :fillable="fillable"
+                    @updateModel="updatePermission($event)"
+                    :canEdit="true"
+                />
             </v-tab-item>
         </v-tabs>
 
@@ -40,18 +35,24 @@ export default {
     },
 
     data: () => ({
-        title: "Permissions",
+        title: "Permission",
         headers: [
             {text: "#", value: "count"},
             {text: "Name", value: "name"},
             {text: "Guard", value: "guard_name"},
             {text: "Last Update", value: "updated_at"},
             {text: "Roles", value: "roles"},
+            {text: "Actions", value: "actions", sortable: false},
+        ],
+        fillable: [
+            { label: "Permission Name", field: "name", value: "", type: "input-disabled" },
+            { label: "Roles", field: "roles", value: "", type: "chips-single", options: Array },
         ],
         contents: [],
     }),
     created() {
         this.getPermissions();
+        this.getRoles();
     },
     methods: {
         async getPermissions() {
@@ -62,6 +63,7 @@ export default {
             const data = response.data.permissions;
             let date = '';
             let count = 0;
+            this.contents = []; // Resetting contents to null
             for (let item in data) {
                 let roles = []
                 date = this.getDateToday( new Date( data[item].updated_at ) );
@@ -71,15 +73,34 @@ export default {
                 }
                 permission = {
                     count: count,
+                    id: data[item].id,
                     name: data[item].name,
                     category: data[item].name.split(/(\s+)/)[1],
                     guard_name: data[item].guard_name,
                     updated_at: date,
                     roles: roles,
                 }
-                console.log(permission.category)
                 this.contents.push(permission);
             }
+        },
+        async updatePermission(item) {
+            await axios.put('/api/v1/permissions/'+item.id, {
+                roles : item.roles
+            }).then(response => {
+                this.getPermissions()
+                }).catch(err => console.log(err))
+        },
+        async getRoles() {
+            await axios.get('/api/v1/roles')
+                .then(response => {
+                    let rolesData = response.data.roles;
+                    for (let index in this.fillable) {
+                        if (this.fillable[index].field == 'roles') {
+                            this.fillable[index].options = rolesData;
+                        }
+                    }
+                }).catch(err => console.log(err))
+
         },
         getDateToday( date ) {
             date = (date) ? date : new Date();
