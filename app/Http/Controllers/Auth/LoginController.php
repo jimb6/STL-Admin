@@ -55,9 +55,13 @@ class LoginController extends Controller
             $this->fireLockoutEvent($request);
             return $this->sendLockoutResponse($request);
         }
-
+//        if (filter_var($request->get('username'), FILTER_VALIDATE_EMAIL))
         if ($this->attemptLogin($request)) {
             $user = Auth::user();
+            if ($user->hasRole('agent'))
+                abort(401);
+
+
             $user->update([
                 'api_token' => $user->createToken($user->name)->plainTextToken
             ]);
