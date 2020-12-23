@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Bet;
 use App\Models\CloseNumber;
+use App\Scopes\BetScope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,8 +16,7 @@ class ApiBetController extends Controller
         $this->authorize('list bet transactions', Bet::class);
         $search = $request->get('search', '');
 //        $bets = Bet::with(['game', 'drawPeriod', 'betTransaction']);
-        $bets = Bet::with('betTransaction.user', 'game', 'drawPeriod')
-            ->whereDate('created_at', DB::raw('CURDATE()'))->get();
+        $bets = Bet::with('betTransaction.user', 'game', 'drawPeriod')->get();
         $bets = $bets->groupBy('combination')->map(function ($row) {
             return ['sum' => $row->sum('amount'), 'bets' => $row];
         });
@@ -89,8 +89,14 @@ class ApiBetController extends Controller
     }
 
 
-    public function getBetsPerformancePerDrawPeriod()
+    public function getBetsRange(Request $request, $date)
     {
-
+        $this->authorize('list bet transactions', Bet::class);
+        $bets = Bet::withoutGlobalScope(BetScope::class)->where('created_at', 'like', "{$date}%")->with('betTransaction.user', 'game', 'drawPeriod')->get();
+        $bets = $bets->groupBy('combination')->map(function ($row) {
+            return ['sum' => $row->sum('amount'), 'bets' => $row];
+        });
+        $closeNumbers = CloseNumber::with(['game', 'drawPeriod'])->get();
+        return response(['bets' => $bets, 'closeNumbers' => $closeNumbers], 200);
     }
 }

@@ -17,11 +17,15 @@ class BetScope implements Scope
     {
         if (Auth::check()) {
             $user = Auth::user();
-            if (!$user->hasRole(['super-admin'])) {
-                $builder->whereDate('created_at', Carbon::today())
-                    ->with(['betTransaction' => function($query) use ($user) {
-                        $query->where('user_id', '=', $user->id);
-                    }]);
+            if ($user->hasRole(['super-admin'])) {
+            }else if($user->hasRole('admin')){
+                $builder->with(['betTransaction' => function($query) use ($user) {
+                    $query->where('cluster_id', '=', $user->cluster_id);
+                }]);
+            }else{
+                $builder->with(['betTransaction' => function($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
             }
         }
     }

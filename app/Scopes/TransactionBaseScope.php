@@ -4,6 +4,7 @@
 namespace App\Scopes;
 
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -18,9 +19,12 @@ class TransactionBaseScope implements Scope
         if (Auth::check()) {
             $user = Auth::user();
             if (!$user->hasRole(['super-admin'])) {
-                $builder->whereDate('created_at', Carbon::today())->with('user', function ($query) use ($user) {
+                $builder->whereDate('created_at', Carbon::today())
+                    ->with('user', function ($query) use ($user) {
                     $query->where('cluster_id', $user->cluster_id);
                 });
+            }else{
+                $builder->whereDate('created_at', Carbon::today());
             }
         }
     }

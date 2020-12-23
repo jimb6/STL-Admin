@@ -6,6 +6,7 @@
                 :contents="contents"
                 :headers="headers"
                 :fillable="fillable"
+                @displayModel="displayBets($event)"
                 :canAdd="canAdd"
                 :canEdit="canEdit"
                 :canDelete="canDelete"
@@ -47,23 +48,24 @@ export default {
 
         editedItem: {},
         address: Array,
+        date: '',
 
         canAdd: false,
         canEdit: true,
         canDelete: false,
     }),
     created() {
-        this.displayBets();
+        this.getISODateToday()
+        this.displayBets(this.date);
         this.listen();
     },
     methods: {
-        async displayBets() {
-            await axios.get('/api/v1/bets')
+        async displayBets(date) {
+            console.log(date, "<<<<");
+            await axios.get('/api/v1/bets-range/'+date)
                 .then(response => {
-                    console.log(response)
                     let bet = {};
                     const data = response.data.bets;
-                    console.log(data)
                     let date = '';
                     let count = 0;
                     this.contents = []
@@ -72,7 +74,6 @@ export default {
                         sum += data[item].sum;
                     }
                     for (let item in data) {
-                        console.log(data[item].combination)
                         count++;
                         bet = {
                             count: count,
@@ -99,6 +100,14 @@ export default {
         formatMoney(money) {
             money = (Math.round(money * 100) / 100).toFixed(2);
             return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
+
+        getISODateToday() {
+            let date = new Date();
+            const month = date.toLocaleString('default', {month: 'numeric'});
+            date = date.getFullYear() + "-" + month + "-" + date.getDate();
+            this.maxDate = date;
+            this.date = date;
         },
 
         async listen() {
