@@ -59,7 +59,8 @@ class ApiBetTransactionController extends Controller
                     $result[] = join("", $perm);
                 }
                 $result = array_unique(array_unique($result));
-                if ($close = CloseNumber::whereIn('combination', $result)){
+                $close = CloseNumber::whereIn('combination', $result)->count();
+                if ($close>0){
                     return response(["message" => 'Bets contains close numbers.', "numbers" => $allClose],406);
                 }
                 $originalAmount = $bet['amount'];
@@ -70,6 +71,10 @@ class ApiBetTransactionController extends Controller
                     if ($save = Bet::create($bet)) {
                         array_push($saveBets, $save);
                     }
+                }
+            }else{
+                if ($save = Bet::create($bet)) {
+                    array_push($saveBets, $save);
                 }
             }
         }
