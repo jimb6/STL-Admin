@@ -254,9 +254,9 @@ export default {
         },
 
         async listen() {
-            Echo.channel('active.agent')
-                .listen('NewActiveAgent', (device) => {
-                    this.displayActiveAgents();
+            Echo.channel('bet.transaction')
+                .listen('NewBetTransactionAdded', (bets) => {
+                    this.getCardsValues();
                 });
         },
 
