@@ -23,9 +23,7 @@ Vue.use(Vuetify)
 
 export default {
     name: "Bet",
-    props: {
-        userData: JSON,
-    },
+    props: ['betType'],
     components: {
         BetsDatatable,
     },
@@ -35,11 +33,10 @@ export default {
         headers: [
             {text: "#", value: "count"},
             {text: "Combination", value: "combination"},
-            {text: "Rumbled", value: "is_rumbled"},
             {text: "Voided", value: "is_voided"},
-            {text: "Bet Amount", value: "bet_amount"},
-            {text: "Winning Amount", value: "winning_amount"},
-            {text: "Net Amount", value: "net_amount"},
+            {text: "₱ Bet Amount", value: "bet_amount"},
+            {text: "₱ Winning Amount", value: "winning_amount"},
+            {text: "₱ Net Amount", value: "net_amount"},
             {text: "Close", value: "isClose", sortable: false},
         ],
         contents: [],
@@ -72,20 +69,18 @@ export default {
                     this.contents = []
                     let sum = 0;
                     for (let item in data) {
-                        sum += data[item].amount;
+                        sum += data[item].sum;
                     }
                     for (let item in data) {
-                        date = this.getDateToday(new Date(data[item].updated_at));
+                        console.log(data[item].combination)
                         count++;
                         bet = {
                             count: count,
-                            id: data[item].id,
-                            combination: data[item].combination,
-                            is_rumbled: data[item].is_rumbled,
-                            is_voided: data[item].is_voided,
-                            bet_amount: data[item].amount,
-                            winning_amount: (data[item].amount * data[item].game.prize),
-                            net_amount: sum - (data[item].amount * data[item].game.prize),
+                            combination: item,
+                            is_voided: data[item].bets[0].is_voided,
+                            bet_amount: (data[item].sum).toLocaleString('en'),
+                            winning_amount: (data[item].sum * data[item].bets[0]['game'].prize).toLocaleString('en'),
+                            net_amount: (sum - (data[item].sum * data[item].bets[0]['game'].prize)).toLocaleString('en'),
                         }
                         this.contents.push(bet);
                     }

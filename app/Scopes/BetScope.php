@@ -4,10 +4,12 @@
 namespace App\Scopes;
 
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BetScope implements Scope
 {
@@ -17,7 +19,7 @@ class BetScope implements Scope
             $user = Auth::user();
             if (!$user->hasRole(['super-admin'])) {
                 $builder->with(['betTransaction' => function($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
+                    $query->where('user_id', '=', $user->id)->whereDate('created_at', DB::raw('CURDATE()'));
                 }]);
             }
         }

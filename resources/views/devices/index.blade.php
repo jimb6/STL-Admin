@@ -1,4 +1,4 @@
 @extends('adminlte::page')
 @section('content')
-    <Device/>
+    <Device canAdd="{{ Auth::user()->hasRole('Super-Admin') }}"/>
 @stop

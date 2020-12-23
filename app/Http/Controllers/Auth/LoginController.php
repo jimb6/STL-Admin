@@ -45,7 +45,10 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $this->validateLogin($request);
+        $validated = $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ]);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
@@ -56,14 +59,30 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-        if ($this->attemptLogin($request)) {
-            $user = Auth::user();
-            $user->update([
-                'api_token' => $user->createToken($user->name)->plainTextToken
-            ]);
-            NewActiveAgent::broadcast($user);
-            return $this->sendLoginResponse($request);
+        if (filter_var($request->get('username'), FILTER_VALIDATE_EMAIL)) {
+            if (!Auth::attempt([
+                'email' => request('username'),
+                'password' => request('password')
+            ])) {
+                return response(['messages' => 'invalid username or password.'], 401);
+            }
+        }else {
+            if (!Auth::attempt([
+                'email' => request('username'),
+                'password' => request('password')
+            ])) {
+                return response(['messages' => 'invalid username or password.'], 401);
+            }
         }
+
+        $user = Auth::user();
+        $user->update([
+            'api_token' => $user->createToken($user->name)->plainTextToken
+        ]);
+        NewActiveAgent::broadcast($user);
+        return $this->sendLoginResponse($request);
+
+
 
         $this->incrementLoginAttempts($request);
 
@@ -92,10 +111,10 @@ class LoginController extends Controller
 
     public function authenticated(Request $request, User $user)
     {
-        return $request->ajax()?//if it's an AJAX request just return the user,no redirect needed!
+        return $request->ajax() ?//if it's an AJAX request just return the user,no redirect needed!
             response()->json([
-                'name'=>$user->name,
-                'email'=>$user->email,
+                'name' => $user->name,
+                'email' => $user->email,
                 'api_token' => $user->api_token
             ]) :
             redirect()->intended($this->redirectPath());//if it's a normal login redirect to page
@@ -109,17 +128,14 @@ class LoginController extends Controller
             'device_serial_number' => 'required'
         ]);
 
-        if (filter_var($request->get('username'), FILTER_VALIDATE_EMAIL))
-        {
+        if (filter_var($request->get('username'), FILTER_VALIDATE_EMAIL)) {
             if (!Auth::attempt([
                 'email' => request('username'),
                 'password' => request('password')
             ])) {
                 return response(['messages' => 'invalid username or password.'], 401);
             }
-        }
-        else
-        {
+        } else {
             if (!Auth::attempt([
                 'contact_number' => request('username'),
                 'password' => request('password')
@@ -129,10 +145,10 @@ class LoginController extends Controller
         }
         $user = $request->user('sanctum');
         $isDeviceOwnedByUser = $user->whereHas('device', function ($query) use ($validated) {
-            $query->where('serial_number', '=', $validated['device_serial_number']);
-        })->count() > 0;
+                $query->where('serial_number', '=', $validated['device_serial_number']);
+            })->count() > 0;
 
-        if ($isDeviceOwnedByUser){
+        if ($isDeviceOwnedByUser) {
             $accessToken = $user->createToken(request('username'))->plainTextToken;
             $user->session_status = true;
             $user->api_token = $accessToken;
@@ -141,8 +157,7 @@ class LoginController extends Controller
             return response([
                 'agent' => $user
             ], 200);
-        }
-        else{
+        } else {
             return response([
                 'Message' => 'The device not owned by the agent!'
             ], 401);
@@ -152,7 +167,7 @@ class LoginController extends Controller
 
     public function logoutAgent(Request $request)
     {
-        $user =  $request->user('sanctum');
+        $user = $request->user('sanctum');
         $user->session_status = false;
         $user->update();
         NewActiveAgent::broadcast($user);

@@ -33,7 +33,7 @@
                         :canDelete="canDelete"/>
                 </v-tab-item>
             </v-tabs>
-            <div class="cstm-side-floating">
+            <div class="cstm-side-floating" v-show="$props.canAdd">
                 <button>
                     <i class="fas fa-qrcode" @click="this.getRegistrationQr"></i></button>
                 <div>
@@ -68,6 +68,7 @@ import ErrorNotif from "../components/Notification/ErrorNotif";
 Vue.use(Vuetify)
 export default {
     name: "Device",
+    props: ['canAdd'],
     components: {
         ErrorNotif,
         Card,

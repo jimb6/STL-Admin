@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bet;
 use App\Models\CloseNumber;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ApiBetController extends Controller
 {
@@ -13,7 +14,12 @@ class ApiBetController extends Controller
     {
         $this->authorize('list bet transactions', Bet::class);
         $search = $request->get('search', '');
-        $bets = Bet::selectRaw('*')->groupBy('combination')->get();
+//        $bets = Bet::with(['game', 'drawPeriod', 'betTransaction']);
+        $bets = Bet::with('betTransaction.user', 'game', 'drawPeriod')
+            ->whereDate('created_at', DB::raw('CURDATE()'))->get();
+        $bets = $bets->groupBy('combination')->map(function ($row) {
+            return ['sum' => $row->sum('amount'), 'bets' => $row];
+        });
         $closeNumbers = CloseNumber::with(['game', 'drawPeriod'])->get();
         return response(['bets' => $bets, 'closeNumbers' => $closeNumbers], 200);
     }

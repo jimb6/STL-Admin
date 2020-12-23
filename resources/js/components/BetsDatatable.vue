@@ -10,8 +10,6 @@
             :items-per-page="itemsPerPage"
             :search="search"
             hide-default-footer
-            class=""
-            :sort-by="['bet_amount']"
             :sort-desc="[true]"
             @page-count="pageCount = $event"
             loading
