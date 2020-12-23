@@ -13,11 +13,6 @@ use Spatie\Permission\Models\Role;
 class ApiAgentController extends ApiController
 {
 
-    public function __construct()
-    {
-        $this->middleware(['auth:api', 'auth:sanctum']);
-    }
-
     public function index(Request $request)
     {
         $this->authorize('list users', User::class);

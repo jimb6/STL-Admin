@@ -127,12 +127,18 @@
 {{-- Custom Scripts --}}
 
 @yield('adminlte_js')
-<script>
-    window.Laravel = {!! json_encode([
-       'csrfToken' => csrf_token(),
-       'apiToken' => Auth::user()->api_token ?? null,
-   ]) !!};
-</script>
+
+@once
+    <script>
+        @auth
+            window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
+        @else
+            window.Permissions = [];
+        @endauth
+    </script>
+@endonce
+
+
 </body>
 
 </html>

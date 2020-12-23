@@ -7,38 +7,18 @@
             <div class="col-lg-12">
                 <Card v-bind:cards="cards"/>
             </div>
+            <div class="col-12" v-show="canViewActiveAgents">
 
-            <div class="col-lg-9" v-show="canViewBets">
-                <v-card
-                    class="mt-4 mx-auto"
-                    max-width="100%">
-                    <v-sheet
-                        class="v-sheet--offset mx-auto"
-                        color="#1D3557"
-                        elevation="12"
+                <DataTable
+                    :title="title"
+                    :contents="contents"
+                    :headers="headers"
+                    :fillable="fillable"
+                    :canAdd="canAdd"
+                    :canEdit="canEdit"
+                    :canDelete="canDelete"
+                />
 
-                        max-width="calc(100% - 32px)">
-                        <v-sparkline
-                            :labels="labels"
-                            :value="value"
-                            color="white"
-                            line-width="2"
-                            padding="16"
-                        ></v-sparkline>
-                    </v-sheet>
-
-                    <v-card-text class="pt-0">
-                        <div class="title font-weight-light mb-2">Today's Bets Performance</div>
-                        <!--                        <div class="subheading font-weight-light grey&#45;&#45;text">Last Campaign Performance</div>-->
-                        <v-divider class="my-2"></v-divider>
-                        <v-icon
-                            class="mr-2"
-                            small>
-                            mdi-clock
-                        </v-icon>
-                        <span class="caption grey--text font-weight-light">last bet transactions 24 hours ago</span>
-                    </v-card-text>
-                </v-card>
             </div>
             <div class="col-3" v-show="canViewTransactions">
                 <v-card>
@@ -54,34 +34,7 @@
                     </v-list>
                 </v-card>
             </div>
-            <div class="col-12" v-show="canViewActiveAgents">
-                <v-tabs>
-                    <v-tab>Table View</v-tab>
-                    <v-tab>Card View</v-tab>
-                    <v-tab-item>
-                        <DataTable
-                            :title="title"
-                            :contents="contents"
-                            :headers="headers"
-                            :fillable="fillable"
-                            :canAdd="canAdd"
-                            :canEdit="canEdit"
-                            :canDelete="canDelete"
-                        />
-                    </v-tab-item>
-                    <v-tab-item>
-                        <Card2
-                            :title="title"
-                            :contents="contents"
-                            :headers="headers"
-                            :fillable="fillable"
-                            :canAdd="canAdd"
-                            :canEdit="canEdit"
-                            :canDelete="canDelete"
-                        />
-                    </v-tab-item>
-                </v-tabs>
-            </div>
+
         </div>
     </div>
 
@@ -177,7 +130,7 @@ export default {
             },
 
 
-            title: "Active Agents",
+            title: "Active Agent",
             headers: [
                 {text: "#", value: "count"},
                 {text: "Name", value: "name"},
@@ -195,9 +148,9 @@ export default {
             editedItem: {},
             address: Array,
 
-            canAdd: true,
-            canEdit: true,
-            canDelete: true,
+            canAdd: false,
+            canEdit: false,
+            canDelete: false,
 
             canViewActiveAgents: false,
             canViewBets: false,
@@ -212,20 +165,29 @@ export default {
         const data = {};
         this.totalCollection = this.formatCurrencies(this.totalCollection);
         await this.displayActiveAgents();
-        await this.getDrawPeriods();
-        await this.getBetsPerformance();
-        await this.getGamesPerformance();
+        await this.getCardsValues();
+        // await this.getBetsPerformance();
+        // await this.getGamesPerformance();
         await this.listen();
     },
     methods: {
 
-        async getDrawPeriods() {
+        async getCardsValues() {
             await axios.get('/api/v1/draw-periods').then(response => {
                 for (let item in response.data.drawPeriods) {
                     this.labels.push(response.data.drawPeriods[item].draw_time)
                     this.value.push(response.data.drawPeriods[item].id)
                 }
-            }).catch(err => this.addNotification("Error fetching draw periods.", "error", err.status))
+            }).catch(err => console.log(err))
+            await axios.get('/api/v1/sum-transactions').then(response => {
+                    console.log('sum ', response)
+                this.cards[1].description = '₱ ' + response.data.transaction.toLocaleString('en')
+            }).catch(err => this.addNotification("Error summarizing transactions.", "error", err.status))
+            await axios.get('/api/v1/count-transactions').then(response => {
+                    console.log('count', response)
+                this.cards[2].description = response.data.transaction
+            }).catch(err => this.addNotification("Can't count bet transactions.", "error", err.status))
+
         },
         async getGamesPerformance() {
             await axios.get('/api/v1/games').then(response => {
@@ -248,7 +210,6 @@ export default {
 
         async displayActiveAgents() {
             await axios.get('/api/v1/agents/active/all').then(response => {
-                console.log(response)
                 this.canViewActiveAgents = true
                 let agent = {};
                 const data = response.data.agents;

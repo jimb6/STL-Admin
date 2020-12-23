@@ -8,7 +8,7 @@ import Vuelidate from 'vuelidate'
 import router from "./routes";
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
-
+// import Permissions from "./mixins/Permissions";
 
 require('./bootstrap');
 
@@ -36,7 +36,7 @@ const options = {
 
 // VUE USES
 Vue.use(VueProgressBar, options, axios, Vuelidate, Vuetify, VueRouter)
-
+// Vue.mixin(Permissions);
 // COMPONENT IMPORTS
 import Dashboard from "./pages/Dashboard";
 import Agent from "./pages/Agent";

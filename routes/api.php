@@ -1,7 +1,9 @@
 <?php
 
 
+use App\Models\Bet;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
@@ -57,7 +59,7 @@ Route::get('/user', function (Request $request) {
 });
 
 Route::prefix('v1/')
-    ->middleware(['auth:sanctum'])
+    ->middleware(['auth.basic'])
     ->group(function () {
         Route::resource('agents', \App\Http\Controllers\API\v1\ApiAgentController::class);
         Route::resource('bets', \App\Http\Controllers\API\v1\ApiBetController::class);
@@ -70,6 +72,19 @@ Route::prefix('v1/')
         Route::resource('permissions', \App\Http\Controllers\API\v1\ApiPermissionController::class);
         Route::resource('users', \App\Http\Controllers\API\v1\ApiUserController::class);
         Route::resource('clusters', \App\Http\Controllers\API\v1\ApiClusterController::class);
+
+
+        Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])
+            ->name('agents.active');
+
+        Route::get('count-transactions', function (){
+            return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->count()]);
+        });
+
+        Route::get('sum-transactions', function (){
+            return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->sum('amount')]);
+        });
+
 
         Route::get('draw-periods-games', [\App\Http\Controllers\API\v1\ApiDrawPeriodController::class, 'getDrawPeriodGames']);
 

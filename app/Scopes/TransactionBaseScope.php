@@ -15,10 +15,10 @@ class TransactionBaseScope implements Scope
 
     public function apply(Builder $builder, Model $model)
     {
-        if (Auth::hasUser()) {
+        if (Auth::check()) {
             $user = Auth::user();
             if (!$user->hasRole(['super-admin'])) {
-                $builder->with('user', function ($query) use ($user) {
+                $builder->whereDate('created_at', Carbon::today())->with('user', function ($query) use ($user) {
                     $query->where('cluster_id', $user->cluster_id);
                 });
             }
