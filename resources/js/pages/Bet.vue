@@ -24,7 +24,7 @@ Vue.use(Vuetify)
 
 export default {
     name: "Bet",
-    props: ['betType'],
+    props: ['game'],
     components: {
         BetsDatatable,
     },
@@ -62,7 +62,7 @@ export default {
     methods: {
         async displayBets(date) {
             console.log(date, "<<<<");
-            await axios.get('/api/v1/bets-range/'+date)
+            await axios.get('/api/v1/bets-range/'+date+'/'+date)
                 .then(response => {
                     let bet = {};
                     const data = response.data.bets;
@@ -85,6 +85,7 @@ export default {
                         }
                         this.contents.push(bet);
                     }
+                    console.log(response)
                 }).catch(err => {
                     console.log(err)
                 });

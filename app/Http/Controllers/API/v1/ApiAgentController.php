@@ -17,8 +17,8 @@ class ApiAgentController extends ApiController
     public function index(Request $request)
     {
         $this->authorize('list users', User::class);
-        $search = $request->get('search', '');
-        $agents = Agent::search($search)->with(['cluster', 'address'])->get();
+//        $search = $request->get('search', '');
+        $agents = Agent::with(['cluster', 'address'])->get();
         return response(['agents' => $agents], 200);
     }
 

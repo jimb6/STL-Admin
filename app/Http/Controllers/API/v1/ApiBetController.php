@@ -89,10 +89,12 @@ class ApiBetController extends Controller
     }
 
 
-    public function getBetsRange(Request $request, $date)
+    public function getBetsRange(Request $request, $game, $date)
     {
         $this->authorize('list bet transactions', Bet::class);
-        $bets = Bet::withoutGlobalScope(BetScope::class)->where('created_at', 'like', "{$date}%")->with('betTransaction.user', 'game', 'drawPeriod')->get();
+        $bets = Bet::withoutGlobalScope(BetScope::class)
+            ->where('created_at', 'like', "{$date}%")
+            ->with(['betTransaction.user', 'game', 'drawPeriod'])->get();
         $bets = $bets->groupBy('combination')->map(function ($row) {
             return ['sum' => $row->sum('amount'), 'bets' => $row];
         });

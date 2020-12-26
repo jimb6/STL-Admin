@@ -97,7 +97,7 @@ export default {
     },
     methods: {
         async displayGames() {
-            const response = await axios.get('games/?')
+            const response = await axios.get('/api/v1/games')
                 .then(response => {
                     let game = {};
                     const data = response.data.games;
@@ -130,7 +130,7 @@ export default {
         },
 
         async storeGame(item) {
-            const response = await axios.post('games/?',
+            const response = await axios.post('/api/games',
                 {
                     'description': item.description,
                     'abbreviation': item.abbreviation,
@@ -157,7 +157,7 @@ export default {
         },
 
         async destroyGame(item) {
-            const response = await axios.delete('games/' + item.id)
+            const response = await axios.delete('/api/v1/games/' + item.id)
                 .then(response => {
                     this.addNotification(item.description + " deleted successfully!", "success", "200")
                 })

@@ -204,6 +204,12 @@
                 </v-chip>
             </template>
 
+            <template v-slot:item.days_availability ="{ item }">
+                <v-chip class="ma-1" v-for="day in item.days_availability" :key="day"  dark small>
+                    {{ day }}
+                </v-chip>
+            </template>
+
             <template v-slot:item.is_voided="{ item }">
                 <v-checkbox
                     :input-value="item.is_voided"

@@ -34,7 +34,7 @@ class RoleSeeder extends Seeder
         })->get();
 
         $arrayOfProhibitedPermission = [
-            'create user agents', 'update user agents', 'delete user agents',
+            'create agents', 'update agents', 'delete agents',
             'create user controllers', 'update user controllers', 'delete user controllers',
             'create user monitoring', 'update user monitoring', 'delete user monitoring',
         ];

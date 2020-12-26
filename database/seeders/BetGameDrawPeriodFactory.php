@@ -29,7 +29,7 @@ class BetGameDrawPeriodFactory extends Seeder
         );
         DB::table('bet_game_draw_period')->insert(
             [
-                'bet_game_id' => 5,
+                'bet_game_id' => 7,
                 'draw_period_id' => 1
             ],
         );
@@ -47,7 +47,7 @@ class BetGameDrawPeriodFactory extends Seeder
         );
         DB::table('bet_game_draw_period')->insert(
             [
-                'bet_game_id' => 5,
+                'bet_game_id' => 7,
                 'draw_period_id' => 2
             ],
         );
@@ -65,44 +65,32 @@ class BetGameDrawPeriodFactory extends Seeder
         );
         DB::table('bet_game_draw_period')->insert(
             [
-                'bet_game_id' => 5,
+                'bet_game_id' => 7,
                 'draw_period_id' => 3
             ],
         );
         DB::table('bet_game_draw_period')->insert(
             [
-                'bet_game_id' => 1,
+                'bet_game_id' => 3,
                 'draw_period_id' => 4
             ],
         );
         DB::table('bet_game_draw_period')->insert(
             [
-                'bet_game_id' => 2,
+                'bet_game_id' => 4,
                 'draw_period_id' => 4
             ],
         );
         DB::table('bet_game_draw_period')->insert(
             [
-                'bet_game_id' => 1,
+                'bet_game_id' => 3,
                 'draw_period_id' => 5
             ],
         );
         DB::table('bet_game_draw_period')->insert(
             [
-                'bet_game_id' => 2,
+                'bet_game_id' => 4,
                 'draw_period_id' => 5
-            ],
-        );
-        DB::table('bet_game_draw_period')->insert(
-            [
-                'bet_game_id' => 1,
-                'draw_period_id' => 6
-            ],
-        );
-        DB::table('bet_game_draw_period')->insert(
-            [
-                'bet_game_id' => 2,
-                'draw_period_id' => 6
             ],
         );
         DB::table('bet_game_draw_period')->insert(
@@ -114,6 +102,18 @@ class BetGameDrawPeriodFactory extends Seeder
         DB::table('bet_game_draw_period')->insert(
             [
                 'bet_game_id' => 4,
+                'draw_period_id' => 6
+            ],
+        );
+        DB::table('bet_game_draw_period')->insert(
+            [
+                'bet_game_id' => 35,
+                'draw_period_id' => 6
+            ],
+        );
+        DB::table('bet_game_draw_period')->insert(
+            [
+                'bet_game_id' => 6,
                 'draw_period_id' => 6
             ],
         );

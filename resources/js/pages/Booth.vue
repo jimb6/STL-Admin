@@ -61,6 +61,7 @@ export default {
             {text: "#", value: "count"},
             {text: "Name", value: "name"},
             {text: "Type", value: "cluster_type"},
+            {text: "Agents", value: "agents"},
             {text: "Actions", value: "actions", sortable: false},
         ],
         contents: [],
@@ -94,6 +95,7 @@ export default {
                         id: data[item].id,
                         name: data[item].name,
                         cluster_type: data[item].cluster_type,
+                        agents: data[item].agents.length
                     }
                     this.contents.push(cluster);
                 }

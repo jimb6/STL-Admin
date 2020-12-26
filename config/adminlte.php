@@ -302,12 +302,6 @@ return [
             'label_color' => 'success',
             'classes' => '',
             'submenu' => [
-                [
-                    'text' => 'All Bets',
-                    'can' => 'view bets',
-                    'route' => 'bets.index',
-                    'active' => ['admin/bets', 'admin/bets']
-                ],
             ]
         ],
         [
@@ -353,8 +347,9 @@ return [
             'submenu' => [
                 [
                     'text' => 'All Collections',
-                    'can' => 'view booths',
-                    'route' => 'booths.index',
+                    'can' => 'view collections',
+                    'route' => 'collections.index',
+                    'active' => ['admin/collections']
                 ],
             ]
         ],
@@ -373,8 +368,9 @@ return [
             'submenu' => [
                 [
                     'text' => 'All Reports',
-                    'can' => 'view booths',
-                    'route' => 'booths.index',
+                    'can' => 'view reports',
+                    'route' => 'reports.index',
+                    'active' => ['admin/reports']
                 ],
             ]
         ],
@@ -420,9 +416,7 @@ return [
             'can' => 'menu mobile settings',
             'classes' => '',
             'key' => 'users',
-            'active' => ['admin/users*'],
             'submenu' => [
-
             ]
         ],
         [
@@ -471,11 +465,6 @@ return [
                     'label_color' => 'success',
                     'classes' => '',
                     'submenu' => [
-                        [
-                            'text' => 'Trashed Users',
-                            'route' => 'users.index',
-                            'active' => ['admin/trashed/users'],
-                        ],
                         [
                             'text' => 'Trashed Devices',
                             'route' => 'devices.index',

@@ -56,12 +56,50 @@ class BetGameSeeder extends Seeder
 
         DB::table('games')->insert(
             [
-                'description' => 'STL-4 Digits',
+                'description' => 'National-2 Digits',
+                'days_availability' => json_encode([
+                    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+                ]),
+                'abbreviation' => 'N-2D',
+                'prize' => 70.00,
+                'field_set' => 1,
+                'digit_per_field_set' => 2,
+                'min_number' => 0,
+                'max_number' => 99,
+                'has_repetition' => true,
+
+                'updated_at' => Carbon::now(),
+                'created_at' => Carbon::now(),
+            ],
+        );
+
+        DB::table('games')->insert(
+            [
+                'description' => 'National-3 Digits',
+                'days_availability' => json_encode([
+                    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+                ]),
+                'abbreviation' => 'N-3D',
+                'prize' => 500.00,
+                'field_set' => 1,
+                'digit_per_field_set' => 3,
+                'min_number' => 0,
+                'max_number' => 999,
+                'has_repetition' => true,
+
+                'updated_at' => Carbon::now(),
+                'created_at' => Carbon::now(),
+            ],
+        );
+
+        DB::table('games')->insert(
+            [
+                'description' => 'N-4 Digits',
                 'days_availability' => json_encode([
                     'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
                 ]),
                 'abbreviation' => 'STL-4D',
-                'prize' => 500.00,
+                'prize' => 4000.00,
                 'field_set' => 1,
                 'digit_per_field_set' => 4,
                 'min_number' => 0,
@@ -80,7 +118,7 @@ class BetGameSeeder extends Seeder
                     'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
                 ]),
                 'abbreviation' => 'P3',
-                'prize' => 450.00,
+                'prize' => 500.00,
                 'field_set' => 3,
                 'digit_per_field_set' => 2,
                 'min_number' => 1,

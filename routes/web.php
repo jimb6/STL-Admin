@@ -26,8 +26,8 @@ Route::prefix('admin')
             return view('agents.index');
         })->name('agents.index');                                   // Agents\
 
-        Route::get('users/{role_name}', function (Request $request, $role_name) {
-            return view('users.index', with(['role' => $role_name]));
+        Route::get('users/{role}', function (Request $request, $role) {
+            return view('users.index', with(['role' => $role]));
         })->name('users.index');                                    // Users
 
         Route::get('addresses', function (Request $request) {
@@ -38,10 +38,14 @@ Route::prefix('admin')
         })->name('devices.index');                                  // Devices
         Route::get('draw-periods', function (Request $request) {
             return view('draw_periods.index');
-        })->name('draw_periods.index');                             // Draw Periods
+        })->name('draw_periods.index');
+
+        // Draw Periods
         Route::get('games', function (Request $request) {
             return view('games.index');
-        })->name('games.index');                                    // Games
+        })->name('games.index');
+
+        // Games
         Route::get('booths', function (Request $request) {
             return view('booths.index');
         })->name('booths.index');                                    // Booths
@@ -50,13 +54,23 @@ Route::prefix('admin')
         })->name('permissions.index');                               // Permissions
         Route::get('roles', function (Request $request) {
             return view('settings.roles.index');
-        })->name('roles.index');                                    // Roles
-        Route::get('bets/', function (Request $request) {
-            return view('bets.index');
+        })->name('roles.index');
+
+        Route::get('bets/{game}', function (Request $request, $game) {
+            return view('bets.index', with(['game' => $game]));
         })->name('bets.index');                                    // Bets
+
         Route::get('bases', function (Request $request) {
             return view('bases.index');
-        })->name('bases.index');                                    // Bets
+        })->name('bases.index');
+        // Bets
+        Route::get('collections', function (Request $request) {
+            return view('collections.index');
+        })->name('collections.index');
+
+        Route::get('reports', function (Request $request) {
+            return view('reports.index');
+        })->name('reports.index');
 //        Route::resource('devices', \App\Http\Controllers\API\v1\ApiDeviceController::class);
 
 

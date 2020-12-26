@@ -18,7 +18,7 @@ class CreateGamesTable extends Migration
             $table->string('description');
             $table->string('abbreviation');
             $table->double('prize');
-            $table->double('max_bet');
+            $table->double('max_bet')->default(1000);
             $table->integer('field_set');
             $table->integer('digit_per_field_set');
             $table->integer('min_number');

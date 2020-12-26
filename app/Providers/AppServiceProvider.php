@@ -39,7 +39,8 @@ class AppServiceProvider extends ServiceProvider
             $items = Role::all()->map(function (Role $role) {
                 return [
                     'text' => strtoupper($role['name']),
-                    'url' => route('users.index', $role['name']),
+                    'route' => ['users.index', ['role' => $role['name']]],
+                    'active' => ['admin/users*']
                 ];
             });
             $event->menu->addIn('users', ...$items);
@@ -47,7 +48,8 @@ class AppServiceProvider extends ServiceProvider
             $gameItem = Game::all()->map(function (Game $game){
                 return [
                     'text' => strtoupper($game['abbreviation']),
-                    'url' => route('bets.index', $game['abbreviation'])
+                    'route' => ['bets.index', ['game' => $game['abbreviation']]],
+                    'active' => ['admin/bets/'.$game['abbreviation']]
                 ];
             });
 

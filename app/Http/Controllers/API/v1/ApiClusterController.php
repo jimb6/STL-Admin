@@ -13,7 +13,7 @@ class ApiClusterController extends Controller
     {
         $this->authorize('list clusters', Cluster::class);
         $search = $request->get('search', '');
-        $clusters = Cluster::search($search)->get();
+        $clusters = Cluster::search($search)->with('agents')->get();
         $user = Auth::check()? Auth::user():null;
         if ($user && !$user->hasRole('Super-Admin')){
             $clusters = $clusters->reject(function ($value, $key) {

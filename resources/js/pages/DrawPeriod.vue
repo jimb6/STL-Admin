@@ -71,6 +71,7 @@ export default {
         fillable: [
             {label: "Draw Time", field: "draw_time", value: "", type: "timepicker"},
             {label: "Draw Type", field: "draw_type", value: "", type: "select", options: ["Local", "National"]},
+            { label: "Games", field: "games", value: "", type: "chips", options: Array },
         ],
         editedItem: {},
         notifications: [],

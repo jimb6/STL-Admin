@@ -32,4 +32,12 @@ class Cluster extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function agents()
+    {
+        return $this->hasMany(User::class)
+            ->whereHas('roles', function ($query){
+                $query->where('name', '=', 'agent');
+            });
+    }
 }
