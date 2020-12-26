@@ -33,7 +33,7 @@
                         :canDelete="canDelete"/>
                 </v-tab-item>
             </v-tabs>
-            <div class="cstm-side-floating" v-show="$props.canAdd">
+            <div class="cstm-side-floating">
                 <button>
                     <i class="fas fa-qrcode" @click="this.getRegistrationQr"></i></button>
                 <div>
