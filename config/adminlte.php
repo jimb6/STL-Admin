@@ -459,24 +459,7 @@ return [
                     'text' => 'Mail',
                     'url' => '/#',
                 ],
-                [
-                    'text' => 'Recycle Bin',
-                    'icon' => 'fas fa-trash',
-                    'label_color' => 'success',
-                    'classes' => '',
-                    'submenu' => [
-                        [
-                            'text' => 'Trashed Devices',
-                            'route' => 'devices.index',
-                            'active' => ['admin/trashed/devices'],
-                        ],
-                        [
-                            'text' => 'Trashed Collections',
-                            'route' => 'collections.index',
-                            'active' => ['admin/trashed/collections'],
-                        ],
-                    ]
-                ],
+
             ]
         ],
     ],
