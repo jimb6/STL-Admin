@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Models\Address;
+use App\Models\Agent;
 use App\Models\Cluster;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,22 +18,8 @@ class ApiAgentController extends ApiController
     {
         $this->authorize('list users', User::class);
         $search = $request->get('search', '');
-        $agents = null;
-        if ($request->has('type')){
-            $agents = User::onlyTrashed()
-                ->with(['cluster', 'address'])
-                ->whereHas('roles', function ($query) {
-                    $query->where('name', 'agent');
-                })->get();
-        }else{
-            $agents = User::search($search)
-                ->with(['cluster', 'address'])
-                ->whereHas('roles', function ($query) {
-                    $query->where('name', 'agent');
-                })->get();
-        }
+        $agents = Agent::search($search)->with(['cluster', 'address'])->get();
         return response(['agents' => $agents], 200);
-
     }
 
     public function store(Request $request)

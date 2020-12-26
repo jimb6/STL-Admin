@@ -129,12 +129,6 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'delete addresses']);
 
 
-
-        Permission::create(['name' => 'create user agents']);
-        Permission::create(['name' => 'update user agents']);
-        Permission::create(['name' => 'delete user agents']);
-
-
         Permission::create(['name' => 'create user super-admins']);
         Permission::create(['name' => 'update user super-admins']);
         Permission::create(['name' => 'delete user super-admins']);

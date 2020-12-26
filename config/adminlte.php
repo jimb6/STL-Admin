@@ -465,6 +465,29 @@ return [
                     'text' => 'Mail',
                     'url' => '/#',
                 ],
+                [
+                    'text' => 'Recycle Bin',
+                    'icon' => 'fas fa-trash',
+                    'label_color' => 'success',
+                    'classes' => '',
+                    'submenu' => [
+                        [
+                            'text' => 'Trashed Users',
+                            'route' => 'users.index',
+                            'active' => ['admin/trashed/users'],
+                        ],
+                        [
+                            'text' => 'Trashed Devices',
+                            'route' => 'devices.index',
+                            'active' => ['admin/trashed/devices'],
+                        ],
+                        [
+                            'text' => 'Trashed Collections',
+                            'route' => 'collections.index',
+                            'active' => ['admin/trashed/collections'],
+                        ],
+                    ]
+                ],
             ]
         ],
     ],

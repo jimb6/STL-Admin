@@ -51,7 +51,7 @@ Route::prefix('admin')
         Route::get('roles', function (Request $request) {
             return view('settings.roles.index');
         })->name('roles.index');                                    // Roles
-        Route::get('bets', function (Request $request) {
+        Route::get('bets/', function (Request $request) {
             return view('bets.index');
         })->name('bets.index');                                    // Bets
         Route::get('bases', function (Request $request) {

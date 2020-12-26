@@ -16,8 +16,9 @@ class CreateGamesTable extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->string('abbreviation')->unique();
+            $table->string('abbreviation');
             $table->double('prize');
+            $table->double('max_bet');
             $table->integer('field_set');
             $table->integer('digit_per_field_set');
             $table->integer('min_number');
