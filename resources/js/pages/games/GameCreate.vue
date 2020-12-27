@@ -62,7 +62,7 @@ export default {
             {text: "#", value: "count"},
             {text: "Description", value: "description"},
             {text: "Abbreviation", value: "abbreviation"},
-            {text: "Prize", value: "prize"},
+            {text: "Prize", value: "multiplier"},
             {text: "Days Availability", value: "days_availability"},
             {text: "Last Update", value: "updated_at"},
             {text: "Actions", value: "actions", sortable: false},
@@ -71,11 +71,11 @@ export default {
         fillable: [
             {label: "Description", field: "description", value: "", type: "input"},
             {label: "Abbreviation", field: "abbreviation", value: "", type: "input"},
-            {label: "Prize", field: "prize", value: "", type: "input"},
+            {label: "Multiplier", field: "multiplier", value: "", type: "input"},
             {label: "Field Set", field: "field_set", value: "", type: "input"},
             {label: "Digit Per Field Set", field: "digit_per_field_set", value: "", type: "input"},
-            {label: "Min Bet", field: "min_bet", value: "", type: "input"},
-            {label: "Max Bet", field: "max_bet", value: "", type: "input"},
+            {label: "Min Bet", field: "min_per_bet", value: "", type: "input"},
+            {label: "Max Bet", field: "max_per_bet", value: "", type: "input"},
             {label: "Max Hard Bet", field: "max_sum_bet", value: "", type: "input"},
             {label: "Has Repetition", field: "has_repetition", value: "", type: "select", options: [true, false]},
             {
@@ -115,11 +115,11 @@ export default {
                             id: data[item].id,
                             description: data[item].description,
                             abbreviation: data[item].abbreviation,
-                            prize: data[item].game_configuration.multiplier,
+                            multiplier: data[item].game_configuration.multiplier,
                             field_set: data[item].game_configuration.field_set,
                             digit_per_field_set: data[item].game_configuration.digit_per_field_set,
-                            min_bet: data[item].game_configuration.min_per_bet,
-                            max_bet: data[item].game_configuration.max_per_bet,
+                            min_per_bet: data[item].game_configuration.min_per_bet,
+                            max_per_bet: data[item].game_configuration.max_per_bet,
                             max_sum_bet: data[item].game_configuration.max_sum_bet,
                             has_repetition: data[item].game_configuration.has_repetition,
                             days_availability: data[item].game_configuration.days_availability,
@@ -129,8 +129,10 @@ export default {
                         }
                         this.contents.push(game);
                     }
+                    console.log(response)
                 })
                 .catch(err => {
+                    console.log(response, 'error')
                     this.addNotification("Failed to load " + this.title + "s", "error", "400");
                 });
         },
@@ -140,7 +142,7 @@ export default {
                 {
                     'description': item.description,
                     'abbreviation': item.abbreviation,
-                    'prize': item.prize,
+                    'multiplier': item.prize,
                     'field_set': item.field_set,
                     'digit_per_field_set': item.digit_per_field_set,
                     'min_per_bet': item.min_per_bet,
@@ -170,9 +172,11 @@ export default {
         async destroyGame(item) {
             const response = await axios.delete('/api/v1/games/' + item.id)
                 .then(response => {
+                    console.log(response)
                     this.addNotification(item.description + " deleted successfully!", "success", "200")
                 })
                 .catch(err => {
+                    console.log(response)
                     this.addNotification(item.description + " unsuccessfully deleted!", "error", "400")
                 });
             await this.displayGames();
