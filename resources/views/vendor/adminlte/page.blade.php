@@ -17,7 +17,7 @@
 
 @section('body_data', $layoutHelper->makeBodyData())
 @section('body')
-    <div class="wrapper" id="app">
+    <div class="wrapper " id="app">
         {{-- Top Navbar --}}
         @if($layoutHelper->isLayoutTopnavEnabled())
             @include('adminlte::partials.navbar.navbar-layout-topnav')
@@ -32,7 +32,7 @@
 
         {{-- Content Wrapper --}}
         <v-app>
-        <div class="content-wrapper {{ config('adminlte.classes_content_wrapper') ?? '' }}">
+        <div class="content-wrapper {{ config('adminlte.classes_content_wrapper') ?? '' }} dark">
 
             {{-- Content Header --}}
             <div class="content-header">

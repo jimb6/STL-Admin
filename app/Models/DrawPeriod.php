@@ -44,4 +44,9 @@ class DrawPeriod extends Model
     {
         return $this->belongsToMany(Game::class);
     }
+
+    public function winningCombination()
+    {
+        return $this->hasOne(WinningCombination::class);
+    }
 }

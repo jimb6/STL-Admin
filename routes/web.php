@@ -45,6 +45,14 @@ Route::prefix('admin')
             return view('games.index');
         })->name('games.index');
 
+        Route::get('games/create', function (Request $request) {
+            return view('games.create');
+        })->name('games.create');
+
+        Route::get('games/categorize/{abbreviation}', function (Request $request, $abbreviation) {
+            return view('games.config', with(['abbreviation' => $abbreviation]));
+        })->name('games.abbreviation.config');
+
         // Games
         Route::get('booths', function (Request $request) {
             return view('booths.index');

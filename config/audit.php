@@ -29,6 +29,7 @@ return [
         'guards'       => [
             'web',
             'api',
+            'sanctum',
         ],
     ],
 

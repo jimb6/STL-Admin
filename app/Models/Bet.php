@@ -7,12 +7,12 @@ use App\Scopes\BetScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Bet extends Model
+class Bet extends Model implements Auditable
 {
-    use SoftDeletes;
-    use HasFactory;
-    use Searchable;
+    use SoftDeletes, HasFactory, Searchable, \OwenIt\Auditing\Auditable;
+
 
     protected $fillable = [
         'combination',

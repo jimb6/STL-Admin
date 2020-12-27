@@ -78,8 +78,16 @@ ul.navbar-nav {
 .content-wrapper {
     background: #ffffff;
 }
+
+/*.content-wrapper.dark {*/
+/*    background: #1d3557;*/
+/*}*/
+
 .content-wrapper>.content {
     /*padding: 0 1.5rem;*/
+}
+.dark p{
+    color: #fff !important;
 }
 .main-sidebar a.brand-link {
     height: 60px;

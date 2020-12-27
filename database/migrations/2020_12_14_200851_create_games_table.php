@@ -17,15 +17,7 @@ class CreateGamesTable extends Migration
             $table->id();
             $table->string('description');
             $table->string('abbreviation');
-            $table->double('prize');
-            $table->double('max_bet')->default(1000);
-            $table->integer('field_set');
-            $table->integer('digit_per_field_set');
-            $table->integer('min_number');
-            $table->integer('max_number');
-            $table->boolean('has_repetition');
-            $table->boolean('is_rumbled')->default(false);
-            $table->json('days_availability');
+            $table->string('sold_out')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

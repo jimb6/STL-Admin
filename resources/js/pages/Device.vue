@@ -102,7 +102,7 @@ export default {
         address: Array,
 
         canAdd: true,
-        canEdit: false,
+        canEdit: true,
         canDelete: true,
 
         notifications: [],

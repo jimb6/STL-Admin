@@ -313,10 +313,10 @@ return [
             'classes' => '',
             'submenu' => [
                 [
-                    'text' => 'All Games',
-                    'can' => 'view games',
-                    'route' => 'games.index',
-                    'active' => ['admin/games', 'admin/games*']
+                    'text' => 'Add new game',
+                    'can' => 'create games',
+                    'route' => 'games.create',
+                    'active' => ['admin/games/create', 'admin/games/create*']
                 ],
             ]
         ],

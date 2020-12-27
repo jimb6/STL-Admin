@@ -1,4 +1,3 @@
-import App from "./App.vue";
 import VueRouter from 'vue-router'
 import VueProgressBar from 'vue-progressbar'
 import Vue from 'vue'
@@ -8,6 +7,23 @@ import Vuelidate from 'vuelidate'
 import router from "./routes";
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+// Vue.mixin(Permissions);
+// COMPONENT IMPORTS
+import Dashboard from "./pages/Dashboard";
+import Agent from "./pages/Agent";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import Bet from './pages/Bet'
+import User from './pages/User'
+import Role from './pages/Role'
+import Permission from './pages/Permission'
+import GlobalSettings from './pages/GlobalSettings'
+import Game from "./pages/games/Game";
+import Drawperiod from "./pages/DrawPeriod";
+import Device from "./pages/Device";
+import ErrorNotif from "./components/Notification/ErrorNotif";
+import Booth from "./pages/Booth";
+import GameCreate from "./pages/games/GameCreate";
 // import Permissions from "./mixins/Permissions";
 
 require('./bootstrap');
@@ -36,29 +52,14 @@ const options = {
 
 // VUE USES
 Vue.use(VueProgressBar, options, axios, Vuelidate, Vuetify, VueRouter)
-// Vue.mixin(Permissions);
-// COMPONENT IMPORTS
-import Dashboard from "./pages/Dashboard";
-import Agent from "./pages/Agent";
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import Bet from './pages/Bet'
-import User from './pages/User'
-import Role from './pages/Role'
-import Permission from './pages/Permission'
-import GlobalSettings from './pages/GlobalSettings'
-import Game from "./pages/Game";
-import Drawperiod from "./pages/DrawPeriod";
-import Device from "./pages/Device";
-import ErrorNotif from "./components/Notification/ErrorNotif";
-import Booth from "./pages/Booth";
 
-const app = new Vue(    {
-    theme: { dark: true },
+const app = new Vue({
+    theme: {dark: true},
     vuetify: new Vuetify(),
     el: '#app',
     router,
     components: {
+        GameCreate,
         Dashboard,
         Agent,
         Login,
@@ -72,6 +73,7 @@ const app = new Vue(    {
         Permission,
         GlobalSettings,
         Device,
-        ErrorNotif
+        ErrorNotif,
+
     },
 });

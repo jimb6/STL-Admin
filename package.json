@@ -10,6 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
+        "@mdi/font": "^5.8.55",
         "axios": "^0.19",
         "bootstrap": "^4.0.0",
         "cross-env": "^7.0",
@@ -27,6 +28,8 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "@enso-ui/tables": "^2.4.0",
+        "@enso-ui/toastr": "^2.1.0",
         "@vue/compiler-sfc": "^3.0.3",
         "chart.js": "^2.9.4",
         "epic-spinners": "^1.1.0",
@@ -38,6 +41,7 @@
         "vform": "^1.0.1",
         "vue": "^2.5.17",
         "vue-chartjs": "^3.5.1",
+        "vue-json-to-csv": "^1.1.8",
         "vue-progressbar": "^0.7.5",
         "vue-qrcode": "^0.3.5",
         "vue-router": "^3.4.9",

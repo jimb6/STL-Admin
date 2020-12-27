@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Game;
+use App\Models\GameConfiguration;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -16,135 +18,150 @@ class BetGameSeeder extends Seeder
     public function run()
     {
 
-        DB::table('games')->insert(
-            [
+        $game = Game::create([
                 'description' => 'STL-2 Digits',
-                'days_availability' => json_encode([
-                    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
-                ]),
                 'abbreviation' => 'STL-2D',
-                'prize' => 70.00,
-                'field_set' => 1,
-                'digit_per_field_set' => 2,
-                'min_number' => 0,
-                'max_number' => 99,
-                'has_repetition' => true,
-
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
-            ],
-        );
+            ]);
 
-        DB::table('games')->insert(
+        GameConfiguration::create([
+            'game_id'   => $game->id,
+            'field_set' => 1,
+            'digit_per_field_set' => 2,
+            'has_repetition' => true,
+            'is_rumbled' => true,
+            'min_sum_bet' => 1000,
+            'multiplier' =>  70,
+            'transaction_limit' => 10,
+            'max_per_bet' => 500,
+            'days_availability' => json_encode([
+                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+            ]),
+        ]);
+
+        $game = Game::create(
             [
                 'description' => 'STL-3 Digits',
-                'days_availability' => json_encode([
-                    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
-                ]),
                 'abbreviation' => 'STL-3D',
-                'prize' => 500.00,
-                'field_set' => 1,
-                'digit_per_field_set' => 3,
-                'min_number' => 0,
-                'max_number' => 999,
-                'has_repetition' => true,
-
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
         );
 
-        DB::table('games')->insert(
+        GameConfiguration::create([
+            'game_id'   => $game->id,
+            'field_set' => 1,
+            'digit_per_field_set' => 3,
+            'has_repetition' => true,
+            'is_rumbled' => true,
+            'min_sum_bet' => 1000,
+            'multiplier' =>  500,
+            'transaction_limit' => 10,
+            'max_per_bet' => 500,
+            'days_availability' => json_encode([
+                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+            ]),
+        ]);
+
+        $game = Game::create(
             [
                 'description' => 'National-2 Digits',
-                'days_availability' => json_encode([
-                    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
-                ]),
-                'abbreviation' => 'N-2D',
-                'prize' => 70.00,
-                'field_set' => 1,
-                'digit_per_field_set' => 2,
-                'min_number' => 0,
-                'max_number' => 99,
-                'has_repetition' => true,
-
+                'abbreviation' => 'S2',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
         );
 
-        DB::table('games')->insert(
+        GameConfiguration::create([
+            'game_id'   => $game->id,
+            'field_set' => 1,
+            'digit_per_field_set' => 2,
+            'has_repetition' => true,
+            'is_rumbled' => true,
+            'min_sum_bet' => 1000,
+            'multiplier' =>  70,
+            'transaction_limit' => 10,
+            'max_per_bet' => 500,
+            'days_availability' => json_encode([
+                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+            ]),
+        ]);
+
+        $game = Game::create(
             [
                 'description' => 'National-3 Digits',
-                'days_availability' => json_encode([
-                    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
-                ]),
-                'abbreviation' => 'N-3D',
-                'prize' => 500.00,
-                'field_set' => 1,
-                'digit_per_field_set' => 3,
-                'min_number' => 0,
-                'max_number' => 999,
-                'has_repetition' => true,
-
+                'abbreviation' => 'S3',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
         );
 
-        DB::table('games')->insert(
+        GameConfiguration::create([
+            'game_id'   => $game->id,
+            'field_set' => 1,
+            'digit_per_field_set' => 3,
+            'has_repetition' => true,
+            'is_rumbled' => true,
+            'min_sum_bet' => 1000,
+            'multiplier' =>  500,
+            'transaction_limit' => 10,
+            'max_per_bet' => 500,
+            'days_availability' => json_encode([
+                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+            ]),
+        ]);
+
+
+        $game = Game::create(
             [
-                'description' => 'N-4 Digits',
-                'days_availability' => json_encode([
-                    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-                ]),
-                'abbreviation' => 'STL-4D',
-                'prize' => 4000.00,
-                'field_set' => 1,
-                'digit_per_field_set' => 4,
-                'min_number' => 0,
-                'max_number' => 9999,
-                'has_repetition' => true,
-
+                'description' => 'National-4 Digits',
+                'abbreviation' => 'S4',
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
         );
 
-        DB::table('games')->insert(
+        GameConfiguration::create([
+            'game_id'   => $game->id,
+            'field_set' => 1,
+            'digit_per_field_set' => 4,
+            'has_repetition' => false,
+            'is_rumbled' => false,
+            'min_sum_bet' => 1000,
+            'multiplier' =>  500,
+            'transaction_limit' => 10,
+            'max_per_bet' => 500,
+            'days_availability' => json_encode([
+                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+            ]),
+        ]);
+
+
+        $game = Game::create(
             [
                 'description' => 'Pick 3',
-                'days_availability' => json_encode([
-                    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-                ]),
                 'abbreviation' => 'P3',
-                'prize' => 500.00,
-                'field_set' => 3,
-                'digit_per_field_set' => 2,
-                'min_number' => 1,
-                'max_number' => 58,
-                'has_repetition' => false,
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
         );
 
-        DB::table('games')->insert(
-            [
-                'description' => 'STL Pares',
-                'days_availability' => json_encode([
-                    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-                ]),
-                'abbreviation' => 'P',
-                'prize' => 450.00,
-                'field_set' => 2,
-                'digit_per_field_set' => 2,
-                'min_number' => 1,
-                'max_number' => 40,
-                'has_repetition' => false,
-                'updated_at' => Carbon::now(),
-                'created_at' => Carbon::now(),
-            ],
-        );
+        GameConfiguration::create([
+            'game_id'   => $game->id,
+            'field_set' => 3,
+            'digit_per_field_set' => 2,
+            'has_repetition' => false,
+            'is_rumbled' => false,
+            'min_sum_bet' => 1000,
+            'multiplier' =>  500,
+            'transaction_limit' => 10,
+            'max_per_bet' => 500,
+            'days_availability' => json_encode([
+                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+            ]),
+        ]);
+
+
     }
 }

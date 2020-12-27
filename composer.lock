@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b3a9162f773e82fe5cfbf8cc9e627fd",
+    "content-hash": "68724b7ec5f2187c516684e03158f90a",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -157,6 +157,79 @@
                 "source": "https://github.com/Bacon/BaconQrCode/tree/2.0.3"
             },
             "time": "2020-10-30T02:02:47+00:00"
+        },
+        {
+            "name": "box/spout",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/box/spout.git",
+                "reference": "7964dadc2128f3a00ffa393395b618ea115c8032"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/box/spout/zipball/7964dadc2128f3a00ffa393395b618ea115c8032",
+                "reference": "7964dadc2128f3a00ffa393395b618ea115c8032",
+                "shasum": ""
+            },
+            "require": {
+                "ext-xmlreader": "*",
+                "ext-zip": "*",
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2",
+                "phpunit/phpunit": "^7"
+            },
+            "suggest": {
+                "ext-iconv": "To handle non UTF-8 CSV files (if \"php-intl\" is not already installed or is too limited)",
+                "ext-intl": "To handle non UTF-8 CSV files (if \"iconv\" is not already installed)"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Box\\Spout\\": "src/Spout"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Adrien Loison",
+                    "email": "adrien@box.com"
+                }
+            ],
+            "description": "PHP Library to read and write spreadsheet files (CSV, XLSX and ODS), in a fast and scalable way",
+            "homepage": "https://www.github.com/box/spout",
+            "keywords": [
+                "OOXML",
+                "csv",
+                "excel",
+                "memory",
+                "odf",
+                "ods",
+                "office",
+                "open",
+                "php",
+                "read",
+                "scale",
+                "spreadsheet",
+                "stream",
+                "write",
+                "xlsx"
+            ],
+            "support": {
+                "issues": "https://github.com/box/spout/issues",
+                "source": "https://github.com/box/spout/tree/v3.1.0"
+            },
+            "time": "2019-12-02T21:21:41+00:00"
         },
         {
             "name": "brick/math",
@@ -1561,6 +1634,238 @@
                 }
             ],
             "time": "2020-09-14T14:23:00+00:00"
+        },
+        {
+            "name": "laravel-enso/enums",
+            "version": "2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-enso/enums.git",
+                "reference": "8f55b5c42e264ffb5a407e57062f617659884441"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-enso/enums/zipball/8f55b5c42e264ffb5a407e57062f617659884441",
+                "reference": "8f55b5c42e264ffb5a407e57062f617659884441",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^7.0|^8.0",
+                "php": ">=7.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelEnso\\Enums\\AppServiceProvider",
+                        "LaravelEnso\\Enums\\EnumServiceProvider"
+                    ],
+                    "aliases": {
+                        "Enums": "LaravelEnso\\Enums\\Facades\\Enums"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelEnso\\Enums\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Reza Fouladi",
+                    "email": "raftx24@gmail.com",
+                    "homepage": "https://laravel-enso.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Adrian Ocneanu",
+                    "email": "aocneanu@gmail.com",
+                    "homepage": "https://laravel-enso.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Enums for Laravel Enso",
+            "homepage": "https://github.com/laravel-enso/enums",
+            "keywords": [
+                "enums",
+                "laravel-enso"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-enso/enums/issues",
+                "source": "https://github.com/laravel-enso/enums/tree/2.1.2"
+            },
+            "time": "2020-12-11T14:17:36+00:00"
+        },
+        {
+            "name": "laravel-enso/filters",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-enso/filters.git",
+                "reference": "cc7fa62476d12e105797100809a53c2783f8839b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-enso/filters/zipball/cc7fa62476d12e105797100809a53c2783f8839b",
+                "reference": "cc7fa62476d12e105797100809a53c2783f8839b",
+                "shasum": ""
+            },
+            "require": {
+                "laravel-enso/helpers": "^2.0",
+                "laravel/framework": "^7.0|^8.0",
+                "php": ">=7.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LaravelEnso\\Filters\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Ocneanu",
+                    "email": "aocneanu@gmail.com",
+                    "homepage": "https://laravel-enso.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Filters dependency for Laravel Enso",
+            "homepage": "https://github.com/laravel-enso/filters",
+            "keywords": [
+                "date-interval",
+                "filters",
+                "laravel-enso"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-enso/filters/issues",
+                "source": "https://github.com/laravel-enso/filters/tree/2.0.3"
+            },
+            "time": "2020-12-24T11:08:57+00:00"
+        },
+        {
+            "name": "laravel-enso/helpers",
+            "version": "2.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-enso/helpers.git",
+                "reference": "103c9039de9b72135f67b1db01f1a11047f8623b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-enso/helpers/zipball/103c9039de9b72135f67b1db01f1a11047f8623b",
+                "reference": "103c9039de9b72135f67b1db01f1a11047f8623b",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^8.0",
+                "php": ">=7.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "EnsoException": "LaravelEnso\\Helpers\\Exceptions\\EnsoException"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelEnso\\Helpers\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Ocneanu",
+                    "email": "aocneanu@gmail.com",
+                    "homepage": "https://laravel-enso.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Helper classes dependency for Laravel Enso",
+            "homepage": "https://github.com/laravel-enso/helpers",
+            "keywords": [
+                "helpers",
+                "laravel-enso"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-enso/helpers/issues",
+                "source": "https://github.com/laravel-enso/helpers/tree/2.2.6"
+            },
+            "time": "2020-12-13T12:44:49+00:00"
+        },
+        {
+            "name": "laravel-enso/tables",
+            "version": "4.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-enso/tables.git",
+                "reference": "8a912f197d189b2dbb8cdcf2d324cc1025e1a7f0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-enso/tables/zipball/8a912f197d189b2dbb8cdcf2d324cc1025e1a7f0",
+                "reference": "8a912f197d189b2dbb8cdcf2d324cc1025e1a7f0",
+                "shasum": ""
+            },
+            "require": {
+                "box/spout": "^3.0",
+                "laravel-enso/enums": "^2.0",
+                "laravel-enso/filters": "^2.0",
+                "laravel-enso/helpers": "^2.0",
+                "laravel/framework": "^7.0|^8.0",
+                "php": ">=7.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelEnso\\Tables\\AppServiceProvider"
+                    ],
+                    "aliases": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelEnso\\Tables\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Ocneanu",
+                    "email": "aocneanu@gmail.com",
+                    "homepage": "https://laravel-enso.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Data Table library with server-side processing and a VueJS component",
+            "homepage": "https://github.com/laravel-enso/tables",
+            "keywords": [
+                "data-table",
+                "data-table-server-side",
+                "datatable",
+                "laravel-enso"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-enso/tables/issues",
+                "source": "https://github.com/laravel-enso/tables/tree/4.6.1"
+            },
+            "time": "2020-12-22T11:01:01+00:00"
         },
         {
             "name": "laravel/framework",

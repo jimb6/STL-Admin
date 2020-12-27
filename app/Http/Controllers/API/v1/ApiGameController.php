@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 
 class ApiGameController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, $abbreviation)
     {
         $this->authorize('list games', Game::class);
         $search = $request->get('search', '');
-        $games = Game::search($search)->get();
+        $games = Game::where('abbreviation', $abbreviation)->with(['drawPeriods', 'controlCombination', 'bets', 'gameConfiguration'])->get();
         return response(['games' => $games], 200);
     }
 
@@ -55,7 +55,7 @@ class ApiGameController extends Controller
     public function show(Request $request, Game $games)
     {
         $this->authorize('view games', $games);
-        return response([], 204);
+        return response([$games], 200);
     }
 
     public function edit(Request $request, Game $game)

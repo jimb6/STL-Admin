@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
-use App\Scopes\ClusterScope;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Game extends Model
 {
@@ -30,20 +30,33 @@ class Game extends Model
     protected $searchableFields = ['*'];
 
     protected $casts = [
-        'days_availability' => 'array',
-        'has_repetition' => 'boolean',
-        'is_rumbled' => 'boolean'
+        'is_closed' => 'boolean'
     ];
 
 
-    public function bet()
+    public function gameConfiguration()
     {
-        return $this->hasMany(Bet::class);
+        return $this->hasOne(GameConfiguration::class);
+    }
+
+    public function bets()
+    {
+        return $this->hasMany(Bet::class)->whereDate('created_at', Carbon::today());
     }
 
     public function drawPeriods()
     {
         return $this->belongsToMany(DrawPeriod::class);
+    }
+
+    public function controlCombination()
+    {
+        return $this->hasMany(ControlCombination::class);
+    }
+
+    public function winningCombination()
+    {
+        return $this->hasOne(WinningCombination::class);
     }
 
 }

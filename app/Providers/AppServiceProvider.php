@@ -44,16 +44,18 @@ class AppServiceProvider extends ServiceProvider
                 ];
             });
             $event->menu->addIn('users', ...$items);
-
-            $gameItem = Game::all()->map(function (Game $game){
+            $icons = ['fas fa-dice-one', 'fas fa-dice-two', 'fas fa-dice-three', 'fas fa-dice-four', 'fas fa-dice-five', 'fas fa-dice-six'];
+            $gameItem = Game::all()->map(function (Game $game) use ($icons) {
                 return [
                     'text' => strtoupper($game['abbreviation']),
-                    'route' => ['bets.index', ['game' => $game['abbreviation']]],
-                    'active' => ['admin/bets/'.$game['abbreviation']]
+                    'route' => ['games.abbreviation.config', ['abbreviation' => $game['abbreviation']]],
+                    'active' => ['admin/games/categorize/'.$game['abbreviation']],
+                    'icon' => 'fas fa-dice-five',
+                    'icon_color' => 'Success',
                 ];
             });
 
-            $event->menu->addIn('bets', ...$gameItem);
+            $event->menu->addIn('games', ...$gameItem);
         });
     }
 }
