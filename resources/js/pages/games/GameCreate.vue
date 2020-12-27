@@ -1,134 +1,195 @@
 <template>
-
-    <v-card
-        class="mx-auto">
-        <v-card-text>
-            <form>
-                <v-text-field
-                    v-model="name"
-                    :error-messages="nameErrors"
-                    :counter="10"
-                    label="Name"
-                    required
-                    @input="$v.name.$touch()"
-                    @blur="$v.name.$touch()"
-                ></v-text-field>
-                <v-text-field
-                    v-model="email"
-                    :error-messages="emailErrors"
-                    label="E-mail"
-                    required
-                    @input="$v.email.$touch()"
-                    @blur="$v.email.$touch()"
-                ></v-text-field>
-                <v-select
-                    v-model="select"
-                    :items="items"
-                    :error-messages="selectErrors"
-                    label="Item"
-                    required
-                    @change="$v.select.$touch()"
-                    @blur="$v.select.$touch()"
-                ></v-select>
-                <v-checkbox
-                    v-model="checkbox"
-                    :error-messages="checkboxErrors"
-                    label="Do you agree?"
-                    required
-                    @change="$v.checkbox.$touch()"
-                    @blur="$v.checkbox.$touch()"
-                ></v-checkbox>
-
-                <v-btn
-                    class="mr-4"
-                    @click="submit"
-                >
-                    submit
-                </v-btn>
-                <v-btn @click="clear">
-                    clear
-                </v-btn>
-            </form>
-        </v-card-text>
-    </v-card>
-
+    <v-main>
+        <v-container>
+            <div v-if="notifications.length > 0" v-for="notification in notifications">
+                <Notification :notification="notification"></Notification>
+            </div>
+            <v-tabs>
+                <v-tab>Table View</v-tab>
+                <v-tab>Card View</v-tab>
+                <v-tab-item>
+                    <DataTable
+                        :title="title"
+                        :headers="headers"
+                        :contents="contents"
+                        :fillable="fillable"
+                        @storeModel="storeGame($event)"
+                        @updateModel="updateGame($event)"
+                        @destroyModel="destroyGame($event)"
+                        :canAdd="canAdd"
+                        :canEdit="canEdit"
+                        :canDelete="canDelete"
+                    />
+                </v-tab-item>
+                <v-tab-item>
+                    <Card2
+                        :title="title"
+                        :headers="headers"
+                        :contents="contents"
+                        :fillable="fillable"
+                        @storeModel="storeGame($event)"
+                        @updateModel="updateGame($event)"
+                        @destroyModel="destroyGame($event)"
+                        :canAdd="canAdd"
+                        :canEdit="canEdit"
+                        :canDelete="canDelete"
+                    />
+                </v-tab-item>
+            </v-tabs>
+        </v-container>
+    </v-main>
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate'
-import { required, maxLength, email } from 'vuelidate/lib/validators'
+import DataTable from "../../components/DataTable";
+import Card2 from "../../components/Card2";
+import Notification from "../../components/Notification";
+import Vue from "vue";
+import Vuetify from 'vuetify'
+
+Vue.use(Vuetify)
+
 export default {
     name: "GameCreate",
-    mixins: [validationMixin],
-
-    validations: {
-        name: { required, maxLength: maxLength(10) },
-        email: { required, email },
-        select: { required },
-        checkbox: {
-            checked (val) {
-                return val
-            },
-        },
+    components: {
+        DataTable,
+        Card2,
+        Notification,
     },
-
     data: () => ({
-        name: '',
-        email: '',
-        select: null,
-        items: [
-            'Item 1',
-            'Item 2',
-            'Item 3',
-            'Item 4',
+        title: "Game",
+        headers: [
+            {text: "#", value: "count"},
+            {text: "Description", value: "description"},
+            {text: "Abbreviation", value: "abbreviation"},
+            {text: "Prize", value: "prize"},
+            {text: "Days Availability", value: "days_availability"},
+            {text: "Last Update", value: "updated_at"},
+            {text: "Actions", value: "actions", sortable: false},
         ],
-        checkbox: false,
+        contents: [],
+        fillable: [
+            {label: "Description", field: "description", value: "", type: "input"},
+            {label: "Abbreviation", field: "abbreviation", value: "", type: "input"},
+            {label: "Prize", field: "prize", value: "", type: "input"},
+            {label: "Field Set", field: "field_set", value: "", type: "input"},
+            {label: "Digit Per Field Set", field: "digit_per_field_set", value: "", type: "input"},
+            {label: "Min Bet", field: "min_bet", value: "", type: "input"},
+            {label: "Max Bet", field: "max_bet", value: "", type: "input"},
+            {label: "Max Hard Bet", field: "max_sum_bet", value: "", type: "input"},
+            {label: "Has Repetition", field: "has_repetition", value: "", type: "select", options: [true, false]},
+            {
+                label: "Days Availability",
+                field: "days_availability",
+                value: "",
+                type: "chips",
+                options: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+            },
+            {label: "Transaction Limit", field: "transaction_limit", value: "", type: "input"},
+            {label: "Is Rumbled", field: "is_rumbled", value: "", type: "select", options: [true, false]},
+        ],
+        editedItem: {},
+        notifications: [],
+
+        canAdd: true,
+        canEdit: true,
+        canDelete: true,
     }),
-
-    computed: {
-        checkboxErrors () {
-            const errors = []
-            if (!this.$v.checkbox.$dirty) return errors
-            !this.$v.checkbox.checked && errors.push('You must agree to continue!')
-            return errors
-        },
-        selectErrors () {
-            const errors = []
-            if (!this.$v.select.$dirty) return errors
-            !this.$v.select.required && errors.push('Item is required')
-            return errors
-        },
-        nameErrors () {
-            const errors = []
-            if (!this.$v.name.$dirty) return errors
-            !this.$v.name.maxLength && errors.push('Name must be at most 10 characters long')
-            !this.$v.name.required && errors.push('Name is required.')
-            return errors
-        },
-        emailErrors () {
-            const errors = []
-            if (!this.$v.email.$dirty) return errors
-            !this.$v.email.email && errors.push('Must be valid e-mail')
-            !this.$v.email.required && errors.push('E-mail is required')
-            return errors
-        },
+    created() {
+        this.displayGames();
     },
-
     methods: {
-        submit () {
-            this.$v.$touch()
+        async displayGames() {
+            const response = await axios.get('/api/v1/games')
+                .then(response => {
+                    let game = {};
+                    const data = response.data.games;
+                    let count = 0;
+                    let date = '';
+                    this.contents = []
+                    for (let item in data) {
+                        date = this.getDateToday(new Date(data[item].updated_at));
+                        count++;
+                        game = {
+                            count: count,
+                            id: data[item].id,
+                            description: data[item].description,
+                            abbreviation: data[item].abbreviation,
+                            prize: data[item].game_configuration.multiplier,
+                            field_set: data[item].game_configuration.field_set,
+                            digit_per_field_set: data[item].game_configuration.digit_per_field_set,
+                            min_bet: data[item].game_configuration.min_per_bet,
+                            max_bet: data[item].game_configuration.max_per_bet,
+                            max_sum_bet: data[item].game_configuration.max_sum_bet,
+                            has_repetition: data[item].game_configuration.has_repetition,
+                            days_availability: data[item].game_configuration.days_availability,
+                            is_rumbled: data[item].game_configuration.is_rumbled,
+                            transaction_limit: data[item].game_configuration.transaction_limit,
+                            updated_at: date,
+                        }
+                        this.contents.push(game);
+                    }
+                })
+                .catch(err => {
+                    this.addNotification("Failed to load " + this.title + "s", "error", "400");
+                });
         },
-        clear () {
-            this.$v.$reset()
-            this.name = ''
-            this.email = ''
-            this.select = null
-            this.checkbox = false
+
+        async storeGame(item) {
+            const response = await axios.post('/api/v1/games',
+                {
+                    'description': item.description,
+                    'abbreviation': item.abbreviation,
+                    'prize': item.prize,
+                    'field_set': item.field_set,
+                    'digit_per_field_set': item.digit_per_field_set,
+                    'min_per_bet': item.min_per_bet,
+                    'max_per_bet': item.max_per_bet,
+                    'has_repetition': item.has_repetition,
+                    'days_availability': item.days_availability,
+                    'is_rumbled': item.is_rumbled,
+                    'max_sum_bet': item.max_sum_bet,
+                    'transaction_limit': item.transaction_limit,
+                })
+                .then(response => {
+                    console.log(response);
+                    this.addNotification(item.description + " added successfully!", "success", "200");
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.addNotification(item.description + " unsuccessfully added!", "error", "400");
+                });
+
+            await this.displayGames()
         },
-    },
+
+        async updateGame() {
+
+        },
+
+        async destroyGame(item) {
+            const response = await axios.delete('/api/v1/games/' + item.id)
+                .then(response => {
+                    this.addNotification(item.description + " deleted successfully!", "success", "200")
+                })
+                .catch(err => {
+                    this.addNotification(item.description + " unsuccessfully deleted!", "error", "400")
+                });
+            await this.displayGames();
+        },
+
+        getDateToday(date) {
+            date = (date) ? date : new Date();
+            const month = date.toLocaleString('default', {month: 'long'});
+            date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
+            return date;
+        },
+
+        addNotification(message, type, statusCode) {
+            this.notifications.push({message: message, type: type, statusCode: statusCode});
+        }
+
+
+    }
 }
 </script>
-
-<style scoped>
-
-</style>

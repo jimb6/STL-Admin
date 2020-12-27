@@ -51,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
                     'route' => ['games.abbreviation.config', ['abbreviation' => $game['abbreviation']]],
                     'active' => ['admin/games/categorize/'.$game['abbreviation']],
                     'icon' => 'fas fa-dice-five',
-                    'icon_color' => 'Success',
+                    'icon_color' => 'success',
                 ];
             });
 

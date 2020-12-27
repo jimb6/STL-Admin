@@ -294,16 +294,7 @@ return [
                 ],
             ]
         ],
-        [
-            'text' => 'Bets',
-            'key' => 'bets',
-            'can' => 'menu bets',
-            'icon' => 'fas fa-coins',
-            'label_color' => 'success',
-            'classes' => '',
-            'submenu' => [
-            ]
-        ],
+
         [
             'text' => 'Games',
             'key' => 'games',

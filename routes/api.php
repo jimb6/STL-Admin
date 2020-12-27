@@ -74,7 +74,7 @@ Route::prefix('v1/')
         Route::resource('clusters', \App\Http\Controllers\API\v1\ApiClusterController::class);
         Route::get('bets-range/{game}/{date}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'getBetsRange']);
 
-        Route::get('games/config/{abbreviation}', [\App\Http\Controllers\API\v1\ApiGameController::class, 'index']);
+        Route::get('games/config/{abbreviation}', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configIndex']);
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])
             ->name('agents.active');
