@@ -39,17 +39,17 @@
 </template>
 
 <script>
-import DataTable from "../components/DataTable";
-import Card2 from "../components/Card2";
-import Notification from "../components/Notification";
+import DataTable from "../../components/DataTable";
+import Card2 from "../../components/Card2";
+import Notification from "../../components/Notification";
 import Vue from "vue";
 import Vuetify from 'vuetify'
-import Bet from './Bet'
-import WinningCombination from "./WinningCombination";
+import Bet from '../Bet'
+import WinningCombination from "../WinningCombination";
 import '@mdi/font/css/materialdesignicons.css'
-import Reports from "./Reports";
+import Reports from "../Reports";
 import VueJsonToCsv from 'vue-json-to-csv'
-import Configuration from "../components/games/Configuration";
+import Configuration from "../../components/games/Configuration";
 
 Vue.use(Vuetify, VueJsonToCsv)
 
