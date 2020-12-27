@@ -15,105 +15,105 @@ class BetGameDrawPeriodFactory extends Seeder
     public function run()
     {
 //        //
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 1,
+                'game_id' => 1,
                 'draw_period_id' => 1
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 2,
+                'game_id' => 2,
                 'draw_period_id' => 1
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 7,
+                'game_id' => 7,
                 'draw_period_id' => 1
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 1,
+                'game_id' => 1,
                 'draw_period_id' => 2
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 2,
+                'game_id' => 2,
                 'draw_period_id' => 2
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 7,
+                'game_id' => 7,
                 'draw_period_id' => 2
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 1,
+                'game_id' => 1,
                 'draw_period_id' => 3
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 2,
+                'game_id' => 2,
                 'draw_period_id' => 3
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 7,
+                'game_id' => 7,
                 'draw_period_id' => 3
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 3,
+                'game_id' => 3,
                 'draw_period_id' => 4
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 4,
+                'game_id' => 4,
                 'draw_period_id' => 4
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 3,
+                'game_id' => 3,
                 'draw_period_id' => 5
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 4,
+                'game_id' => 4,
                 'draw_period_id' => 5
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 3,
+                'game_id' => 3,
                 'draw_period_id' => 6
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 4,
+                'game_id' => 4,
                 'draw_period_id' => 6
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 35,
+                'game_id' => 35,
                 'draw_period_id' => 6
             ],
         );
-        DB::table('bet_game_draw_period')->insert(
+        DB::table('draw_period_game')->insert(
             [
-                'bet_game_id' => 6,
+                'game_id' => 6,
                 'draw_period_id' => 6
             ],
         );

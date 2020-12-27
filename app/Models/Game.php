@@ -41,7 +41,8 @@ class Game extends Model
 
     public function bets()
     {
-        return $this->hasMany(Bet::class)->whereDate('created_at', Carbon::today());
+        return $this->hasMany(Bet::class)
+            ->whereDate('created_at', Carbon::today());
     }
 
     public function drawPeriods()

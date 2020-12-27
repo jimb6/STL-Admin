@@ -74,7 +74,11 @@ Route::prefix('v1/')
         Route::resource('clusters', \App\Http\Controllers\API\v1\ApiClusterController::class);
         Route::get('bets-range/{game}/{date}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'getBetsRange']);
 
+//      Game Configuration Route
         Route::get('games/config/{abbreviation}', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configIndex']);
+        Route::post('games/config', [\App\Http\Controllers\API\v1\ApiGameController::class, 'updateConfig']);
+
+//      Game
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])
             ->name('agents.active');
@@ -85,7 +89,6 @@ Route::prefix('v1/')
         Route::get('sum-transactions', function (){
             return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->sum('amount')]);
         });
-
 
         Route::get('draw-periods-games', [\App\Http\Controllers\API\v1\ApiDrawPeriodController::class, 'getDrawPeriodGames']);
 

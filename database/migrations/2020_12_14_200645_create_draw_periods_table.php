@@ -17,6 +17,8 @@ class CreateDrawPeriodsTable extends Migration
             $table->bigIncrements('id');
             $table->time('draw_time');
             $table->enum('draw_type', ['Local', 'National']);
+            $table->time('open_time');
+            $table->time('close_time');
             $table->timestamps();
             $table->softDeletes();
         });
