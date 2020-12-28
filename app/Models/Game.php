@@ -42,7 +42,12 @@ class Game extends Model
     public function bets()
     {
         return $this->hasMany(Bet::class)
-            ->whereDate('created_at', Carbon::today());
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('drawPeriod', function ($query) {
+                $query
+                    ->whereTime('open_time', '<', Carbon::now()->toTimeString())
+                    ->whereTime('close_time', '>', Carbon::now()->toTimeString());
+            });
     }
 
     public function drawPeriods()

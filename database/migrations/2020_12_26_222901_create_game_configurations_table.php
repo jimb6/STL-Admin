@@ -21,11 +21,11 @@ class CreateGameConfigurationsTable extends Migration
             $table->boolean('has_repetition');
             $table->boolean('is_rumbled')->default(false);
             $table->double('max_sum_bet');
-            $table->double('main_per_bet')->default(0);
+            $table->double('min_per_bet')->default(0);
             $table->double('multiplier');
             $table->string('transaction_limit');
             $table->double('max_per_bet');
-            $table->json('days_availability');
+            $table->json('days_availability')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

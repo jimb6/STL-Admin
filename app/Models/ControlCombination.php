@@ -10,6 +10,8 @@ class ControlCombination extends Model
 {
     use HasFactory, Searchable;
 
+    protected $fillable = ['game_id', 'combination', 'max_amount'];
+
     public function game()
     {
         return $this->belongsTo(Game::class);

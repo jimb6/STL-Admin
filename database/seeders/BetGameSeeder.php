@@ -31,13 +31,12 @@ class BetGameSeeder extends Seeder
             'digit_per_field_set' => 2,
             'has_repetition' => true,
             'is_rumbled' => true,
-            'min_sum_bet' => 1000,
+            'max_sum_bet' => 1000,
             'multiplier' =>  70,
             'transaction_limit' => 10,
             'max_per_bet' => 500,
-            'days_availability' => json_encode([
-                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
-            ]),
+            'min_per_bet' => 5,
+
         ]);
 
         $game = Game::create(
@@ -55,13 +54,12 @@ class BetGameSeeder extends Seeder
             'digit_per_field_set' => 3,
             'has_repetition' => true,
             'is_rumbled' => true,
-            'min_sum_bet' => 1000,
+            'max_sum_bet' => 1000,
             'multiplier' =>  500,
             'transaction_limit' => 10,
             'max_per_bet' => 500,
-            'days_availability' => json_encode([
-                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
-            ]),
+            'min_per_bet' => 5,
+
         ]);
 
         $game = Game::create(
@@ -79,13 +77,12 @@ class BetGameSeeder extends Seeder
             'digit_per_field_set' => 2,
             'has_repetition' => true,
             'is_rumbled' => true,
-            'min_sum_bet' => 1000,
+            'max_sum_bet' => 1000,
             'multiplier' =>  70,
             'transaction_limit' => 10,
             'max_per_bet' => 500,
-            'days_availability' => json_encode([
-                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-            ]),
+            'min_per_bet' => 5,
+
         ]);
 
         $game = Game::create(
@@ -103,13 +100,12 @@ class BetGameSeeder extends Seeder
             'digit_per_field_set' => 3,
             'has_repetition' => true,
             'is_rumbled' => true,
-            'min_sum_bet' => 1000,
+            'max_sum_bet' => 1000,
             'multiplier' =>  500,
             'transaction_limit' => 10,
             'max_per_bet' => 500,
-            'days_availability' => json_encode([
-                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
-            ]),
+            'min_per_bet' => 5,
+
         ]);
 
 
@@ -128,13 +124,12 @@ class BetGameSeeder extends Seeder
             'digit_per_field_set' => 4,
             'has_repetition' => false,
             'is_rumbled' => false,
-            'min_sum_bet' => 1000,
+            'max_sum_bet' => 1000,
             'multiplier' =>  500,
             'transaction_limit' => 10,
             'max_per_bet' => 500,
-            'days_availability' => json_encode([
-                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-            ]),
+            'min_per_bet' => 5,
+
         ]);
 
 
@@ -153,13 +148,12 @@ class BetGameSeeder extends Seeder
             'digit_per_field_set' => 2,
             'has_repetition' => false,
             'is_rumbled' => false,
-            'min_sum_bet' => 1000,
+            'max_sum_bet' => 1000,
             'multiplier' =>  500,
             'transaction_limit' => 10,
             'max_per_bet' => 500,
-            'days_availability' => json_encode([
-                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
-            ]),
+            'min_per_bet' => 5,
+
         ]);
 
 

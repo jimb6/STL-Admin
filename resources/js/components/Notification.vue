@@ -1,5 +1,5 @@
 <template>
-    <v-scroll-x-reverse-transition>
+    <v-slide-y-transition>
         <v-alert v-if="display"
                  prominent
                  :type=" notification.type "
@@ -17,7 +17,7 @@
                 </v-col>
                 <v-col class="shrink">
                     <div>
-                        <v-btn @click="display = false" :color="notification.type" depressed>
+                        <v-btn @click="display = false" :color="notification.type" depressed class="close-notification-btn">
                             <v-icon small>
                                 mdi-close
                             </v-icon>
@@ -26,7 +26,7 @@
                 </v-col>
             </v-row>
         </v-alert>
-    </v-scroll-x-reverse-transition>
+    </v-slide-y-transition>
 </template>
 
 <script>
@@ -38,6 +38,18 @@ export default {
     data: () => ({
         display: true,
     }),
+    created() {
+        this.closeNotification();
+    },
+    methods: {
+        closeNotification(){
+            setTimeout(function(){
+                $(".close-notification-btn").click();
+            }, 3000)
+
+
+        }
+    }
 }
 </script>
 

@@ -13,8 +13,9 @@
                         large
                         @save="save(props.item)"
                         @cancel="cancel"
-                        @open="open"
-                        @close="close">
+                        @open="open(props.item)"
+                        @close="close"
+                    >
                         <div>{{ props.item.config }}</div>
                         <template v-slot:input>
                             <div class="mt-4 title">
@@ -46,6 +47,7 @@ export default {
     },
     data: () => ({
         editedItem: {},
+        temp: '',
         rules: {
             required: value => !!value || 'Required.',
             numeric: 'numeric',
@@ -56,16 +58,23 @@ export default {
     created() {
 
     },
+
     methods: {
         save(item) {
-            this.$emit('updateDefaultConfig', item);
+            if (item.config === this.editedItem.config){}
+            else
+            {
+                console.log('nausab ko.')
+                this.$emit('updateDefaultConfig', item);
+            }
         },
         cancel() {
             this.snack = true
             this.snackColor = 'error'
             this.snackText = 'Canceled'
         },
-        open() {
+        open(item) {
+            this.editedItem.config = item.config
         },
         close() {
             console.log('Dialog closed')

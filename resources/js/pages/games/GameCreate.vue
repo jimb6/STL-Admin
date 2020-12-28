@@ -62,7 +62,7 @@ export default {
             {text: "#", value: "count"},
             {text: "Description", value: "description"},
             {text: "Abbreviation", value: "abbreviation"},
-            {text: "Prize", value: "multiplier"},
+            {text: "Multiplier", value: "multiplier"},
             {text: "Days Availability", value: "days_availability"},
             {text: "Last Update", value: "updated_at"},
             {text: "Actions", value: "actions", sortable: false},
@@ -100,13 +100,13 @@ export default {
     },
     methods: {
         async displayGames() {
-            const response = await axios.get('/api/v1/games')
+            await axios.get('/api/v1/games')
                 .then(response => {
                     let game = {};
                     const data = response.data.games;
                     let count = 0;
                     let date = '';
-                    this.contents = []
+                    this.contents = [];
                     for (let item in data) {
                         date = this.getDateToday(new Date(data[item].updated_at));
                         count++;
@@ -129,20 +129,19 @@ export default {
                         }
                         this.contents.push(game);
                     }
-                    console.log(response)
                 })
                 .catch(err => {
-                    console.log(response, 'error')
+                    console.log(err, 'error')
                     this.addNotification("Failed to load " + this.title + "s", "error", "400");
                 });
         },
 
         async storeGame(item) {
-            const response = await axios.post('/api/v1/games',
+            await axios.post('/api/v1/games',
                 {
                     'description': item.description,
                     'abbreviation': item.abbreviation,
-                    'multiplier': item.prize,
+                    'multiplier': item.multiplier,
                     'field_set': item.field_set,
                     'digit_per_field_set': item.digit_per_field_set,
                     'min_per_bet': item.min_per_bet,
@@ -165,8 +164,29 @@ export default {
             await this.displayGames()
         },
 
-        async updateGame() {
-
+        async updateGame(item) {
+            await axios.put('/api/v1/games/'+item.id,
+                {
+                    'description': item.description,
+                    'abbreviation': item.abbreviation,
+                    'multiplier': item.multiplier,
+                    'field_set': item.field_set,
+                    'digit_per_field_set': item.digit_per_field_set,
+                    'min_per_bet': item.min_per_bet,
+                    'max_per_bet': item.max_per_bet,
+                    'has_repetition': item.has_repetition,
+                    'days_availability': item.days_availability,
+                    'is_rumbled': item.is_rumbled,
+                    'max_sum_bet': item.max_sum_bet,
+                    'transaction_limit': item.transaction_limit,
+                })
+                .then(response => {
+                    this.addNotification(item.description + " updated successfully!", "success", "200");
+                })
+                .catch(err => {
+                    this.addNotification(item.description + " unsuccessfully updated!", "error", "400");
+                });
+            await this.displayGames();
         },
 
         async destroyGame(item) {

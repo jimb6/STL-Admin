@@ -27,10 +27,25 @@ class ApiDrawPeriodController extends Controller
     {
         $this->authorize('create draw periods', DrawPeriod::class);
         $validated = $request->validate([
-            'draw_time' => 'required|date_format:H:i',
-            'draw_type' => 'required'
+            'draw_time' => 'required',
+            'draw_type' => 'required',
+            'games.*' => 'required',
+            'open_time' => 'required',
+            'close_time' => 'required'
         ]);
-        $drawPeriod = DrawPeriod::create($validated);
+
+        $games = Game::whereIn('description', $validated['games'])->get()->map(function ($row) {
+            return $row->id;
+        })->toArray();
+
+        $drawPeriod = DrawPeriod::create([
+            'draw_time' => $validated['draw_time'],
+            'draw_type' => $validated['draw_type'],
+            'open_time' => $validated['open_time'],
+            'close_time' => $validated['close_time'],
+        ]);
+        $drawPeriod->games()->sync($games);
+
         return response(['drawPeriod' => $drawPeriod], 202);
     }
 
@@ -50,9 +65,25 @@ class ApiDrawPeriodController extends Controller
     public function update(Request $request, DrawPeriod $drawPeriod)
     {
         $this->authorize('update draw periods', $drawPeriod);
-        $validated = $request->validated();
-        $drawPeriod->update($validated);
-        return response([$drawPeriod], 202);
+        $validated = $request->validate([
+            'draw_time' => 'required',
+            'draw_type' => 'required',
+            'games.*' => 'required',
+            'open_time' => 'required',
+            'close_time' => 'required'
+        ]);
+        $games = Game::whereIn('description', $validated['games'])->get()->map(function ($row) {
+            return $row->id;
+        })->toArray();
+//
+        $drawPeriod->update([
+            'draw_time' => $validated['draw_time'],
+            'draw_type' => $validated['draw_type'],
+            'open_time' => $validated['open_time'],
+            'close_time' => $validated['close_time'],
+        ]);
+        $drawPeriod->games()->sync($games);
+        return response([], 204);
     }
 
     public function destroy(Request $request, DrawPeriod $drawPeriod)

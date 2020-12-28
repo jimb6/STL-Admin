@@ -47,7 +47,7 @@ Route::get('v1/devices/validate/{device}', function ($serial) {
         response(['device' => 'UNREGISTERED'], 204);
 })->name('device.validate');
 
-Route::get('test', function (){
+Route::get('test', function () {
     return User::whereHas('roles', function ($query) {
         $query->where('name', 'super-admin');
     })->get();
@@ -55,7 +55,7 @@ Route::get('test', function (){
 
 
 Route::get('/user', function (Request $request) {
-    return response(['user' =>  Auth::guard('api')->user()], 200);
+    return response(['user' => Auth::guard('api')->user()], 200);
 });
 
 Route::prefix('v1/')
@@ -76,17 +76,25 @@ Route::prefix('v1/')
 
 //      Game Configuration Route
         Route::get('games/config/{abbreviation}', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configIndex']);
-        Route::post('games/config', [\App\Http\Controllers\API\v1\ApiGameController::class, 'updateConfig']);
+        Route::put('games/config/default/{game}', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configUpdate']);
+        Route::put('games/config/days/{game}', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configDaysUpdate']);
 
-//      Game
+//      Controlled Game Combination
+        Route::post('games/control-combination/{game}', [\App\Http\Controllers\API\v1\ApiControlledNumberController::class, 'store']);
+        Route::delete('games/control-combination/{combi}', [\App\Http\Controllers\API\v1\ApiControlledNumberController::class, 'destroy']);
+        Route::put('games/control-combination/{game}', [\App\Http\Controllers\API\v1\ApiControlledNumberController::class, 'update']);
+
+//    Game Configuration Mobile Route
+        Route::get('games/mobile-config/today/', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configMobileIndex']);
+
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])
             ->name('agents.active');
-        Route::get('count-transactions', function (){
+        Route::get('count-transactions', function () {
             return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->count()]);
         });
 
-        Route::get('sum-transactions', function (){
+        Route::get('sum-transactions', function () {
             return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->sum('amount')]);
         });
 

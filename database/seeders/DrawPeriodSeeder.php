@@ -19,7 +19,9 @@ class DrawPeriodSeeder extends Seeder
         DB::table('draw_periods')->insert(
             [
                 'draw_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:30 AM')),
-                'draw_type' => 'Local',
+                'draw_type' => 'STL',
+                'open_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:00 PM')),
+                'close_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:00 PM')),
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -28,7 +30,9 @@ class DrawPeriodSeeder extends Seeder
         DB::table('draw_periods')->insert(
             [
                 'draw_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '3:00 PM')),
-                'draw_type' => 'Local',
+                'draw_type' => 'STL',
+                'open_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:00 PM')),
+                'close_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:00 PM')),
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -37,7 +41,9 @@ class DrawPeriodSeeder extends Seeder
         DB::table('draw_periods')->insert(
             [
                 'draw_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '7:00 PM')),
-                'draw_type' => 'Local',
+                'draw_type' => 'STL',
+                'open_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:00 PM')),
+                'close_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:00 PM')),
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -47,6 +53,8 @@ class DrawPeriodSeeder extends Seeder
             [
                 'draw_time' => Carbon::createFromFormat('g:ia', '2:00pm'),
                 'draw_type' => 'National',
+                'open_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:00 PM')),
+                'close_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:00 PM')),
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -56,6 +64,8 @@ class DrawPeriodSeeder extends Seeder
             [
                 'draw_time' => Carbon::createFromFormat('g:ia', '5:00pm'),
                 'draw_type' => 'National',
+                'open_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:00 PM')),
+                'close_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:00 PM')),
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -65,6 +75,8 @@ class DrawPeriodSeeder extends Seeder
             [
                 'draw_time' => Carbon::createFromFormat('g:ia', '9:00pm'),
                 'draw_type' => 'National',
+                'open_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:00 PM')),
+                'close_time' => Carbon::createFromTimeString(Carbon::createFromFormat('g:i A', '10:00 PM')),
                 'updated_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],

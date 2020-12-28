@@ -30,6 +30,17 @@
                         </v-tab-item>
                         <v-tab-item>
                             <Reports/>
+                            <BetsDatatable
+                                :title="game"
+                                :total="total"
+                                :headers="headers"
+                                :contents="contents"
+                                :fillable="fillable"
+                                :canAdd="canAdd"
+                                :canEdit="canEdit"
+                                :canDelete="canDelete"
+                                :hasTopHeader="hasTopHeader"
+                            />
                         </v-tab-item>
                     </v-tabs>
                 </div>
@@ -50,6 +61,7 @@ import '@mdi/font/css/materialdesignicons.css'
 import Reports from "../Reports";
 import VueJsonToCsv from 'vue-json-to-csv'
 import Configuration from "../../components/games/Configuration";
+import BetsDatatable from "../../components/BetsDatatable";
 
 Vue.use(Vuetify, VueJsonToCsv)
 
@@ -63,17 +75,12 @@ export default {
         Card2,
         Notification,
         Bet,
-        WinningCombination
+        WinningCombination,
+        BetsDatatable
     },
     data: () => ({
         panel: [0, 0],
         readonly: false,
-
-        snack: false,
-        snackColor: '',
-        snackText: '',
-        max25chars: v => v.length <= 25 || 'Input too long!',
-        pagination: {},
 
         editedIndex: -1,
 
@@ -135,9 +142,11 @@ export default {
         itemsPerPage: 10,
         tabs: '',
 
+        total: 1000,
         canAdd: true,
         canEdit: true,
         canDelete: true,
+        hasTopHeader: false,
 
         dialog: false,
         dialogDelete: false,
@@ -147,7 +156,7 @@ export default {
     methods: {
 
         async storeGame(item) {
-            const response = await axios.post('/api/games',
+            const response = await axios.post('/api/v1/games',
                 {
                     'description': item.description,
                     'abbreviation': item.abbreviation,

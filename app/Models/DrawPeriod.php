@@ -14,7 +14,7 @@ class DrawPeriod extends Model
     use HasFactory;
     use Searchable;
 
-    protected $fillable = ['draw_time', 'draw_type'];
+    protected $fillable = ['draw_time', 'draw_type', 'games', 'open_time', 'close_time'];
 
     protected $searchableFields = ['*'];
 
@@ -25,10 +25,10 @@ class DrawPeriod extends Model
         return Carbon::parse($this->attributes['updated_at'])->diffForHumans();
     }
 
-    public function getDrawTimeAttribute($time)
-    {
-        return date("g:i a", strtotime($time));
-    }
+//    public function getDrawTimeAttribute($time)
+//    {
+//        return date("g:i a", strtotime($time));
+//    }
 
     public function betGames()
     {

@@ -87,4 +87,6 @@ Route::prefix('admin')
         Route::get('user/info', function () {
             return Auth::check() ? Auth::user()->toJson() : null;
         })->name('user.info');
+
+        Route::get('test', function (){ return view('test'); });
     });

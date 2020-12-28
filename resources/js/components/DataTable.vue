@@ -85,7 +85,7 @@
                                                 <v-menu
                                                     v-if="item.type === 'timepicker'"
                                                     ref="menu"
-                                                    v-model="menuTime"
+                                                    v-model="menuTime[index]"
                                                     :close-on-content-click="false"
                                                     :nudge-right="40"
                                                     transition="scale-transition"
@@ -95,20 +95,20 @@
                                                     <template v-slot:activator="{ on, attrs }">
                                                         <v-text-field
                                                             v-model="editedItem[item.field]"
-                                                            label="Draw Time"
+                                                            :label="item.label"
                                                             readonly
                                                             v-bind="attrs"
                                                             v-on="on"
                                                         />
                                                     </template>
                                                     <v-time-picker
-                                                        v-if="menuTime"
-                                                        v-model="time"
+                                                        v-if="menuTime[index]"
+                                                        v-model="editedItem[item.field]"
                                                         full-width
                                                         ampm-in-title
-                                                        @click:hour="editedItem[item.field] = time"
-                                                        @click:minute="editedItem[item.field] = time"
-                                                        @update:period="editedItem[item.field] = time"
+                                                        @click:hour="editedItem[item.field]"
+                                                        @click:minute="editedItem[item.field]"
+                                                        @update:period="editedItem[item.field]"
                                                     />
                                                 </v-menu>
 
@@ -301,8 +301,8 @@ export default {
         birthdate: null,
         menuDate: false,
 
-        time: null,
-        menuTime: false,
+        time: [],
+        menuTime: [],
 
     }),
 
@@ -316,6 +316,7 @@ export default {
             for (let index in fillable) {
                 this.editedItem[fillable[index].field] = fillable[index].value
                 this.defaultItem[fillable[index].field] = fillable[index].value
+                this.menuTime[index] = false
             }
         },
 

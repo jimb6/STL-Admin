@@ -9,14 +9,31 @@ class GameConfiguration extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['field_set', 'days_availability', 'max_per_bet', 'transaction_limit', 'multiplier', 'max_sum_bet', 'is_rumbled', 'has_repetition',
-    'digit_per_field_set', 'field_set'];
+    protected $fillable = [
+        'game_id',
+        'field_set',
+        'digit_per_field_set',
+        'has_repetition',
+        'is_rumbled',
+        'max_sum_bet',
+        'multiplier',
+        'transaction_limit',
+        'min_per_bet',
+        'max_per_bet',
+        'days_availability',
+        ];
 
     protected $casts = [
         'days_availability' => 'array',
         'has_repetition' => 'boolean',
         'is_rumbled' => 'boolean'
     ];
+
+    protected $table = 'game_configurations';
+
+    public function getDaysAvailabilityAttribute($days){
+        return json_decode($this->attributes['days_availability']);
+    }
 
     public function game()
     {

@@ -4,7 +4,7 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
             <template class="p-2">
-                <v-chip class="mr-1 my-1" close
+                <v-chip class="mr-1 my-1"
                         v-for="day in daysConfigContents"
                         :key="day" dark small>
                     {{ day }}
@@ -100,8 +100,8 @@
             },
 
             save() {
-                console.log( this.editedItem );
-                this.close()
+                this.$emit('updateDaysAvailability', this.editedItem);
+                this.close();
             },
         },
         computed: {

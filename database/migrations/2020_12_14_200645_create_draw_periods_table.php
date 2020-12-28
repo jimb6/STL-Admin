@@ -16,7 +16,7 @@ class CreateDrawPeriodsTable extends Migration
         Schema::create('draw_periods', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->time('draw_time');
-            $table->enum('draw_type', ['Local', 'National']);
+            $table->enum('draw_type', ['STL', 'National']);
             $table->time('open_time');
             $table->time('close_time');
             $table->timestamps();

@@ -1,6 +1,7 @@
 <template>
     <v-container class="cstm-vuetify-table">
-        <h2>{{ title }}s Table</h2>
+        <h3>{{ title }} Gross TOTAL</h3>
+        <h2>${{ total }}</h2>
 
 
         <v-data-table
@@ -12,11 +13,10 @@
             hide-default-footer
             :sort-desc="[true]"
             @page-count="pageCount = $event"
-            loading
             loading-text="Loading... Please wait">
 
             <template v-slot:top>
-                <div class="flex-between cstm-table-options my-4 cstm-row col2">
+                <div class="flex-between cstm-table-options my-4 cstm-row col2" v-if="hasTopHeader">
                     <div>
                         <v-row class="flex">
                             <v-col cols="4">
@@ -72,6 +72,27 @@
                         hide-details
                     ></v-text-field>
                 </div>
+                <div class="flex-between cstm-row col2" v-if="!hasTopHeader">
+                    <v-text-field
+                        :value="itemsPerPage"
+                        label="Items per page"
+                        type="number"
+                        min="-1"
+                        max="15"
+                        @input="itemsPerPage = parseInt($event, 10)"
+                        class="cstm-v-textfield small"
+                    ></v-text-field>
+                    <div>
+                        <v-pagination
+                            v-model="page"
+                            :length="pageCount"
+                            prev-icon="mdi-menu-left"
+                            next-icon="mdi-menu-right"
+                            :total-visible="7"
+                            circle
+                        ></v-pagination>
+                    </div>
+                </div>
             </template>
 
             <template v-slot:item.is_rumbled="{ item }">
@@ -97,7 +118,7 @@
         </v-data-table>
 
 
-        <div class="flex-between cstm-row col2">
+        <div class="flex-between cstm-row col2" v-if="hasTopHeader">
             <v-text-field
                 :value="itemsPerPage"
                 label="Items per page"
@@ -134,12 +155,14 @@ export default {
     },
     props: {
         title: String,
+        total: "",
         headers: Array,
         contents: Array,
         fillable: Array,
         canAdd: Boolean,
         canEdit: Boolean,
         canDelete: Boolean,
+        hasTopHeader: Boolean,
     },
 
     data: () => ({
@@ -287,4 +310,19 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.container.cstm-vuetify-table {
+    padding: unset;
+}
+h3 {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 22px;
+    font-weight: 300;
+}
+h2 {
+    font-weight: 600;
+}
+</style>
 

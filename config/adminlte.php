@@ -304,7 +304,7 @@ return [
             'classes' => '',
             'submenu' => [
                 [
-                    'text' => 'Add new game',
+                    'text' => 'All Games',
                     'can' => 'create games',
                     'route' => 'games.create',
                     'active' => ['admin/games/create', 'admin/games/create*']

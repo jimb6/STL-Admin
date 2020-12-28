@@ -65,13 +65,17 @@ export default {
             {text: "Draw Type", value: "draw_type"},
             {text: "Last Update", value: "updated_at"},
             {text: "Games", value: "games"},
+            {text: "Start", value: "open_time"},
+            {text: "End", value: "close_time"},
             {text: "Actions", value: "actions", sortable: false},
         ],
         contents: [],
         fillable: [
             {label: "Draw Time", field: "draw_time", value: "", type: "timepicker"},
-            {label: "Draw Type", field: "draw_type", value: "", type: "select", options: ["Local", "National"]},
-            { label: "Games", field: "games", value: "", type: "chips", options: Array },
+            {label: "Draw Type", field: "draw_type", value: "", type: "select", options: ["STL", "National"]},
+            {label: "Games", field: "games", value: "", type: "chips", options: Array},
+            {label: "Open Time", field: "open_time", value: "", type: "timepicker"},
+            {label: "Close Time", field: "close_time", value: "", type: "timepicker"},
         ],
         editedItem: {},
         notifications: [],
@@ -82,19 +86,19 @@ export default {
     }),
     created() {
         this.displayDrawPeriods();
+        this.getAllGames();
     },
     methods: {
         async displayDrawPeriods() {
             await axios.get('/api/v1/draw-periods')
-                .then(response=> {
-                    console.log(response)
+                .then(response => {
                     let drawPeriod = {};
                     const data = response.data.drawPeriods;
                     let count = 0;
                     this.contents = []
                     for (let item in data) {
                         let games = [];
-                        for (let gameItem in data[item].games){
+                        for (let gameItem in data[item].games) {
                             games.push(data[item].games[gameItem].description)
                         }
                         count++;
@@ -103,6 +107,8 @@ export default {
                             id: data[item].id,
                             draw_time: data[item].draw_time,
                             draw_type: data[item].draw_type,
+                            open_time: data[item].open_time,
+                            close_time: data[item].close_time,
                             updated_at: data[item].updated_at,
                             games: games
                         }
@@ -114,11 +120,33 @@ export default {
                 });
         },
 
+        async getAllGames() {
+            axios.get('/api/v1/games')
+                .then(response => {
+                    let games = [];
+                    let data = response.data.games;
+                    for (let index in data) {
+                        games.push(data[index].description)
+                    }
+                    for (let index in this.fillable) {
+                        if (this.fillable[index].field == 'games') {
+                            this.fillable[index].options = games;
+                        }
+                    }
+                })
+                .catch(err => {
+                    this.addNotification(item.draw_time + " unsuccessfully added!", "error", "400");
+                });
+        },
+
         async storeDrawPeriod(item) {
             axios.post('/api/v1/draw-periods',
                 {
                     'draw_time': item.draw_time,
                     'draw_type': item.draw_type,
+                    'games': item.games,
+                    'open_time': item.open_time,
+                    'close_time': item.close_time
                 })
                 .then(response => {
                     this.addNotification(item.draw_time + " added successfully!", "success", "200");
@@ -129,17 +157,30 @@ export default {
             await this.displayDrawPeriods()
         },
 
-        async updateDrawPeriod() {
-
+        async updateDrawPeriod(item) {
+            await axios.put('/api/v1/draw-periods/' + item.id, {
+                'draw_time': item.draw_time,
+                'draw_type': item.draw_type,
+                'games': item.games,
+                'open_time': item.open_time,
+                'close_time': item.close_time
+            })
+                .then(response => {
+                    this.addNotification(item.draw_time + " updated successfully!", "success", response.status)
+                })
+                .catch(err => {
+                    this.addNotification(item.draw_time + " unsuccessfully updated!", "error", err.status)
+                });
+            await this.displayDrawPeriods();
         },
 
         async destroyDrawPeriod(item) {
-            const response = await axios.delete('/api/draw-periods/' + item.id)
+            await axios.delete('/api/v1/draw-periods/' + item.id)
                 .then(response => {
-                    this.addNotification(item.draw_time + " deleted successfully!", "success", "200")
+                    this.addNotification(item.draw_time + " deleted successfully!", "success", response.status)
                 })
                 .catch(err => {
-                    this.addNotification(item.draw_time + " unsuccessfully deleted!", "error", "400")
+                    this.addNotification(item.draw_time + " unsuccessfully deleted!", "error", err.status)
                 });
             await this.displayDrawPeriods();
         },
