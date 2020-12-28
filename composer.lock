@@ -1310,16 +1310,16 @@
         },
         {
             "name": "jeroennoten/laravel-adminlte",
-            "version": "v3.5.1",
+            "version": "v3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jeroennoten/Laravel-AdminLTE.git",
-                "reference": "2d89430b68fdc72a126a160bf068125cc14ba626"
+                "reference": "baa10b8b0c3bd085a7e6cd5a62d5b5aa25d3ccfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jeroennoten/Laravel-AdminLTE/zipball/2d89430b68fdc72a126a160bf068125cc14ba626",
-                "reference": "2d89430b68fdc72a126a160bf068125cc14ba626",
+                "url": "https://api.github.com/repos/jeroennoten/Laravel-AdminLTE/zipball/baa10b8b0c3bd085a7e6cd5a62d5b5aa25d3ccfb",
+                "reference": "baa10b8b0c3bd085a7e6cd5a62d5b5aa25d3ccfb",
                 "shasum": ""
             },
             "require": {
@@ -1363,9 +1363,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jeroennoten/Laravel-AdminLTE/issues",
-                "source": "https://github.com/jeroennoten/Laravel-AdminLTE/tree/v3.5.1"
+                "source": "https://github.com/jeroennoten/Laravel-AdminLTE/tree/v3.5.0"
             },
-            "time": "2020-12-09T15:58:39+00:00"
+            "time": "2020-09-26T21:28:24+00:00"
         },
         {
             "name": "joshrainwater/active-users",
@@ -1869,16 +1869,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v8.20.1",
+            "version": "v8.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "b5d8573ab16027867eaa1ac148893833434f9b02"
+                "reference": "f5f331cee60f1bbe672503b7eb9ba5b22b2ceacb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/b5d8573ab16027867eaa1ac148893833434f9b02",
-                "reference": "b5d8573ab16027867eaa1ac148893833434f9b02",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f5f331cee60f1bbe672503b7eb9ba5b22b2ceacb",
+                "reference": "f5f331cee60f1bbe672503b7eb9ba5b22b2ceacb",
                 "shasum": ""
             },
             "require": {
@@ -2032,7 +2032,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2020-12-22T21:21:19+00:00"
+            "time": "2020-12-15T16:16:31+00:00"
         },
         {
             "name": "laravel/homestead",
@@ -2086,16 +2086,16 @@
         },
         {
             "name": "laravel/horizon",
-            "version": "v5.6.3",
+            "version": "v5.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/horizon.git",
-                "reference": "f91245c1b32289da8dfdd3f66f13fe79dde347fd"
+                "reference": "26b737da35fd3eaa478f4e7572added44c31fb73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/horizon/zipball/f91245c1b32289da8dfdd3f66f13fe79dde347fd",
-                "reference": "f91245c1b32289da8dfdd3f66f13fe79dde347fd",
+                "url": "https://api.github.com/repos/laravel/horizon/zipball/26b737da35fd3eaa478f4e7572added44c31fb73",
+                "reference": "26b737da35fd3eaa478f4e7572added44c31fb73",
                 "shasum": ""
             },
             "require": {
@@ -2157,22 +2157,22 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/horizon/issues",
-                "source": "https://github.com/laravel/horizon/tree/v5.6.3"
+                "source": "https://github.com/laravel/horizon/tree/v5.6.2"
             },
-            "time": "2020-12-22T17:03:05+00:00"
+            "time": "2020-12-15T19:04:00+00:00"
         },
         {
             "name": "laravel/nexmo-notification-channel",
-            "version": "v2.5.1",
+            "version": "v2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/nexmo-notification-channel.git",
-                "reference": "178c9f0eb3a18d4b5682471bffca104a15d817a7"
+                "reference": "c2d11e5f4832fe50c807a4ecf89dc555c3247641"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/nexmo-notification-channel/zipball/178c9f0eb3a18d4b5682471bffca104a15d817a7",
-                "reference": "178c9f0eb3a18d4b5682471bffca104a15d817a7",
+                "url": "https://api.github.com/repos/laravel/nexmo-notification-channel/zipball/c2d11e5f4832fe50c807a4ecf89dc555c3247641",
+                "reference": "c2d11e5f4832fe50c807a4ecf89dc555c3247641",
                 "shasum": ""
             },
             "require": {
@@ -2219,9 +2219,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/nexmo-notification-channel/issues",
-                "source": "https://github.com/laravel/nexmo-notification-channel/tree/v2.5.1"
+                "source": "https://github.com/laravel/nexmo-notification-channel/tree/v2.5.0"
             },
-            "time": "2020-12-22T17:10:24+00:00"
+            "time": "2020-12-03T11:22:02+00:00"
         },
         {
             "name": "laravel/sanctum",
@@ -3195,16 +3195,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.10.4",
+            "version": "v4.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "c6d052fc58cb876152f89f532b95a8d7907e7f0e"
+                "reference": "dbe56d23de8fcb157bbc0cfb3ad7c7de0cfb0984"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/c6d052fc58cb876152f89f532b95a8d7907e7f0e",
-                "reference": "c6d052fc58cb876152f89f532b95a8d7907e7f0e",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/dbe56d23de8fcb157bbc0cfb3ad7c7de0cfb0984",
+                "reference": "dbe56d23de8fcb157bbc0cfb3ad7c7de0cfb0984",
                 "shasum": ""
             },
             "require": {
@@ -3245,9 +3245,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.10.4"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.10.3"
             },
-            "time": "2020-12-20T10:01:03+00:00"
+            "time": "2020-12-03T17:45:45+00:00"
         },
         {
             "name": "opis/closure",
