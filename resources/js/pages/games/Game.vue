@@ -162,13 +162,18 @@ export default {
                 {
                     'description': item.description,
                     'abbreviation': item.abbreviation,
-                    'prize': item.prize,
+                    'multiplier': item.multiplier,
                     'field_set': item.field_set,
                     'digit_per_field_set': item.digit_per_field_set,
-                    'min_number': item.min_number,
-                    'max_number': item.max_number,
+                    'min_per_bet': item.min_per_bet,
+                    'max_per_bet': item.max_per_bet,
                     'has_repetition': item.has_repetition,
                     'days_availability': item.days_availability,
+                    'is_rumbled': item.is_rumbled,
+                    'max_sum_bet': item.max_sum_bet,
+                    'transaction_limit': item.transaction_limit,
+                    'min_per_field_set': item.min_per_field_set,
+                    'max_per_field_set': item.max_per_field_set,
                 })
                 .then(response => {
                     this.addNotification(item.description + " added successfully!", "success", "200");

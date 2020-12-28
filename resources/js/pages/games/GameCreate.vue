@@ -189,9 +189,11 @@ export default {
                     'max_per_field_set': item.max_per_field_set,
                 })
                 .then(response => {
+                    console.log(response)
                     this.addNotification(item.description + " updated successfully!", "success", "200");
                 })
                 .catch(err => {
+                    console.log(err)
                     this.addNotification(item.description + " unsuccessfully updated!", "error", "400");
                 });
             await this.displayGames();

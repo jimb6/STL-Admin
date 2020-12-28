@@ -38,12 +38,11 @@ class ApiGameController extends Controller
             "max_per_bet" => "required",
             "min_per_bet" => "required",
             "has_repetition" => "required",
-            "days_availability" => "required|array",
             "is_rumbled" => "required",
             "max_sum_bet" => "required",
             "transaction_limit" => "required",
-            'min_per_field_set',
-            'max_per_field_set',
+            'min_per_field_set' => "required",
+            'max_per_field_set' => "required",
         ]);
 
         $game = Game::firstOrcreate([
@@ -95,12 +94,11 @@ class ApiGameController extends Controller
             "max_per_bet" => "required",
             "min_per_bet" => "required",
             "has_repetition" => "required",
-            "days_availability" => "required|array",
             "is_rumbled" => "required",
             "max_sum_bet" => "required",
             "transaction_limit" => "required",
-            'min_per_field_set',
-            'max_per_field_set',
+            'min_per_field_set' => "required",
+            'max_per_field_set' => "required",
         ]);
         $gameConfig = GameConfiguration::where('game_id', $game->id)
             ->update([
@@ -121,7 +119,8 @@ class ApiGameController extends Controller
             'description' => $validated['description'],
             'abbreviation' => $validated['abbreviation'],
         ]);
-        return response(['game' => $game], 202);
+
+        return response(['game' => $validated], 202);
     }
 
     public function destroy(Request $request, Game $game)
