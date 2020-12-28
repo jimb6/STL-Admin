@@ -59,7 +59,7 @@ Route::get('/user', function (Request $request) {
 });
 
 Route::prefix('v1/')
-    ->middleware(['auth:api'])
+    ->middleware(['auth:sanctum'])
     ->group(function () {
         Route::resource('agents', \App\Http\Controllers\API\v1\ApiAgentController::class);
         Route::resource('bets', \App\Http\Controllers\API\v1\ApiBetController::class);
