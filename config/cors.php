@@ -16,13 +16,12 @@ return [
     */
 
     'paths' => [
-        'api/*',
-        'sanctum/csrf-cookie'
+        'api/*'
     ],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['file:///C:/Users/RSY-JIM/OneDrive/Documents/index.html', "*"],
 
     'allowed_origins_patterns' => [],
 
