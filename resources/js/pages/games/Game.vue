@@ -123,6 +123,8 @@ export default {
             {label: "Prize", field: "prize", value: "", type: "input"},
             {label: "Field Set", field: "field_set", value: "", type: "input"},
             {label: "Digit Per Field Set", field: "digit_per_field_set", value: "", type: "input"},
+            {label: "Min Per Field Set", field: "min_per_field_set", value: "", type: "input"},
+            {label: "Max Per Field Set", field: "max_per_field_set", value: "", type: "input"},
             {label: "Min Number", field: "min_number", value: "", type: "input"},
             {label: "Max Number", field: "max_number", value: "", type: "input"},
             {label: "Has Repetition", field: "has_repetition", value: "", type: "select", options: [true, false]},

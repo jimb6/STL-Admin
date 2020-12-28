@@ -42,6 +42,8 @@ class ApiGameController extends Controller
             "is_rumbled" => "required",
             "max_sum_bet" => "required",
             "transaction_limit" => "required",
+            'min_per_field_set',
+            'max_per_field_set',
         ]);
 
         $game = Game::firstOrcreate([
@@ -61,6 +63,8 @@ class ApiGameController extends Controller
             'is_rumbled' => $validated['is_rumbled'],
             'max_sum_bet' => $validated['max_sum_bet'],
             'transaction_limit' => $validated['transaction_limit'],
+            'min_per_field_set' => $validated['min_per_field_set'],
+            'max_per_field_set' => $validated['max_per_field_set'],
         ]);
 
         $game->gameConfiguration->associate($config);
@@ -95,6 +99,8 @@ class ApiGameController extends Controller
             "is_rumbled" => "required",
             "max_sum_bet" => "required",
             "transaction_limit" => "required",
+            'min_per_field_set',
+            'max_per_field_set',
         ]);
         $gameConfig = GameConfiguration::where('game_id', $game->id)
             ->update([
@@ -108,6 +114,8 @@ class ApiGameController extends Controller
                 'is_rumbled' => $validated['is_rumbled'],
                 'max_sum_bet' => $validated['max_sum_bet'],
                 'transaction_limit' => $validated['transaction_limit'],
+                'min_per_field_set' => $validated['min_per_field_set'],
+                'max_per_field_set' => $validated['max_per_field_set'],
             ]);
         $game->update([
             'description' => $validated['description'],
@@ -159,7 +167,8 @@ class ApiGameController extends Controller
         $currentDay = Carbon::now()->tz(config('app.timezone'))->format('l');
         $games = Game::with(['gameConfiguration'])
             ->whereHas('drawPeriods', function ($query) {
-                $query->whereTime('open_time', '<', Carbon::now()->toTimeString())->whereTime('close_time', '>', Carbon::now()->toTimeString());
+                $query->whereTime('open_time', '<', Carbon::now()->toTimeString())
+                    ->whereTime('close_time', '>', Carbon::now()->toTimeString());
             })->get()
             ->reject(function ($row) use ($currentDay) {
                 return !in_array($currentDay, $row['gameConfiguration']->days_availability);

@@ -74,6 +74,8 @@ export default {
             {label: "Multiplier", field: "multiplier", value: "", type: "input"},
             {label: "Field Set", field: "field_set", value: "", type: "input"},
             {label: "Digit Per Field Set", field: "digit_per_field_set", value: "", type: "input"},
+            {label: "Min Per Field Set", field: "min_per_field_set", value: "", type: "input"},
+            {label: "Max Per Field Set", field: "max_per_field_set", value: "", type: "input"},
             {label: "Min Bet", field: "min_per_bet", value: "", type: "input"},
             {label: "Max Bet", field: "max_per_bet", value: "", type: "input"},
             {label: "Max Hard Bet", field: "max_sum_bet", value: "", type: "input"},
@@ -125,6 +127,8 @@ export default {
                             days_availability: data[item].game_configuration.days_availability,
                             is_rumbled: data[item].game_configuration.is_rumbled,
                             transaction_limit: data[item].game_configuration.transaction_limit,
+                            min_per_field_set: data[item].game_configuration.min_per_field_set,
+                            max_per_field_set: data[item].game_configuration.max_per_field_set,
                             updated_at: date,
                         }
                         this.contents.push(game);
@@ -151,6 +155,8 @@ export default {
                     'is_rumbled': item.is_rumbled,
                     'max_sum_bet': item.max_sum_bet,
                     'transaction_limit': item.transaction_limit,
+                    'min_per_field_set': item.min_per_field_set,
+                    'max_per_field_set': item.max_per_field_set,
                 })
                 .then(response => {
                     console.log(response);
@@ -179,6 +185,8 @@ export default {
                     'is_rumbled': item.is_rumbled,
                     'max_sum_bet': item.max_sum_bet,
                     'transaction_limit': item.transaction_limit,
+                    'min_per_field_set': item.min_per_field_set,
+                    'max_per_field_set': item.max_per_field_set,
                 })
                 .then(response => {
                     this.addNotification(item.description + " updated successfully!", "success", "200");

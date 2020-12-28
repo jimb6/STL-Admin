@@ -25,6 +25,8 @@ class Game extends Model
         'has_repetition',
         'is_rumbled',
         'days_availability',
+        'min_per_field_set',
+        'max_per_field_set',
     ];
 
     protected $searchableFields = ['*'];
