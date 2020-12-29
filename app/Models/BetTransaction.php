@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Scopes\Searchable;
 use App\Scopes\TransactionBaseScope;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,7 +18,7 @@ class BetTransaction extends Model implements Auditable
     use Searchable;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['user_id'];
+    protected $fillable = ['user_id', 'qr_code'];
 
     protected $keyType = 'string';
 
@@ -39,7 +40,14 @@ class BetTransaction extends Model implements Auditable
         parent::boot();
         static::creating(function (Model $model) {
             $model->setAttribute($model->getKeyName(), Uuid::uuid4());
+            $model->attributes['qr_code'] = date("mdy").
+                '-'.substr(md5(uniqid(mt_rand(), true)), 0, 8);
         });
+    }
+
+    public function setQrCodeAttribute($value)
+    {
+
     }
 
     public function scopeWithAgent($query)

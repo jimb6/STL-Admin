@@ -20,15 +20,16 @@ class DrawPeriod extends Model
 
     protected $table = 'draw_periods';
 
+    public function scopeCurrentDraw()
+    {
+        return $this->whereTime('open_time', '<', Carbon::now()->toTimeString())
+                    ->whereTime('close_time', '>', Carbon::now()->toTimeString());
+    }
+
     public function getUpdatedAtAttribute($date)
     {
         return Carbon::parse($this->attributes['updated_at'])->diffForHumans();
     }
-
-//    public function getDrawTimeAttribute($time)
-//    {
-//        return date("g:i a", strtotime($time));
-//    }
 
     public function betGames()
     {

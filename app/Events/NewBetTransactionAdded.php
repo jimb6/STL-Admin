@@ -2,7 +2,10 @@
 
 namespace App\Events;
 
+use App\Models\Bet;
 use App\Models\BetTransaction;
+use App\Models\CloseNumber;
+use App\Models\Game;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -15,23 +18,24 @@ class NewBetTransactionAdded implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $game;
+
+    public function __construct(Game $game)
+    {
+        $this->game = $game;
+    }
 
     public $betTransaction;
 
-    public function __construct(BetTransaction $betTransaction)
-    {
-        $this->betTransaction = $betTransaction;
-    }
-
     public function broadcastOn()
     {
-        return new Channel('bet.transaction');
+        return new Channel('bets.'.$this->game->abbreviation);
     }
 
     public function broadcastWith()
     {
         return [
-            'betTransaction' => $this->betTransaction
+//            'game' => $this->game->id,
         ];
     }
 }

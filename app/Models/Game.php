@@ -36,6 +36,22 @@ class Game extends Model
     ];
 
 
+    public function scopeCurrentDrawDate()
+    {
+        return $this->whereDate('created_at', Carbon::today());
+    }
+
+    public function scopeCurrentDrawTime()
+    {
+        return $this
+            ->whereHas('drawPeriods', function ($query) {
+                $query
+                    ->whereTime('open_time', '<', Carbon::now()->toTimeString())
+                    ->whereTime('close_time', '>', Carbon::now()->toTimeString());
+            });
+    }
+
+
     public function gameConfiguration()
     {
         return $this->hasOne(GameConfiguration::class);
@@ -43,13 +59,7 @@ class Game extends Model
 
     public function bets()
     {
-        return $this->hasMany(Bet::class)
-            ->whereDate('created_at', Carbon::today())
-            ->whereHas('drawPeriod', function ($query) {
-                $query
-                    ->whereTime('open_time', '<', Carbon::now()->toTimeString())
-                    ->whereTime('close_time', '>', Carbon::now()->toTimeString());
-            });
+        return $this->hasMany(Bet::class);
     }
 
     public function drawPeriods()

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bet;
+use App\Models\CloseNumber;
+use App\Models\DrawPeriod;
 use App\Models\Game;
 use App\Models\GameConfiguration;
 use Carbon\Carbon;
@@ -136,10 +139,21 @@ class ApiGameController extends Controller
     {
         $this->authorize('list games', Game::class);
         $search = $request->get('search', '');
-        $games = Game::where('abbreviation', $abbreviation)
+        $game = Game::where('abbreviation', $abbreviation)
             ->with(['gameConfiguration', 'controlCombination', 'bets'])
             ->get();
-        return response(['games' => $games], 200);
+        $draw = DrawPeriod::currentDraw()->whereHas('games', function ($query) use ($game) {
+            $query->where('id', $game[0]->id);
+        })->first();
+
+        $bets = Bet::currentDraw()->where('game_id', $game[0]->id)->get()
+            ->groupBy('combination')->map(function ($row) {
+                return ['sum' => $row->sum('amount'), 'bets' => $row];
+            });
+
+        $closedNumbers = CloseNumber::all();
+
+        return response(['bets' => $bets, 'game' => $game, 'draw_period' => $draw, 'closed_numbers' => $closedNumbers], 200);
     }
 
     public function configUpdate(Request $request, $game)

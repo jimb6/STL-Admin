@@ -74,6 +74,8 @@ Route::prefix('v1/')
         Route::resource('clusters', \App\Http\Controllers\API\v1\ApiClusterController::class);
         Route::get('bets-range/{game}/{date}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'getBetsRange']);
 
+        Route::get('bets/{game}/{draw}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'index']);
+
 //      Game Configuration Route
         Route::get('games/config/{abbreviation}', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configIndex']);
         Route::put('games/config/default/{game}', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configUpdate']);
@@ -84,7 +86,11 @@ Route::prefix('v1/')
         Route::delete('games/control-combination/{combi}', [\App\Http\Controllers\API\v1\ApiControlledNumberController::class, 'destroy']);
         Route::put('games/control-combination/{game}', [\App\Http\Controllers\API\v1\ApiControlledNumberController::class, 'update']);
 
-//    Game Configuration Mobile Route
+//        Closed Game Combination
+        Route::post('close-combination/{game}/{draw_period}', [\App\Http\Controllers\API\v1\ApiCloseNumberController::class, 'store']);
+        Route::patch('close-combination/{game}/{draw}', [\App\Http\Controllers\API\v1\ApiCloseNumberController::class, 'destroy']);
+
+//      Game Configuration Mobile Route
         Route::get('games/mobile-config/today/', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configMobileIndex']);
 
 

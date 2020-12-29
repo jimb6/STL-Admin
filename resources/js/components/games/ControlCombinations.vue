@@ -1,7 +1,7 @@
 <template>
 
     <!-- Max Specific Combination -->
-    <v-expansion-panel class="ml-5 elevation-3 mr-2">
+    <v-expansion-panel class="ml-5 mr-2">
         <v-expansion-panel-header>
             {{ this.game }} Max Specific Combination
         </v-expansion-panel-header>
@@ -181,5 +181,7 @@ export default {
 </script>
 
 <style scoped>
-
+button.v-expansion-panel-header.v-expansion-panel-header--active {
+    font-weight: 700;
+}
 </style>

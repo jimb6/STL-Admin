@@ -6,6 +6,24 @@
     --lightGray: #F7F2FF;
     --myBlue: #2196f3;
     --myRed: #E63946;
+    --mySuccess: #4CAF50;
+    --myInfo: #4CAF50;
+    --myDanger: #FF5252;
+    --myWarning: #FB8C00;
+}
+
+.mySuccess {
+    background: var(--mySuccess) !important;
+}
+.myInfo {
+    background: var(--myInfo) !important;
+}
+.myDanger {
+    background: var(--myDanger) !important;
+    color: #fff;
+}
+.myWarning {
+    background: var(--myWarning) !important;
 }
 
 body {

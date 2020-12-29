@@ -36,3 +36,11 @@ Broadcast::channel('bet.transaction', function ($user) {
         return true;
     return true;
 }, ['guards' => ['web']]);
+
+
+
+Broadcast::channel('bets.{abbreviation}', function ($user, $abbreviation) {
+    if ($user->hasRole('super-admin'))
+        return true;
+    return true;
+}, ['guards' => ['web']]);

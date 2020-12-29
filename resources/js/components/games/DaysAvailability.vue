@@ -1,5 +1,5 @@
 <template>
-    <v-expansion-panel class="ml-5 elevation-3 mr-2">
+    <v-expansion-panel class="ml-5 mr-2">
         <v-expansion-panel-header>{{ this.game }} Days Availability
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -129,4 +129,6 @@ button.v-btn {
 .cstm-select-small .v-menu__content.menuable__content__active {
     height: 175px !important;
 }
-</style>
+button.v-expansion-panel-header.v-expansion-panel-header--active {
+    font-weight: 700;
+}</style>

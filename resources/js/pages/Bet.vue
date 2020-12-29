@@ -62,7 +62,7 @@ export default {
     methods: {
         async displayBets(date) {
             console.log(date, "<<<<");
-            await axios.get('/api/v1/bets-range/'+date+'/'+date)
+            await axios.get('/api/v1/bets-range/'+this.game+'/'+date)
                 .then(response => {
                     let bet = {};
                     const data = response.data.bets;

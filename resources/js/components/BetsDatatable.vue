@@ -1,7 +1,7 @@
 <template>
     <v-container class="cstm-vuetify-table">
-        <h3>{{ title }} Gross TOTAL</h3>
-        <h2>${{ total }}</h2>
+        <h3>{{ title }}</h3>
+
 
 
         <v-data-table
@@ -9,9 +9,11 @@
             :items="contents"
             :page.sync="page"
             :items-per-page="itemsPerPage"
+            :item-class="getStatusBackground"
             :search="search"
             hide-default-footer
-            :sort-desc="[true]"
+            :sort-by="['amount', 'status']"
+            :sort-desc="[true, true]"
             @page-count="pageCount = $event"
             loading-text="Loading... Please wait">
 
@@ -72,7 +74,7 @@
                         hide-details
                     ></v-text-field>
                 </div>
-                <div class="flex-between cstm-row col2" v-if="!hasTopHeader">
+                <div class="flex-between cstm-row col3" v-if="!hasTopHeader">
                     <v-text-field
                         :value="itemsPerPage"
                         label="Items per page"
@@ -82,6 +84,7 @@
                         @input="itemsPerPage = parseInt($event, 10)"
                         class="cstm-v-textfield small"
                     ></v-text-field>
+                    <h2 class="cstm-price">₱ {{ total }}</h2>
                     <div>
                         <v-pagination
                             v-model="page"
@@ -109,10 +112,13 @@
                 ></v-checkbox>
             </template>
 
-            <template v-slot:item.isClose="{ item }">
+            <template v-slot:item.isClosed="{ item }">
                 <v-switch
-                    v-model="item.isClose"
-                    inset
+                    :disabled="item.status=='SOLD OUT'"
+                    v-model="item.isClosed"
+                    color="white"
+                    @change="updateCloseCombination(item)"
+                    :loading="loadingRequest"
                 ></v-switch>
             </template>
         </v-data-table>
@@ -140,7 +146,6 @@
             </div>
         </div>
 
-
     </v-container>
 
 </template>
@@ -150,7 +155,7 @@ import Address from "./Address";
 
 export default {
     name: 'BetsDatatable',
-    components:{
+    components: {
         Address
     },
     props: {
@@ -163,13 +168,14 @@ export default {
         canEdit: Boolean,
         canDelete: Boolean,
         hasTopHeader: Boolean,
+        loadingRequest: String,
     },
 
     data: () => ({
         search: "",
         page: 1,
         pageCount: 0,
-        itemsPerPage: 10,
+        itemsPerPage: 100,
 
         dialog: false,
         dialogDelete: false,
@@ -264,14 +270,14 @@ export default {
         cancel() {
 
         },
-        deletedSnack(){
+        deletedSnack() {
 
         },
         open() {
 
         },
 
-        displayBets(date){
+        displayBets(date) {
             this.$refs.dialog.save(date);
             this.$emit('displayModel', date);
         },
@@ -284,10 +290,39 @@ export default {
             this.date = date;
         },
 
-        changeAddress(field, address){
+        changeAddress(field, address) {
             this.editedItem[field] = address.join(', ');
             this.$emit('changeAddress', address);
         },
+
+        //  COLOR
+        getStatusBackground(item) {
+            switch (item.status) {
+                case "SOLD OUT":
+                    item.isClosed = true;
+                    return "myDanger myTr"
+                case "OPEN":
+                    return "myTr"
+                case "CLOSED":
+                    item.isClosed = true;
+                    return "myWarning myTr"
+                default:
+                    return "myDanger"
+            }
+        },
+
+        updateCloseCombination(item) {
+            this.editedIndex = this.contents.indexOf(item);
+            item['index'] = this.editedIndex;
+            if( item.status === "OPEN"){
+                this.$emit("storeCloseCombination", item);
+            } else if (item.status === "CLOSED"){
+                this.$emit("destroyCloseCombination", item);
+            }
+
+        }
+
+
     },
 
     computed: {
@@ -304,8 +339,12 @@ export default {
         dialogDelete(val) {
             val || this.closeDelete()
         },
-        menu (val) {
+        menu(val) {
             val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+        },
+        contents: function (val) {
+            // watch it
+            this.contents = val;
         },
     },
 };
@@ -315,14 +354,42 @@ export default {
 .container.cstm-vuetify-table {
     padding: unset;
 }
+
 h3 {
+    position: relative;
     text-align: center;
     text-transform: uppercase;
-    font-size: 22px;
-    font-weight: 300;
+    font-size: 24px;
+    font-weight: 500;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+    /*width: fit-content;*/
+    /*margin: 0 auto 10px auto;*/
 }
 h2 {
     font-weight: 600;
+    border: unset;
+}
+h2.cstm-price {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+</style>
+<style>
+.singleBetTable .myTr td.text-start {
+    padding: 10px 16px !important;
+}
+.singleBetTable .myTr .v-messages.theme--light {
+    display: none;
+}
+.singleBetTable .myTr td>div.v-input--switch {
+    margin: unset;
+}
+.singleBetTable .myDanger td,
+.singleBetTable .myWarning td{
+    color: #ffffff;
 }
 </style>
 

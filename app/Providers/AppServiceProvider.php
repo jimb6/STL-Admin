@@ -37,11 +37,13 @@ class AppServiceProvider extends ServiceProvider
 
         $events->listen(BuildingMenu::class, function (BuildingMenu $event) {
             $items = Role::all()->map(function (Role $role) {
-                return [
-                    'text' => strtoupper($role['name']),
-                    'route' => ['users.index', ['role' => $role['name']]],
-                    'active' => ['admin/users*']
-                ];
+                 if ($role['name'] != 'agent'){
+                     return [
+                        'text' => strtoupper($role['name']),
+                        'route' => ['users.index', ['role' => $role['name']]],
+                        'active' => ['admin/users/'.$role['name']]
+                    ];
+                }
             });
             $event->menu->addIn('users', ...$items);
             $icons = ['fas fa-dice-one', 'fas fa-dice-two', 'fas fa-dice-three', 'fas fa-dice-four', 'fas fa-dice-five', 'fas fa-dice-six'];

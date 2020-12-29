@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Scopes\Searchable;
 use App\Scopes\BetScope;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -37,6 +38,16 @@ class Bet extends Model implements Auditable
     public static function booted()
     {
         static::addGlobalScope(new BetScope);
+    }
+
+    public function scopeCurrentDraw()
+    {
+        return $this->whereDate('created_at', Carbon::today())
+            ->whereHas('drawPeriod', function ($query) {
+                $query
+                    ->whereTime('open_time', '<', Carbon::now()->toTimeString())
+                    ->whereTime('close_time', '>', Carbon::now()->toTimeString());
+            });
     }
 
 
@@ -77,9 +88,9 @@ class Bet extends Model implements Auditable
         return $this->hasOneThrough(User::class, BetTransaction::class,);
     }
 
-    public function closeNumber()
-    {
-        return $this->hasOneThrough(CloseNumber::class, DrawPeriod::class);
-    }
+//    public function closeNumbers()
+//    {
+//        return $this->hasOneThrough(CloseNumber::class, DrawPeriod::class);
+//    }
 
 }

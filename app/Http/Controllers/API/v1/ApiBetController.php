@@ -5,23 +5,27 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Bet;
 use App\Models\CloseNumber;
+use App\Models\DrawPeriod;
+use App\Models\Game;
 use App\Scopes\BetScope;
+use BaconQrCode\Renderer\Path\Close;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ApiBetController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, $game, $draw)
     {
-        $this->authorize('list bet transactions', Bet::class);
-        $search = $request->get('search', '');
-//        $bets = Bet::with(['game', 'drawPeriod', 'betTransaction']);
-        $bets = Bet::with('betTransaction.user', 'game', 'drawPeriod')->get();
-        $bets = $bets->groupBy('combination')->map(function ($row) {
-            return ['sum' => $row->sum('amount'), 'bets' => $row];
-        });
-        $closeNumbers = CloseNumber::with(['game', 'drawPeriod'])->get();
-        return response(['bets' => $bets, 'closeNumbers' => $closeNumbers], 200);
+        $this->authorize('list bets', Bet::class);
+        $game = Game::where('id', $game)
+            ->with(['gameConfiguration', 'controlCombination', 'bets'])
+            ->get();
+        $bets = Bet::currentDraw()->where('game_id', $game[0]->id)->get()
+            ->groupBy('combination')->map(function ($row) {
+                return ['sum' => $row->sum('amount'), 'bets' => $row];
+            });
+        $closedNumbers = CloseNumber::all();
+        return response(['bets' => $bets, 'closed_numbers' => $closedNumbers], 200);
     }
 
     public function create(Request $request)
@@ -87,7 +91,6 @@ class ApiBetController extends Controller
         $bet->delete();
         return response([], 204);
     }
-
 
     public function getBetsRange(Request $request, $game, $date)
     {

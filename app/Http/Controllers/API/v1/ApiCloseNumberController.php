@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Events\NewBetTransactionAdded;
 use App\Http\Controllers\Controller;
 use App\Models\CloseNumber;
+use App\Models\DrawPeriod;
+use App\Models\Game;
 use Illuminate\Http\Request;
 
 class ApiCloseNumberController extends Controller
@@ -22,12 +25,20 @@ class ApiCloseNumberController extends Controller
         return response([], 200);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $game, $drawPeriod)
     {
         $this->authorize('create close numbers', CloseNumber::class);
-        $validated = $request->validated();
-        $closeNumber = CloseNumber::create($validated);
-        return response(['closeNumber' => $closeNumber], 202);
+        $validated = $request->validate([
+            'combinations' => 'required'
+        ]);
+
+        $closeNumber = CloseNumber::firstOrCreate([
+            'combination' => $validated['combinations'],
+            'draw_period_id' => $drawPeriod,
+            'game_id' => $game,
+        ]);
+
+        return response(['closeNumber' => $request->all()], 202);
     }
 
     public function show(Request $request, CloseNumber $closeNumber)
@@ -50,11 +61,17 @@ class ApiCloseNumberController extends Controller
         return response([$closeNumber], 202);
     }
 
-    public function destroy(Request $request, CloseNumber $closeNumber)
+    public function destroy(Request $request, $game, $drawPeriod)
     {
-        $this->authorize('delete close numbers', $closeNumber);
-        $closeNumber->delete();
-        return response([], 204);
+        $this->authorize('delete close numbers', CloseNumber::class);
+        $validated = $request->validate([
+            'combinations' => 'required'
+        ]);
+        $closeNumber = CloseNumber::where('combination', $validated['combinations'])
+            ->where('game_id', $game)->where('draw_period_id', $drawPeriod)
+            ->forceDelete();
+//        broadcast(new NewBetTransactionAdded(Game::find($game)));
+        return response([$game, $drawPeriod], 200);
     }
 
 }

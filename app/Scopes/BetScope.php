@@ -4,12 +4,10 @@
 namespace App\Scopes;
 
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class BetScope implements Scope
 {
@@ -18,12 +16,12 @@ class BetScope implements Scope
         if (Auth::check()) {
             $user = Auth::user();
             if ($user->hasRole(['super-admin'])) {
-            }else if($user->hasRole('admin')){
-                $builder->with(['betTransaction' => function($query) use ($user) {
+            } else if ($user->hasRole('admin')) {
+                $builder->with(['betTransaction' => function ($query) use ($user) {
                     $query->where('cluster_id', '=', $user->cluster_id);
                 }]);
-            }else{
-                $builder->with(['betTransaction' => function($query) use ($user) {
+            } else {
+                $builder->with(['betTransaction' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
                 }]);
             }

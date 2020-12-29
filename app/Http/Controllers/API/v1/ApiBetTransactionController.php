@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Events\BetTransactionAdded;
 use App\Events\NewBetTransactionAdded;
 use App\Http\Controllers\Controller;
 use App\Models\Bet;
 use App\Models\BetTransaction;
 use App\Models\CloseNumber;
+use App\Models\ControlCombination;
+use App\Models\DrawPeriod;
+use App\Models\Game;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ApiBetTransactionController extends Controller
@@ -32,55 +35,90 @@ class ApiBetTransactionController extends Controller
         //Validate the user inputs
         $validated = $request->validate([
             'bets.*' => 'required',
-            'bets.*.amount' => 'required|numeric|min:1|max:10000',
+            'bets.*.amount' => ['required', 'numeric', function ($attrib, $value, $fail) {
+                if ($value % 5 !== 0) {
+                    $fail('Bet\'s amount must be divisible by 5');
+                }
+            }],
             'bets' => 'required|array|min:1|max:10',
         ]);
 
         $bets = $validated['bets'];
         $agentId = $request->user('sanctum')->id;
 
-        $hasCloseNumbers = CloseNumber::whereIn('combination', array_column($bets, 'combination'))->count();
-        $allClose = CloseNumber::all();
-        if ($hasCloseNumbers > 0)
-        {
-            return response(['close_numbers' => $allClose], 406);
-        }
-        $transaction = BetTransaction::create([
-            'user_id' => $agentId
-        ]);
+        //Check Close number
+        if (CloseNumber::whereIn('combination', array_column($bets, 'combination'))
+            ->whereDate('created_at', Carbon::today())->get()->isNotEmpty()) abort(406);
 
-        $saveBets = [];
+        $tempVals = [];
         foreach ($bets as $bet) {
-            $bet['bet_transaction_id'] = $transaction->id;
-            if ($bet['is_rumbled']) {
-                $p = $this->permutate(str_split($bet['combination']));
-                $result = array();
-                foreach ($p as $perm) {
-                    $result[] = join("", $perm);
-                }
-                $result = array_unique(array_unique($result));
-                $close = CloseNumber::whereIn('combination', $result)->count();
-                if ($close>0){
-                    return response(["message" => 'Bets contains close numbers.', "numbers" => $allClose],406);
-                }
-                $originalAmount = $bet['amount'];
-                foreach (array_values($result) as $array_value) {
-                    array_push($saveBets, $result);
-                    $bet['combination'] = $array_value;
-                    $bet['amount'] = number_format($originalAmount / count($result), 2, '.', ',');
-                    if ($save = Bet::create($bet)) {
-                        array_push($saveBets, $save);
-                    }
-                }
-            }else{
-                if ($save = Bet::create($bet)) {
-                    array_push($saveBets, $save);
-                }
+
+            //Check if bet has a valid draw_period  (Pwedi siya dili isulod sa loop)
+            $d = DrawPeriod::currentDraw()->whereHas('games', function ($query) use ($bet) {
+                $query->where('id', $bet['game_id']);
+            })->first();
+
+            if (!$d) abort(406);
+
+            //Get the Sum of bets amount from the same submitted Bets
+            $b = Bet::currentDraw()->where('game_id', $bet['game_id'])
+                ->where('combination', $bet['combination'])
+                ->get()->groupBy('combination')->map(function ($row) {
+                    return ['sum' => $row->sum('amount'), 'bets' => $row];
+                });
+
+            //Get Game Configuration to compare the maximum and minimum bets amount
+            $game = Game::where('id', $bet['game_id'])->with('gameConfiguration')->get()
+                ->map(function ($row) {
+                    return $row->getRelation('gameConfiguration');
+                });
+
+
+            // Comparing....
+            // COMBI >>>>       01-50
+            // Pares range >>>  1-38
+            // COMBI >>>>       123-R
+
+            $combinations = explode('-', $bet['combination']);
+            if ((count(array_unique($combinations)) != count($combinations)) && !$game[0]->has_repetition) abort(406);
+            foreach ($combinations as $combination) {
+                if (strlen($combination) != $game[0]->digit_per_field_set) abort(406);
+                if (intval($combination) > $game[0]->max_per_field_set) abort(406);
+                if (intval($combination) < $game[0]->min_per_field_set) abort(406);
             }
+
+            if ($bet['amount'] > $game[0]->max_per_bet) abort(406);
+            if ($bet['amount'] < $game[0]->min_per_bet) abort(406);
+            if ($b->isNotEmpty() && ($b[$bet['combination']]['sum'] + $bet['amount']) > $game[0]->max_sum_bet) abort(406);
+
+            $control = ControlCombination::where('game_id', $game[0]->game_id)->where('combination', $bet['combination'])->get();
+
+            if ($control->isNotEmpty() && $b[$bet['combination']]['sum'] + $bet['amount'] > $control[0]->max_amount) abort(406);
+            array_push($tempVals, array_merge($bet, ['draw_period_id' => $d['id']]));
         }
 
-        broadcast(new NewBetTransactionAdded($transaction));
-        return response(['bets' => $bets, 'code' => $transaction->id], 202);
+        $transaction = null;
+        try {
+            $transaction = BetTransaction::create([
+                'user_id' => $agentId
+            ]);
+        } catch (\Exception $ex) {
+            return response(['error' => 'Server Error. Try to submit your transaction again.'], 400);
+        }
+
+        foreach ($tempVals as $val){
+            $bet = Bet::create([
+                'combination' => $val['combination'],
+                'amount' => $val['amount'],
+                'is_rumbled' => $val['is_rumbled'],
+                'bet_transaction_id' => $transaction->id,
+                'game_id' => $val['game_id'],
+                'draw_period_id' => $val['draw_period_id'],
+            ]);
+        }
+
+        broadcast(new NewBetTransactionAdded(Game::find($game[0]->game_id)));
+        return response(['transaction-details'=> $transaction], 202);
     }
 
     public function show(Request $request, BetTransaction $betTransaction)
@@ -109,16 +147,20 @@ class ApiBetTransactionController extends Controller
         $betTransaction->delete();
         return response([], 204);
     }
-    public function swap($res,$a,$b){
-        $tmp =$res[$a];
+
+    public function swap($res, $a, $b)
+    {
+        $tmp = $res[$a];
         $res[$a] = $res[$b];
         $res[$b] = $tmp;
         return $res;
     }
-    public function permutate($list,$index=0){
-        if(count($list)-1<=$index) return [array_splice($list,0)];
+
+    public function permutate($list, $index = 0)
+    {
+        if (count($list) - 1 <= $index) return [array_splice($list, 0)];
         $res = [];
-        for($i = $index;$i<count($list);$i++)$res = array_merge($res,$this->permutate($this->swap($list,$i,$index),$index+1));
+        for ($i = $index; $i < count($list); $i++) $res = array_merge($res, $this->permutate($this->swap($list, $i, $index), $index + 1));
         return array_map("unserialize", array_unique(array_map("serialize", $res)));
     }
 //    public function permutateNumber($elements, $perm = array(), &$permArray = array())
