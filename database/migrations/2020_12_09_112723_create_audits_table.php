@@ -18,7 +18,7 @@ class CreateAuditsTable extends Migration
             $table->string('user_type')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('event');
-            $table->uuid('auditable_id');
+            $table->unsignedBigInteger('auditable_id');
             $table->string('auditable_type');
             $table->text('old_values')->nullable();
             $table->text('new_values')->nullable();
@@ -40,6 +40,5 @@ class CreateAuditsTable extends Migration
     public function down()
     {
         Schema::drop('audits');
-
     }
 }
