@@ -20,7 +20,7 @@ class CreateCollectionsTable extends Migration
             $table->string('status');
             $table->string('remarks')->nullable();
             $table->bigInteger('user_id')->nullable();
-            $table->uuid('bet_transaction_id');
+            $table->unsignedBigInteger('bet_transaction_id');
             $table->timestamps();
         });
     }

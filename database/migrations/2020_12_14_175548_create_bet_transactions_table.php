@@ -14,7 +14,7 @@ class CreateBetTransactionsTable extends Migration
     public function up()
     {
         Schema::create('bet_transactions', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id('id');
             $table->string('qr_code');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
