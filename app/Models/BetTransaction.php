@@ -20,9 +20,6 @@ class BetTransaction extends Model implements Auditable
 
     protected $fillable = ['user_id', 'qr_code'];
 
-    protected $keyType = 'string';
-
-    public $incrementing = false;
 
     protected $searchableFields = ['*'];
 
@@ -42,11 +39,6 @@ class BetTransaction extends Model implements Auditable
             $model->attributes['qr_code'] = date("mdy").
                 '-'.substr(md5(uniqid(mt_rand(), true)), 0, 8);
         });
-    }
-
-    public function setQrCodeAttribute($value)
-    {
-
     }
 
     public function scopeWithAgent($query)

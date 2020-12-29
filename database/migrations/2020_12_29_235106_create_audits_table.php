@@ -18,8 +18,7 @@ class CreateAuditsTable extends Migration
             $table->string('user_type')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('event');
-            $table->unsignedBigInteger('auditable_id');
-            $table->string('auditable_type');
+            $table->morphs('auditable');
             $table->text('old_values')->nullable();
             $table->text('new_values')->nullable();
             $table->text('url')->nullable();
@@ -28,7 +27,7 @@ class CreateAuditsTable extends Migration
             $table->string('tags')->nullable();
             $table->timestamps();
 
-            $table->index(['user_id', 'user_type', 'auditable_id', 'auditable_type']);
+            $table->index(['user_id', 'user_type']);
         });
     }
 

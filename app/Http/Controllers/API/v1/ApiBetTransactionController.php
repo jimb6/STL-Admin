@@ -103,7 +103,7 @@ class ApiBetTransactionController extends Controller
                 'user_id' => $agentId
             ]);
         } catch (\Exception $ex) {
-            return response(['error' => 'Server Error. Try to submit your transaction again.'], 400);
+            return response(['error' => $ex], 400);
         }
 
         foreach ($tempVals as $val){

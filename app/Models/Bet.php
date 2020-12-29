@@ -88,9 +88,4 @@ class Bet extends Model implements Auditable
         return $this->hasOneThrough(User::class, BetTransaction::class,);
     }
 
-//    public function closeNumbers()
-//    {
-//        return $this->hasOneThrough(CloseNumber::class, DrawPeriod::class);
-//    }
-
 }
