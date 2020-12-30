@@ -17,86 +17,6 @@
             @page-count="pageCount = $event"
             loading-text="Loading... Please wait">
 
-            <template v-slot:top>
-                <div class="flex-between cstm-table-options my-4 cstm-row col2" v-if="hasTopHeader">
-                    <div>
-                        <v-row class="flex">
-                            <v-col cols="4">
-                                <v-dialog
-                                    ref="dialog"
-                                    v-model="modalDate"
-                                    :return-value.sync="date"
-                                    persistent
-                                    width="290px"
-                                >
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-text-field
-                                            v-model="date"
-                                            label="Date"
-                                            prepend-icon="mdi-calendar"
-                                            readonly
-                                            v-bind="attrs"
-                                            v-on="on"
-                                        ></v-text-field>
-                                    </template>
-                                    <v-date-picker
-                                        v-model="date"
-                                        :max="maxDate"
-                                        scrollable
-                                    >
-                                        <v-spacer></v-spacer>
-                                        <v-btn text color="primary" @click="modalDate = false">
-                                            Cancel
-                                        </v-btn>
-                                        <v-btn text color="primary" @click="displayBets(date)">
-                                            OK
-                                        </v-btn>
-                                    </v-date-picker>
-                                </v-dialog>
-                            </v-col>
-
-                            <v-col cols="4">
-                                <v-select
-                                    v-model="selectedDrawPeriod"
-                                    :items="drawPeriods"
-                                    item-text="name"
-                                    item-value="id"
-                                    label="Draw Period"
-                                    return-object/>
-                            </v-col>
-                        </v-row>
-                    </div>
-                    <v-text-field
-                        v-model="search"
-                        append-icon="mdi-magnify"
-                        label="Search"
-                        single-line
-                        hide-details
-                    ></v-text-field>
-                </div>
-                <div class="flex-between cstm-row col3" v-if="!hasTopHeader">
-                    <v-text-field
-                        :value="itemsPerPage"
-                        label="Items per page"
-                        type="number"
-                        min="-1"
-                        max="15"
-                        @input="itemsPerPage = parseInt($event, 10)"
-                        class="cstm-v-textfield small"
-                    ></v-text-field>
-                    <h2 class="cstm-price">₱ {{ total }}</h2>
-                    <div>
-                        <v-pagination
-                            v-model="page"
-                            :length="pageCount"
-                            prev-icon="mdi-menu-left"
-                            next-icon="mdi-menu-right"
-                            :total-visible="7"
-                            circle
-                        ></v-pagination>
-                    </div>
-                </div>
-            </template>
 
             <template v-slot:item.is_rumbled="{ item }">
                 <v-checkbox
@@ -123,28 +43,6 @@
             </template>
         </v-data-table>
 
-
-        <div class="flex-between cstm-row col2" v-if="hasTopHeader">
-            <v-text-field
-                :value="itemsPerPage"
-                label="Items per page"
-                type="number"
-                min="-1"
-                max="15"
-                @input="itemsPerPage = parseInt($event, 10)"
-                class="cstm-v-textfield small"
-            ></v-text-field>
-            <div>
-                <v-pagination
-                    v-model="page"
-                    :length="pageCount"
-                    prev-icon="mdi-menu-left"
-                    next-icon="mdi-menu-right"
-                    :total-visible="7"
-                    circle
-                ></v-pagination>
-            </div>
-        </div>
 
     </v-container>
 

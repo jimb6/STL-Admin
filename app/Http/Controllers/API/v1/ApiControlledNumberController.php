@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Events\NewControlledBetAdded;
 use App\Http\Controllers\Controller;
 use App\Models\ControlCombination;
 use App\Models\Game;
@@ -31,11 +32,12 @@ class ApiControlledNumberController extends Controller
         $game = Game::where('abbreviation', $game)->first();
         $gameConfig = GameConfiguration::where('game_id', $game->id)->first();
 
-        $splitValues = explode('-', $request->get('combination'));
-        if(count($splitValues) != $gameConfig->field_set) abort(406);
-        if (count($splitValues) != count(array_unique($splitValues))) abort(406);
-        foreach ($splitValues as $splitValue) {
-            if (strlen($splitValue) != $gameConfig->digit_per_field_set) abort(406);
+        $combinations = explode('-', $validated['combination']);
+        if ((count(array_unique($combinations)) != count($combinations)) && !$game[0]->has_repetition) abort(406);
+        foreach ($combinations as $combination) {
+            if (strlen($combination) != $gameConfig->digit_per_field_set) abort(406);
+            if (intval($combination) > $gameConfig->max_per_field_set) abort(406);
+            if (intval($combination) < $gameConfig->min_per_field_set) abort(406);
         }
 
         ControlCombination::create([
@@ -43,6 +45,7 @@ class ApiControlledNumberController extends Controller
             'combination' => $request->get('combination'),
             'max_amount' => $request->get('max_amount')
         ]);
+        broadcast(new NewControlledBetAdded($game));
         return response([], 202);
     }
 
@@ -75,13 +78,15 @@ class ApiControlledNumberController extends Controller
         }
         $controlCombination = ControlCombination::find($validated['id'])
             ->update(['combination' => $validated['combination'], 'max_amount' => $validated['max_amount']]);
+        broadcast(new NewControlledBetAdded($game));
         return response([], 204);
     }
 
     public function destroy(ControlCombination $combi)
     {
-//        $this->authorize('delete control combinations', $combi);
+        $this->authorize('delete control combinations', $combi);
         $combi->delete();
+        broadcast(new NewControlledBetAdded(Game::find($combi->game_id)));
         return response([], 204);
     }
 }

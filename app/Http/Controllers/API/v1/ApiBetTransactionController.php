@@ -93,7 +93,7 @@ class ApiBetTransactionController extends Controller
 
             $control = ControlCombination::where('game_id', $game[0]->game_id)->where('combination', $bet['combination'])->get();
 
-            if ($control->isNotEmpty() && $b[$bet['combination']]['sum'] + $bet['amount'] > $control[0]->max_amount) abort(406);
+            if ($b->isNotEmpty() && $control->isNotEmpty() && $b != null && $b[ $bet['combination']]['sum'] + $bet['amount'] > $control[0]->max_amount) abort(406);
             array_push($tempVals, array_merge($bet, ['draw_period_id' => $d['id']]));
         }
 

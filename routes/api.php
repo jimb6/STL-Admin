@@ -91,7 +91,7 @@ Route::prefix('v1/')
         Route::patch('close-combination/{game}/{draw}', [\App\Http\Controllers\API\v1\ApiCloseNumberController::class, 'destroy']);
 
 //      Game Configuration Mobile Route
-        Route::get('games/mobile-config/today/', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configMobileIndex']);
+            Route::get('games/mobile-config/today/', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configMobileIndex']);
 
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])

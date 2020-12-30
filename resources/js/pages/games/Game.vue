@@ -15,7 +15,7 @@
                             <v-icon small class="mr-2">mdi-settings</v-icon>
                             Config / Monitoring
                         </v-tab>
-                        <v-tab>Transaction Logs</v-tab>
+                        <v-tab><v-icon small class="mr-2">mdi-account</v-icon>Entries</v-tab>
                         <v-tab>Winning Combination</v-tab>
                         <v-tab>Reports</v-tab>
                         <v-tab-item>
@@ -23,10 +23,10 @@
                         </v-tab-item>
 
                         <v-tab-item>
-                            <Bet :game="this.game"></Bet>
+                            <game-draw :game="this.game"></game-draw>
                         </v-tab-item>
                         <v-tab-item>
-                            <WinningCombination/>
+                            <game-draw :game="this.game"></game-draw>
                         </v-tab-item>
                         <v-tab-item>
                             <Reports/>
@@ -62,6 +62,7 @@ import Reports from "../Reports";
 import VueJsonToCsv from 'vue-json-to-csv'
 import Configuration from "../../components/games/Configuration";
 import BetsDatatable from "../../components/BetsDatatable";
+import GameDraw from "./GameDraw";
 
 Vue.use(Vuetify, VueJsonToCsv)
 
@@ -69,6 +70,7 @@ export default {
     name: "Game",
     props: ['game'],
     components: {
+        GameDraw,
         Configuration,
         Reports,
         DataTable,

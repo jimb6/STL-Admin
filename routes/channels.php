@@ -44,3 +44,18 @@ Broadcast::channel('bets.{abbreviation}', function ($user, $abbreviation) {
         return true;
     return true;
 }, ['guards' => ['web']]);
+
+
+Broadcast::channel('default.config.{abbreviation}', function ($user, $abbreviation) {
+    if ($user->hasRole('super-admin'))
+        return true;
+    return true;
+}, ['guards' => ['web']]);
+
+Broadcast::channel('controlled.combination.{abbreviation}', function ($user, $abbreviation) {
+    if ($user->hasRole('super-admin'))
+        return true;
+    return true;
+}, ['guards' => ['web']]);
+
+

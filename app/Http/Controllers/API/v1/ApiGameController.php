@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Events\GameConfigEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Bet;
 use App\Models\CloseNumber;
@@ -162,6 +163,7 @@ class ApiGameController extends Controller
         $game = Game::where('abbreviation', $game)->first();
         $gameConfig = GameConfiguration::where('game_id', $game->id)
             ->update([$request->get('col_name') => $request->get('config')]);
+        broadcast(new GameConfigEvent($game));
         return response([$gameConfig], 200);
     }
 

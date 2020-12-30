@@ -166,6 +166,7 @@ export default {
     }),
     created() {
         this.index();
+        this.listen();
     },
 
     watch: {
@@ -179,20 +180,17 @@ export default {
 
     methods: {
         async index() {
-            const response = await axios.get(`/api/v1/games/config/${this.game}`)
+            await axios.get(`/api/v1/games/config/${this.game}`)
                 .then(response => {
                     this.gameConfig = response.data.game[0];
                     this.drawPeriodConfig = response.data.draw_period
                     const game = this.gameConfig
                     const bets = response.data.bets;
-                    console.log(this.drawPeriodConfig, "FROM INDEX")
                     this.contents = [];
                     this.controlNumberData = [];
                     this.daysConfigContents = [];
                     this.closedNumbers = response.data.closed_numbers
-                    console.log(this.closedNumbers, "CLOSED NUMBERS")
                     // //For Control Numbers of Game
-                    console.log(game.game_configuration.days_availability)
                     for (let controlItem in game.control_combination) {
                         let contComb = {
                             id: game.control_combination[controlItem].id,
@@ -221,7 +219,6 @@ export default {
                     ];
 
                     this.displayBets(bets)
-                    this.listen();
                 })
 
                 .catch(err => {
@@ -231,8 +228,6 @@ export default {
 
         displayBets(bets) {
             this.contents = [];
-            console.log(bets, "Bets....")
-            console.log(this.gameConfig, "Game Config....")
             this.total = 0;
             for (let item in bets) {
                 let isControlled = false
@@ -268,7 +263,6 @@ export default {
             await axios.post('/api/v1/close-combination/' + this.gameConfig.id + '/' + this.drawPeriodConfig.id,
                 {'combinations': item.combinations})
                 .then(response => {
-                    console.log(response)
                     this.$nextTick(function () {
                         this.contents[item.index].isClosed = true;
                         this.contents[item.index].status = "CLOSED";
@@ -287,7 +281,6 @@ export default {
                 'combinations': item.combinations
             })
                 .then(response => {
-                    console.log(response)
                     this.$nextTick(function () {
                         this.contents[item.index].isClosed = false;
                         this.contents[item.index].status = "OPEN";
@@ -347,11 +340,10 @@ export default {
         // DEFAULT CONFIGURATIONS
         async updateDefaultConfig(item) {
             // this.addNotification(item.col_name + " <> " + item.name + " <> " + item.config, "success", 200);
-            console.log(item)
             axios.put('/api/v1/games/config/default/' + this.game, item).then(response => {
-                console.log(response)
+                this.addNotification("Configuration Changed!", "success", 200);
             }).catch(err => {
-                console.log(err)
+                this.addNotification("Error Occurred !", "error", err.status);
             })
         },
 
@@ -360,7 +352,6 @@ export default {
             axios.put('/api/v1/games/config/days/' + this.game, {
                 'days': item
             }).then(response => {
-                console.log(response)
                 this.addNotification("updateControlCombination", "success", 200);
             }).catch(err => {
 
@@ -374,7 +365,6 @@ export default {
                 'combination': item.combination,
                 'max_amount': item.max_amount
             }).then(response => {
-                console.log(response)
                 this.addNotification("updateControlCombination", "success", 200);
             }).catch(err => {
 
@@ -385,10 +375,8 @@ export default {
                 'combination': item.combination,
                 'max_amount': item.max_amount
             }).then(response => {
-                console.log(response)
                 this.addNotification("storeControlCombination", "success", 200);
             }).catch(err => {
-                console.log(err)
             })
         },
         async destroyControlCombination(item) {
@@ -396,7 +384,7 @@ export default {
 
                 this.addNotification("destroyControlCombination", "success", 200);
             }).catch(err => {
-                console.log(err)
+                this.addNotification("Error Occurred !", "error", err.status);
             })
         },
 
@@ -424,23 +412,32 @@ export default {
         async getUpdatedBets() {
             await axios.get('/api/v1/bets/' + this.gameConfig.id + '/' + this.drawPeriodConfig.id)
                 .then(response => {
-                    this.displayBets(response.data.bets)
                     this.closedNumbers = response.data.closed_numbers
+                    this.displayBets(response.data.bets)
                 })
                 .catch(err => {
-                    console.log(err)
+                    this.addNotification("Error Occurred !", "error", err.status);
                 })
         },
+
 
         async listen() {
             Echo.channel('bets.' + this.game)
                 .listen('NewBetTransactionAdded', (data) => {
                     this.getUpdatedBets();
+                    console.log("NEW BET EVENT")
                 })
-            // .listen('NewControlledBetAdded', (data) => {
-            //     console.log(data.bets, "FROM LISTEN")
-            //     this.displayBets(data.bets)
-            // });
+            Echo.channel('controlled.combination.' + this.game)
+                .listen('NewControlledBetAdded', (data) => {
+                    this.index()
+                    console.log("NEW CONTROLLED BET EVENT")
+                })
+
+            Echo.channel('default.config.' + this.game)
+                .listen('GameConfigEvent', (data) => {
+                    this.index()
+                    console.log("GAME CONFIG EVENT")
+                })
         }
     }
 }

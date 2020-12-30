@@ -12,13 +12,7 @@
                 <v-dialog
                     v-model="dialog"
                     max-width="500px">
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="blue" class="mr-1 my-1 text-white" x-small v-bind="attrs" v-on="on" @click="initialize">
-                            <v-icon dark small>
-                                mdi-plus
-                            </v-icon>
-                        </v-btn>
-                    </template>
+
                     <v-card>
                         <v-card-title>
                             <span class="headline">Configure Day Availability</span>

@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Game;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -10,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewControlledBetAdded
+class NewControlledBetAdded implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -19,9 +20,12 @@ class NewControlledBetAdded
      *
      * @return void
      */
-    public function __construct()
+
+    public $game;
+
+    public function __construct(Game $game)
     {
-        //
+        $this->game = $game;
     }
 
     /**
@@ -31,6 +35,13 @@ class NewControlledBetAdded
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel('controlled.combination.'.$this->game->abbreviation);
+    }
+
+    public function broadcastWith()
+    {
+        return [
+
+        ];
     }
 }

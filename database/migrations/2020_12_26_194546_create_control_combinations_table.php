@@ -16,7 +16,7 @@ class CreateControlCombinationsTable extends Migration
         Schema::create('control_combinations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('game_id');
-            $table->integer('combination');
+            $table->string('combination');
             $table->double('max_amount');
             $table->timestamps();
         });
