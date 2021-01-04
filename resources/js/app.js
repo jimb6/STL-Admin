@@ -24,6 +24,8 @@ import Device from "./pages/Device";
 import ErrorNotif from "./components/Notification/ErrorNotif";
 import Booth from "./pages/Booth";
 import GameCreate from "./pages/games/GameCreate";
+import Cluster from "./pages/Cluster";
+import JsonExcel from "vue-json-excel";
 // import Permissions from "./mixins/Permissions";
 
 require('./bootstrap');
@@ -35,6 +37,7 @@ Vue.prototype.$token = document.querySelector("meta[name='csrf-token']").getAttr
 // const files = require.context('./', true, /\.vue$/i)
 Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.component('QrcodeVue', require('qrcode.vue'));
+Vue.component("downloadExcel", JsonExcel);
 
 const options = {
     color: '#ffd609',
@@ -59,6 +62,7 @@ const app = new Vue({
     el: '#app',
     router,
     components: {
+        Cluster,
         GameCreate,
         Dashboard,
         Agent,
@@ -74,6 +78,5 @@ const app = new Vue({
         GlobalSettings,
         Device,
         ErrorNotif,
-
     },
 });

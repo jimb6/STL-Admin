@@ -22,7 +22,6 @@ class Cluster extends Model
     protected $casts = [
     ];
 
-
     public function booths()
     {
         return $this->hasMany(Booth::class);
@@ -39,5 +38,11 @@ class Cluster extends Model
             ->whereHas('roles', function ($query){
                 $query->where('name', '=', 'agent');
             });
+    }
+
+    public function commissions()
+    {
+        return $this->hasMany(Commission::class)
+            ->with('game');
     }
 }

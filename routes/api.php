@@ -72,6 +72,7 @@ Route::prefix('v1/')
         Route::resource('permissions', \App\Http\Controllers\API\v1\ApiPermissionController::class);
         Route::resource('users', \App\Http\Controllers\API\v1\ApiUserController::class);
         Route::resource('clusters', \App\Http\Controllers\API\v1\ApiClusterController::class);
+        Route::resource('commissions', \App\Http\Controllers\API\v1\ApiCommissionController::class);
         Route::get('bets-range/{game}/{date}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'getBetsRange']);
 
         Route::get('bets/{game}/{draw}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'index']);

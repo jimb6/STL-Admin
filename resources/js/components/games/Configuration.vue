@@ -27,7 +27,10 @@
             <div class="col-3">
                 <div>
                     <h3 class="cstm-date">{{ this.getDateToday() }}</h3>
-                    <h2 class="cstm-drawPeriod">{{ this.getFormattedTime(this.drawPeriodConfig.draw_time) }}</h2>
+                    <h2 class="cstm-drawPeriod">
+                        {{ this.getFormattedTime(this.drawPeriodConfig.draw_time) == null ?
+                        "In Progress" :
+                        this.getFormattedTime(this.drawPeriodConfig.draw_time) }}</h2>
                     <v-expansion-panels
                         v-model="panel"
                         :readonly="readonly"

@@ -1,4 +1,4 @@
 @extends('adminlte::page')
 @section('content')
-    <Booth />
+    <Cluster />
 @stop

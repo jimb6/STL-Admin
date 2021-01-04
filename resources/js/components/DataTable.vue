@@ -39,17 +39,28 @@
                                                 <v-text-field
                                                     v-if="item.type === 'input'"
                                                     v-model="editedItem[item.field]"
-                                                    :label="item.label">
-                                                </v-text-field>
+                                                    :label="item.label"
+                                                />
+
+                                                <v-text-field
+                                                    v-if="item.type === 'group-input'"
+                                                    v-model="editedItem[item.field]"
+                                                    :label="item.label"
+                                                    @input="insertHiddenVal(item.field, editedItem[item.field])"
+                                                />
+
+<!--                                                <v-text-field-->
+<!--                                                    v-if="item.type === 'hidden'"-->
+<!--                                                    v-model="hiddenVals"-->
+<!--                                                    :label="item.label"-->
+<!--                                                />-->
 
                                                 <v-text-field
                                                     v-if="item.type === 'input-disabled'"
                                                     v-model="editedItem[item.field]"
                                                     :label="item.label"
                                                     disabled
-                                                >
-
-                                                </v-text-field>
+                                                />
 
                                                 <v-select
                                                     v-if="item.type === 'select'"
@@ -204,6 +215,12 @@
                 </v-chip>
             </template>
 
+            <template v-slot:item.commissions ="{ item }">
+                <v-chip class="mr-2 my-2" v-for="(commission, index) in item.commissions" :key="index" style="font-weight: 200;" dark small>
+                    <p><span class="mr-2">{{ commission.label }}</span><b style="font-weight: 700;">{{ commission.value }}%</b></p>
+                </v-chip>
+            </template>
+
             <template v-slot:item.days_availability ="{ item }">
                 <v-chip class="ma-1" v-for="day in item.days_availability" :key="day"  dark small>
                     {{ day }}
@@ -304,6 +321,8 @@ export default {
         time: [],
         menuTime: [],
 
+        hiddenVals: {},
+
     }),
 
     created() {
@@ -312,20 +331,20 @@ export default {
 
     methods: {
         initialize() {
-            const fillable = this.fillable
-            for (let index in fillable) {
-                this.editedItem[fillable[index].field] = fillable[index].value
-                this.defaultItem[fillable[index].field] = fillable[index].value
+            for (let index in this.fillable) {
+                this.editedItem[this.fillable[index].field] = this.fillable[index].value
+                this.defaultItem[this.fillable[index].field] = this.fillable[index].value
                 this.menuTime[index] = false
             }
         },
 
         editItem(item) {
+            this.initialize();
             this.editedIndex = this.contents.indexOf(item)
             for (let index in this.editedItem) {
                 this.editedItem[index] = this.contents[this.editedIndex][index]
             }
-            // this.editedItem = Object.assign({}, item)
+            this.editedItem = Object.assign({}, item)
             this.dialog = true
         },
 
@@ -359,6 +378,11 @@ export default {
         },
 
         save() {
+            if (Object.keys(this.hiddenVals).length !== 0) {
+                this.editedItem["commission_vals"] = this.hiddenVals;
+                this.hiddenVals = {};
+            }
+
             if (this.editedIndex > -1) {
                 // EDIT
                 // Object.assign(this.contents[this.editedIndex], this.editedItem)
@@ -390,6 +414,11 @@ export default {
             this.editedItem[field] = address.join(', ');
             this.$emit('changeAddress', address);
         },
+
+        insertHiddenVal(key, value) {
+            this.hiddenVals[key] = value;
+        }
+
     },
 
     computed: {

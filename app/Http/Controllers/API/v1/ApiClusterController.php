@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cluster;
+use App\Models\Commission;
+use App\Models\Game;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,13 +15,13 @@ class ApiClusterController extends Controller
     {
         $this->authorize('list clusters', Cluster::class);
         $search = $request->get('search', '');
-        $clusters = Cluster::search($search)->with('agents')->get();
-        $user = Auth::check()? Auth::user():null;
-        if ($user && !$user->hasRole('Super-Admin')){
-            $clusters = $clusters->reject(function ($value, $key) {
-                return $value['cluster_type'] == 'Main';
-            });
-        }
+        $clusters = Cluster::search($search)->with('agents', 'commissions')->get();
+        $user = Auth::check() ? Auth::user() : null;
+//        if ($user && !$user->hasRole('super-admin')){
+//            $clusters = $clusters->reject(function ($value, $key) {
+//                return $value['cluster_type'] == 'Main';
+//            });
+//        }
         return response(['clusters' => $clusters], 200);
     }
 
@@ -33,11 +35,21 @@ class ApiClusterController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create clusters', Cluster::class);
-        $validated = $request->validated();
-        $cluster = Cluster::create($validated);
-
-//        return redirect()->route('clusters.edit', $cluster);
-        return response(['cluster' => $cluster], 202);
+        $validated = $request->validate([
+            'name' => 'required',
+            'cluster_type',
+        ]);
+        $cluster = Cluster::firstOrCreate($validated);
+        $games = Game::all();
+        foreach ($games as $game){
+            if ($request->has($game->abbreviation)){
+                Commission::updateOrCreate(
+                    ['cluster_id' => $cluster->id, 'game_id' => $game->id],
+                    ['commission_rate' => (intval($request->get($game->abbreviation)) * .01)]
+                );
+            }
+        }
+        return response([$cluster], 202);
     }
 
     public function show(Request $request, Cluster $cluster)
@@ -58,9 +70,21 @@ class ApiClusterController extends Controller
     public function update(Request $request, Cluster $cluster)
     {
         $this->authorize('update clusters', $cluster);
-        $validated = $request->validated();
+        $validated = $request->validate([
+            'name' => 'required',
+            'cluster_type',
+        ]);
+        $games = Game::all();
+        foreach ($games as $game){
+            if ($request->has($game->abbreviation)){
+                Commission::updateOrCreate(
+                    ['cluster_id' => $cluster->id, 'game_id' => $game->id],
+                    ['commission_rate' => (intval($request->get($game->abbreviation)) * .01)]
+                );
+            }
+        }
         $cluster->update($validated);
-        return response([$cluster], 202);
+        return response($request->all(), 202);
     }
 
     public function destroy(Request $request, Cluster $cluster)

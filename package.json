@@ -41,6 +41,7 @@
         "vform": "^1.0.1",
         "vue": "^2.5.17",
         "vue-chartjs": "^3.5.1",
+        "vue-json-excel": "^0.3.0",
         "vue-json-to-csv": "^1.1.8",
         "vue-progressbar": "^0.7.5",
         "vue-qrcode": "^0.3.5",

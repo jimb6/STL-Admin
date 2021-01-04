@@ -77,4 +77,9 @@ class Game extends Model
         return $this->hasOne(WinningCombination::class);
     }
 
+    public function commissions()
+    {
+        return $this->hasMany(Commission::class);
+    }
+
 }

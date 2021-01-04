@@ -1,40 +1,5 @@
 <template>
-    <v-main>
-        <v-container>
-            <v-tabs>
-                <v-tab>Table View</v-tab>
-                <v-tab>Card View</v-tab>
-                <v-tab-item>
-                    <DataTable
-                        :title="title"
-                        :contents="contents"
-                        :headers="headers"
-                        :fillable="fillable"
-                        @storeUser="storeAgent($event)"
-                        @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyAgent($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-                <v-tab-item>
-                    <Card2
-                        :title="title"
-                        :contents="contents"
-                        :headers="headers"
-                        :fillable="fillable"
-                        @storeUser="storeAgent($event)"
-                        @changeAddress="changeAddress($event)"
-                        @destroyUser="destroyAgent($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-            </v-tabs>
-        </v-container>
-    </v-main>
+
 </template>
 
 <script>
@@ -61,7 +26,8 @@ export default {
             {text: "#", value: "count"},
             {text: "Name", value: "name"},
             {text: "Type", value: "cluster_type"},
-            {text: "Agents", value: "agents"},
+
+            {text: "Commissions", value: "commissions"},
             {text: "Actions", value: "actions", sortable: false},
         ],
         contents: [],
