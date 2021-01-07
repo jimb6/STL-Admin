@@ -1,6 +1,6 @@
 <template>
 
-	<div class="card">
+	<div class="card ">
 		<CardItem v-bind:cards="cards"/>
 	</div>
 

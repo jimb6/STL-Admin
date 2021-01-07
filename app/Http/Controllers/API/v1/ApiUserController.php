@@ -7,6 +7,8 @@ use App\Models\Address;
 use App\Models\Cluster;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Twilio\Exceptions\ConfigurationException;
@@ -16,7 +18,7 @@ class ApiUserController extends Controller
 {
     public function index(Request $request)
     {
-        $this->authorize('list users', User::class);
+        $request->user()->can('list-users', User::class);
         $search = $request->get('search', '');
         $users = User::search($search)->with(['cluster', 'address', 'roles'])->get();
 //
@@ -25,7 +27,7 @@ class ApiUserController extends Controller
 
     public function create(Request $request)
     {
-        $this->authorize('create users', User::class);
+        $request->user()->can('create-users', User::class);
         $clusters = Cluster::pluck('name', 'id');
         $roles = Role::get();
         return response(['clusters' => $clusters, 'roles' => $roles], 200);
@@ -33,7 +35,7 @@ class ApiUserController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('create users', User::class);
+        $request->user()->can('create-users', User::class);
         $validated = $request->validate([
             'role.*' => 'required',
             'name' => 'required',
@@ -45,7 +47,6 @@ class ApiUserController extends Controller
             'address.*' => 'required'
         ]);
 
-        $this->authorize('create user ' . $validated['role']['name'] . 's', User::class);
         $address = Address::firstOrCreate([
             'street' => $validated['address']['0'],
             'barangay' => $validated['address']['1'],
@@ -72,14 +73,14 @@ class ApiUserController extends Controller
 
     public function show(Request $request, User $user)
     {
-        $this->authorize('view users', $user);
+        $request->user()->can('view-users', $user);
         return response(['user' => $user], 200);
 //        return view('app.users.show', compact('user'));
     }
 
     public function edit(Request $request, User $user)
     {
-        $this->authorize('update users', $user);
+        $request->user()->can('update-users', $user);
         $bases = Base::pluck('base_name', 'id');
         $roles = Role::get();
         return response(['bases' => $bases, 'roles' => $roles], 200);
@@ -87,7 +88,7 @@ class ApiUserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $this->authorize('update users', $user);
+        $request->user()->can('update-users', $user);
         $validated = $request->validated();
         if (empty($validated['password'])) {
             unset($validated['password']);
@@ -101,7 +102,7 @@ class ApiUserController extends Controller
 
     public function destroy(Request $request, User $user)
     {
-        $this->authorize('delete users', $user);
+        Auth::user()->can('delete-users', $user);
         $user->delete();
         return response([], 204);
     }
@@ -109,7 +110,7 @@ class ApiUserController extends Controller
 
     public function baseRoleIndex(Request $request, $role)
     {
-        $this->authorize('list users', User::class);
+        $request->user()->can('list-users', User::class);
         $search = $request->get('search', '');
         $users = User::search($search)->with(['cluster', 'address', 'roles' => function ($query) use ($role) {
             $query->whereIn('name', [$role]);

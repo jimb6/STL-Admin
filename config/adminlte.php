@@ -237,7 +237,7 @@ return [
             'url' => '/admin/home',
             'icon' => 'fas fa-tachometer-alt',
             'label_color' => 'success',
-            'can' => 'menu dashboard',
+            'can' => 'menu-dashboard',
             'key' => 'dashboard',
             'classes' => '',
         ],
@@ -248,13 +248,12 @@ return [
             'text' => 'Clusters',
             'icon' => 'fas fa-house-user',
             'label_color' => 'success',
-            'can' => 'menu clusters',
+            'can' => 'menu-clusters',
             'classes' => '',
             'key' => 'clusters',
             'submenu' => [
                 [
                     'text' => 'All Bases',
-                    'can' => 'list clusters',
                     'route' => 'bases.index',
                 ],
             ]
@@ -264,12 +263,11 @@ return [
             'url' => '/#',
             'icon' => 'fas fa-users',
             'label_color' => 'success',
-            'can' => 'menu agents',
+            'can' => 'menu-agents',
             'classes' => '',
             'submenu' => [
                 [
                     'text' => 'All Agents',
-                    'can' => 'list agents',
                     'route' => 'agents.index',
                     'active' => ['admin/agents']
                 ],
@@ -284,11 +282,10 @@ return [
             'icon' => 'fas fa-store',
             'label_color' => 'success',
             'classes' => '',
-            'can' => 'menu booths',
+            'can' => 'menu-booths',
             'submenu' => [
                 [
                     'text' => 'All Booths',
-                    'can' => 'view booths',
                     'route' => 'booths.index',
                     'active' => ['admin/booths']
                 ],
@@ -298,14 +295,13 @@ return [
         [
             'text' => 'Games',
             'key' => 'games',
-            'can' => 'menu games',
+            'can' => 'menu-games',
             'icon' => 'fas fa-dice',
             'label_color' => 'success',
             'classes' => '',
             'submenu' => [
                 [
                     'text' => 'All Games',
-                    'can' => 'create games',
                     'route' => 'games.create',
                     'active' => ['admin/games/create', 'admin/games/create*']
                 ],
@@ -314,7 +310,7 @@ return [
         [
             'text' => 'Draw Periods',
             'key' => 'draw-periods',
-            'can' => 'menu draw periods',
+            'can' => 'menu-draw-periods',
             // 'url'         => '/#',
             'icon' => 'fas fa-clock',
             'label_color' => 'success',
@@ -322,7 +318,6 @@ return [
             'submenu' => [
                 [
                     'text' => 'All Draw Periods',
-                    'can' => 'view draw periods',
                     'route' => 'draw_periods.index',
                     'active' => ['admin/draw-periods', 'admin/draw-periods*']
                 ],
@@ -333,12 +328,11 @@ return [
             'text' => 'Collections',
             'icon' => 'fas fa-briefcase',
             'label_color' => 'success',
-            'can' => 'menu collections',
+            'can' => 'menu-collections',
             'classes' => 'xs text-wrap',
             'submenu' => [
                 [
                     'text' => 'All Collections',
-                    'can' => 'view collections',
                     'route' => 'collections.index',
                     'active' => ['admin/collections']
                 ],
@@ -346,20 +340,17 @@ return [
         ],
         [
             'header' => 'Reporting',
-            'can' => 'menu reports',
         ],
         [
             'text' => 'Reports',
             // 'url'         => '/#',
             'icon' => 'fas fa-print',
             'label_color' => 'success',
-            'can' => 'menu reports',
             'classes' => 'xs',
 
             'submenu' => [
                 [
                     'text' => 'All Reports',
-                    'can' => 'view reports',
                     'route' => 'reports.index',
                     'active' => ['admin/reports']
                 ],
@@ -372,7 +363,6 @@ return [
             // 'url'         => '/#',
             'icon' => 'fas fa-user-lock',
             'label_color' => 'success',
-//            'can' => 'menu mobile settings',
             'classes' => '',
             'submenu' => [
                 [
@@ -390,7 +380,6 @@ return [
             // 'url'         => '/#',
             'icon' => 'fas fa-mobile-alt',
             'label_color' => 'success',
-            'can' => 'menu mobile settings',
             'classes' => '',
             'submenu' => [
                 [
@@ -404,7 +393,6 @@ return [
             'text' => 'Users',
             'icon' => 'fas fa-user-shield',
             'label_color' => 'success',
-            'can' => 'menu mobile settings',
             'classes' => '',
             'key' => 'users',
             'submenu' => [
@@ -415,7 +403,7 @@ return [
             // 'url'         => '/#',
             'icon' => 'fas fa-cogs',
             'label_color' => 'success',
-            'can' => 'menu settings',
+            'can' => 'menu-settings',
             'classes' => '',
             'submenu' => [
                 [

@@ -7,6 +7,7 @@ use App\Models\Agent;
 use App\Models\Cluster;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Rainwater\Active\Active;
 use Spatie\Permission\Models\Role;
@@ -16,7 +17,7 @@ class ApiAgentController extends ApiController
 
     public function index(Request $request)
     {
-        $this->authorize('list users', Agent::class);
+        Auth::user()->can('list-users', Agent::class);
 //        $search = $request->get('search', '');
         $agents = Agent::with(['cluster', 'address'])->get();
         return response(['agents' => $agents], 200);
@@ -24,7 +25,7 @@ class ApiAgentController extends ApiController
 
     public function store(Request $request)
     {
-        $this->authorize('create users', User::class);
+        Auth::user()->can('create-users', User::class);
         $validated = $request->validate([
             'name' => 'required',
             'birthdate' => 'required|date',
@@ -35,7 +36,7 @@ class ApiAgentController extends ApiController
             'address.*' => 'required'
         ]);
 
-        $this->authorize('create user agents', User::class);
+        Auth::user()->can('create-agents', User::class);
         $address = Address::firstOrCreate([
             'street' => $validated['address']['0'],
             'barangay' => $validated['address']['1'],
@@ -61,13 +62,13 @@ class ApiAgentController extends ApiController
 
     public function show(Request $request, User $user)
     {
-        $this->authorize('view users', $user);
+        Auth::user()->can('view-users', $user);
         return response(['user' => $user], 200);
     }
 
     public function update(Request $request, User $user)
     {
-        $this->authorize('update users', $user);
+        Auth::user()->can('update-users', $user);
         $validated = $request->validated();
         if (empty($validated['password'])) {
             unset($validated['password']);
@@ -81,13 +82,13 @@ class ApiAgentController extends ApiController
 
     public function destroy(Request $request, User $user)
     {
-        $this->authorize('delete users', $user);
+        Auth::user()->can('delete-users', $user);
         $user->delete();
         return response([], 204);
     }
 
     public function activeIndex(){
-        $this->authorize('list agents', User::class);
+        Auth::user()->can('list-agents', User::class);
         $agents = User::whereHas('roles', function ($query){
             $query->where('name', '=', 'Agent');
         })->where('session_status', true)->with('device')->get();

@@ -1,7 +1,7 @@
 <template>
 
 	<div class="carditem-container">
-		<div v-for="carditem in cards" class="card-item">
+		<div v-for="carditem in cards" class="card-item elevation-14">
 			<div>
 				<i :class='carditem.icon'></i>
 			</div>

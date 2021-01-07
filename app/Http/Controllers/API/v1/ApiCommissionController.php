@@ -11,7 +11,7 @@ class ApiCommissionController extends Controller
 {
     public function index(Request $request)
     {
-        $this->authorize('list commissions', Commission::class);
+        Auth::user()->can('list-commissions', Commission::class);
         $search = $request->get('search', '');
         $commissions = Commission::search($search)->with('agents')->get();
         $user = Auth::check()? Auth::user():null;
@@ -23,16 +23,9 @@ class ApiCommissionController extends Controller
         return response(['clusters' => $commissions], 200);
     }
 
-    public function create(Request $request)
-    {
-        $this->authorize('create clusters', Commission::class);
-
-        return response([], 200);
-    }
-
     public function store(Request $request)
     {
-        $this->authorize('create clusters', Commission::class);
+        Auth::user()->can('create-commissions', Commission::class);
         $validated = $request->validated();
         $commission = Commission::create($validated);
 
@@ -42,14 +35,14 @@ class ApiCommissionController extends Controller
 
     public function show(Request $request, Commission $commission)
     {
-        $this->authorize('view clusters', $commission);
+        Auth::user()->can('view-commissions', $commission);
 //        return view('app.clusters.show', compact('cluster'));
         return response([], 204);
     }
 
     public function edit(Request $request, Commission $commission)
     {
-        $this->authorize('update clusters', $commission);
+        Auth::user()->can('update-commissions', $commission);
 
 //        return view('app.clusters.edit', compact('cluster'));
         return response(['cluster' => $commission], 200);
@@ -57,7 +50,7 @@ class ApiCommissionController extends Controller
 
     public function update(Request $request, Commission $commission)
     {
-        $this->authorize('update clusters', $commission);
+        Auth::user()->can('update-commissions', $commission);
         $validated = $request->validated();
         $commission->update($validated);
         return response([$commission], 202);
@@ -65,7 +58,7 @@ class ApiCommissionController extends Controller
 
     public function destroy(Request $request, Commission $commission)
     {
-        $this->authorize('delete clusters', $commission);
+        Auth::user()->can('delete-commissions', $commission);
         $commission->delete();
         return response([], 204);
     }

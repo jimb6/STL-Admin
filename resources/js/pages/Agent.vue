@@ -133,7 +133,7 @@ export default {
 
         },
         async storeAgent(item) {
-            const response = await axios.post('/api/v1/agents', {
+            await axios.post('/api/v1/agents', {
                 'name': item.name,
                 'birthdate': item.birthdate,
                 'gender': item.gender,
@@ -155,7 +155,7 @@ export default {
 
         },
         async destroyAgent(item) {
-            const response = await axios.delete('/api/v1/agents/'+item.id)
+            await axios.delete('/api/v1/agents/'+item.id)
                 .then(response => {
                     this.addNotification(item.name + " deleted successfully!", "success", "200")
                     this.displayAgents();

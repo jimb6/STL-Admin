@@ -15,6 +15,7 @@
                         :fillable="fillable"
                         @storeModel="storeDevice($event)"
                         @destoryModel="destroyDevice($event)"
+                        @updateModel="updateDevice($event)"
                         :canAdd="canAdd"
                         :canEdit="canEdit"
                         :canDelete="canDelete"
@@ -68,7 +69,6 @@ import ErrorNotif from "../components/Notification/ErrorNotif";
 Vue.use(Vuetify)
 export default {
     name: "Device",
-    props: ['canAdd'],
     components: {
         ErrorNotif,
         Card,
@@ -87,13 +87,7 @@ export default {
         ],
         contents: [],
         fillable: [
-            {
-                label: "Agent Name",
-                field: "agent_name",
-                value: "",
-                type: "select",
-                options: ["Male", "Female", "Others"]
-            },
+            { label: "Agent Name", field: "agents", value: "", type: "select", options: Array },
             {label: "Serial Number", field: "serial_number", value: "", type: "input"},
         ],
         qrValue: '',
@@ -113,9 +107,9 @@ export default {
     }),
 
     created() {
-        this.errors = [];
         this.displayDevices()
         this.getRegistrationQr()
+        this.getAgents();
         this.listen()
     },
 
@@ -166,8 +160,28 @@ export default {
 
         },
 
+        async updateDevice($event){
+
+        },
+
         async destroyDevice($event) {
 
+        },
+
+        async getAgents(){
+            axios.get('/api/v1/agents')
+                .then(response => {
+                    let agents = response.data.agents
+
+                    for (let index in this.fillable) {
+                        if (this.fillable[index].field === 'agents') {
+                            this.fillable[index].options = agents;
+                        }
+                    }
+                    console.log( response );
+                }).catch(err => {
+                console.log(err)
+            })
         },
 
         changeAddress(address) {
@@ -194,6 +208,7 @@ export default {
                     });
             }).catch(err => console.log(err))
         }
+
     }
 }
 

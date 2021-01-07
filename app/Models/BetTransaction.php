@@ -20,7 +20,6 @@ class BetTransaction extends Model implements Auditable
 
     protected $fillable = ['user_id', 'qr_code'];
 
-
     protected $searchableFields = ['*'];
 
     protected $table = 'bet_transactions';

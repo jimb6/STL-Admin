@@ -122,7 +122,7 @@ Route::prefix('v1/')
 //        Route::post('send-custom-message', [\App\Http\Controllers\SMSController::class, 'sendCustomMessage']);
         Route::post('send-default-message', [\App\Http\Controllers\SMSController::class, 'sendMessage']);
 
-        Route::get('users-list/{role}', [\App\Http\Controllers\API\v1\ApiUserController::class, 'baseRoleIndex']);
+        Route::get('users-list/{role}', [\App\Http\Controllers\API\v1\ApiUserController::class, 'baseRo leIndex']);
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])->name('agents.active');
 

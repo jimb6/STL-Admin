@@ -14,7 +14,7 @@ class ApiDeviceController extends Controller
 {
     public function index(Request $request)
     {
-        $this->authorize('list devices', Device::class);
+        Auth::user()->can('list-devices', Device::class);
         $search = $request->get('search', '');
         $devices = Device::search($search)->get();
         return response(['devices' => $devices], 200);
@@ -22,7 +22,7 @@ class ApiDeviceController extends Controller
 
     public function create(Request $request)
     {
-        $this->authorize('create devices', Device::class);
+        Auth::user()->can('create-devices', Device::class);
 
         $url = URL::temporarySignedRoute(
             'device.subscribe', now()->addMinutes(30), ['cluster_id' => Auth::user()->cluster_id]
@@ -40,7 +40,7 @@ class ApiDeviceController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('create devices', Device::class);
+        Auth::user()->can('create-devices', Device::class);
         $validated = $request->validated();
         $device = Device::create($validated);
         broadcast(new NewDeviceAdded($device));
@@ -50,20 +50,20 @@ class ApiDeviceController extends Controller
 
     public function show(Request $request, Device $device)
     {
-        $this->authorize('view devices', $device);
+        Auth::user()->can('view-devices', $device);
         return response([], 204);
     }
 
     public function edit(Request $request, Device $device)
     {
-        $this->authorize('update devices', $device);
+        Auth::user()->can('update-devices', $device);
 
         return response(['device' => $device], 200);
     }
 
     public function update(Request $request, Device $device)
     {
-        $this->authorize('update devices', $device);
+        Auth::user()->can('update-devices', $device);
         $validated = $request->validated();
         $device->update($validated);
         return response([$device], 202);
@@ -71,7 +71,7 @@ class ApiDeviceController extends Controller
 
     public function destroy(Request $request, Device $device)
     {
-        $this->authorize('delete devices', $device);
+        Auth::user()->can('delete-devices', $device);
         $device->delete();
         return response([], 204);
     }

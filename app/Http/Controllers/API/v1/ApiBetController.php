@@ -8,12 +8,13 @@ use App\Models\CloseNumber;
 use App\Models\Game;
 use App\Scopes\BetScope;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ApiBetController extends Controller
 {
     public function index(Request $request, $game, $draw)
     {
-        $this->authorize('list bets', Bet::class);
+        Auth::user()->can('list-bets', Bet::class);
         $game = Game::where('id', $game)
             ->with(['gameConfiguration', 'controlCombination', 'bets'])
             ->get();
@@ -27,13 +28,13 @@ class ApiBetController extends Controller
 
     public function create(Request $request)
     {
-        $this->authorize('create bet transactions', Bet::class);
+        Auth::user()->can('create-bet-transactions', Bet::class);
         return response([], 200);
     }
 
     public function store(Request $request)
     {
-        $this->authorize('create bet transactions', Bet::class);
+        Auth::user()->can('create-bet-transactions', Bet::class);
         $validated = $request->validate([
             'agent_id' => 'required',
             'bets.*' => 'required',
@@ -64,19 +65,19 @@ class ApiBetController extends Controller
 
     public function show(Request $request, Bet $bet)
     {
-        $this->authorize('view bet transactions', Bet::class);
+        Auth::user()->can('view-bet-transactions', Bet::class);
         return response([], 204);
     }
 
     public function edit(Request $request, Bet $bet)
     {
-        $this->authorize('update bet transactions', $bet);
+        Auth::user()->can('update-bet-transactions', $bet);
         return response(['bets' => $bet], 200);
     }
 
     public function update(Request $request, Bet $bet)
     {
-        $this->authorize('update bet transactions', $bet);
+        Auth::user()->can('update-bet-transactions', $bet);
         $validated = $request->validated();
         $bet->update($validated);
         return response([$bet], 202);
@@ -84,14 +85,14 @@ class ApiBetController extends Controller
 
     public function destroy(Request $request, Bet $bet)
     {
-        $this->authorize('delete bet transactions', $bet);
+        Auth::user()->can('delete-bet-transactions', $bet);
         $bet->delete();
         return response([], 204);
     }
 
     public function getBetsRange(Request $request, $game, $date)
     {
-        $this->authorize('list bet transactions', Bet::class);
+        Auth::user()->can('list-bet-transactions', Bet::class);
         $bets = Bet::withoutGlobalScope(BetScope::class)
             ->where('created_at', 'like', "{$date}%")
             ->with(['betTransaction.user', 'game', 'drawPeriod'])->get();
@@ -105,7 +106,7 @@ class ApiBetController extends Controller
 
     public function getGeneralBetsReport(Request $request)
     {
-        $this->authorize('list bet transactions', Bet::class);
+        Auth::user()->can('list-bet-transactions', Bet::class);
         $validated = $request->validate([
             'cluster_id' => 'required|array',
             'draw_period_id' => 'required|array',
@@ -129,7 +130,7 @@ class ApiBetController extends Controller
 
     public function getCombinationBetsReport(Request $request)
     {
-        $this->authorize('list bet transactions', Bet::class);
+        Auth::user()->can('list-bet-transactions', Bet::class);
         $validated = $request->validate([
             'cluster_id' => 'required|array',
             'draw_period_id' => 'required|array',

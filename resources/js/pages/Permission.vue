@@ -1,20 +1,13 @@
 <template>
     <div>
-        <v-tabs>
-            <v-tab>Table View</v-tab>
-
-            <v-tab-item>
-                <DataTable
-                    :title="title"
-                    :headers="headers"
-                    :contents="contents"
-                    :fillable="fillable"
-                    @updateModel="updatePermission($event)"
-                    :canEdit="true"
-                />
-            </v-tab-item>
-        </v-tabs>
-
+        <DataTable
+            :title="title"
+            :headers="headers"
+            :contents="contents"
+            :fillable="fillable"
+            @updateModel="updatePermission($event)"
+            :canEdit="true"
+        />
     </div>
 </template>
 
@@ -45,8 +38,8 @@ export default {
             {text: "Actions", value: "actions", sortable: false},
         ],
         fillable: [
-            { label: "Permission Name", field: "name", value: "", type: "input-disabled" },
-            { label: "Roles", field: "roles", value: "", type: "chips-single", options: Array },
+            {label: "Permission Name", field: "name", value: "", type: "input-disabled"},
+            {label: "Roles", field: "roles", value: "", type: "chips-single", options: Array},
         ],
         contents: [],
     }),
@@ -66,9 +59,9 @@ export default {
             this.contents = []; // Resetting contents to null
             for (let item in data) {
                 let roles = []
-                date = this.getDateToday( new Date( data[item].updated_at ) );
+                date = this.getDateToday(new Date(data[item].updated_at));
                 count++;
-                for (let roleItem in data[item].roles){
+                for (let roleItem in data[item].roles) {
                     roles.push(data[item].roles[roleItem].name)
                 }
                 permission = {
@@ -84,11 +77,11 @@ export default {
             }
         },
         async updatePermission(item) {
-            await axios.put('/api/v1/permissions/'+item.id, {
-                roles : item.roles
+            await axios.put('/api/v1/permissions/' + item.id, {
+                roles: item.roles
             }).then(response => {
                 this.getPermissions()
-                }).catch(err => console.log(err))
+            }).catch(err => console.log(err))
         },
         async getRoles() {
             await axios.get('/api/v1/roles')
@@ -102,9 +95,9 @@ export default {
                 }).catch(err => console.log(err))
 
         },
-        getDateToday( date ) {
+        getDateToday(date) {
             date = (date) ? date : new Date();
-            const month = date.toLocaleString('default', { month: 'long' });
+            const month = date.toLocaleString('default', {month: 'long'});
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
         }

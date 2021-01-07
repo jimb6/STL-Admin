@@ -8,6 +8,7 @@ use App\Models\ControlCombination;
 use App\Models\Game;
 use App\Models\GameConfiguration;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ApiControlledNumberController extends Controller
 {
@@ -24,7 +25,7 @@ class ApiControlledNumberController extends Controller
 
     public function store(Request $request, $game)
     {
-//        $this->authorize('create control combinations', ControlCombination::class);
+        Auth::user()->can('create-control-combinations', ControlCombination::class);
         $validated = $request->validate([
             "combination" => "required",
             "max_amount" => "required"
@@ -61,7 +62,7 @@ class ApiControlledNumberController extends Controller
 
     public function update(Request $request, ControlCombination $controlCombination, $game)
     {
-//        $this->authorize('update control combinations', $controlCombination);
+        Auth::user()->can('update-control-combinations', $controlCombination);
         $validated = $request->validate([
             'id' => 'required',
             "combination" => "required",
@@ -84,7 +85,7 @@ class ApiControlledNumberController extends Controller
 
     public function destroy(ControlCombination $combi)
     {
-        $this->authorize('delete control combinations', $combi);
+        Auth::user()->can('delete-control-combinations', $combi);
         $combi->delete();
         broadcast(new NewControlledBetAdded(Game::find($combi->game_id)));
         return response([], 204);
