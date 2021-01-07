@@ -153,7 +153,8 @@ export default {
         async updateDevice(item) {
             console.log(item)
             axios.put('/api/v1/devices-update/'+item.id, {
-                user_id: item.agents.id
+                user_id: item.agents.id,
+                password: item.password,
             })
                 .then(response => {
                     console.log(response)
