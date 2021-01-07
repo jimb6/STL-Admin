@@ -13,7 +13,7 @@ class ApiClusterController extends Controller
 {
     public function index(Request $request)
     {
-        $request->user()->can('list-clusters', Cluster::class);
+        $this->authorize('list-clusters', Cluster::class);
         $search = $request->get('search', '');
         $clusters = Cluster::search($search)->with('agents', 'commissions')->get();
         $user = Auth::check() ? Auth::user() : null;
@@ -27,14 +27,14 @@ class ApiClusterController extends Controller
 
     public function create(Request $request)
     {
-        $request->user()->can('create-clusters', Cluster::class);
+        $this->authorize('create-clusters', Cluster::class);
 
         return response([], 200);
     }
 
     public function store(Request $request)
     {
-        $request->user()->can('create-clusters', Cluster::class);
+        $this->authorize('create-clusters', Cluster::class);
         $validated = $request->validate([
             'name' => 'required',
             'cluster_type',
@@ -54,14 +54,14 @@ class ApiClusterController extends Controller
 
     public function show(Request $request, Cluster $cluster)
     {
-        $request->user()->can('view-clusters', $cluster);
+        $this->authorize('view-clusters', $cluster);
 //        return view('app.clusters.show', compact('cluster'));
         return response([], 204);
     }
 
     public function edit(Request $request, Cluster $cluster)
     {
-        $request->user()->can('update-clusters', $cluster);
+        $this->authorize('update-clusters', $cluster);
 
 //        return view('app.clusters.edit', compact('cluster'));
         return response(['cluster' => $cluster], 200);
@@ -69,7 +69,7 @@ class ApiClusterController extends Controller
 
     public function update(Request $request, Cluster $cluster)
     {
-        $request->user()->can('update-clusters', $cluster);
+        $this->authorize('update-clusters', $cluster);
         $validated = $request->validate([
             'name' => 'required',
             'cluster_type',
@@ -89,13 +89,13 @@ class ApiClusterController extends Controller
 
     public function destroy(Request $request, Cluster $cluster)
     {
-        $request->user()->can('delete-clusters', $cluster);
+        $this->authorize('delete-clusters', $cluster);
         $cluster->delete();
         return response([], 204);
     }
 
     public function getClusterWithCommissions(Request $request, $game){
-        $request->user()->can('list-clusters', Cluster::class);
+        $this->authorize('list-clusters', Cluster::class);
         $game = Game::where('abbreviation', $game)->first();
         $search = $request->get('search', '');
         $clusters = Cluster::search($search)->with(['commissions' => function($query) use ($game) {

@@ -15,7 +15,7 @@ class ApiDeviceController extends Controller
 {
     public function index(Request $request)
     {
-        $request->user()->can('list-devices', Device::class);
+        $this->authorize('list-devices', Device::class);
         $search = $request->get('search', '');
         $devices = Device::search($search)->with(['cluster.users', 'user'])->get();
         return response(['devices' => $devices], 200);
@@ -23,7 +23,7 @@ class ApiDeviceController extends Controller
 
     public function create(Request $request)
     {
-        $request->user()->can('create-devices', Device::class);
+        $this->authorize('create-devices', Device::class);
 
         $url = URL::temporarySignedRoute(
             'device.subscribe', now()->addMinutes(30), ['cluster_id' => Auth::user()->cluster_id]
@@ -41,7 +41,7 @@ class ApiDeviceController extends Controller
 
     public function store(Request $request)
     {
-        $request->user()->can('create-devices', Device::class);
+        $this->authorize('create-devices', Device::class);
         $validated = $request->validated();
 
         $device = Device::onlyTrashed()->where('serial_number', $validated['serial_number'])->first();
@@ -57,20 +57,20 @@ class ApiDeviceController extends Controller
 
     public function show(Request $request, Device $device)
     {
-        $request->user()->can('view-devices', $device);
+        $this->authorize('view-devices', $device);
         return response([], 204);
     }
 
     public function edit(Request $request, Device $device)
     {
-        $request->user()->can('update-devices', $device);
+        $this->authorize('update-devices', $device);
 
         return response(['device' => $device], 200);
     }
 
     public function update(Request $request, $device)
     {
-        $request->user()->can('update-devices', $device);
+        $this->authorize('update-devices', $device);
         $validated = $request->validate([
             'user_id' => 'required',
             'password' => 'required'
@@ -82,7 +82,7 @@ class ApiDeviceController extends Controller
 
     public function destroy(Request $request, $device)
     {
-        $request->user()->can('delete-devices', Device::class);
+        $this->authorize('delete-devices', Device::class);
         $validated = $request->validate([
             'password' => 'required'
         ]);

@@ -17,7 +17,7 @@ class ApiAgentController extends ApiController
 
     public function index(Request $request)
     {
-        $request->user()->can('list-users', Agent::class);
+        $this->authorize('list-users', Agent::class);
 //        $search = $request->get('search', '');
         $agents = Agent::with(['cluster', 'address'])->get();
         return response(['agents' => $agents], 200);
@@ -25,7 +25,7 @@ class ApiAgentController extends ApiController
 
     public function store(Request $request)
     {
-        $request->user()->can('create-users', User::class);
+        $this->authorize('create-users', User::class);
         $validated = $request->validate([
             'name' => 'required',
             'birthdate' => 'required|date',
@@ -36,7 +36,7 @@ class ApiAgentController extends ApiController
             'address.*' => 'required'
         ]);
 
-        $request->user()->can('create-agents', User::class);
+        $this->authorize('create-agents', User::class);
         $address = Address::firstOrCreate([
             'street' => $validated['address']['0'],
             'barangay' => $validated['address']['1'],
@@ -62,13 +62,13 @@ class ApiAgentController extends ApiController
 
     public function show(Request $request, User $user)
     {
-        $request->user()->can('view-users', $user);
+        $this->authorize('view-users', $user);
         return response(['user' => $user], 200);
     }
 
     public function update(Request $request, User $user)
     {
-        $request->user()->can('update-users', $user);
+        $this->authorize('update-users', $user);
         $validated = $request->validated();
         if (empty($validated['password'])) {
             unset($validated['password']);
@@ -82,13 +82,13 @@ class ApiAgentController extends ApiController
 
     public function destroy(Request $request, User $user)
     {
-        $request->user()->can('delete-users', $user);
+        $this->authorize('delete-users', $user);
         $user->delete();
         return response([], 204);
     }
 
     public function activeIndex(Request $request){
-        $request->user()->can('list-agents', User::class);
+        $this->authorize('list-agents', User::class);
         $agents = User::whereHas('roles', function ($query){
             $query->where('name', '=', 'Agent');
         })->where('session_status', true)->with('device')->get();
@@ -104,7 +104,7 @@ class ApiAgentController extends ApiController
 
     public function agentPerCluster(Request $request, Cluster $cluster)
     {
-        $request->user()->can('list-users', Agent::class);
+        $this->authorize('list-users', Agent::class);
 //        $search = $request->get('search', '');
         $agents = Agent::with(['cluster', 'address'])->where('cluster_id', $cluster->id)->get();
         return response(['agents' => $agents], 200);

@@ -18,7 +18,7 @@ class ApiBetTransactionController extends Controller
 {
     public function index(Request $request)
     {
-        $request->user()->can('list-bet-transactions', BetTransaction::class);
+        $this->authorize('list-bet-transactions', BetTransaction::class);
         $search = $request->get('search', '');
         $betTransactions = BetTransaction::search($search)->with('bets')->get()->sortBy('bets.amount');
         return response(['betTransactions' => $betTransactions], 200);
@@ -26,13 +26,13 @@ class ApiBetTransactionController extends Controller
 
     public function create(Request $request)
     {
-        $request->user()->can('create-bet-transactions', BetTransaction::class);
+        $this->authorize('create-bet-transactions', BetTransaction::class);
         return response([], 200);
     }
 
     public function store(Request $request)
     {
-        $request->user()->can('create-bet-transactions', BetTransaction::class);
+        $this->authorize('create-bet-transactions', BetTransaction::class);
         //Validate the user inputs
         $validated = $request->validate([
             'bets.*' => 'required',
@@ -124,19 +124,19 @@ class ApiBetTransactionController extends Controller
 
     public function show(Request $request, BetTransaction $betTransaction)
     {
-        $request->user()->can('view-bet-transactions', BetTransaction::class);
+        $this->authorize('view-bet-transactions', BetTransaction::class);
         return response([], 204);
     }
 
     public function edit(Request $request, BetTransaction $betTransaction)
     {
-        $request->user()->can('update-bet-transactions', $betTransaction);
+        $this->authorize('update-bet-transactions', $betTransaction);
         return response(['betTransactions' => $betTransaction], 200);
     }
 
     public function update(Request $request, BetTransaction $betTransaction)
     {
-        $request->user()->can('update-bet-transactions', $betTransaction);
+        $this->authorize('update-bet-transactions', $betTransaction);
         $validated = $request->validated();
         $betTransaction->update($validated);
         return response([$betTransaction], 202);
@@ -144,7 +144,7 @@ class ApiBetTransactionController extends Controller
 
     public function destroy(Request $request, BetTransaction $betTransaction)
     {
-        $request->user()->can('delete-bet-transactions', $betTransaction);
+        $this->authorize('delete-bet-transactions', $betTransaction);
         $betTransaction->delete();
         return response([], 204);
     }

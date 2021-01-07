@@ -15,7 +15,7 @@ class ApiWinningCombinationController extends Controller
 {
     public function index(Request $request)
     {
-        $request->user()->can('list-winning-combinations', WinningCombination::class);
+        $this->authorize('list-winning-combinations', WinningCombination::class);
         $search = $request->get('search', '');
         $winningCombinations = WinningCombination::search($search)->with(['game', 'draw_period'])->get();
         return response(['winningCombination' => $winningCombinations], 200);
@@ -23,14 +23,14 @@ class ApiWinningCombinationController extends Controller
 
     public function create(Request $request)
     {
-        $request->user()->can('create-winning-combinations', WinningCombination::class);
+        $this->authorize('create-winning-combinations', WinningCombination::class);
 
         return response([], 200);
     }
 
     public function show(Request $request)
     {
-        $request->user()->can('view-winning-combinations', WinningCombination::class);
+        $this->authorize('view-winning-combinations', WinningCombination::class);
         $validated = $request->validate([
             'game' => 'required',
             'dates' => 'required|array|min:2|max:2'
@@ -48,7 +48,7 @@ class ApiWinningCombinationController extends Controller
 
     public function store(Request $request)
     {
-        $request->user()->can('create-winning-combinations', WinningCombination::class);
+        $this->authorize('create-winning-combinations', WinningCombination::class);
         $validated = $request->validate([
             'password' => 'required',
             'combination' => 'required',
@@ -86,7 +86,7 @@ class ApiWinningCombinationController extends Controller
 
     public function update(Request $request, WinningCombination $winningCombination)
     {
-        $request->user()->can('update-winning-combinations', $winningCombination);
+        $this->authorize('update-winning-combinations', $winningCombination);
         $validated = $request->validate([
             'password' => 'required',
             'combination' => 'required',
@@ -102,7 +102,7 @@ class ApiWinningCombinationController extends Controller
 
     public function verify(Request $request, $winningCombination)
     {
-        $request->user()->can('update-winning-combinations', WinningCombination::class);
+        $this->authorize('update-winning-combinations', WinningCombination::class);
         $validated = $request->validate(['password' => 'required']);
         if (!Hash::check($validated['password'], Auth::user()->getAuthPassword())) abort(406);  //Password Validation
         $winningCombination = WinningCombination::find($winningCombination);
@@ -115,7 +115,7 @@ class ApiWinningCombinationController extends Controller
 
     public function destroy(Request $request, WinningCombination $winningCombination)
     {
-        $request->user()->can('delete-winning-combinations', $winningCombination);
+        $this->authorize('delete-winning-combinations', $winningCombination);
         $winningCombination->delete();
         return response([], 204);
     }

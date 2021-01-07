@@ -17,7 +17,7 @@ class ApiGameController extends Controller
 {
     public function index(Request $request)
     {
-        $request->user()->can('list-games', Game::class);
+        $this->authorize('list-games', Game::class);
         $search = $request->get('search', '');
         $games = Game::with(['drawPeriods', 'controlCombination', 'bets', 'gameConfiguration'])->get();
         return response(['games' => $games], 200);
@@ -25,13 +25,13 @@ class ApiGameController extends Controller
 
     public function create(Request $request)
     {
-        $request->user()->can('create-games', Game::class);
+        $this->authorize('create-games', Game::class);
         return response([], 200);
     }
 
     public function store(Request $request)
     {
-        $request->user()->can('create-games', Game::class);
+        $this->authorize('create-games', Game::class);
         $validated = $request->validate([
             "description" => "required",
             "abbreviation" => "required",
@@ -76,19 +76,19 @@ class ApiGameController extends Controller
 
     public function show(Request $request, Game $games)
     {
-        $request->user()->can('view-games', $games);
+        $this->authorize('view-games', $games);
         return response([$games], 200);
     }
 
     public function edit(Request $request, Game $game)
     {
-        $request->user()->can('update-games', $game);
+        $this->authorize('update-games', $game);
         return response(['game' => $game], 200);
     }
 
     public function update(Request $request, Game $game)
     {
-        $request->user()->can('update-games', $game);
+        $this->authorize('update-games', $game);
         $validated = $request->validate([
             "description" => "required",
             "abbreviation" => "required",
@@ -130,14 +130,14 @@ class ApiGameController extends Controller
 
     public function destroy(Request $request, Game $game)
     {
-        $request->user()->can('delete-games', $game);
+        $this->authorize('delete-games', $game);
         $game->delete();
         return response([], 204);
     }
 
     public function configIndex(Request $request, $abbreviation)
     {
-        $request->user()->can('list-games', Game::class);
+        $this->authorize('list-games', Game::class);
         $search = $request->get('search', '');
         $game = Game::where('abbreviation', $abbreviation)
             ->with(['gameConfiguration', 'controlCombination', 'bets'])
@@ -158,7 +158,7 @@ class ApiGameController extends Controller
 
     public function configUpdate(Request $request, $game)
     {
-        $request->user()->can('update-games', Game::class);
+        $this->authorize('update-games', Game::class);
         $game = Game::where('abbreviation', $game)->first();
         $gameConfig = GameConfiguration::where('game_id', $game->id)
             ->update([$request->get('col_name') => $request->get('config')]);
@@ -168,7 +168,7 @@ class ApiGameController extends Controller
 
     public function configDaysUpdate(Request $request, $game)
     {
-        $request->user()->can('update-games', Game::class);
+        $this->authorize('update-games', Game::class);
         $validated = $request->validate(['days' => 'required|array']);
         $game = Game::where('abbreviation', $game)->first();
         $gameConfig = GameConfiguration::where('game_id', $game->id)
@@ -178,7 +178,7 @@ class ApiGameController extends Controller
 
     public function configMobileIndex(Request $request)
     {
-        $request->user()->can('list-games', Game::class);
+        $this->authorize('list-games', Game::class);
         $search = $request->get('search', '');
         $currentDay = Carbon::now()->tz(config('app.timezone'))->format('l');
         $games = Game::with(['gameConfiguration'])

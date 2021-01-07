@@ -11,7 +11,7 @@ class ApiRoleController extends Controller
 {
     public function index(Request $request)
     {
-        $request->user()->can('list-roles', Role::class);
+        $this->authorize('list-roles', Role::class);
         $search = $request->get('search', '');
         $roles = Role::with('permissions')->get();
         return response(['roles' => $roles], 200);
@@ -19,13 +19,13 @@ class ApiRoleController extends Controller
 
     public function create(Request $request)
     {
-        $request->user()->can('create-roles', Role::class);
+        $this->authorize('create-roles', Role::class);
         return response([], 200);
     }
 
     public function store(Request $request)
     {
-        $request->user()->can('create-roles', Role::class);
+        $this->authorize('create-roles', Role::class);
         $validated = $request->validated();
         $role = Role::create($validated);
 
@@ -34,19 +34,19 @@ class ApiRoleController extends Controller
 
     public function show(Request $request, Role $role)
     {
-        $request->user()->can('view-roles', $role);
+        $this->authorize('view-roles', $role);
         return response([], 204);
     }
 
     public function edit(Request $request, Role $role)
     {
-        $request->user()->can('update-roles', $role);
+        $this->authorize('update-roles', $role);
         return response(['permission' => $role], 200);
     }
 
     public function update(Request $request, Role $role)
     {
-        $request->user()->can('update-roles', $role);
+        $this->authorize('update-roles', $role);
         $validated = $request->validated();
         $role->update($validated);
         return response([$role], 202);
@@ -54,7 +54,7 @@ class ApiRoleController extends Controller
 
     public function destroy(Request $request, Role $role)
     {
-        $request->user()->can('delete-roles', $role);
+        $this->authorize('delete-roles', $role);
         $role->delete();
         return response([], 204);
     }
