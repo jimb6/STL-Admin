@@ -4,40 +4,19 @@
             <div v-if="notifications.length > 0" v-for="notification in notifications">
                 <Notification :notification="notification"></Notification>
             </div>
-            <v-tabs>
-                <v-tab>Table View</v-tab>
-                <v-tab>Card View</v-tab>
-                <v-tab-item>
-                    <DataTable
-                        :title="title"
-                        :contents="contents"
-                        :headers="headers"
-                        :fillable="fillable"
-                        @storeModel="storeAgent($event)"
-                        @udpateModel="updateAgent($event)"
-                        @destroyModel="destroyAgent($event)"
-                        @changeAddress="changeAddress($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-                <v-tab-item>
-                    <Card2
-                        :title="title"
-                        :contents="contents"
-                        :headers="headers"
-                        :fillable="fillable"
-                        @storeModel="storeAgent($event)"
-                        @udpateModel="updateAgent($event)"
-                        @destroyModel="destroyAgent($event)"
-                        @changeAddress="changeAddress($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-            </v-tabs>
+            <DataTable
+                :title="title"
+                :contents="contents"
+                :headers="headers"
+                :fillable="fillable"
+                @storeModel="storeAgent($event)"
+                @udpateModel="updateAgent($event)"
+                @destroyModel="destroyAgent($event)"
+                @changeAddress="changeAddress($event)"
+                :canAdd="canAdd"
+                :canEdit="canEdit"
+                :canDelete="canDelete"
+            />
         </v-container>
     </v-main>
 </template>
@@ -84,7 +63,7 @@ export default {
             {label: "Contact #", field: "contact_number", value: "", type: "input"},
             {label: "Email", field: "email", value: "", type: "input"},
             {label: "Address", field: "address", value: "", type: "address"},
-            {label: "Cluster", field: "cluster", value: "", type: "select", options: Array},
+            {label: "Cluster", field: "clusterId", value: "", type: "select", options: Array},
         ],
 
         editedItem: {},
@@ -104,11 +83,9 @@ export default {
             await axios.get('/api/v1/agents').then(response => {
                 let agent = {};
                 const data = response.data.agents;
-                let date = '';
                 let count = 0;
                 this.contents = []
                 for (let item in data) {
-                    date = this.getDateToday(new Date(data[item].updated_at));
                     count++;
                     agent = {
                         count: count,
@@ -123,15 +100,17 @@ export default {
                             + ", " + data[item].address.municipality
                             + ", " + data[item].address.province,
                         cluster: data[item].cluster.name,
-                        updated_at: date,
+                        clusterId: data[item].cluster.id,
+                        updated_at: data[item].updated_at,
                     }
                     this.contents.push(agent);
                 }
             }).catch(err => {
                 this.addNotification("Failed to load " + this.title + "s", "error", "400");
             });
-
         },
+
+
         async storeAgent(item) {
             await axios.post('/api/v1/agents', {
                 'name': item.name,
@@ -141,7 +120,6 @@ export default {
                 'email': item.email,
                 'cluster_id': item.cluster.id,
                 'address': this.address
-
             }).then(response => {
                 this.addNotification(item.name + " added successfully!", "success", "200");
                 this.sendPasswordSMS(response.data.user, response.data.password)
@@ -155,7 +133,7 @@ export default {
 
         },
         async destroyAgent(item) {
-            await axios.delete('/api/v1/agents/'+item.id)
+            await axios.delete('/api/v1/agents/' + item.id)
                 .then(response => {
                     this.addNotification(item.name + " deleted successfully!", "success", "200")
                     this.displayAgents();
@@ -168,8 +146,9 @@ export default {
         async getClusters() {
             const response = await axios.get('/api/v1/clusters').catch(err => console.log(err))
             let clustersData = response.data.clusters;
+            console.log( clustersData );
             for (let index in this.fillable) {
-                if (this.fillable[index].field == 'cluster') {
+                if (this.fillable[index].field === 'clusterId') {
                     this.fillable[index].options = clustersData;
                 }
             }
@@ -188,13 +167,13 @@ export default {
 
         async sendPasswordSMS(user, password) {
             await axios.post('/api/v1/send-default-message', {
-                'message': 'You are now part of STL as ' + user.roles[0].name + '. login your account using your mobile number or email registered. Your default password is '+ password,
+                'message': 'You are now part of STL as ' + user.roles[0].name + '. login your account using your mobile number or email registered. Your default password is ' + password,
                 'send_to': user.contact_number
             })
                 .then(response => {
                     console.log(response)
                     console.log(user, "<<<<<<");
-                    this.addNotification('Password sent to '+ user.name, "success", "200");
+                    this.addNotification('Password sent to ' + user.name, "success", "200");
                 }).catch(err => {
                     this.addNotification(err.response.data.message, "error", err.status);
                 })

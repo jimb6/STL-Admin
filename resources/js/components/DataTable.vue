@@ -300,16 +300,6 @@
             </template>
         </v-data-table>
 
-        <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-            {{ snackText }}
-
-            <template v-slot:action="{ attrs }">
-                <v-btn v-bind="attrs" text @click="snack = false">
-                    Close
-                </v-btn>
-            </template>
-        </v-snackbar>
-
 
         <div class="flex-between cstm-row col2">
             <v-text-field

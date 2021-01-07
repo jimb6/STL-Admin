@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Scopes\AgentScope;
 use App\Scopes\ClusterScope;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
