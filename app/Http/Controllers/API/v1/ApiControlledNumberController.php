@@ -25,7 +25,7 @@ class ApiControlledNumberController extends Controller
 
     public function store(Request $request, $game)
     {
-        Auth::user()->can('create-control-combinations', ControlCombination::class);
+        $request->user()->can('create-control-combinations', ControlCombination::class);
         $validated = $request->validate([
             "combination" => "required",
             "max_amount" => "required"
@@ -62,7 +62,7 @@ class ApiControlledNumberController extends Controller
 
     public function update(Request $request, ControlCombination $controlCombination, $game)
     {
-        Auth::user()->can('update-control-combinations', $controlCombination);
+        $request->user()->can('update-control-combinations', $controlCombination);
         $validated = $request->validate([
             'id' => 'required',
             "combination" => "required",
@@ -83,9 +83,9 @@ class ApiControlledNumberController extends Controller
         return response([], 204);
     }
 
-    public function destroy(ControlCombination $combi)
+    public function destroy(Request $request, ControlCombination $combi)
     {
-        Auth::user()->can('delete-control-combinations', $combi);
+        $request->user()->can('delete-control-combinations', $combi);
         $combi->delete();
         broadcast(new NewControlledBetAdded(Game::find($combi->game_id)));
         return response([], 204);

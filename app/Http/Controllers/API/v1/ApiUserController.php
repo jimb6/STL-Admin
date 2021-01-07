@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Cluster;
 use App\Models\User;
+use Faker\Provider\Base;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -102,7 +103,7 @@ class ApiUserController extends Controller
 
     public function destroy(Request $request, User $user)
     {
-        Auth::user()->can('delete-users', $user);
+        $request->user()->can('delete-users', $user);
         $user->delete();
         return response([], 204);
     }

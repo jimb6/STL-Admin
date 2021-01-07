@@ -14,7 +14,7 @@ class ApiCloseNumberController extends Controller
 {
     public function index(Request $request)
     {
-        Auth::user()->can('list-close-numbers', CloseNumber::class);
+        $request->user()->can('list-close-numbers', CloseNumber::class);
         $search = $request->get('search', '');
         $closeNumbers = CloseNumber::with(['game', 'drawPeriod'])->get();
         return response(['closeNumbers' => $closeNumbers], 200);
@@ -22,13 +22,13 @@ class ApiCloseNumberController extends Controller
 
     public function create(Request $request)
     {
-        Auth::user()->can('create-close-numbers', CloseNumber::class);
+        $request->user()->can('create-close-numbers', CloseNumber::class);
         return response([], 200);
     }
 
     public function store(Request $request, $game, $drawPeriod)
     {
-        Auth::user()->can('create-close-numbers', CloseNumber::class);
+        $request->user()->can('create-close-numbers', CloseNumber::class);
         $validated = $request->validate([
             'combinations' => 'required'
         ]);
@@ -44,19 +44,19 @@ class ApiCloseNumberController extends Controller
 
     public function show(Request $request, CloseNumber $closeNumber)
     {
-        Auth::user()->can('view-close-numbers', CloseNumber::class);
+        $request->user()->can('view-close-numbers', CloseNumber::class);
         return response([], 204);
     }
 
     public function edit(Request $request, CloseNumber $closeNumber)
     {
-        Auth::user()->can('update-close-numbers', $closeNumber);
+        $request->user()->can('update-close-numbers', $closeNumber);
         return response(['closeNumbers' => $closeNumber], 200);
     }
 
     public function update(Request $request, CloseNumber $closeNumber)
     {
-        Auth::user()->can('update-close-numbers', $closeNumber);
+        $request->user()->can('update-close-numbers', $closeNumber);
         $validated = $request->validated();
         $closeNumber->update($validated);
         return response([$closeNumber], 202);
@@ -64,7 +64,7 @@ class ApiCloseNumberController extends Controller
 
     public function destroy(Request $request, $game, $drawPeriod)
     {
-        Auth::user()->can('delete-close-numbers', CloseNumber::class);
+        $request->user()->can('delete-close-numbers', CloseNumber::class);
         $validated = $request->validate([
             'combinations' => 'required'
         ]);

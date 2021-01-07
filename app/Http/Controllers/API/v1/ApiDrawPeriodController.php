@@ -12,7 +12,7 @@ class ApiDrawPeriodController extends Controller
 {
     public function index(Request $request)
     {
-        Auth::user()->can('list-draw-periods', DrawPeriod::class);
+        $request->user()->can('list-draw-periods', DrawPeriod::class);
         $search = $request->get('search', '');
         $drawPeriods = DrawPeriod::search($search)->with('games:description')->get();
         return response(['drawPeriods' => $drawPeriods], 200);
@@ -20,13 +20,13 @@ class ApiDrawPeriodController extends Controller
 
     public function create(Request $request)
     {
-        Auth::user()->can('create-draw-periods', DrawPeriod::class);
+        $request->user()->can('create-draw-periods', DrawPeriod::class);
         return response([], 200);
     }
 
     public function store(Request $request)
     {
-        Auth::user()->can('create-draw-periods', DrawPeriod::class);
+        $request->user()->can('create-draw-periods', DrawPeriod::class);
         $validated = $request->validate([
             'draw_time' => 'required',
             'draw_type' => 'required',
@@ -52,20 +52,20 @@ class ApiDrawPeriodController extends Controller
 
     public function show(Request $request, DrawPeriod $drawPeriod)
     {
-        Auth::user()->can('view-draw-periods', $drawPeriod);
+        $request->user()->can('view-draw-periods', $drawPeriod);
         return response([], 204);
     }
 
     public function edit(Request $request, DrawPeriod $drawPeriod)
     {
-        Auth::user()->can('update-draw-periods', $drawPeriod);
+        $request->user()->can('update-draw-periods', $drawPeriod);
 
         return response(['drawPeriod' => $drawPeriod], 200);
     }
 
     public function update(Request $request, DrawPeriod $drawPeriod)
     {
-        Auth::user()->can('update-draw-periods', $drawPeriod);
+        $request->user()->can('update-draw-periods', $drawPeriod);
         $validated = $request->validate([
             'draw_time' => 'required',
             'draw_type' => 'required',
@@ -89,14 +89,14 @@ class ApiDrawPeriodController extends Controller
 
     public function destroy(Request $request, DrawPeriod $drawPeriod)
     {
-        Auth::user()->can('delete-draw-periods', $drawPeriod);
+        $request->user()->can('delete-draw-periods', $drawPeriod);
         $drawPeriod->delete();
         return response([], 204);
     }
 
     public function getDrawPeriodGames(Request $request)
     {
-        Auth::user()->can('list-draw-periods', DrawPeriod::class);
+        $request->user()->can('list-draw-periods', DrawPeriod::class);
         $search = $request->get('search', '');
         $drawPeriods = DrawPeriod::search($search)->with('games:description')->get()
             ->mapWithKeys(function ($item) {
@@ -117,7 +117,7 @@ class ApiDrawPeriodController extends Controller
 
     public function getCategorizedDrawPeriod(Request $request, $game)
     {
-        Auth::user()->can('list-draw-periods', DrawPeriod::class);
+        $request->user()->can('list-draw-periods', DrawPeriod::class);
         $search = $request->get('search', '');
         $drawPeriods = DrawPeriod::search($search)->with('games:description')
             ->whereHas('games', function ($query) use ($game) {
