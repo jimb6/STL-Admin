@@ -17,11 +17,7 @@ class ApiDeviceController extends Controller
     {
         $request->user()->can('list-devices', Device::class);
         $search = $request->get('search', '');
-        $devices = Device::search($search)->with(['cluster.users' => function($query){
-            $query->whereHas('roles', function ($subQuery){
-                $subQuery->where('name', 'agent');
-            });
-        }, 'user'])->get();
+        $devices = Device::search($search)->with(['cluster.users', 'user'])->get();
         return response(['devices' => $devices], 200);
     }
 
