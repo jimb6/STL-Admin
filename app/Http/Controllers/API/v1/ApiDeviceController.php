@@ -68,7 +68,7 @@ class ApiDeviceController extends Controller
         return response(['device' => $device], 200);
     }
 
-    public function update(Request $request, Device $device)
+    public function update(Request $request, $device)
     {
         $request->user()->can('update-devices', $device);
         $validated = $request->validate([
@@ -76,7 +76,7 @@ class ApiDeviceController extends Controller
             'password' => 'required'
         ]);
         if (! Hash::check($validated['password'], $request->user()->password)) abort(406);
-        $device->update($validated);
+        Device::find($device)->update($validated);
         return response([$device], 202);
     }
 
