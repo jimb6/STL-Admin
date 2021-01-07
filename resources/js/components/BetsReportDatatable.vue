@@ -1,0 +1,357 @@
+<template>
+    <v-container class="cstm-vuetify-table">
+        <h2>{{ title }}</h2>
+
+        <!-- REPORTS TABLE -->
+        <v-data-table
+            :headers="headers"
+            :items="contents"
+            :page.sync="page"
+            :items-per-page="itemsPerPage"
+            :search="search"
+            hide-default-footer
+            :sort-by="['combination']"
+            :sort-desc="[false]"
+            @page-count="pageCount = $event"
+            loading-text="Loading... Please wait">
+
+            <template v-slot:top>
+                <div class="flex-between cstm-table-options my-4 cstm-row col2">
+                    <div style="width: 75% !important;">
+
+                        <div class="flex">
+                            <!-- REPORT TYPE FILTER -->
+                            <v-select
+                                v-model="reportTypeFilter.selected"
+                                :items="reportTypeFilter.options"
+                                item-text="text"
+                                item-value="value"
+                                label="Report Type"
+                                class="mr-5"
+                                return-object
+                                @change="displayReports"
+                            />
+
+                            <!-- CLUSTER FILTER -->
+                            <v-select
+                                v-model="clusterFilter.selected"
+                                :items="clusterFilter.options"
+                                item-text="text"
+                                item-value="value"
+                                label="Cluster"
+                                class="mr-5"
+                                return-object
+                                @change="displayReports"
+                            >
+                                <template v-slot:item="{ item }">
+                                    <p :class="item.type">{{ item.text }}</p>
+                                </template>
+                            </v-select>
+
+                            <!-- DRAW PERIOD FILTER -->
+                            <v-select
+                                v-model="drawPeriodFilter.selected"
+                                :items="drawPeriodFilter.options"
+                                item-text="text"
+                                item-value="value"
+                                label="Draw Period"
+                                class="mr-5"
+                                return-object
+                                @change="displayReports"
+                            />
+
+                            <!-- DATE RANGE FILTER -->
+                            <div class="mr-5">
+                                <v-dialog
+                                    ref="dialog"
+                                    v-model="modal"
+                                    :return-value.sync="dates"
+                                    persistent
+                                    width="290px"
+                                >
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-text-field
+                                            v-model="dateRangeText"
+                                            label="Date Range"
+                                            readonly
+                                            v-bind="attrs"
+                                            v-on="on"
+                                        ></v-text-field>
+                                    </template>
+                                    <v-date-picker
+                                        v-model="dates"
+                                        scrollable
+                                        range
+                                        :max="getCurrentDate()"
+                                    >
+                                        <v-btn text color="primary" @click="modal = false">
+                                            Cancel
+                                        </v-btn>
+                                        <v-btn text color="primary" @click="()=>{ $refs.dialog.save(dates); displayReports()}">
+                                            OK
+                                        </v-btn>
+                                    </v-date-picker>
+                                </v-dialog>
+                            </div>
+
+                            <!-- EXCEL FILE -->
+                            <Excel
+                                class="mr-2"
+                                :excelHeaders="excelHeaders"
+                                :excelData="excelData"
+                                :excelTitle="excelTitle"
+                            />
+
+                            <!-- PDF FILE -->
+                            <Pdf
+                                alt="Download pdf file"
+                                :excelHeaders="excelHeaders"
+                                :excelData="excelData"
+                                :excelTitle="excelTitle"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- SEARCH -->
+                    <v-text-field
+                        v-model="search"
+                        append-icon="mdi-magnify"
+                        label="Search"
+                        single-line
+                        hide-details
+                    ></v-text-field>
+                </div>
+
+            </template>
+        </v-data-table>
+
+        <!-- PAGINATION -->
+        <div class="flex-between cstm-row col2">
+            <v-text-field
+                :value="itemsPerPage"
+                label="Items per page"
+                type="number"
+                min="-1"
+                max="15"
+                @input="itemsPerPage = parseInt($event, 10)"
+                class="cstm-v-textfield small"
+            ></v-text-field>
+            <div>
+                <v-pagination
+                    v-model="page"
+                    :length="pageCount"
+                    prev-icon="mdi-menu-left"
+                    next-icon="mdi-menu-right"
+                    :total-visible="7"
+                    circle
+                ></v-pagination>
+            </div>
+        </div>
+    </v-container>
+
+</template>
+
+<script>
+import Excel from "./Excel";
+import Pdf from "./Pdf";
+
+export default {
+    name: 'BetsReportDatatable',
+    components: {
+        Excel,
+        Pdf
+    },
+    props: {
+        title: String,
+        headers: Array,
+        contents: Array,
+
+        excelHeaders: Array,
+        excelData: Array,
+        excelTitle: String,
+    },
+
+    data: () => ({
+        // SEARCH AND PAGINATION
+        search: "",
+        page: 1,
+        pageCount: 0,
+        itemsPerPage: 100,
+
+        //  FILTERS
+        reportTypeFilter: {
+            selected: {},
+            options: [{text: "General", value: "General"}, {text: "Combination", value: "Combination"}]
+        },
+        clusterFilter: {},
+        drawPeriodFilter: {},
+        dates: [],
+        modal: false,
+    }),
+
+    created() {
+        this.initialize();
+    },
+
+    methods: {
+
+        initialize() {
+            this.dates = [this.getCurrentDate(), this.getCurrentDate()]
+            this.getClusters();
+            this.getDrawPeriods();
+        },
+
+        displayReports() {
+            if (this.drawPeriodFilter.selected !== '' && this.clusterFilter.selected !== '' && this.reportTypeFilter.selected !== '' && this.dates !== null && this.dates.length > 1)
+                this.$emit('displayReports', [this.reportTypeFilter, this.clusterFilter, this.drawPeriodFilter, this.dates])
+        },
+
+        displayGeneralReports() {
+
+        },
+
+        displayCombinationReports() {
+
+        },
+
+        getClusters() {
+            axios.get('/api/v1/cluster-categorized/' + this.title)
+                .then(response => {
+
+                    let clusters = response.data.clusters
+                    let clustersId = response.data.clustersId
+
+                    this.clusterFilter = {
+                        selected: {
+                            text: "All",
+                            value: clustersId['without-commission'].concat(clustersId['with-commission']),
+                            type: "super"
+                        },
+                        options: [{
+                            text: "All",
+                            value: clustersId['without-commission'].concat(clustersId['with-commission']),
+                            type: "super"
+                        }],
+                    }
+
+                    this.clusterFilter.options.push({
+                        text: "Clusters w/o Commission",
+                        value: clustersId['without-commission'],
+                        type: "super"
+                    })
+                    for (let item in clusters['without-commission']) {
+                        this.clusterFilter.options.push({
+                            text: clusters['without-commission'][item].name,
+                            value: [clusters['without-commission'][item].id],
+                            type: "sub"
+                        })
+                    }
+
+                    this.clusterFilter.options.push({
+                        text: "Clusters w/ Commission",
+                        value: clustersId['with-commission'],
+                        type: "super"
+                    })
+                    for (let item in clusters['with-commission']) {
+                        this.clusterFilter.options.push({
+                            text: clusters['with-commission'][item].name,
+                            value: [clusters['with-commission'][item].id],
+                            type: "sub"
+                        })
+                    }
+                }).catch(err => {
+                console.log(err)
+            })
+        },
+
+        getDrawPeriods() {
+            axios.get('/api/v1/draw-periods-categorized/' + this.title)
+                .then(response => {
+                    let drawPeriods = response.data.drawPeriods
+                    if (drawPeriods.length > 1){
+                        let ids = []
+                        for (let item in drawPeriods) {
+                            ids.push(drawPeriods[item].id)
+                        }
+                        this.drawPeriodFilter = {
+                            selected: {text: "All", value: ids},
+                            options: [{text: "All", value: ids}],
+                        }
+                        for (let item in drawPeriods) {
+                            let drawTime = new Date('1/1/2021 ' + drawPeriods[item].draw_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");
+                            this.drawPeriodFilter.options.push({
+                                text: drawTime,
+                                value: [drawPeriods[item].id]
+                            })
+                        }
+                    } else {
+                        let drawTime = new Date('1/1/2021 ' + drawPeriods[0].draw_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");
+                        this.drawPeriodFilter = {
+                            selected: {text: drawTime, value: [drawPeriods[0].id]},
+                            options: [{text: drawTime, value: [drawPeriods[0].id]}],
+                        }
+                    }
+
+                    console.log(response, "DRAW PERIOD")
+                }).catch(err => {
+                console.log(err)
+            })
+        },
+
+        getCurrentDate() {
+            let date = new Date();
+            const month = date.toLocaleString('default', {month: 'numeric'});
+            date = date.getFullYear() + "-" + (month < 10 ? "0" + month : month) + "-" + (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+            return date
+        },
+
+        //  COLOR
+        getStatusBackground(item) {
+            switch (item.status) {
+                case "SOLD OUT":
+                    item.isClosed = true;
+                    return "myDanger myTr"
+                case "OPEN":
+                    return "myTr"
+                case "CLOSED":
+                    item.isClosed = true;
+                    return "myWarning myTr"
+                default:
+                    return "myDanger"
+            }
+        },
+
+        updateCloseCombination(item) {
+            this.editedIndex = this.contents.indexOf(item);
+            item['index'] = this.editedIndex;
+            if (item.status === "OPEN") {
+                this.$emit("storeCloseCombination", item);
+            } else if (item.status === "CLOSED") {
+                this.$emit("destroyCloseCombination", item);
+            }
+        }
+
+
+    },
+
+    computed: {
+        dateRangeText() {
+            this.dates.sort();
+            return this.dates.join(' ~ ')
+        },
+    },
+
+
+};
+</script>
+
+<style scoped>
+.v-list-item p.super {
+    font-weight: 600;
+}
+
+.v-list-item p.sub {
+    padding-left: 20px;
+}
+</style>
+

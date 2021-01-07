@@ -26,6 +26,7 @@ import Booth from "./pages/Booth";
 import GameCreate from "./pages/games/GameCreate";
 import Cluster from "./pages/Cluster";
 import JsonExcel from "vue-json-excel";
+import Collection from "./pages/Collection";
 // import Permissions from "./mixins/Permissions";
 
 require('./bootstrap');
@@ -62,6 +63,7 @@ const app = new Vue({
     el: '#app',
     router,
     components: {
+        Collection,
         Cluster,
         GameCreate,
         Dashboard,

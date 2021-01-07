@@ -12,6 +12,26 @@
     --myWarning: #FB8C00;
 }
 
+/* SCROLLBAR */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+::-webkit-scrollbar {
+    width: 5px;
+    background-color: #F5F5F5;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-image: -webkit-gradient(linear,
+    left bottom,
+    left top,
+    color-stop(0.44, rgb(122,153,217)),
+    color-stop(0.72, rgb(73,125,189)),
+    color-stop(0.86, rgb(28,58,148)));
+}
+
 .mySuccess {
     background: var(--mySuccess) !important;
 }
@@ -462,4 +482,23 @@ input.datepicker {
     border-radius: 50%;
     font-size: 50px;
     color: #fff;
+}
+
+/* DARK MODE */
+
+.darkTheme .content-wrapper {
+    background: var(--darkGray);
+}
+.darkTheme .v-tab, .darkTheme .v-tab i, .darkTheme h2, .darkTheme h3,
+.darkTheme .cstm-vuetify-table thead.v-data-table-header th span {
+    color: #ffffff !important;
+}
+.darkTheme nav.main-header {
+    background: var(--darkGray);
+}
+.darkTheme .cstm-vuetify-table thead.v-data-table-header {
+    background: var(--gray2);
+}
+.darkTheme tbody {
+    background: var(--gray);
 }

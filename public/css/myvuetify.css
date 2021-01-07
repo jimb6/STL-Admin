@@ -47,7 +47,7 @@
     text-align: center;
     text-transform: uppercase;
     font-weight: 300;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     border-bottom: 1px solid #ddd;
 }
 .cstm-vuetify-table thead.v-data-table-header {
@@ -63,7 +63,7 @@
     position: relative;
 }
 .cstm-vuetify-table .v-data-table-header__icon {
-    color: #ffffff !important;
+    color: var(--myBlue) !important;
     margin-left: 5px;
     position: absolute !important;
 }

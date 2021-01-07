@@ -1,43 +1,20 @@
 <template>
     <v-main>
         <v-container>
-            <v-tabs>
-                <download-excel
-                    class="btn btn-default"
-                    :data="contents"
-                    :fields="json_fields"
-                    worksheet="My Worksheet"
-                    name="filename.xls"
-                >
-                    Download Excel (you can customize this with html code!)
-                </download-excel>
-                <v-tab>Table View</v-tab>
-                <v-tab>Card View</v-tab>
-                <v-tab-item>
-                    <DataTable
-                        :title="title"
-                        :headers="headers"
-                        :contents="contents"
-                        :fillable="fillable"
-                        @storeModel="storeCluster($event)"
-                        @updateModel="updateCluster($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-                <v-tab-item>
-                    <Card2
-                        :title="title"
-                        :contents="contents"
-                        :headers="headers"
-                        :fillable="fillable"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-            </v-tabs>
+            <DataTable
+                :title="title"
+                :headers="headers"
+                :contents="contents"
+                :fillable="fillable"
+                @storeModel="storeCluster($event)"
+                @updateModel="updateCluster($event)"
+                :canAdd="canAdd"
+                :canEdit="canEdit"
+                :canDelete="canDelete"
+                :excelHeaders="excelHeaders"
+                :excelData="excelData"
+                :excelTitle="title"
+            />
         </v-container>
     </v-main>
 </template>
@@ -47,9 +24,7 @@ import DataTable from "../components/DataTable";
 import Card2 from "../components/Card2";
 import Vue from "vue";
 import Vuetify from 'vuetify'
-import JsonExcel from "vue-json-excel";
 
-Vue.use(Vuetify, JsonExcel)
 export default {
     name: "Cluster",
     props: {
@@ -58,7 +33,6 @@ export default {
     components: {
         Card2,
         DataTable,
-        JsonExcel,
     },
 
     data: () => ({
@@ -87,33 +61,33 @@ export default {
 
         json_fields: {
             "Cluster Name": "name",
+            "Type": "type",
             "No. of Agents": "city",
-            "Commissions": "phone.mobile",
+            "Commissions": "",
         },
+
+        excelHeaders: [],
+        excelData: [],
     }),
     created() {
         this.displayClusters();
-        this.getGameCommissions();
     },
     methods: {
         async displayClusters() {
             await axios.get('/api/v1/clusters').then(response => {
-                console.log(response)
-                let cluster = {};
                 const data = response.data.clusters;
                 let count = 0;
                 this.contents = []
                 for (let item in data) {                                                                        // Every Cluster
                     let commissions = [];
                     count++;
-                    cluster = {
+                    let cluster = {
                         count: count,
                         id: data[item].id,
                         name: data[item].name,
                         cluster_type: data[item].cluster_type,
                         agents: data[item].agents.length,
                         commissions: [],
-
                     }
                     for (let i in data[item].commissions) {                                         //Every game commission
                         cluster[data[item].commissions[i].game.abbreviation] = data[item].commissions[i].commission_rate * 100
@@ -126,12 +100,11 @@ export default {
                     }
                     this.contents.push(cluster);
                 }
+                this.getGameCommissions();
 
-                console.log(this.contents)
             }).catch(err => {
                 console.log(err)
             });
-
         },
 
         async getGameCommissions() {
@@ -139,7 +112,13 @@ export default {
                 .then(response => {
                     this.games = [];
                     let data = response.data.games;
+                    this.fillable = [
+                        {label: "Name", field: "name", value: "", type: "input"},
+                        {label: "Type", field: "cluster_type", value: "", type: "select", options: ['Sub-Main']},
+                        {label: "Commission Values", field: "commission_vals", value: "", type: "hidden"},
+                    ]
                     for (let index in data) {
+                        this.games.push(data[index].abbreviation)
                         this.fillable.push({
                             label: data[index].description + " (%)",
                             field: data[index].abbreviation,
@@ -147,6 +126,7 @@ export default {
                             type: "group-input"
                         })
                     }
+                    this.updateExcelFields()
                 })
                 .catch(err => {
                     this.addNotification(item.draw_time + " unsuccessfully added!", "error", "400");
@@ -160,7 +140,7 @@ export default {
             }).catch(err => console.log(err))
         },
         async updateCluster(item) {
-            await axios.put('/api/v1/clusters/'+item.id, item).then(response => {
+            await axios.put('/api/v1/clusters/' + item.id, item).then(response => {
                 console.log(response)
                 this.displayClusters();
             }).catch(err => console.log(err))
@@ -173,6 +153,23 @@ export default {
 
         },
 
+        updateExcelFields() {
+            this.excelHeaders = []
+            this.excelData = []
+            this.excelHeaders = [
+                {name: "Name", subheader: []},
+                {name: "Type", subheader: []},
+                {name: "No. of Agents", subheader: []},
+                {name: "Commissions", subheader: this.games},
+            ];
+
+            let fields = ["name", "cluster_type", "agents"]
+            for (let i in this.games) {
+                console.log(this.games[i], " GAME CONSOLE")
+                fields.push(this.games[i])
+            }
+            this.excelData.push({items: this.contents, fields: fields})
+        },
 
     }
 }

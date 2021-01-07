@@ -20,12 +20,25 @@
                     <div>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn color="blue" class="text-white" v-bind="attrs" v-on="on" v-if="canAdd">
-                                    <v-icon small class="mr-2">
-                                        mdi-plus
-                                    </v-icon>
-                                    Add New {{ title }}
-                                </v-btn>
+                                <div class="flex">
+                                    <v-btn color="blue" class="text-white mr-2" v-bind="attrs" v-on="on" v-if="canAdd">
+                                        <v-icon small class="mr-2">
+                                            mdi-plus
+                                        </v-icon>
+                                        Add New {{ title }}
+                                    </v-btn>
+                                    <Excel
+                                        class="mr-2"
+                                        :excelHeaders="excelHeaders"
+                                        :excelData="excelData"
+                                        :excelTitle="excelTitle"
+                                    />
+                                    <Pdf
+                                        :excelHeaders="excelHeaders"
+                                        :excelData="excelData"
+                                        :excelTitle="excelTitle"
+                                    />
+                                </div>
                             </template>
                             <v-card>
                                 <v-card-title>
@@ -203,8 +216,18 @@
                 </v-icon>
             </template>
 
+            <template v-slot:item.draw_time="{ item }">
+                {{ new Date('1/1/2021 ' + item.draw_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3") }}
+            </template>
+            <template v-slot:item.open_time="{ item }">
+                {{ new Date('1/1/2021 ' + item.open_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3") }}
+            </template>
+            <template v-slot:item.close_time="{ item }">
+                {{ new Date('1/1/2021 ' + item.close_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3") }}
+            </template>
+
             <template v-slot:item.roles ="{ item }">
-                <v-chip  v-for="role in item.roles" :key="role.name" dark small>
+                <v-chip  v-for="role in item.roles" :key="role.name" dark small class="mr-2">
                     {{ role }}
                 </v-chip>
             </template>
@@ -282,11 +305,15 @@
 
 <script>
 import Address from "./Address";
+import Excel from "./Excel";
+import Pdf from "./Pdf";
 
 export default {
     name: 'DataTable',
     components:{
-        Address
+        Address,
+        Excel,
+        Pdf
     },
     props: {
         title: String,
@@ -296,6 +323,10 @@ export default {
         canAdd: Boolean,
         canEdit: Boolean,
         canDelete: Boolean,
+
+        excelHeaders: Array,
+        excelData: Array,
+        excelTitle: String,
     },
 
     data: () => ({

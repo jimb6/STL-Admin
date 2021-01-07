@@ -29,7 +29,7 @@ class Game extends Model
         'max_per_field_set',
     ];
 
-    protected $searchableFields = ['*'];
+
 
     protected $casts = [
         'is_closed' => 'boolean'

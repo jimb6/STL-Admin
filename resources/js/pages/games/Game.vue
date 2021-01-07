@@ -10,37 +10,41 @@
                             v-model="tabs"
                             slider-color="primary"
                             color="danger"
-                            light>
+                            light
+                    >
+                        <!-- TAB TITLES -->
                         <v-tab>
                             <v-icon small class="mr-2">mdi-settings</v-icon>
                             Config / Monitoring
                         </v-tab>
-                        <v-tab><v-icon small class="mr-2">mdi-account</v-icon>Entries</v-tab>
-                        <v-tab>Winning Combination</v-tab>
-                        <v-tab>Reports</v-tab>
+                        <v-tab>
+                            <v-icon small class="mr-2">mdi-sitemap</v-icon>
+                            Entries
+                        </v-tab>
+                        <v-tab>
+                            <v-icon small class="mr-2">mdi-trophy</v-icon>
+                            Winning Combinations
+                        </v-tab>
+                        <v-tab>
+                            <v-icon small class="mr-2">mdi-file</v-icon>
+                            Reports
+                        </v-tab>
+
+                        <!-- TAB ITEMS -->
                         <v-tab-item>
                             <Configuration :game="this.game"/>
                         </v-tab-item>
 
                         <v-tab-item>
-                            <game-draw :game="this.game"></game-draw>
+                            <Entries :game="this.game"/>
                         </v-tab-item>
+
                         <v-tab-item>
-                            <game-draw :game="this.game"></game-draw>
+                            <WinningCombination :game="this.game" />
                         </v-tab-item>
+
                         <v-tab-item>
-                            <Reports/>
-                            <BetsDatatable
-                                :title="game"
-                                :total="total"
-                                :headers="headers"
-                                :contents="contents"
-                                :fillable="fillable"
-                                :canAdd="canAdd"
-                                :canEdit="canEdit"
-                                :canDelete="canDelete"
-                                :hasTopHeader="hasTopHeader"
-                            />
+                            <Reports :game="this.game"/>
                         </v-tab-item>
                     </v-tabs>
                 </div>
@@ -56,13 +60,14 @@ import Notification from "../../components/Notification";
 import Vue from "vue";
 import Vuetify from 'vuetify'
 import Bet from '../Bet'
-import WinningCombination from "../WinningCombination";
 import '@mdi/font/css/materialdesignicons.css'
-import Reports from "../Reports";
 import VueJsonToCsv from 'vue-json-to-csv'
 import Configuration from "../../components/games/Configuration";
-import BetsDatatable from "../../components/BetsDatatable";
+import BetsReportDatatable from "../../components/BetsReportDatatable";
 import GameDraw from "./GameDraw";
+import Entries from "../Entries";
+import WinningCombination from "../WinningCombination";
+import Reports from "../Reports";
 
 Vue.use(Vuetify, VueJsonToCsv)
 
@@ -78,7 +83,8 @@ export default {
         Notification,
         Bet,
         WinningCombination,
-        BetsDatatable
+        BetsReportDatatable,
+        Entries
     },
     data: () => ({
         panel: [0, 0],
@@ -155,6 +161,7 @@ export default {
         dialog: false,
         dialogDelete: false,
 
+
     }),
 
     methods: {
@@ -205,7 +212,7 @@ export default {
 
         addNotification(message, type, statusCode) {
             this.notifications.push({message: message, type: type, statusCode: statusCode});
-        }
+        },
     }
 }
 </script>

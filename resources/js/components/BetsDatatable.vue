@@ -1,6 +1,6 @@
 <template>
     <v-container class="cstm-vuetify-table">
-        <h3>{{ title }}</h3>
+        <h2>{{ title }}</h2>
 
 
 
@@ -249,25 +249,25 @@ export default {
 </script>
 
 <style scoped>
-.container.cstm-vuetify-table {
-    padding: unset;
-}
+/*.container.cstm-vuetify-table {*/
+/*    padding: unset;*/
+/*}*/
 
-h3 {
-    position: relative;
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 24px;
-    font-weight: 500;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 20px;
-    /*width: fit-content;*/
-    /*margin: 0 auto 10px auto;*/
-}
-h2 {
-    font-weight: 600;
-    border: unset;
-}
+/*h3 {*/
+/*    position: relative;*/
+/*    text-align: center;*/
+/*    text-transform: uppercase;*/
+/*    font-size: 24px;*/
+/*    font-weight: 500;*/
+/*    border-bottom: 1px solid #ddd;*/
+/*    padding-bottom: 20px;*/
+/*    !*width: fit-content;*!*/
+/*    !*margin: 0 auto 10px auto;*!*/
+/*}*/
+/*h2 {*/
+/*    font-weight: 600;*/
+/*    border: unset;*/
+/*}*/
 h2.cstm-price {
     position: absolute;
     left: 50%;

@@ -4,38 +4,21 @@
             <div v-if="notifications.length > 0" v-for="notification in notifications">
                 <Notification :notification="notification"></Notification>
             </div>
-            <v-tabs>
-                <v-tab>Table View</v-tab>
-                <v-tab>Card View</v-tab>
-                <v-tab-item>
-                    <DataTable
-                        :title="title"
-                        :headers="headers"
-                        :contents="contents"
-                        :fillable="fillable"
-                        @storeModel="storeGame($event)"
-                        @updateModel="updateGame($event)"
-                        @destroyModel="destroyGame($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-                <v-tab-item>
-                    <Card2
-                        :title="title"
-                        :headers="headers"
-                        :contents="contents"
-                        :fillable="fillable"
-                        @storeModel="storeGame($event)"
-                        @updateModel="updateGame($event)"
-                        @destroyModel="destroyGame($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-            </v-tabs>
+            <DataTable
+                :title="title"
+                :headers="headers"
+                :contents="contents"
+                :fillable="fillable"
+                @storeModel="storeGame($event)"
+                @updateModel="updateGame($event)"
+                @destroyModel="destroyGame($event)"
+                :canAdd="canAdd"
+                :canEdit="canEdit"
+                :canDelete="canDelete"
+                :excelHeaders="excelHeaders"
+                :excelData="excelData"
+                :excelTitle="title"
+            />
         </v-container>
     </v-main>
 </template>
@@ -93,6 +76,9 @@ export default {
         editedItem: {},
         notifications: [],
 
+        excelHeaders: [],
+        excelData: [],
+
         canAdd: true,
         canEdit: true,
         canDelete: true,
@@ -133,6 +119,7 @@ export default {
                         }
                         this.contents.push(game);
                     }
+                    this.updateExcelFields()
                 })
                 .catch(err => {
                     console.log(err, 'error')
@@ -171,7 +158,7 @@ export default {
         },
 
         async updateGame(item) {
-            await axios.put('/api/v1/games/'+item.id,
+            await axios.put('/api/v1/games/' + item.id,
                 {
                     'description': item.description,
                     'abbreviation': item.abbreviation,
@@ -210,6 +197,24 @@ export default {
                     this.addNotification(item.description + " unsuccessfully deleted!", "error", "400")
                 });
             await this.displayGames();
+        },
+
+        updateExcelFields(){
+            this.excelHeaders = []
+            this.excelData = []
+            this.excelHeaders = [
+                { name: "Description", subheader: [] },
+                { name: "Abbreviation", subheader: [] },
+                { name: "Multiplier", subheader: [] },
+                { name: "Days Availability", subheader: []},
+            ];
+
+            let fields = ["description", "abbreviation", "multiplier", "cstm_days"]
+            let mContents = this.contents;
+            for (let i in mContents){
+                mContents[i]['cstm_days'] = mContents[i]['days_availability'].join(", ")
+            }
+            this.excelData.push( {items: mContents, fields:fields} )
         },
 
         getDateToday(date) {

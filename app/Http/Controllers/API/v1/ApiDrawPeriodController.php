@@ -113,4 +113,15 @@ class ApiDrawPeriodController extends Controller
 
         return response([$games, $drawPeriods], 200);
     }
+
+    public function getCategorizedDrawPeriod(Request $request, $game)
+    {
+        $this->authorize('list draw periods', DrawPeriod::class);
+        $search = $request->get('search', '');
+        $drawPeriods = DrawPeriod::search($search)->with('games:description')
+            ->whereHas('games', function ($query) use ($game) {
+                $query->where('abbreviation', $game);
+        })->get();
+        return response(['drawPeriods' => $drawPeriods], 200);
+    }
 }
