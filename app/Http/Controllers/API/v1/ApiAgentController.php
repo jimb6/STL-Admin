@@ -101,4 +101,13 @@ class ApiAgentController extends ApiController
 
         return response(['agents' => $agents, 'total' => $totalAgents], 200);
     }
+
+    public function agentPerCluster(Request $request, Cluster $cluster)
+    {
+        $request->user()->can('list-users', Agent::class);
+//        $search = $request->get('search', '');
+        $agents = Agent::with(['cluster', 'address'])->where('cluster_id', $cluster->id)->get();
+        return response(['agents' => $agents], 200);
+    }
+
 }

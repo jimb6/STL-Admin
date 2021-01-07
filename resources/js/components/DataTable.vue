@@ -62,17 +62,17 @@
                                                     @input="insertHiddenVal(item.field, editedItem[item.field])"
                                                 />
 
-<!--                                                <v-text-field-->
-<!--                                                    v-if="item.type === 'hidden'"-->
-<!--                                                    v-model="hiddenVals"-->
-<!--                                                    :label="item.label"-->
-<!--                                                />-->
-
                                                 <v-text-field
                                                     v-if="item.type === 'input-disabled'"
                                                     v-model="editedItem[item.field]"
                                                     :label="item.label"
                                                     disabled
+                                                />
+                                                <v-text-field
+                                                    v-if="item.type === 'input-password'"
+                                                    v-model="editedItem[item.field]"
+                                                    :label="item.label"
+                                                    type="password"
                                                 />
 
                                                 <v-select
@@ -163,7 +163,7 @@
                                                 <Address
                                                     v-model="editedItem[item.field]"
                                                     v-if="item.type === 'address'"
-                                                    @changeAddress="changeAddress(item.field, $event)" />
+                                                    @changeAddress="changeAddress(item.field, $event)"/>
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -190,7 +190,32 @@
                     ></v-text-field>
                 </div>
 
-                <v-dialog v-model="dialogDelete" max-width="500px">
+                <!-- DIALOG DELETE -->
+                <v-dialog v-model="dialogDelete" max-width="500px" v-if="withPassword === true">
+                    <v-card>
+                        <v-card-title class="headline">Delete this {{ title.toLowerCase() }}?</v-card-title>
+                        <v-card-actions class="pt-5">
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        v-model="confirmDeletePassword"
+                                        label="Enter Password"
+                                        type="password"
+                                    />
+                                </v-col>
+                                <v-col cols="12" align="right">
+                                    <v-btn outlined color="blue" @click="closeDelete">
+                                        Cancel
+                                    </v-btn>
+                                    <v-btn color="blue" class="text-white" @click="deleteItemConfirm">
+                                        Yes
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+                <v-dialog v-model="dialogDelete" max-width="500px" v-else>
                     <v-card>
                         <v-card-title class="headline">Delete this {{ title.toLowerCase() }}?</v-card-title>
                         <v-card-actions class="pt-5">
@@ -205,6 +230,7 @@
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
+
             </template>
 
             <template v-slot:item.actions="{ item }">
@@ -217,35 +243,44 @@
             </template>
 
             <template v-slot:item.draw_time="{ item }">
-                {{ new Date('1/1/2021 ' + item.draw_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3") }}
+                {{
+                    new Date('1/1/2021 ' + item.draw_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3")
+                }}
             </template>
             <template v-slot:item.open_time="{ item }">
-                {{ new Date('1/1/2021 ' + item.open_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3") }}
+                {{
+                    new Date('1/1/2021 ' + item.open_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3")
+                }}
             </template>
             <template v-slot:item.close_time="{ item }">
-                {{ new Date('1/1/2021 ' + item.close_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3") }}
+                {{
+                    new Date('1/1/2021 ' + item.close_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3")
+                }}
             </template>
 
-            <template v-slot:item.roles ="{ item }">
-                <v-chip  v-for="role in item.roles" :key="role.name" dark small class="mr-2">
+            <template v-slot:item.roles="{ item }">
+                <v-chip v-for="role in item.roles" :key="role.name" dark small class="mr-2">
                     {{ role }}
                 </v-chip>
             </template>
 
-            <template v-slot:item.games ="{ item }">
-                <v-chip class="ma-2" v-for="game in item.games" :key="game.description"  dark small>
+            <template v-slot:item.games="{ item }">
+                <v-chip class="ma-2" v-for="game in item.games" :key="game.description" dark small>
                     {{ game }}
                 </v-chip>
             </template>
 
-            <template v-slot:item.commissions ="{ item }">
-                <v-chip class="mr-2 my-2" v-for="(commission, index) in item.commissions" :key="index" style="font-weight: 200;" dark small>
-                    <p><span class="mr-2">{{ commission.label }}</span><b style="font-weight: 700;">{{ commission.value }}%</b></p>
+            <template v-slot:item.commissions="{ item }">
+                <v-chip class="mr-2 my-2" v-for="(commission, index) in item.commissions" :key="index"
+                        style="font-weight: 200;" dark small>
+                    <p><span class="mr-2">{{ commission.label }}</span><b style="font-weight: 700;">{{
+                            commission.value
+                        }}%</b></p>
                 </v-chip>
             </template>
 
-            <template v-slot:item.days_availability ="{ item }">
-                <v-chip class="ma-1" v-for="day in item.days_availability" :key="day"  dark small>
+            <template v-slot:item.days_availability="{ item }">
+                <v-chip class="ma-1" v-for="day in item.days_availability" :key="day" dark small>
                     {{ day }}
                 </v-chip>
             </template>
@@ -310,7 +345,7 @@ import Pdf from "./Pdf";
 
 export default {
     name: 'DataTable',
-    components:{
+    components: {
         Address,
         Excel,
         Pdf
@@ -327,6 +362,9 @@ export default {
         excelHeaders: Array,
         excelData: Array,
         excelTitle: String,
+
+        dynamicFillable: String,
+        withPassword: Boolean,
     },
 
     data: () => ({
@@ -340,6 +378,7 @@ export default {
         editedIndex: -1,
         editedItem: {},
         defaultItem: {},
+        confirmDeletePassword: '',
 
         snack: false,
         snackColor: '',
@@ -376,6 +415,11 @@ export default {
                 this.editedItem[index] = this.contents[this.editedIndex][index]
             }
             this.editedItem = Object.assign({}, item)
+            // we need tp emit the user of the edited item
+            if (this.dynamicFillable) {
+                this.$emit("setFillable", this.editedItem[this.dynamicFillable]);
+            }
+
             this.dialog = true
         },
 
@@ -387,8 +431,11 @@ export default {
         },
 
         deleteItemConfirm() {
+            if( this.withPassword === true ) {
+                this.editedItem['confirmDeletePassword'] = this.confirmDeletePassword;
+            }
             this.$emit('destroyModel', this.editedItem);
-            this.contents.splice(this.editedIndex, 1)
+            // this.contents.splice(this.editedIndex, 1)
             this.closeDelete();
         },
 
@@ -420,7 +467,7 @@ export default {
                 try {
                     let id = this.contents[this.editedIndex].id;
                     this.editedItem["id"] = id;
-                }catch (e) {
+                } catch (e) {
                 }
                 this.$emit('updateModel', this.editedItem)
             } else {
@@ -434,14 +481,14 @@ export default {
         cancel() {
 
         },
-        deletedSnack(){
+        deletedSnack() {
 
         },
         open() {
 
         },
 
-        changeAddress(field, address){
+        changeAddress(field, address) {
             this.editedItem[field] = address.join(', ');
             this.$emit('changeAddress', address);
         },
@@ -466,7 +513,7 @@ export default {
         dialogDelete(val) {
             val || this.closeDelete()
         },
-        menu (val) {
+        menu(val) {
             val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
         },
     },

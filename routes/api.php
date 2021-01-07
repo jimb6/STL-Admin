@@ -66,13 +66,22 @@ Route::prefix('v1/')
         Route::resource('settings', \App\Http\Controllers\API\v1\ApiAppSettingsController::class);
         Route::resource('games', \App\Http\Controllers\API\v1\ApiGameController::class);
         Route::resource('draw-periods', \App\Http\Controllers\API\v1\ApiDrawPeriodController::class);
-        Route::resource('devices', \App\Http\Controllers\API\v1\ApiDeviceController::class);
         Route::resource('bet-transactions', \App\Http\Controllers\API\v1\ApiBetTransactionController::class);
         Route::resource('roles', \App\Http\Controllers\API\v1\ApiRoleController::class);
         Route::resource('permissions', \App\Http\Controllers\API\v1\ApiPermissionController::class);
         Route::resource('users', \App\Http\Controllers\API\v1\ApiUserController::class);
         Route::resource('clusters', \App\Http\Controllers\API\v1\ApiClusterController::class);
         Route::resource('commissions', \App\Http\Controllers\API\v1\ApiWinningCombinationController::class);
+
+//      Devices Route
+        Route::get('devices-index', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'index']);
+        Route::get('devices-create', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'create']);
+        Route::post('devices-store', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'store']);
+        Route::put('devices-update/{id}', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'update']);
+        Route::put('devices-delete/{id}', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'destroy']);
+
+        Route::get('agent-per-cluster/{cluster}', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'agentPerCluster']);
+
         Route::get('bets-range/{game}/{date}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'getBetsRange']);
 //      Custom Winning Combinations Request
         Route::post('winning-combinations', [\App\Http\Controllers\API\v1\ApiWinningCombinationController::class, 'show']);

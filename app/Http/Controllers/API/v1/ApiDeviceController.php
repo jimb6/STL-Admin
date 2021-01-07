@@ -8,21 +8,22 @@ use App\Models\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
 
 class ApiDeviceController extends Controller
 {
     public function index(Request $request)
     {
-        Auth::user()->can('list-devices', Device::class);
+        $request->user()->can('list-devices', Device::class);
         $search = $request->get('search', '');
-        $devices = Device::search($search)->get();
+        $devices = Device::search($search)->with(['cluster.users', 'user'])->get();
         return response(['devices' => $devices], 200);
     }
 
     public function create(Request $request)
     {
-        Auth::user()->can('create-devices', Device::class);
+        $request->user()->can('create-devices', Device::class);
 
         $url = URL::temporarySignedRoute(
             'device.subscribe', now()->addMinutes(30), ['cluster_id' => Auth::user()->cluster_id]
@@ -40,39 +41,53 @@ class ApiDeviceController extends Controller
 
     public function store(Request $request)
     {
-        Auth::user()->can('create-devices', Device::class);
+        $request->user()->can('create-devices', Device::class);
         $validated = $request->validated();
-        $device = Device::create($validated);
-        broadcast(new NewDeviceAdded($device));
 
+        $device = Device::onlyTrashed()->where('serial_number', $validated['serial_number'])->first();
+        if ($device){
+            $device->restore();
+            $device->update($validated);
+        }else{
+            $device = Device::create($validated);
+        }
+        broadcast(new NewDeviceAdded($device));
         return response(['device' => $device], 202);
     }
 
     public function show(Request $request, Device $device)
     {
-        Auth::user()->can('view-devices', $device);
+        $request->user()->can('view-devices', $device);
         return response([], 204);
     }
 
     public function edit(Request $request, Device $device)
     {
-        Auth::user()->can('update-devices', $device);
+        $request->user()->can('update-devices', $device);
 
         return response(['device' => $device], 200);
     }
 
     public function update(Request $request, Device $device)
     {
-        Auth::user()->can('update-devices', $device);
-        $validated = $request->validated();
+        $request->user()->can('update-devices', $device);
+        $validated = $request->validate([
+            'user_id' => 'required',
+            'password' => 'required'
+        ]);
+        if (! Hash::check($validated['password'], $request->user()->password)) abort(406);
         $device->update($validated);
         return response([$device], 202);
     }
 
-    public function destroy(Request $request, Device $device)
+    public function destroy(Request $request, $device)
     {
-        Auth::user()->can('delete-devices', $device);
-        $device->delete();
+        $request->user()->can('delete-devices', Device::class);
+        $validated = $request->validate([
+            'password' => 'required'
+        ]);
+        if (! Hash::check($validated['password'], $request->user()->password)) abort(406);
+        Device::find($device)->delete();
         return response([], 204);
     }
 

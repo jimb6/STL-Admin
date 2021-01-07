@@ -4,36 +4,21 @@
             <Notification :notification="notification"></Notification>
         </div>
         <v-container>
-            <v-tabs>
-                <v-tab>Table View</v-tab>
-                <v-tab>Card View</v-tab>
-                <v-tab-item>
-                    <DataTable
-                        :title="title"
-                        :contents="contents"
-                        :headers="headers"
-                        :fillable="fillable"
-                        @storeModel="storeDevice($event)"
-                        @destoryModel="destroyDevice($event)"
-                        @updateModel="updateDevice($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-                <v-tab-item>
-                    <Card2
-                        :title="title"
-                        :contents="contents"
-                        :headers="headers"
-                        :fillable="fillable"
-                        @storeModel="storeDevice($event)"
-                        @destroyModel="destroyDevice($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"/>
-                </v-tab-item>
-            </v-tabs>
+            <DataTable
+                :title="title"
+                :contents="contents"
+                :headers="headers"
+                :fillable="fillable"
+                @storeModel="storeDevice($event)"
+                @destroyModel="destroyDevice($event)"
+                @updateModel="updateDevice($event)"
+                :canAdd="false"
+                :canEdit="true"
+                :canDelete="true"
+                :withPassword="true"
+                dynamicFillable="agents"
+                @setFillable="getAgents($event)"
+            />
             <div class="cstm-side-floating">
                 <button>
                     <i class="fas fa-qrcode" @click="this.getRegistrationQr"></i></button>
@@ -65,11 +50,13 @@ import Vuetify from 'vuetify'
 import Card from "../components/Card";
 import QrcodeVue from 'qrcode.vue'
 import ErrorNotif from "../components/Notification/ErrorNotif";
+import Notification from "../components/Notification";
 
 Vue.use(Vuetify)
 export default {
     name: "Device",
     components: {
+        Notification,
         ErrorNotif,
         Card,
         Card2,
@@ -82,22 +69,21 @@ export default {
             {text: "#", value: "count"},
             {text: "Agent Name", value: "agent_name"},
             {text: "Serial Number", value: "serial_number"},
+            {text: "Device Cluster", value: "cluster"},
             {text: "Last Update", value: "updated_at"},
             {text: "Actions", value: "actions", sortable: false},
         ],
         contents: [],
         fillable: [
-            { label: "Agent Name", field: "agents", value: "", type: "select", options: Array },
-            {label: "Serial Number", field: "serial_number", value: "", type: "input"},
+            {label: "Device Cluster", field: "cluster", value: "", type: "input-disabled"},
+            {label: "Serial Number", field: "serial_number", value: "", type: "input-disabled"},
+            {label: "Agent Name", field: "agents", value: "", type: "select", options: Array},
+            {label: "Password", field: "password", value: "", type: "input-password"},
         ],
         qrValue: '',
         size: 180,
         editedItem: {},
         address: Array,
-
-        canAdd: true,
-        canEdit: true,
-        canDelete: true,
 
         notifications: [],
 
@@ -116,8 +102,9 @@ export default {
     methods: {
 
         async displayDevices() {
-            await axios.get('/api/v1/devices')
+            await axios.get('/api/v1/devices-index')
                 .then(response => {
+                    console.log(response)
                     let device = {};
                     const data = response.data.devices;
                     let date = '';
@@ -129,12 +116,15 @@ export default {
                         device = {
                             count: count,
                             id: data[item].id,
+                            agents: data[item].cluster.users,
+                            cluster: data[item].cluster.name,
                             agent_name: data[item].user ? data[item].user.name : "NOT ASSIGNED",
                             serial_number: data[item].device_code,
                             updated_at: date,
                         }
                         this.contents.push(device);
                     }
+
                 }).catch(err => {
                     this.addNotification("Error fetching devices.", "error", err.status)
                 });
@@ -142,7 +132,7 @@ export default {
 
         async getRegistrationQr() {
             this.isQrCreating = true;
-            const response = await axios.get('/api/v1/devices/create')
+            await axios.get('/api/v1/devices-create')
                 .then(response => {
                     this.qrValue = response.data
                     console.log(this.qrValue)
@@ -160,28 +150,38 @@ export default {
 
         },
 
-        async updateDevice($event){
-
-        },
-
-        async destroyDevice($event) {
-
-        },
-
-        async getAgents(){
-            axios.get('/api/v1/agents')
+        async updateDevice(item) {
+            console.log(item)
+            axios.put('/api/v1/devices-update/'+item.id, {
+                user_id: item.agents.id
+            })
                 .then(response => {
-                    let agents = response.data.agents
-
-                    for (let index in this.fillable) {
-                        if (this.fillable[index].field === 'agents') {
-                            this.fillable[index].options = agents;
-                        }
-                    }
-                    console.log( response );
+                    console.log(response)
+                    this.displayDevices()
                 }).catch(err => {
                 console.log(err)
             })
+        },
+
+        async destroyDevice(item) {
+            console.log(item)
+            axios.put('/api/v1/devices-delete/'+item.id, {
+                password: item.confirmDeletePassword
+            })
+                .then(response => {
+                    console.log(response)
+                    this.displayDevices()
+                }).catch(err => {
+                console.log(err)
+            })
+        },
+
+        async getAgents(agents) {
+            for (let index in this.fillable) {
+                if (this.fillable[index].field === 'agents') {
+                    this.fillable[index].options = agents;
+                }
+            }
         },
 
         changeAddress(address) {
