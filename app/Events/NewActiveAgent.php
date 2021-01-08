@@ -23,19 +23,12 @@ class NewActiveAgent implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new Channel('active.agent');
+        return new Channel('dashboard-event');
     }
 
     public function broadcastWith()
     {
         return [
-            'id' => $this->agent->id,
-            'name' => $this->agent->name,
-            'birthdate' => $this->agent->birthdate,
-            'gender' => $this->agent->gender,
-            'contact_number' =>  $this->agent->contact_number,
-            'email' =>  $this->agent->email,
-            'cluster_id' => $this->agent->cluster_id,
         ];
     }
 }

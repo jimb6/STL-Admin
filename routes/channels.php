@@ -27,9 +27,9 @@ Broadcast::channel('device-store.{cluster_id}', function ($user, $cluster_id) {
 //    return true;ssSSS
 }, ['guards' => ['web']]);
 
-Broadcast::channel('active.agent', function ($user) {
-        return true;
-}, ['guards' => ['web']]);
+//Broadcast::channel('active.agent', function ($user) {
+//        return true;
+//}, ['guards' => ['web']]);
 
 Broadcast::channel('bet.transaction', function ($user) {
     if ($user->hasRole('super-admin'))

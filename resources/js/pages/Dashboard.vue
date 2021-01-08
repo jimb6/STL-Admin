@@ -338,10 +338,12 @@ export default {
         async listen() {
             Echo.channel('dashboard-event')
                 .listen('DashboardEvent', ($transaction) => {
-                    this.displayActiveAgents();
                     this.getCardsValues();
                     this.getGamesPerformance();
-                });
+                })
+                .listen('NewActiveAgent', ($agent) => {
+                    this.displayActiveAgents();
+            });
         },
 
         changeAddress(address) {
