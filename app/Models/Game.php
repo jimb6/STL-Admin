@@ -28,8 +28,7 @@ class Game extends Model
         'min_per_field_set',
         'max_per_field_set',
     ];
-
-
+//    protected $guard = 'api';
 
     protected $casts = [
         'is_closed' => 'boolean'

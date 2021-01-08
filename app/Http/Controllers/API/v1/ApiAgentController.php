@@ -17,7 +17,7 @@ class ApiAgentController extends ApiController
 
     public function index(Request $request)
     {
-        $this->authorize('list-users', Agent::class);
+        $this->authorize('list-users', User::class);
 //        $search = $request->get('search', '');
         $agents = Agent::with(['cluster', 'address'])->get();
         return response(['agents' => $agents], 200);
@@ -36,7 +36,7 @@ class ApiAgentController extends ApiController
             'address.*' => 'required'
         ]);
 
-        $this->authorize('create-agents', User::class);
+        $this->authorize('create-agents', Agent::class);
         $address = Address::firstOrCreate([
             'street' => $validated['address']['0'],
             'barangay' => $validated['address']['1'],
@@ -88,7 +88,7 @@ class ApiAgentController extends ApiController
     }
 
     public function activeIndex(Request $request){
-        $this->authorize('list-agents', User::class);
+        $this->authorize('list-agents', Agent::class);
         $agents = User::whereHas('roles', function ($query){
             $query->where('name', '=', 'Agent');
         })->where('session_status', true)->with('device')->get();

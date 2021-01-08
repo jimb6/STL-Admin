@@ -30,7 +30,7 @@ class ApiPermissionController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('create-permissions', Permission::class);
+//        $this->authorize('create-permissions', Permission::class);
         $validated = $request->validated();
         $permission = Permission::create($validated);
 
@@ -51,7 +51,7 @@ class ApiPermissionController extends Controller
 
     public function update(Request $request, Permission $permission)
     {
-        $this->authorize('update-permissions', $permission);
+//        $this->authorize('update-permissions', $permission);
         $validated = $request->validate([
             'roles' => 'array',
         ]);

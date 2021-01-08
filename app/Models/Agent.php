@@ -13,6 +13,8 @@ class Agent extends User
 
     protected $table = 'users';
 
+
+
     public static function booted()
     {
         static::addGlobalScope(new AgentScope);

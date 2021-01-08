@@ -13,6 +13,7 @@ class Commission extends Model
     use HasFactory;
     use Searchable;
 
+
     protected $fillable = ['cluster_id', 'game_id','commission_rate'];
 
     protected $searchableFields = ['*'];
