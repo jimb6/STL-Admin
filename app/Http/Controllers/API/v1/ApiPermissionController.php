@@ -4,16 +4,11 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class ApiPermissionController extends Controller
 {
-
-
     public function index(Request $request)
     {
         $this->authorize('list-permissions', Permission::class);
@@ -30,7 +25,7 @@ class ApiPermissionController extends Controller
 
     public function store(Request $request)
     {
-//        $this->authorize('create-permissions', Permission::class);
+        $this->authorize('create-permissions', Permission::class);
         $validated = $request->validated();
         $permission = Permission::create($validated);
 
@@ -69,5 +64,4 @@ class ApiPermissionController extends Controller
         $permission->delete();
         return response([], 204);
     }
-
 }

@@ -99,22 +99,6 @@
                     </v-card-actions>
                 </v-card>
             </div>
-
-            <div class="col-3" v-show="canViewTransactions">
-                <v-card>
-                    <v-subheader :inset="inset">Top Games</v-subheader>
-                    <v-list>
-                        <template v-for="(game, index) in games">
-                            <v-list-item>
-                                <v-list-item-action>
-                                    {{ game.abbreviation + -+game.max_number }}
-                                </v-list-item-action>
-                            </v-list-item>
-                        </template>
-                    </v-list>
-                </v-card>
-            </div>
-
         </div>
     </div>
 
@@ -240,35 +224,27 @@ export default {
     computed: {
         headers () {
             return [
+                { text: '#', value: 'count' },
                 {
-                    text: 'Dessert (100g serving)',
+                    text: 'Agent Name',
                     align: 'start',
                     sortable: false,
                     value: 'name',
                 },
-                {
-                    text: 'Calories',
-                    value: 'calories',
-                    filter: value => {
-                        if (!this.calories) return true
-
-                        return value < parseInt(this.calories)
-                    },
-                },
-                { text: 'Fat (g)', value: 'fat' },
-                { text: 'Carbs (g)', value: 'carbs' },
-                { text: 'Protein (g)', value: 'protein' },
-                { text: 'Iron (%)', value: 'iron' },
+                { text: 'Contact #', value: 'contact_number' },
+                { text: 'Agent', value: 'device_code' },
+                { text: 'IP Address', value: 'ip_address' },
+                { text: 'Active', value: 'last_active' },
             ]
         },
     },
     created() {
         const data = {};
         this.totalCollection = this.formatCurrencies(this.totalCollection);
-        // this.displayActiveAgents();
-        // this.getCardsValues();
-        // await this.getBetsPerformance();
-        // await this.getGamesPerformance();
+        this.displayActiveAgents();
+        this.getCardsValues();
+        // this.getBetsPerformance();
+        this.getGamesPerformance();
         this.listen();
     },
     methods: {
@@ -324,21 +300,22 @@ export default {
                 let date = '';
                 let count = 0;
                 this.contents = []
-                this.cards[0].description = data.length
+                this.cards[0].description = data.length + "/" + response.data.total;
                 for (let item in data) {
                     count++;
                     date = this.getDateToday(new Date(data[item].last_activity));
                     agent = {
                         count: count,
                         id: data[item].id,
-                        name: data[item].name,
-                        contact_number: data[item].contact_number,
-                        device_code: data[item].device.device_code,
-                        // ip_address: data[item].ip_address,
-                        // last_active: date,
+                        name: data[item].user.name,
+                        contact_number: data[item].user.contact_number,
+                        device_code: data[item].user_agent,
+                        ip_address: data[item].ip_address,
+                        last_active: data[item].user.updated_at,
                     }
                     this.contents.push(agent);
                 }
+                console.log(response)
             }).catch(err => {
                 console.log(err)
                 this.addNotification("Error fetching active agents.", "error", err.status)
@@ -435,13 +412,14 @@ export default {
     text-align: center;
     line-height: 100px;
     font-size: 35px;
-    color: #fff;
+    color: #e0e0e0;
     border-radius: 5px;
     background: linear-gradient(200DEG, rgb(75, 108, 183), rgb(24, 40, 72));
 }
 
 .dashboard .card-item h3 {
     text-transform: uppercase;
+    color: #1d2124 !important;
     font-size: 18px;
     font-weight: 300;
     letter-spacing: 1px;

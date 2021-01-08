@@ -32,7 +32,7 @@
 
         {{-- Content Wrapper --}}
         <v-app>
-        <div class="content-wrapper {{ config('adminlte.classes_content_wrapper') ?? '' }} dark">
+        <div class="content-wrapper {{ config('adminlte.classes_content_wrapper') ?? '' }}">
 
             {{-- Content Header --}}
             <div class="content-header">

@@ -20,9 +20,9 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, HasApiTokens, Searchable, SoftDeletes, CanResetPassword;
 
-    protected $fillable = ['name', 'birthdate', 'gender', 'address_id', 'contact_number', 'email', 'cluster_id', 'password', 'api_token'];
+    protected $fillable = ['name', 'birthdate', 'gender', 'address_id', 'contact_number', 'email', 'cluster_id', 'password'];
     protected $searchableFields = ['*'];
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'api_token'];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -84,5 +84,10 @@ class User extends Authenticatable
     public function betTransactions()
     {
         return $this->hasMany(BetTransaction::class);
+    }
+
+    public function sessions()
+    {
+        return $this->hasMany(Session::class);
     }
 }

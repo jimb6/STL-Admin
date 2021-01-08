@@ -112,21 +112,22 @@ export default {
 
 
         async storeAgent(item) {
-            await axios.post('/api/v1/agents', {
-                'name': item.name,
-                'birthdate': item.birthdate,
-                'gender': item.gender,
-                'contact_number': item.contact_number,
-                'email': item.email,
-                'cluster_id': item.cluster.id,
-                'address': this.address
-            }).then(response => {
-                this.addNotification(item.name + " added successfully!", "success", "200");
-                this.sendPasswordSMS(response.data.user, response.data.password)
-                this.displayAgents()
-            }).catch(err => {
-                this.addNotification(err.response.data.message, "error", "400");
-            })
+            // await axios.post('/api/v1/agents', {
+            //     'name': item.name,
+            //     'birthdate': item.birthdate,
+            //     'gender': item.gender,
+            //     'contact_number': item.contact_number,
+            //     'email': item.email,
+            //     'cluster_id': item.cluster.id,
+            //     'address': this.address
+            // }).then(response => {
+            //     this.addNotification(item.name + " added successfully!", "success", "200");
+            //     this.sendPasswordSMS(response.data.user, response.data.password)
+            //     this.displayAgents()
+            // }).catch(err => {
+            //     this.addNotification(err.response.data.message, "error", "400");
+            // })
+            console.log(item)
 
         },
         async updateAgent() {
