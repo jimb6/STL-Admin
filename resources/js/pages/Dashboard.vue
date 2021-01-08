@@ -232,8 +232,7 @@ export default {
                     value: 'name',
                 },
                 { text: 'Contact #', value: 'contact_number' },
-                { text: 'Agent', value: 'device_code' },
-                { text: 'IP Address', value: 'ip_address' },
+                { text: 'Device Code', value: 'device_code' },
                 { text: 'Active', value: 'last_active' },
             ]
         },
@@ -300,18 +299,16 @@ export default {
                 let date = '';
                 let count = 0;
                 this.contents = []
-                this.cards[0].description = data.length + "/" + response.data.total;
+                this.cards[0].description = data.length + "/" + response.data.total
                 for (let item in data) {
                     count++;
-                    date = this.getDateToday(new Date(data[item].last_activity));
                     agent = {
                         count: count,
                         id: data[item].id,
-                        name: data[item].user.name,
-                        contact_number: data[item].user.contact_number,
-                        device_code: data[item].user_agent,
-                        ip_address: data[item].ip_address,
-                        last_active: data[item].user.updated_at,
+                        name: data[item].name,
+                        contact_number: data[item].contact_number,
+                        device_code: data[item].device.device_code,
+                        last_active: data[item].updated_at,
                     }
                     this.contents.push(agent);
                 }
@@ -412,14 +409,13 @@ export default {
     text-align: center;
     line-height: 100px;
     font-size: 35px;
-    color: #e0e0e0;
+    color: #fff;
     border-radius: 5px;
     background: linear-gradient(200DEG, rgb(75, 108, 183), rgb(24, 40, 72));
 }
 
 .dashboard .card-item h3 {
     text-transform: uppercase;
-    color: #1d2124 !important;
     font-size: 18px;
     font-weight: 300;
     letter-spacing: 1px;

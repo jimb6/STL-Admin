@@ -7,7 +7,6 @@ use App\Models\Cluster;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Rainwater\Active\Active;
 
 class ApiAgentController extends ApiController
 {
@@ -90,7 +89,9 @@ class ApiAgentController extends ApiController
     public function activeIndex(Request $request)
     {
         $this->authorize('list-users', User::class);
-        $agents = Active::users()->mostRecent()->get();
+        $agents = User::whereHas('roles', function ($query) {
+            $query->where('name', '=', 'agent');
+        })->where('session_status', true)->with(['device'])->get();
 
         $totalAgents = User::with(['user' => function ($query) {
             $query->whereHas('roles', function ($query) {
@@ -107,8 +108,8 @@ class ApiAgentController extends ApiController
 //        $search = $request->get('search', '');
         $agents = User::with(['cluster', 'address'])
             ->whereHas('roles', function ($query) {
-                $query->where('name', '=', 'agent');
-            })->where('cluster_id', $cluster->id)->get();
+            $query->where('name', '=', 'agent');
+        })->where('cluster_id', $cluster->id)->get();
         return response(['agents' => $agents], 200);
     }
 
