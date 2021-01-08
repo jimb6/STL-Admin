@@ -132,7 +132,7 @@ class ApiBetTransactionController extends Controller
         broadcast(new NewBetTransactionAdded(Game::find($game[0]->game_id)));
         broadcast(new DashboardEvent($transaction));
 
-        $draw = DrawPeriod::whereIn('draw_period_id', $tempVals['draw_period_id'])->first();
+        $draw = DrawPeriod::find($tempVals[0]['draw_period_id']);
         return response(['transaction' => $transaction, 'draw_period' => $draw], 202);
     }
 
