@@ -118,7 +118,7 @@ export default {
                 'gender': item.gender,
                 'contact_number': item.contact_number,
                 'email': item.email,
-                'cluster_id': item.cluster.id,
+                'cluster_id': item.clusterId.id,
                 'address': this.address
             }).then(response => {
                 this.addNotification(item.name + " added successfully!", "success", "200");
@@ -127,6 +127,7 @@ export default {
             }).catch(err => {
                 this.addNotification(err.response.data.message, "error", "400");
             })
+            console.log(item)
 
         },
         async updateAgent() {

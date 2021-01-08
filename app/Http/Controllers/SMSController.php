@@ -19,9 +19,9 @@ class SMSController extends Controller
             'send_to' => 'required'
         ]);
         $appSettings = AppSettings::all();
-        $account_sid = $appSettings->where('key', 'twilio_sid')->values()[0]->value;
-        $auth_token = $appSettings->where('key', 'twilio_token')->values()[0]->value;
-        $twilio_number = $appSettings->where('key', 'twilio_number')->values()[0]->value;
+        $account_sid = $appSettings->where('key','=','twilio_sid')->values()[0]->value;
+        $auth_token = $appSettings->where('key', '=', 'twilio_token')->values()[0]->value;
+        $twilio_number = $appSettings->where('key', '=', 'twilio_number')->values()[0]->value;
         try {
             $client = new Client($account_sid, $auth_token);
             $client->messages->create($validated['send_to'],
