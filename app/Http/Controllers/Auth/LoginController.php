@@ -138,7 +138,7 @@ class LoginController extends Controller
         })->count() > 0;
 
         if ($isDeviceOwnedByUser){
-            $accessToken = $user->createToken(request('username'))->plainTextToken;
+            $accessToken = $user->createToken($request->get('username'))->plainTextToken;
             $user->session_status = true;
             $user->api_token = $accessToken;
             $user->update();

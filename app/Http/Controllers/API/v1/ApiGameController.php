@@ -188,7 +188,7 @@ class ApiGameController extends Controller
             })->get()
             ->reject(function ($row) use ($currentDay) {
                 return !in_array($currentDay, $row['gameConfiguration']->days_availability);
-            });
+            })->sortBy('id');
         return response(['games' => $games], 200);
     }
 
