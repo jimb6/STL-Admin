@@ -60,7 +60,7 @@ export default {
             {label: "Name", field: "name", value: "", type: "input"},
             {label: "Birthdate", field: "birthdate", value: "", type: "datepicker"},
             {label: "Gender", field: "gender", value: "", type: "select", options: ["Male", "Female", "Others"]},
-            {label: "Contact #", field: "contact_number", value: "", type: "input"},
+            {label: "Contact #", field: "contact_number", value: "", type: "input-phone"},
             {label: "Email", field: "email", value: "", type: "input"},
             {label: "Address", field: "address", value: "", type: "address"},
             {label: "Cluster", field: "clusterId", value: "", type: "select", options: Array},

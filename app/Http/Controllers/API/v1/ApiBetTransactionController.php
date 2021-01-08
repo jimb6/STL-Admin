@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Events\DashboardEvent;
 use App\Events\NewBetTransactionAdded;
 use App\Http\Controllers\Controller;
 use App\Models\Bet;
@@ -12,7 +13,6 @@ use App\Models\DrawPeriod;
 use App\Models\Game;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ApiBetTransactionController extends Controller
 {
@@ -48,8 +48,9 @@ class ApiBetTransactionController extends Controller
         $agentId = $request->user('sanctum')->id;
 
         //Check Close number
-        if (CloseNumber::whereIn('combination', array_column($bets, 'combination'))
-            ->whereDate('created_at', Carbon::today())->get()->isNotEmpty()) abort(406);
+        $closeNumbers = CloseNumber::whereIn('combination', array_column($bets, 'combination'))
+            ->whereDate('created_at', Carbon::today())->get();
+        if ($closeNumbers->isNotEmpty()) return response(['message' => 'Some numbers are closed. ' . $closeNumbers], 406);
 
         $tempVals = [];
         foreach ($bets as $bet) {
@@ -59,7 +60,7 @@ class ApiBetTransactionController extends Controller
                 $query->where('id', $bet['game_id']);
             })->first();
 
-            if (!$d) abort(406);
+            if (!$d) return response(['message' => 'Cannot processed the bets. Game in progress.'], 406);
 
             //Get the Sum of bets amount from the same submitted Bets
             $b = Bet::currentDraw()->where('game_id', $bet['game_id'])
@@ -83,18 +84,27 @@ class ApiBetTransactionController extends Controller
             $combinations = explode('-', $bet['combination']);
             if ((count(array_unique($combinations)) != count($combinations)) && !$game[0]->has_repetition) abort(406);
             foreach ($combinations as $combination) {
-                if (strlen($combination) != $game[0]->digit_per_field_set) abort(406);
-                if (intval($combination) > $game[0]->max_per_field_set) abort(406);
-                if (intval($combination) < $game[0]->min_per_field_set) abort(406);
+                if (strlen($combination) != $game[0]->digit_per_field_set) return response(['message' => 'Invalid combination.'], 406);
+                if (intval($combination) > $game[0]->max_per_field_set) return response(['message' => 'Invalid combination.'], 406);
+                if (intval($combination) < $game[0]->min_per_field_set) return response(['message' => 'Invalid combination.'], 406);
             }
 
-            if ($bet['amount'] > $game[0]->max_per_bet) abort(406);
-            if ($bet['amount'] < $game[0]->min_per_bet) abort(406);
-            if ($b->isNotEmpty() && ($b[$bet['combination']]['sum'] + $bet['amount']) > $game[0]->max_sum_bet) abort(406);
+            //Check the maximum amount per bet
+            if ($bet['amount'] > $game[0]->max_per_bet)
+                return response(['message' => 'Amount exceeds the maximum. might be less than or equal '.$game[0]->max_per_bet], 406);
+            //Check the minimum amount per bet
+            if ($bet['amount'] < $game[0]->min_per_bet)
+                return response(['message' => 'Invalid amount. Must be greater than or equal '.$game[0]->min_per_bet], 406);
+            //Check the total amount of the bet
+            if ($b->isNotEmpty() && ($b[$bet['combination']]['sum'] + $bet['amount']) > $game[0]->max_sum_bet)
+                return response(['message' => 'Amount exceeds. Available amount '.($b[$bet['combination']]['sum'] - $game[0]->max_sum_bet)], 406);
 
+            //Get the control combinations
             $control = ControlCombination::where('game_id', $game[0]->game_id)->where('combination', $bet['combination'])->get();
 
-            if ($b->isNotEmpty() && $control->isNotEmpty() && $b != null && $b[ $bet['combination']]['sum'] + $bet['amount'] > $control[0]->max_amount) abort(406);
+            //check the control combinations
+            if ($b->isNotEmpty() && $control->isNotEmpty() && $b != null && $b[$bet['combination']]['sum'] + $bet['amount'] > $control[0]->max_amount)
+                return response(['message' => 'Amount exceeds. Available amount '.($b[$bet['combination']]['sum'] - $control[0]->max_amount)], 406);
             array_push($tempVals, array_merge($bet, ['draw_period_id' => $d['id']]));
         }
 
@@ -104,11 +114,11 @@ class ApiBetTransactionController extends Controller
                 'user_id' => $agentId
             ]);
         } catch (\Exception $ex) {
-            return response(['error' => $ex], 400);
+            return response(['message' => $ex], 400);
         }
 
-        foreach ($tempVals as $val){
-            $bet = Bet::create([
+        foreach ($tempVals as $val) {
+            Bet::create([
                 'combination' => $val['combination'],
                 'amount' => $val['amount'],
                 'is_rumbled' => $val['is_rumbled'],
@@ -119,7 +129,8 @@ class ApiBetTransactionController extends Controller
         }
 
         broadcast(new NewBetTransactionAdded(Game::find($game[0]->game_id)));
-        return response(['transaction-details'=> $transaction], 202);
+        broadcast(new DashboardEvent($transaction));
+        return response(['message' => $transaction], 202);
     }
 
     public function show(Request $request, BetTransaction $betTransaction)

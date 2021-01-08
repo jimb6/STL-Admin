@@ -31,7 +31,7 @@ class ApiDeviceController extends Controller
 
         $customRequest = Request::create($url);
         $data = [
-            'created_by' => \Auth::user()->id,
+            'created_by' => $request->user()->id,
             'token' => $customRequest->get('signature')
         ];
         DB::table('device_registration')->where(['created_by' => Auth::user()->id])->delete();

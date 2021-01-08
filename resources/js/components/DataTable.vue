@@ -63,6 +63,13 @@
                                                 />
 
                                                 <v-text-field
+                                                    v-if="item.type === 'input-phone'"
+                                                    v-model="editedItem[item.field]"
+                                                    :label="item.label"
+                                                    prefix="+63"
+                                                />
+
+                                                <v-text-field
                                                     v-if="item.type === 'input-disabled'"
                                                     v-model="editedItem[item.field]"
                                                     :label="item.label"

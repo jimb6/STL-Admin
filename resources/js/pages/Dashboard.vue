@@ -336,9 +336,11 @@ export default {
         },
 
         async listen() {
-            Echo.channel('bet.transaction')
-                .listen('NewBetTransactionAdded', (bets) => {
+            Echo.channel('dashboard-event')
+                .listen('DashboardEvent', ($transaction) => {
+                    this.displayActiveAgents();
                     this.getCardsValues();
+                    this.getGamesPerformance();
                 });
         },
 

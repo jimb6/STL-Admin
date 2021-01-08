@@ -24,7 +24,7 @@ class SMSController extends Controller
         $twilio_number = $appSettings->where('key', '=', 'twilio_number')->values()[0]->value;
         try {
             $client = new Client($account_sid, $auth_token);
-            $client->messages->create($validated['send_to'],
+            $client->messages->create('+63'.$validated['send_to'],
                 ['from' => $twilio_number, 'body' => $validated['message']] );
         } catch (ConfigurationException $e) {
             return response($e, 400);
