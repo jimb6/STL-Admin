@@ -3,14 +3,10 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Models\Address;
-use App\Models\Agent;
 use App\Models\Cluster;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Rainwater\Active\Active;
-use Spatie\Permission\Models\Role;
 
 class ApiAgentController extends ApiController
 {
@@ -19,7 +15,10 @@ class ApiAgentController extends ApiController
     {
         $this->authorize('list-users', User::class);
 //        $search = $request->get('search', '');
-        $agents = Agent::with(['cluster', 'address'])->get();
+        $agents = User::with(['cluster', 'address'])
+            ->whereHas('roles', function ($query) {
+                $query->where('name', '=', 'agent');
+            })->get();
         return response(['agents' => $agents], 200);
     }
 
@@ -36,7 +35,7 @@ class ApiAgentController extends ApiController
             'address.*' => 'required'
         ]);
 
-        $this->authorize('create-agents', Agent::class);
+        $this->authorize('create-agents', User::class);
         $address = Address::firstOrCreate([
             'street' => $validated['address']['0'],
             'barangay' => $validated['address']['1'],
@@ -87,15 +86,16 @@ class ApiAgentController extends ApiController
         return response([], 204);
     }
 
-    public function activeIndex(Request $request){
-        $this->authorize('list-agents', Agent::class);
-        $agents = User::whereHas('roles', function ($query){
-            $query->where('name', '=', 'Agent');
+    public function activeIndex(Request $request)
+    {
+        $this->authorize('list-agents', User::class);
+        $agents = User::whereHas('roles', function ($query) {
+            $query->where('name', '=', 'agent');
         })->where('session_status', true)->with('device')->get();
 
-        $totalAgents = User::with(['user' => function($query){
-            $query->whereHas('roles',  function ($query) {
-                $query->where('name', '=', 'Agent');
+        $totalAgents = User::with(['user' => function ($query) {
+            $query->whereHas('roles', function ($query) {
+                $query->where('name', '=', 'agent');
             });
         }])->count();
 
@@ -104,9 +104,12 @@ class ApiAgentController extends ApiController
 
     public function agentPerCluster(Request $request, Cluster $cluster)
     {
-        $this->authorize('list-users', Agent::class);
+        $this->authorize('list-users', User::class);
 //        $search = $request->get('search', '');
-        $agents = Agent::with(['cluster', 'address'])->where('cluster_id', $cluster->id)->get();
+        $agents = User::with(['cluster', 'address'])
+            ->whereHas('roles', function ($query) {
+            $query->where('name', '=', 'agent');
+        })->where('cluster_id', $cluster->id)->get();
         return response(['agents' => $agents], 200);
     }
 
