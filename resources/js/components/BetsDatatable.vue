@@ -58,6 +58,10 @@
                 </tr>
             </template>
 
+            <template v-slot:item.amount="{item}">
+                {{ item.amount.toFixed(2)  }}
+            </template>
+
         </v-data-table>
 
 
@@ -237,7 +241,7 @@ export default {
         },
         sumField(key) {
             // sum data in give key (property)
-            return this.contents.reduce((a, b) => a + (b[key] || 0), 0)
+            return this.contents.reduce((a, b) => a + (b[key] || 0), 0).toLocaleString('en-US', {style: 'currency', currency: 'PHP',});
         }
 
 

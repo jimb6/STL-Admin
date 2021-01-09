@@ -22,7 +22,7 @@ class ApiBetTransactionController extends Controller
     {
         $this->authorize('list-bet-transactions', BetTransaction::class);
         $search = $request->get('search', '');
-        $betTransactions = BetTransaction::search($search)->with('bets')->get()->sortBy('bets.amount');
+        $betTransactions = BetTransaction::today()->search($search)->with('bets')->get()->sortBy('bets.amount');
         return response(['betTransactions' => $betTransactions], 200);
     }
 
@@ -173,7 +173,7 @@ class ApiBetTransactionController extends Controller
             'draw_periods' => 'required|array'
         ]);
         $validated['dates'][1] .= ' 23:59:59';
-        $betTransactions = BetTransaction::withoutGlobalScope(TransactionBaseScope::class)->whereBetween('created_at', $validated['dates'])
+        $betTransactions = BetTransaction::whereBetween('created_at', $validated['dates'])
             ->whereHas('bets', function ($query) use ($validated) {
                 $query->whereIn('draw_period_id', $validated['draw_periods']);
             })->with('bets', 'user')->get()->sortBy('created_at');
@@ -210,8 +210,7 @@ class ApiBetTransactionController extends Controller
         $game = Game::with('gameConfiguration')->where('abbreviation', $validated['game'])->first();
         $validated['dates'][1] .= ' 23:59:59';
 
-        $bets = BetTransaction::withoutGlobalScope(TransactionBaseScope::class)
-            ->whereBetween('created_at', $validated['dates'])
+        $bets = BetTransaction::whereBetween('created_at', $validated['dates'])
             ->whereHas('user', function ($subQuery) use ($validated) {
                 $subQuery->whereIn('cluster_id', $validated['cluster_id']);
             })
@@ -285,6 +284,21 @@ class ApiBetTransactionController extends Controller
         });
 
         return response(['bets' => $bets], 200);
+    }
+
+    public function getAgentTransactions(Request $request, $date)
+    {
+        $this->authorize('list-bet-transactions', BetTransaction::class);
+        $search = $request->get('search', '');
+
+        $betTransactions = BetTransaction::with('bets')->whereDate('created_at', $date)
+            ->get();
+
+        $betTransactions = $betTransactions->map(function ($item){
+            $item['game'] = $item['bets'][0]->game->abbreviation;
+            return $item;
+        })->groupBy('game');;
+        return response(['betTransactions' => $betTransactions], 200);
     }
 
 //    public function permutateNumber($elements, $perm = array(), &$permArray = array())

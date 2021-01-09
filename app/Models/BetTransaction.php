@@ -44,6 +44,10 @@ class BetTransaction extends Model implements Auditable
         });
     }
 
+    public function scopeToday($query){
+        $query->whereDate('created_at', Carbon::today());
+    }
+
     public function scopeWithAgent($query)
     {
         return $query->with(['user' => function ($q) {
@@ -65,7 +69,7 @@ class BetTransaction extends Model implements Auditable
 
     public function bets()
     {
-        return $this->hasMany(Bet::class)->with('drawPeriod')
+        return $this->hasMany(Bet::class)->with('drawPeriod', 'game')
             ->orderBy('amount', 'asc');
     }
 }

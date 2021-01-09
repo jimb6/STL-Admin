@@ -80,9 +80,9 @@ export default {
                     const data = response.data.transactions;
                     this.contents = [];
                     for (let item in data) {
-                        let sum = 0
+                        let sum = 0;
                         for (let i in  data[item].bets){
-                            sum+=data[item].bets[i].amount;
+                            sum += parseInt(data[item].bets[i].amount);
                         }
                         this.contents.push({
                             transaction_code: data[item].qr_code,

@@ -95,6 +95,7 @@ Route::prefix('v1/')
 
 //      Custom Bet Transaction Request
         Route::post('bet-transaction-entries', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'showEntriesBasedOnDateRange']);
+        Route::get('bet-transaction-entries/{date}', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'getAgentTransactions']);
 
 //        Custom Bets Request
         Route::get('bets/{game}/{draw}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'index']);
