@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Cluster;
+use App\Models\DrawPeriod;
 use App\Models\User;
+use App\Scopes\StatusScope;
 use Faker\Provider\Base;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +23,7 @@ class ApiUserController extends Controller
     {
         $this->authorize('list-users', User::class);
         $search = $request->get('search', '');
-        $users = User::search($search)->with(['cluster', 'address', 'roles'])->get();
+        $users = User::withoutGlobalScope(StatusScope::class)->search($search)->with(['cluster', 'address', 'roles'])->get();
 //
         return response(['users' => $users], 200);
     }
@@ -57,7 +59,7 @@ class ApiUserController extends Controller
 
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         $generated_password = substr(str_shuffle(str_repeat($chars, 5)), 0, 8);
-        $user = User::firstOrCreate([
+        $user = User::withoutGlobalScope(StatusScope::class)->firstOrCreate([
             'name' => $validated['name'],
             'birthdate' => $validated['birthdate'],
             'gender' => $validated['gender'],
@@ -72,38 +74,41 @@ class ApiUserController extends Controller
         return response(['user' => $user, 'password' => $generated_password], 202);
     }
 
-    public function show(Request $request, User $user)
+    public function show(Request $request, $user)
     {
-        $this->authorize('view-users', $user);
+        $this->authorize('view-users', User::class);
+        $user = User::withoutGlobalScope(StatusScope::class)->where('id', $user)->first();
         return response(['user' => $user], 200);
 //        return view('app.users.show', compact('user'));
     }
 
-    public function edit(Request $request, User $user)
+    public function edit(Request $request, $user)
     {
-        $this->authorize('update-users', $user);
+        $this->authorize('update-users', User::class);
         $bases = Base::pluck('base_name', 'id');
         $roles = Role::get();
         return response(['bases' => $bases, 'roles' => $roles], 200);
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, $user)
     {
-        $this->authorize('update-users', $user);
+        $this->authorize('update-users', User::class);
         $validated = $request->validated();
         if (empty($validated['password'])) {
             unset($validated['password']);
         } else {
             $validated['password'] = Hash::make($validated['password']);
         }
+        $user = User::withoutGlobalScope(StatusScope::class)->where('id', $user)->first();
         $user->update($validated);
         $user->syncRoles($request->roles);
         return response(['message' => 'User Updated Successfully!'], 202);
     }
 
-    public function destroy(Request $request, User $user)
+    public function destroy(Request $request, $user)
     {
-        $this->authorize('delete-users', $user);
+        $this->authorize('delete-users', User::class);
+        $user = User::withoutGlobalScope(StatusScope::class)->where('id', $user)->first();
         $user->delete();
         return response([], 204);
     }
@@ -113,13 +118,30 @@ class ApiUserController extends Controller
     {
         $this->authorize('list-users', User::class);
         $search = $request->get('search', '');
-        $users = User::search($search)->with(['cluster', 'address', 'roles' => function ($query) use ($role) {
+        $users = User::withoutGlobalScope(StatusScope::class)->search($search)->with(['cluster', 'address', 'roles' => function ($query) use ($role) {
             $query->whereIn('name', [$role]);
         }])->get()
             ->reject(function ($value, $key) {
                 return $value['roles']->isEmpty();
             });
         return response(['users' => $users], 200);
+    }
+
+
+    public function deactivateUser(Request $request, $id){
+        $this->authorize('update-users', User::class);
+        $validated = $request->validate([
+            'status' => 'required|boolean',
+        ]);
+
+        if ($request->user()->id == $id) abort(406);
+
+        User::withoutGlobalScope(StatusScope::class)
+            ->where('id', $id)
+            ->first()
+            ->update($validated);
+
+        return response([$validated], 200);
     }
 
 }

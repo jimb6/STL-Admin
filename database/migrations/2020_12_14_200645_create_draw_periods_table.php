@@ -19,6 +19,7 @@ class CreateDrawPeriodsTable extends Migration
             $table->enum('draw_type', ['STL', 'National']);
             $table->time('open_time');
             $table->time('close_time');
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -91,6 +91,7 @@ Route::prefix('v1/')
 
 //      Custom Draw Period Request
         Route::get('draw-periods-categorized/{game}', [\App\Http\Controllers\API\v1\ApiDrawPeriodController::class, 'getCategorizedDrawPeriod']);
+        Route::put('close-draw-period/{drawPeriod}', [\App\Http\Controllers\API\v1\ApiDrawPeriodController::class, 'closeDrawPeriod']);
 
 //      Custom Bet Transaction Request
         Route::post('bet-transaction-entries', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'showEntriesBasedOnDateRange']);
@@ -99,7 +100,7 @@ Route::prefix('v1/')
         Route::get('bets/{game}/{draw}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'index']);
         Route::post('bets-reports/general', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'getGeneralBetsReport']);
         Route::post('bets-reports/combination', [\App\Http\Controllers\API\v1\ApiBetController::class, 'getCombinationBetsReport']);
-        Route::get('cluster-categorized/{game}', [\App\Http\Controllers\API\v1\ApiClusterController::class, 'getClusterWithCommissions']);
+        Route::get('cluster-categorized', [\App\Http\Controllers\API\v1\ApiClusterController::class, 'getClusterWithCommissions']);
 
 //      Custom Game Configuration Route Request
         Route::get('games/config/{abbreviation}', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configIndex']);
@@ -118,6 +119,9 @@ Route::prefix('v1/')
 //      Custom Game Configuration Mobile Route Request
         Route::get('games/mobile-config/today/', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configMobileIndex']);
 
+
+//        Custom User Request
+        Route::put('deactivate-user/{id}', [\App\Http\Controllers\API\v1\ApiUserController::class, 'deactivateUser']);
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])
             ->name('agents.active');

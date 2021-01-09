@@ -293,9 +293,19 @@
             <template v-slot:item.isClose="{ item }">
                 <v-switch
                     v-model="item.isClose"
+                    color="primary"
                     inset
                 ></v-switch>
             </template>
+
+            <template v-slot:item.isClosed="{ item }">
+                <v-switch
+                    v-model="item.isClosed"
+                    @change="updateStatus(item)"
+                    inset
+                ></v-switch>
+            </template>
+
         </v-data-table>
 
 
@@ -353,6 +363,7 @@ export default {
 
         dynamicFillable: String,
         withPassword: Boolean,
+        loadingRequest: String,
     },
 
     data: () => ({
@@ -476,6 +487,12 @@ export default {
 
         },
 
+        updateStatus(item){
+            this.editedIndex = this.contents.indexOf(item);
+            item['index'] = this.editedIndex;
+            this.$emit('updateStatus', item);
+        },
+
         changeAddress(field, address) {
             this.editedItem[field] = address.join(', ');
             this.$emit('changeAddress', address);
@@ -484,6 +501,7 @@ export default {
         insertHiddenVal(key, value) {
             this.hiddenVals[key] = value;
         }
+
 
     },
 

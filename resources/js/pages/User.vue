@@ -17,6 +17,7 @@
                         @updateModel="updateUser($event)"
                         @destroyModel="destroyUser($event)"
                         @changeAddress="changeAddress($event)"
+                        @updateStatus="deactivateUser($event)"
                         :canAdd="canAdd"
                         :canEdit="canEdit"
                         :canDelete="canDelete"
@@ -70,6 +71,7 @@ export default {
             {text: "Email", value: "email"},
             {text: "Address", value: "address"},
             {text: "Cluster", value: "cluster"},
+            {text: "Active", value: "isClosed"},
             {text: "Last Update", value: "updated_at"},
             {text: "Actions", value: "actions", sortable: false},
         ],
@@ -123,6 +125,7 @@ export default {
                                 + ", " + data[item].address.province,
                             cluster: data[item].cluster.name,
                             updated_at: data[item].updated_at,
+                            isClosed: data[item].status,
                         }
                         this.contents.push(user);
                     }
@@ -157,6 +160,20 @@ export default {
 
         async updateUser() {
 
+        },
+
+        async deactivateUser(item) {
+            axios.put('/api/v1/deactivate-user/' + item.id, {
+                status: item.isClosed
+            })
+                .then(response => {
+                    this.displayUsers();
+                    console.log('response');
+                }).catch(err => {
+                this.$nextTick(function () {
+                    this.contents[item.index].isClosed = !item.isClosed;
+                });
+            })
         },
 
         async destroyUser(item) {

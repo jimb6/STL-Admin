@@ -350,9 +350,14 @@ return [
 
             'submenu' => [
                 [
-                    'text' => 'All Reports',
+                    'text' => 'Overall Gross',
+                    'route' => 'reports.gross',
+                    'active' => ['admin/reports/overall-gross']
+                ],
+                [
+                    'text' => 'Agent Collections',
                     'route' => 'reports.index',
-                    'active' => ['admin/reports']
+                    'active' => ['admin/agents/collection']
                 ],
             ]
         ],

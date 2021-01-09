@@ -94,14 +94,10 @@ class ApiClusterController extends Controller
         return response([], 204);
     }
 
-    public function getClusterWithCommissions(Request $request, $game){
+    public function getClusterWithCommissions(Request $request){
         $this->authorize('list-clusters', Cluster::class);
-        $game = Game::where('abbreviation', $game)->first();
         $search = $request->get('search', '');
-        $clusters = Cluster::search($search)->with(['commissions' => function($query) use ($game) {
-            $query->where('game_id', $game->id);
-        }])->get();
-
+        $clusters = Cluster::search($search)->with(['commissions'])->get();
 
         $groupedId = $clusters->mapToGroups(function ($item, $key) {
             return

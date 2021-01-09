@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\HomeController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -75,6 +76,10 @@ Route::prefix('admin')
         Route::get('collections', function (Request $request) {
             return view('collections.index');
         })->name('collections.index');
+
+        Route::get('reports/overall-gross', function (Request $request) {
+            return view('reports.gross');
+        })->name('reports.gross');
 
         Route::get('reports', function (Request $request) {
             return view('reports.index');

@@ -4,38 +4,22 @@
             <div v-if="notifications.length > 0" v-for="notification in notifications">
                 <Notification :notification="notification"></Notification>
             </div>
-            <v-tabs>
-                <v-tab>Table View</v-tab>
-                <v-tab>Card View</v-tab>
-                <v-tab-item>
-                    <DataTable
-                        :title="title"
-                        :headers="headers"
-                        :contents="contents"
-                        :fillable="fillable"
-                        @storeModel="storeDrawPeriod($event)"
-                        @updateModel="updateDrawPeriod($event)"
-                        @destroyModel="destroyDrawPeriod($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-                <v-tab-item>
-                    <Card2
-                        :title="title"
-                        :headers="headers"
-                        :contents="contents"
-                        :fillable="fillable"
-                        @storeModel="storeDrawPeriod($event)"
-                        @updateModel="updateDrawPeriod($event)"
-                        @destroyModel="destroyDrawPeriod($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-            </v-tabs>
+
+            <DataTable
+                :title="title"
+                :headers="headers"
+                :contents="contents"
+                :fillable="fillable"
+                @storeModel="storeDrawPeriod($event)"
+                @updateModel="updateDrawPeriod($event)"
+                @destroyModel="destroyDrawPeriod($event)"
+                @updateStatus="closeDrawPeriod($event)"
+                :canAdd="canAdd"
+                :canEdit="canEdit"
+                :canDelete="canDelete"
+                :loadingRequest="loadingRequest"
+            />
+
         </v-container>
     </v-main>
 </template>
@@ -65,6 +49,7 @@ export default {
             {text: "Draw Type", value: "draw_type"},
             {text: "Last Update", value: "updated_at"},
             {text: "Games", value: "games"},
+            {text: "Status", value: "isClosed"},
             {text: "Start", value: "open_time"},
             {text: "End", value: "close_time"},
             {text: "Actions", value: "actions", sortable: false},
@@ -79,6 +64,8 @@ export default {
         ],
         editedItem: {},
         notifications: [],
+
+        loadingRequest: "okay",
 
         canAdd: true,
         canEdit: true,
@@ -110,7 +97,8 @@ export default {
                             open_time: data[item].open_time,
                             close_time: data[item].close_time,
                             updated_at: data[item].updated_at,
-                            games: games
+                            games: games,
+                            isClosed: data[item].status
                         }
                         this.contents.push(drawPeriod);
                     }
@@ -183,6 +171,20 @@ export default {
                     this.addNotification(item.draw_time + " unsuccessfully deleted!", "error", err.status)
                 });
             await this.displayDrawPeriods();
+        },
+
+        async closeDrawPeriod(item) {
+            axios.put('/api/v1/close-draw-period/' + item.id, {
+                status: item.isClosed
+            })
+                .then(response => {
+                    this.displayDrawPeriods();
+                    console.log('response');
+                }).catch(err => {
+                this.$nextTick(function () {
+                    this.contents[item.index].isClosed = !item.isClosed;
+                });
+            })
         },
 
         getDateToday(date) {

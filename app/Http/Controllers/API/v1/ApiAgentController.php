@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Models\Address;
 use App\Models\Cluster;
 use App\Models\User;
+use App\Scopes\StatusScope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,7 +16,7 @@ class ApiAgentController extends ApiController
     {
         $this->authorize('list-users', User::class);
 //        $search = $request->get('search', '');
-        $agents = User::with(['cluster', 'address'])
+        $agents = User::withoutGlobalScope(StatusScope::class)->with(['cluster', 'address'])
             ->whereHas('roles', function ($query) {
                 $query->where('name', '=', 'agent');
             })->get();
@@ -44,7 +45,7 @@ class ApiAgentController extends ApiController
         ]);
 
         $generated_password = substr(str_shuffle(str_repeat(config('app.key'), 5)), 0, 8);
-        $user = User::firstOrCreate([
+        $user = User::withoutGlobalScope(StatusScope::class)->firstOrCreate([
             'name' => $validated['name'],
             'birthdate' => $validated['birthdate'],
             'gender' => $validated['gender'],
@@ -59,41 +60,41 @@ class ApiAgentController extends ApiController
         return response(['user' => $user, 'password' => $generated_password], 202);
     }
 
-    public function show(Request $request, User $user)
+    public function show(Request $request, $user)
     {
-        $this->authorize('view-users', $user);
+        $this->authorize('view-users', User::class);
         return response(['user' => $user], 200);
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, $user)
     {
-        $this->authorize('update-users', $user);
+        $this->authorize('update-users', User::class);
         $validated = $request->validated();
         if (empty($validated['password'])) {
             unset($validated['password']);
         } else {
             $validated['password'] = Hash::make($validated['password']);
         }
-        $user->update($validated);
+        $user = User::withoutGlobalScope(StatusScope::class)->where('id', $user)->first()->update($validated);
         $user->syncRoles($request->roles);
         return response(['message' => 'User Updated Successfully!'], 202);
     }
 
-    public function destroy(Request $request, User $user)
+    public function destroy(Request $request, $user)
     {
         $this->authorize('delete-users', $user);
-        $user->delete();
+        User::withoutGlobalScope(StatusScope::class)->where('id', $user)->first()->delete();
         return response([], 204);
     }
 
     public function activeIndex(Request $request)
     {
         $this->authorize('list-users', User::class);
-        $agents = User::whereHas('roles', function ($query) {
+        $agents = User::withoutGlobalScope(StatusScope::class)->whereHas('roles', function ($query) {
             $query->where('name', '=', 'agent');
         })->where('session_status', true)->with(['device'])->get();
 
-        $totalAgents = User::with(['user' => function ($query) {
+        $totalAgents = User::withoutGlobalScope(StatusScope::class)->with(['user' => function ($query) {
             $query->whereHas('roles', function ($query) {
                 $query->where('name', '=', 'agent');
             });
@@ -106,11 +107,12 @@ class ApiAgentController extends ApiController
     {
         $this->authorize('list-users', User::class);
 //        $search = $request->get('search', '');
-        $agents = User::with(['cluster', 'address'])
+        $agents = User::withoutGlobalScope(StatusScope::class)->with(['cluster', 'address'])
             ->whereHas('roles', function ($query) {
             $query->where('name', '=', 'agent');
         })->where('cluster_id', $cluster->id)->get();
         return response(['agents' => $agents], 200);
     }
+
 
 }

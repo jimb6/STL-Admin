@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Scopes\Searchable;
 use App\Scopes\ClusterScope;
+use App\Scopes\StatusScope;
 use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -20,12 +21,13 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, HasApiTokens, Searchable, SoftDeletes, CanResetPassword;
 
-    protected $fillable = ['name', 'birthdate', 'gender', 'address_id', 'contact_number', 'email', 'cluster_id', 'password'];
+    protected $fillable = ['name', 'birthdate', 'gender', 'address_id', 'contact_number', 'email', 'cluster_id', 'password', 'status'];
     protected $searchableFields = ['*'];
     protected $hidden = ['password', 'remember_token'];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'status' => 'boolean'
     ];
 
 
@@ -33,6 +35,7 @@ class User extends Authenticatable
     public static function booted()
     {
         static::addGlobalScope(new ClusterScope);
+        static::addGlobalScope(new StatusScope);
     }
 
 

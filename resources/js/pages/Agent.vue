@@ -13,6 +13,7 @@
                 @udpateModel="updateAgent($event)"
                 @destroyModel="destroyAgent($event)"
                 @changeAddress="changeAddress($event)"
+                @updateStatus="deactivateUser($event)"
                 :canAdd="canAdd"
                 :canEdit="canEdit"
                 :canDelete="canDelete"
@@ -52,6 +53,7 @@ export default {
             {text: "Email", value: "email"},
             {text: "Address", value: "address"},
             {text: "Cluster", value: "cluster"},
+            {text: "Active", value: "isClosed"},
             {text: "Last Update", value: "updated_at"},
             {text: "Actions", value: "actions", sortable: false},
         ],
@@ -102,6 +104,7 @@ export default {
                         cluster: data[item].cluster.name,
                         clusterId: data[item].cluster.id,
                         updated_at: data[item].updated_at,
+                        isClosed: data[item].status,
                     }
                     this.contents.push(agent);
                 }
@@ -147,7 +150,7 @@ export default {
         async getClusters() {
             const response = await axios.get('/api/v1/clusters').catch(err => console.log(err))
             let clustersData = response.data.clusters;
-            console.log( clustersData );
+            console.log(clustersData);
             for (let index in this.fillable) {
                 if (this.fillable[index].field === 'clusterId') {
                     this.fillable[index].options = clustersData;
@@ -164,6 +167,21 @@ export default {
             const month = date.toLocaleString('default', {month: 'long'});
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
+        },
+
+        async deactivateUser(item) {
+            axios.put('/api/v1/deactivate-user/' + item.id, {
+                status: item.isClosed
+            })
+                .then(response => {
+                    this.displayAgents();
+                    console.log(response);
+                }).catch(err => {
+                    console.log(err)
+                this.$nextTick(function () {
+                    this.contents[item.index].isClosed = !item.isClosed;
+                });
+            })
         },
 
         async sendPasswordSMS(user, password) {

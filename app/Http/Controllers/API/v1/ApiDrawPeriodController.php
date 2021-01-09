@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Models\DrawPeriod;
 use App\Models\Game;
+use App\Scopes\DrawPeriodStatus;
+use App\Scopes\StatusScope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +16,7 @@ class ApiDrawPeriodController extends Controller
     {
         $this->authorize('list-draw-periods', DrawPeriod::class);
         $search = $request->get('search', '');
-        $drawPeriods = DrawPeriod::search($search)->with('games:description')->get();
+        $drawPeriods = DrawPeriod::withoutGlobalScope(DrawPeriodStatus::class)->search($search)->with('games:description')->get();
         return response(['drawPeriods' => $drawPeriods], 200);
     }
 
@@ -91,6 +93,20 @@ class ApiDrawPeriodController extends Controller
     {
         $this->authorize('delete-draw-periods', $drawPeriod);
         $drawPeriod->delete();
+        return response([], 204);
+    }
+
+    public function closeDrawPeriod(Request $request, $drawPeriod){
+        $this->authorize('update-draw-periods', DrawPeriod::class);
+        $validated = $request->validate([
+            'status' => 'required|boolean',
+        ]);
+
+        DrawPeriod::withoutGlobalScope(StatusScope::class)
+            ->where('id', $drawPeriod)
+            ->first()
+            ->update($validated);
+
         return response([], 204);
     }
 

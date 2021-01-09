@@ -289,7 +289,7 @@ export default {
         },
 
         getClusters() {
-            axios.get('/api/v1/cluster-categorized/' + this.title)
+            axios.get('/api/v1/cluster-categorized')
                 .then(response => {
 
                     let clusters = response.data.clusters

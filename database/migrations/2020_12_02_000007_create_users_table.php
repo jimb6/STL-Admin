@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->enum('gender', ['Male', 'Female', 'Others']);
             $table->boolean('session_status')->default(false);
             $table->string('contact_number')->unique();
-            $table->string('email')->unique();
+            $table->string('email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('api_token')->nullable();
