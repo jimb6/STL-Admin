@@ -2,8 +2,6 @@
     <v-container class="cstm-vuetify-table">
         <h2>{{ title }}</h2>
 
-
-
         <v-data-table
             :headers="headers"
             :items="contents"
@@ -17,7 +15,7 @@
             @page-count="pageCount = $event"
             loading-text="Loading... Please wait">
 
-
+            <!-- V-SLOTS -->
             <template v-slot:item.is_rumbled="{ item }">
                 <v-checkbox
                     :input-value="item.is_rumbled"
@@ -34,13 +32,32 @@
 
             <template v-slot:item.isClosed="{ item }">
                 <v-switch
-                    :disabled="item.status=='SOLD OUT'"
+                    :disabled="item.status === 'SOLD OUT'"
                     v-model="item.isClosed"
                     color="white"
                     @change="updateCloseCombination(item)"
                     :loading="loadingRequest"
                 ></v-switch>
             </template>
+
+            <template v-slot:body.prepend="{headers}">
+                <tr style="background: #4caf50; color: #fff; letter-spacing: 1px;">
+                    <td v-for="(header,i) in headers" :key="i">
+                        <div v-if="header.value === 'amount'">
+                            <b>{{ sumField('amount') }}</b>
+                        </div>
+
+                        <div v-if="header.value === 'combinations'" style="text-transform: uppercase">
+                            Grand Total
+                        </div>
+
+                        <div v-else>
+                            <!-- empty table cells for columns that don't need a sum -->
+                        </div>
+                    </td>
+                </tr>
+            </template>
+
         </v-data-table>
 
 
@@ -217,7 +234,10 @@ export default {
             } else if (item.status === "CLOSED"){
                 this.$emit("destroyCloseCombination", item);
             }
-
+        },
+        sumField(key) {
+            // sum data in give key (property)
+            return this.contents.reduce((a, b) => a + (b[key] || 0), 0)
         }
 
 
@@ -286,7 +306,9 @@ h2.cstm-price {
     margin: unset;
 }
 .singleBetTable .myDanger td,
-.singleBetTable .myWarning td{
+.singleBetTable .myWarning td,
+.singleBetTable .myInfo td,
+.singleBetTable .mySuccess td{
     color: #ffffff;
 }
 </style>

@@ -146,6 +146,7 @@
 
             </template>
 
+            <!-- V-SLOTS -->
             <template v-slot:item.actions="{ item }">
                 <v-icon class="mr-2" @click="verifyItem(item)" v-if="!item.verifiedAt">
                     mdi-thumb-up-outline

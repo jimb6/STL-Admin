@@ -13,6 +13,10 @@
 
         {{-- Custom left links --}}
         @yield('content_top_nav_left')
+
+        <li class="nav-item">
+            <button id="cstm-theme"><i class="fas fa-adjust"></i></button>
+        </li>
     </ul>
 
 

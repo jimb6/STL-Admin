@@ -11,6 +11,8 @@ use App\Models\CloseNumber;
 use App\Models\ControlCombination;
 use App\Models\DrawPeriod;
 use App\Models\Game;
+use App\Models\WinningCombination;
+use App\Scopes\TransactionBaseScope;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -91,20 +93,20 @@ class ApiBetTransactionController extends Controller
 
             //Check the maximum amount per bet
             if ($bet['amount'] > $game[0]->max_per_bet)
-                return response(['message' => 'Amount exceeds the maximum. might be less than or equal '.$game[0]->max_per_bet], 406);
+                return response(['message' => 'Amount exceeds the maximum. might be less than or equal ' . $game[0]->max_per_bet], 406);
             //Check the minimum amount per bet
             if ($bet['amount'] < $game[0]->min_per_bet)
-                return response(['message' => 'Invalid amount. Must be greater than or equal '.$game[0]->min_per_bet], 406);
+                return response(['message' => 'Invalid amount. Must be greater than or equal ' . $game[0]->min_per_bet], 406);
             //Check the total amount of the bet
             if ($b->isNotEmpty() && ($b[$bet['combination']]['sum'] + $bet['amount']) > $game[0]->max_sum_bet)
-                return response(['message' => 'Amount exceeds. Available amount '.($b[$bet['combination']]['sum'] - $game[0]->max_sum_bet)], 406);
+                return response(['message' => 'Amount exceeds. Available amount ' . ($b[$bet['combination']]['sum'] - $game[0]->max_sum_bet)], 406);
 
             //Get the control combinations
             $control = ControlCombination::where('game_id', $game[0]->game_id)->where('combination', $bet['combination'])->get();
 
             //check the control combinations
             if ($b->isNotEmpty() && $control->isNotEmpty() && $b != null && $b[$bet['combination']]['sum'] + $bet['amount'] > $control[0]->max_amount)
-                return response(['message' => 'Amount exceeds. Available amount '.($b[$bet['combination']]['sum'] - $control[0]->max_amount)], 406);
+                return response(['message' => 'Amount exceeds. Available amount ' . ($b[$bet['combination']]['sum'] - $control[0]->max_amount)], 406);
             array_push($tempVals, array_merge($bet, ['draw_period_id' => $d['id']]));
         }
 
@@ -163,6 +165,22 @@ class ApiBetTransactionController extends Controller
         return response([], 204);
     }
 
+    public function showEntriesBasedOnDateRange(Request $request)
+    {
+        $this->authorize('list-bet-transactions', BetTransaction::class);
+        $validated = $request->validate([
+            'dates' => 'required|array|min:2|max:2',
+            'draw_periods' => 'required|array'
+        ]);
+        $validated['dates'][1] .= ' 23:59:59';
+        $betTransactions = BetTransaction::withoutGlobalScope(TransactionBaseScope::class)->whereBetween('created_at', $validated['dates'])
+            ->whereHas('bets', function ($query) use ($validated) {
+                $query->whereIn('draw_period_id', $validated['draw_periods']);
+            })->with('bets', 'user')->get()->sortBy('created_at');
+
+        return response(['transactions' => $betTransactions], 200);
+    }
+
     public function swap($res, $a, $b)
     {
         $tmp = $res[$a];
@@ -178,6 +196,97 @@ class ApiBetTransactionController extends Controller
         for ($i = $index; $i < count($list); $i++) $res = array_merge($res, $this->permutate($this->swap($list, $i, $index), $index + 1));
         return array_map("unserialize", array_unique(array_map("serialize", $res)));
     }
+
+    public function getGeneralBetsReport(Request $request)
+    {
+        $this->authorize('list-bet-transactions', Bet::class);
+        $validated = $request->validate([
+            'cluster_id' => 'required|array',
+            'draw_period_id' => 'required|array',
+            'game' => 'required',
+            'dates' => 'required|array|max:2|min:2'
+        ]);
+
+        $game = Game::with('gameConfiguration')->where('abbreviation', $validated['game'])->first();
+        $validated['dates'][1] .= ' 23:59:59';
+
+        $bets = BetTransaction::withoutGlobalScope(TransactionBaseScope::class)
+            ->whereBetween('created_at', $validated['dates'])
+            ->whereHas('user', function ($subQuery) use ($validated) {
+                $subQuery->whereIn('cluster_id', $validated['cluster_id']);
+            })
+            ->whereHas('bets', function ($query) use ($game, $validated) {
+                $query->where('game_id', $game->id)
+                    ->whereIn('draw_period_id', $validated['draw_period_id']);
+            })->with('user.cluster', 'bets.drawPeriod')->get();
+
+
+        $winningCombinations = WinningCombination::where('game_id', $game->id)
+            ->whereIn('draw_period_id', $validated['draw_period_id'])
+            ->whereBetween('created_at', $validated['dates'])
+            ->get();
+
+        // SINGLE BET
+        $bets = $bets->map(function ($item, $key) use ($winningCombinations, $game) {
+            $sum = 0;
+            $drawPeriod = '';
+            $drawDate = '';
+            $hits = 0;
+            $item['bets_commission_rate'] = 0;
+
+            // LOOPS IN EVERY BET
+            foreach ($item['bets'] as $bet) {
+                $sum += $bet['amount'];
+                $drawPeriod = $bet['drawPeriod']->draw_time;
+                $drawDate = $bet->created_at->format('m/d/Y');
+                foreach ($winningCombinations as $winningCombination) {
+                    if ($winningCombination->created_at->format('m/d/Y') === $drawDate && $bet['combination'] == $winningCombination->combination) {
+                        $hits += $bet['amount'];
+                    }
+                }
+            }
+
+            // LOOPS IN EVERY COMMISSION
+            foreach ($item['user']['cluster']['commissions'] as $commission) {
+                if ($commission->game_id === $game->id) {
+                    $item['bets_commission_rate'] = $commission->commission_rate;
+                    break;
+                }
+            }
+
+            $item['bets_amount'] = $sum;
+            $item['bets_hit'] = $hits;
+            $item['drawDate'] = $drawDate;
+            $item['drawPeriod'] = $drawPeriod;
+            $item['cluster'] = $item['user']['cluster']->name;
+            return $item;
+        });
+
+        // SINGLE TRANSACTION
+        $bets = $bets->groupBy('cluster')->transform(function ($item, $key) use ($game) {
+            return $item->groupBy('drawDate')->map(function ($item2, $key) use ($game) {
+                return $item2->groupBy('drawPeriod')->map(function ($item3, $key) use ($game) {
+                    $gross = 0;
+                    $commission_rate = 0;
+                    $hits = 0;
+                    foreach ($item3 as $transaction) {
+                        $gross += $transaction['bets_amount'];
+                        $hits += $transaction['bets_hit'];
+                        $commission_rate = $transaction['bets_commission_rate'];
+                    }
+                    $item3['transaction_gross'] = $gross;
+                    $item3['transaction_commission'] = $gross * $commission_rate;
+                    $item3['transaction_net'] = $gross - ($gross * $commission_rate);
+                    $item3['transaction_hits'] = $hits;
+                    $item3['transaction_amount_hits'] = $hits * $game['gameConfiguration']->multiplier;
+                    return $item3;
+                });
+            });
+        });
+
+        return response(['bets' => $bets], 200);
+    }
+
 //    public function permutateNumber($elements, $perm = array(), &$permArray = array())
 //    {
 //        if (empty($elements)) {

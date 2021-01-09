@@ -56,11 +56,13 @@ export default {
 
             console.log(reportType.selected, "REPORT TYPE")
             console.log(clusterType.selected, "CLUSTER")
+            console.log(drawPeriodType.selected, "DRAW PERIOD")
+
             if (reportType.selected.text === "General"){
                 console.log("General Reports")
                 if (clusterType.selected.type === "super"){
                     this.headers = [
-                        {text: "Cluster Name", value: "user_id"},
+                        {text: "Cluster Name", value: "cluster"},
                         {text: "Draw Date", value: "draw_date"},
                         {text: "Draw Period", value: "draw_period"},
                         {text: "Gross", value: "gross"},
@@ -74,9 +76,8 @@ export default {
                     ]
                 } else if (clusterType.selected.type === "sub"){
                     this.headers = [
-                        {text: "Agent ID", value: "user_id"},
+                        {text: "Agent ID", value: "agent_id"},
                         {text: "Agent Name", value: "agent_name"},
-                        {text: "Device Code", value: "device_code"},
                         {text: "Draw Date", value: "draw_date"},
                         {text: "Draw Period", value: "draw_period"},
                         {text: "Gross", value: "gross"},
@@ -116,7 +117,7 @@ export default {
                         });
                     }
                     this.updateExcelFields("combination", dates);
-                    console.log(response.data)
+                    console.log(response.data,"COMBINATION REPORTS")
                 }).catch(err => {
                     console.log(err)
             })
@@ -130,7 +131,48 @@ export default {
                 dates: dates
             })
                 .then(response => {
-                    console.log(response.data)
+                    const data = response.data.bets;
+                    this.contents = [];
+                    for (let cluster in data) {
+                        for (let drawDate in data[cluster]){
+                            for(let drawTime in data[cluster][drawDate]){
+                                this.contents.push({
+                                    cluster: cluster,
+                                    draw_date: drawDate,
+                                    draw_period: drawTime,
+                                    gross: data[cluster][drawDate][drawTime].transaction_gross,
+                                    commission: data[cluster][drawDate][drawTime].transaction_commission,
+                                    net: data[cluster][drawDate][drawTime].transaction_net,
+                                    hits: data[cluster][drawDate][drawTime].transaction_hits,
+                                    amount_hits: data[cluster][drawDate][drawTime].transaction_amount_hits,
+                                    payout: 0,
+                                    collectible: (data[cluster][drawDate][drawTime].transaction_net - data[cluster][drawDate][drawTime].transaction_amount_hits),
+                                    valid: true,
+                                    // agent_id: data[cluster][drawTime].user.id,
+                                    // agent_name: data[cluster][drawTime].user.name,
+                                });
+                            }
+                        }
+
+                        // {text: "Cluster Name", value: "cluster"},
+                        // {text: "Draw Date", value: "draw_date"},
+                        // {text: "Draw Period", value: "draw_period"},
+                        // {text: "Gross", value: "gross"},
+                        // {text: "Commission", value: "commission"},
+                        // {text: "Net", value: "net"},
+                        // {text: "Hits", value: "hits"},
+                        // {text: "Amount Hits", value: "amount_hits"},
+                        // {text: "Payout", value: "payout"},
+                        // {text: "Collectible", value: "collectible"},
+                        // {text: "Validity", value: "valid"},
+
+                        // {text: "Agent ID", value: "agent"},
+                        // {text: "Agent Name", value: "agent_name"},
+                        // {text: "Device Code", value: "device_code"},
+
+
+                    }
+                    console.log(response.data, "GENERAL REPORTS ", response.data.bets.length)
                 }).catch(err => {
                     console.log(err)
             })

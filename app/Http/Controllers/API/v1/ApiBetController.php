@@ -104,30 +104,6 @@ class ApiBetController extends Controller
     }
 
 
-    public function getGeneralBetsReport(Request $request)
-    {
-        $this->authorize('list-bet-transactions', Bet::class);
-        $validated = $request->validate([
-            'cluster_id' => 'required|array',
-            'draw_period_id' => 'required|array',
-            'game' => 'required',
-            'dates' => 'required|array|max:2|min:2'
-        ]);
-        $validated['dates'][1] .= ' 23:59:59';
-        $bets = Bet::whereBetween('created_at', $validated['dates'])
-            ->where('draw_period_id', $validated['draw_period_id'])
-            ->with(['betTransaction.user' => function ($query) use ($validated) {
-                $query->whereIn('cluster_id', $validated['cluster_id']);
-            }, 'game' => function($query) use ($validated) {
-                $query->where('abbreviation', $validated['game']);
-            }, 'drawPeriod'])
-            ->get();
-        $bets = $bets->reject(function ($item, $key){
-            return $item['game'] == null;
-        });
-        return response(['bets' => $bets], 200);
-    }
-
     public function getCombinationBetsReport(Request $request)
     {
         $this->authorize('list-bet-transactions', Bet::class);
@@ -140,7 +116,7 @@ class ApiBetController extends Controller
 
         $validated['dates'][1] .= ' 23:59:59';
         $bets = Bet::whereBetween('created_at', $validated['dates'])
-            ->where('draw_period_id', $validated['draw_period_id'])
+            ->whereIn('draw_period_id', $validated['draw_period_id'])
             ->with(['betTransaction.user' => function ($query) use ($validated) {
                 $query->whereIn('cluster_id', $validated['cluster_id']);
             }, 'game' => function($query) use ($validated) {

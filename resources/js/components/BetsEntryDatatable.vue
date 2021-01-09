@@ -8,10 +8,11 @@
             :items="contents"
             :page.sync="page"
             :items-per-page="itemsPerPage"
+            :item-class="getStatusBackground"
             :search="search"
             hide-default-footer
-            :sort-by="['combination']"
-            :sort-desc="[false]"
+            :sort-by="['draw_period', 'created_at']"
+            :sort-desc="[true, true]"
             @page-count="pageCount = $event"
             loading-text="Loading... Please wait">
 
@@ -103,6 +104,36 @@
                 </div>
 
             </template>
+
+            <!-- V-SLOTS -->
+            <template v-slot:item.draw_period="{ item }">
+                {{ new Date('1/1/2021 ' + item.draw_period).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3") }}
+            </template>
+
+            <template v-slot:item.combinations="{ item }">
+                <v-chip v-for="bet in item.combinations" :key="bet.id" dark small class="mr-2 my-2">
+                    <p><span class="mr-2">{{ bet.combination }}</span><b style="font-weight: 700;">- {{ bet.amount }}</b></p>
+                </v-chip>
+            </template>
+
+            <template v-slot:item.status="{ item }">
+                <v-switch
+                    :disabled="item.status"
+                    color="red"
+                    @change="updateReprintActions(item)"
+                ></v-switch>
+            </template>
+
+            <template v-slot:item.reprint="{ item }">
+                <v-switch
+                    :disabled="item.reprint"
+                    v-model="item.reprint"
+                    color="white"
+                    @change="updateReprintActions(item)"
+                    :loading="loadingRequest"
+                ></v-switch>
+            </template>
+
         </v-data-table>
 
         <!-- PAGINATION -->
@@ -148,6 +179,7 @@ export default {
         excelHeaders: Array,
         excelData: Array,
         excelTitle: String,
+        loadingRequest: String,
     },
 
     data: () => ({
@@ -175,8 +207,15 @@ export default {
             this.getDrawPeriods();
         },
 
+        updateReprintActions(action){
+            console.log("REPRINTING....")
+        },
+
         displayBetEntries() {
             console.log( "DISPLAY BET ENTRIES" );
+            if (this.dates.length === 2 && this.drawPeriodFilter.selected !== ''){
+                this.$emit('viewModel', [this.drawPeriodFilter, this.dates])
+            }
         },
 
         getDrawPeriods() {
@@ -206,7 +245,6 @@ export default {
                             options: [{text: drawTime, value: [drawPeriods[0].id]}],
                         }
                     }
-
                     console.log(response, "DRAW PERIOD")
                 }).catch(err => {
                 console.log(err)
@@ -223,17 +261,11 @@ export default {
         // EDIT BELOW ==================================================================================================
         //  COLOR
         getStatusBackground(item) {
-            switch (item.status) {
-                case "SOLD OUT":
-                    item.isClosed = true;
-                    return "myDanger myTr"
-                case "OPEN":
-                    return "myTr"
-                case "CLOSED":
-                    item.isClosed = true;
-                    return "myWarning myTr"
-                default:
-                    return "myDanger"
+            if( item.reprint ) {
+                item.isClosed = true;
+                return "myInfo myTr";
+            } else {
+                return "myTr";
             }
         },
 
@@ -262,6 +294,9 @@ export default {
 <style>
 .labelNoMargin label {
     margin: unset !important;
+}
+.singleBetTable .myInfo td{
+    color: #ffffff;
 }
 </style>
 

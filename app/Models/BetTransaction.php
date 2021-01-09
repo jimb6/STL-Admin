@@ -24,6 +24,10 @@ class BetTransaction extends Model implements Auditable
 
     protected $table = 'bet_transactions';
 
+    protected $casts = [
+        'reprint' => 'boolean'
+    ];
+
     //  Defining Scopes for Queries
 
     public static function booted()
@@ -56,11 +60,12 @@ class BetTransaction extends Model implements Auditable
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->with('device', 'cluster.commissions');
     }
 
     public function bets()
     {
-        return $this->hasMany(Bet::class)->orderBy('amount', 'asc');
+        return $this->hasMany(Bet::class)->with('drawPeriod')
+            ->orderBy('amount', 'asc');
     }
 }

@@ -250,19 +250,13 @@
             </template>
 
             <template v-slot:item.draw_time="{ item }">
-                {{
-                    new Date('1/1/2021 ' + item.draw_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3")
-                }}
+                {{ new Date('1/1/2021 ' + item.draw_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3") }}
             </template>
             <template v-slot:item.open_time="{ item }">
-                {{
-                    new Date('1/1/2021 ' + item.open_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3")
-                }}
+                {{ new Date('1/1/2021 ' + item.open_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3") }}
             </template>
             <template v-slot:item.close_time="{ item }">
-                {{
-                    new Date('1/1/2021 ' + item.close_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3")
-                }}
+                {{ new Date('1/1/2021 ' + item.close_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3") }}
             </template>
 
             <template v-slot:item.roles="{ item }">
@@ -278,11 +272,8 @@
             </template>
 
             <template v-slot:item.commissions="{ item }">
-                <v-chip class="mr-2 my-2" v-for="(commission, index) in item.commissions" :key="index"
-                        style="font-weight: 200;" dark small>
-                    <p><span class="mr-2">{{ commission.label }}</span><b style="font-weight: 700;">{{
-                            commission.value
-                        }}%</b></p>
+                <v-chip class="mr-2 my-2" v-for="(commission, index) in item.commissions" :key="index" style="font-weight: 200;" dark small>
+                    <p><span class="mr-2">{{ commission.label }}</span><b style="font-weight: 700;">{{ commission.value }}%</b></p>
                 </v-chip>
             </template>
 

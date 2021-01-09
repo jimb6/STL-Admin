@@ -191,3 +191,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.singleBetTable .myTr .v-messages.theme--light {
+    display: none;
+}
+</style>

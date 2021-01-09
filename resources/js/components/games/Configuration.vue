@@ -112,13 +112,7 @@ export default {
             {label: "Min Number", field: "min_number", value: "", type: "input"},
             {label: "Max Number", field: "max_number", value: "", type: "input"},
             {label: "Has Repetition", field: "has_repetition", value: "", type: "select", options: [true, false]},
-            {
-                label: "Days Availability",
-                field: "days_availability",
-                value: "",
-                type: "chips",
-                options: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-            },
+            {label: "Days Availability", field: "days_availability", value: "", type: "chips", options: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]},
         ],
 
         page: 1,

@@ -81,8 +81,8 @@ Route::prefix('v1/')
         Route::put('devices-delete/{id}', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'destroy']);
 
         Route::get('agent-per-cluster/{cluster}', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'agentPerCluster']);
-
         Route::get('bets-range/{game}/{date}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'getBetsRange']);
+
 //      Custom Winning Combinations Request
         Route::post('winning-combinations', [\App\Http\Controllers\API\v1\ApiWinningCombinationController::class, 'show']);
         Route::post('winning-combinations-store', [\App\Http\Controllers\API\v1\ApiWinningCombinationController::class, 'store']);
@@ -92,9 +92,12 @@ Route::prefix('v1/')
 //      Custom Draw Period Request
         Route::get('draw-periods-categorized/{game}', [\App\Http\Controllers\API\v1\ApiDrawPeriodController::class, 'getCategorizedDrawPeriod']);
 
+//      Custom Bet Transaction Request
+        Route::post('bet-transaction-entries', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'showEntriesBasedOnDateRange']);
+
 //        Custom Bets Request
         Route::get('bets/{game}/{draw}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'index']);
-        Route::post('bets-reports/general', [\App\Http\Controllers\API\v1\ApiBetController::class, 'getGeneralBetsReport']);
+        Route::post('bets-reports/general', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'getGeneralBetsReport']);
         Route::post('bets-reports/combination', [\App\Http\Controllers\API\v1\ApiBetController::class, 'getCombinationBetsReport']);
         Route::get('cluster-categorized/{game}', [\App\Http\Controllers\API\v1\ApiClusterController::class, 'getClusterWithCommissions']);
 

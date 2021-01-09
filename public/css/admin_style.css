@@ -7,7 +7,7 @@
     --myBlue: #2196f3;
     --myRed: #E63946;
     --mySuccess: #4CAF50;
-    --myInfo: #4CAF50;
+    --myInfo: #2196F3;
     --myDanger: #FF5252;
     --myWarning: #FB8C00;
 }
@@ -484,21 +484,82 @@ input.datepicker {
     color: #fff;
 }
 
-/* DARK MODE */
+/* THEME */
+button#cstm-theme {
+    height: 100% !important;
+    border: unset;
+    background: unset;
+    outline: unset;
+    transition-duration: 300ms;
+}
+button#cstm-theme:hover {
+    transform: scale(1.1);
+}
 
+/* DARK MODE */
+.darkTheme .main-sidebar a.brand-link {
+    height: 57px;
+    border-top: unset;
+    background: var(--gray2) !important;
+    border-bottom: 1px solid var(--gray);
+}
 .darkTheme .content-wrapper {
     background: var(--darkGray);
 }
-.darkTheme .v-tab, .darkTheme .v-tab i, .darkTheme h2, .darkTheme h3,
-.darkTheme .cstm-vuetify-table thead.v-data-table-header th span {
-    color: #ffffff !important;
+.darkTheme aside.main-sidebar.sidebar-dark-danger.elevation-4 {
+    background: var(--gray2);
+}
+.darkTheme .v-application--wrap {
+    background: var(--darkGray);
 }
 .darkTheme nav.main-header {
     background: var(--darkGray);
+    border-top: unset;
+    position: relative !important;
+    color: #fff;
+    border-color: var(--gray);
+}
+.darkTheme .navbar-nav .nav-link,
+.darkTheme h2,
+.darkTheme h3,
+.darkTheme label,
+.darkTheme input {
+    color: #fff !important;
+}
+.darkTheme .cstm-v-textfield.v-text-field>.v-input__control>.v-input__slot:after,
+.darkTheme .cstm-v-textfield.v-text-field>.v-input__control>.v-input__slot:before {
+    border-color: #fff;
+}
+.darkTheme .v-tabs div {
+    color: #fff !important;
+    font-weight: 300;
 }
 .darkTheme .cstm-vuetify-table thead.v-data-table-header {
     background: var(--gray2);
 }
+.darkTheme .cstm-vuetify-table thead.v-data-table-header th span {
+    font-weight: 400;
+    color: var(--lightGray);
+}
 .darkTheme tbody {
-    background: var(--gray);
+    background: var(--gray2);
+    color: var(--lightGray);
+}
+.darkTheme .cstm-vuetify-table .v-data-table__wrapper {
+    background: unset;
+    border-radius: 10px;
+}
+.darkTheme .cstm-vuetify-table tr:hover {
+    background: var(--gray) !important;
+}
+.darkTheme .cstm-vuetify-table h2 {
+    border-color: var(--gray);
+}
+.darkTheme .cstm-vuetify-table h2 {
+    border-color: var(--gray);
+    font-weight: 100;
+    letter-spacing: 2px;
+}
+.darkTheme button.v-icon {
+    color: var(--lightGray) !important;
 }

@@ -51,10 +51,10 @@ class Bet extends Model implements Auditable
     }
 
 
-    public function getCreatedAtAttribute($time)
-    {
-        return date("g:i a", strtotime($time));
-    }
+//    public function getCreatedAtAttribute($time)
+//    {
+//        return date("g:i a", strtotime($time));
+//    }
 
     public function getUpdatedAtAttribute($time)
     {

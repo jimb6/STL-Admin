@@ -8,10 +8,12 @@
             :items="contents"
             :page.sync="page"
             :items-per-page="itemsPerPage"
+            :item-class="getStatusBackground"
             :search="search"
             hide-default-footer
-            :sort-by="['combination']"
-            :sort-desc="[false]"
+            :sort-by="['draw_date','draw_period']"
+            :sort-desc="[true, true]"
+            multi-sort
             @page-count="pageCount = $event"
             loading-text="Loading... Please wait">
 
@@ -121,8 +123,77 @@
                         hide-details
                     ></v-text-field>
                 </div>
-
             </template>
+
+            <!-- V-SLOTS  -->
+            <template v-slot:body.prepend="{headers}">
+                <tr :class="sumSingleField('collectible') < 0 ? 'myDanger': 'mySuccess'" style="letter-spacing: 1px;" v-if="reportTypeFilter.selected.value === 'General'">
+                    <td v-for="(header,i) in headers" :key="i">
+                        <div v-if="header.value === 'cluster'" style="text-transform: uppercase">
+                            Grand Total
+                        </div>
+
+                        <div v-if="header.value === 'agent_id'" style="text-transform: uppercase">
+                            Grand Total
+                        </div>
+
+                        <div v-if="header.value === 'gross'">
+                            <b>{{ sumField('gross') }}</b>
+                        </div>
+
+                        <div v-if="header.value === 'commission'">
+                            <b>{{ sumField('commission') }}</b>
+                        </div>
+
+                        <div v-if="header.value === 'net'">
+                            <b>{{ sumField('net') }}</b>
+                        </div>
+
+                        <div v-if="header.value === 'hits'">
+                            <b>{{ sumField('hits') }}</b>
+                        </div>
+
+                        <div v-if="header.value === 'amount_hits'">
+                            <b>{{ sumField('amount_hits') }}</b>
+                        </div>
+
+                        <div v-if="header.value === 'payout'">
+                            <b>{{ sumField('payout') }}</b>
+                        </div>
+
+                        <div v-if="header.value === 'collectible'">
+                            <b>{{ sumField('collectible') }}</b>
+                        </div>
+
+                        <div v-else>
+                            <!-- empty table cells for columns that don't need a sum -->
+                        </div>
+                    </td>
+                </tr>
+            </template>
+
+            <template v-slot:item.gross="{item}">
+                <p class="text-right">{{ item.gross.toFixed(2)  }}</p>
+            </template>
+            <template v-slot:item.commission="{item}">
+                <p class="text-right">{{ item.commission.toFixed(2)  }}</p>
+            </template>
+            <template v-slot:item.net="{item}">
+                <p class="text-right">{{ item.net.toFixed(2)  }}</p>
+            </template>
+            <template v-slot:item.hits="{item}">
+                <p class="text-right">{{ item.hits.toFixed(2)  }}</p>
+            </template>
+            <template v-slot:item.amount_hits="{item}">
+                <p class="text-right">{{ item.amount_hits.toFixed(2)  }}</p>
+            </template>
+            <template v-slot:item.payout="{item}">
+                <p class="text-right">{{ item.payout.toFixed(2)  }}</p>
+            </template>
+            <template v-slot:item.collectible="{item}">
+                <p class="text-right">{{ item.collectible.toFixed(2)  }}</p>
+            </template>
+
         </v-data-table>
 
         <!-- PAGINATION -->
@@ -180,13 +251,16 @@ export default {
 
         //  FILTERS
         reportTypeFilter: {
-            selected: {},
+            selected: {text: "", value: ""},
             options: [{text: "General", value: "General"}, {text: "Combination", value: "Combination"}]
         },
         clusterFilter: {},
         drawPeriodFilter: {},
         dates: [],
         modal: false,
+
+        // DATATABLE
+
     }),
 
     created() {
@@ -307,17 +381,10 @@ export default {
 
         //  COLOR
         getStatusBackground(item) {
-            switch (item.status) {
-                case "SOLD OUT":
-                    item.isClosed = true;
-                    return "myDanger myTr"
-                case "OPEN":
-                    return "myTr"
-                case "CLOSED":
-                    item.isClosed = true;
-                    return "myWarning myTr"
-                default:
-                    return "myDanger"
+            if( item.collectible < 0 ) {
+                return "myWarning myTr";
+            } else {
+                return "myTr"
             }
         },
 
@@ -329,6 +396,16 @@ export default {
             } else if (item.status === "CLOSED") {
                 this.$emit("destroyCloseCombination", item);
             }
+        },
+
+        sumField(key) {
+            // sum data in give key (property)
+            return (this.contents.reduce((a, b) => a + (b[key] || 0), 0)).toLocaleString('en-US', {style: 'currency', currency: 'PHP',});
+        },
+
+        sumSingleField(key) {
+            // sum data in give key (property)
+            return (this.contents.reduce((a, b) => a + (b[key] || 0), 0));
         }
 
 
