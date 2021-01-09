@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Models\DrawPeriod;
 use App\Models\Game;
-use App\Scopes\DrawPeriodStatus;
 use App\Scopes\StatusScope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +15,7 @@ class ApiDrawPeriodController extends Controller
     {
         $this->authorize('list-draw-periods', DrawPeriod::class);
         $search = $request->get('search', '');
-        $drawPeriods = DrawPeriod::withoutGlobalScope(DrawPeriodStatus::class)->search($search)->with('games:description')->get();
+        $drawPeriods = DrawPeriod::withoutGlobalScope(StatusScope::class)->search($search)->with('games:description')->get();
         return response(['drawPeriods' => $drawPeriods], 200);
     }
 
