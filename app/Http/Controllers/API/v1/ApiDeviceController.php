@@ -75,7 +75,7 @@ class ApiDeviceController extends Controller
             'user_id' => 'required',
             'password' => 'required'
         ]);
-        if (! Hash::check($validated['password'], $request->user()->password)) abort(406);
+        if (!Hash::check($validated['password'], $request->user()->password)) abort(406);
         Device::find($device)->update($validated);
         return response([$device], 202);
     }

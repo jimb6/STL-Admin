@@ -185,7 +185,9 @@ return [
 
         OwenIt\Auditing\AuditingServiceProvider::class, // -> Audit Provider
         Rainwater\Active\ActiveServiceProvider::class, // Login Session Provider
-        Nexmo\Laravel\NexmoServiceProvider::class// SMS Provider
+        Nexmo\Laravel\NexmoServiceProvider::class, // SMS Provider
+
+        Stevebauman\Location\LocationServiceProvider::class //IP LOCATOR
     ],
 
     /*

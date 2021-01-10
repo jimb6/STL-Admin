@@ -66,7 +66,7 @@ class ApiUserController extends Controller
         $validated['password'] = Hash::make($generated_password);
 
         $user = User::create($validated);
-        $sms = new TwilioSmsHelper('ACf07ba6ddfcf865b96b6f15c6e8e1f892', 'a65a1f4f71eca0147993a6d0314245a5', '+12059538412');
+        $sms = new TwilioSmsHelper('ACf07ba6ddfcf865b96b6f15c6e8e1f892', 'a38ff3f7536ad6fe81114add3a72dcc8', '+12059538412');
         $sms->sendSms($validated['contact_number'], $generated_password);
         $user->assignRole($roles);
         return response(['user' => $user], 202);

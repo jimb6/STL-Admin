@@ -20,21 +20,20 @@
                 <form>
 
                     <div class="mb-4">
-                        <div class="input-group" :class="{ 'form-group--error': $v.email.$error }">
+                        <div class="input-group" :class="{ 'form-group--error': $v.username.$error }">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <v-icon class="text-white">
-                                        mdi-email-outline
+                                        mdi-account
                                     </v-icon>
                                 </div>
                             </div>
-                            <input type="email" class="form-control form__input"
-                                   v-model.trim="email"
-                                   @input="setEmail($event.target.value)"
-                                   placeholder="Email" v-model="email">
+                            <input type="text" class="form-control form__input"
+                                   v-model.trim="username"
+                                   @input="setUsername($event.target.value)"
+                                   placeholder="Username" v-model="username">
                         </div>
-                        <div class="error text-xs text-white-50 text-center mt-1" v-if="!$v.email.required && error != ''">Email is required</div>
-                        <div class="error text-xs text-white-50 text-center mt-1" v-if="!$v.email.email && error != ''">Not an email</div>
+                        <div class="error text-xs text-white-50 text-center mt-1" v-if="!$v.username.required && error != ''">Username is required</div>
                     </div>
 
                     <div class="mb-4">
@@ -89,7 +88,7 @@
 
 <script>
 
-import {email, minLength, required} from 'vuelidate/lib/validators'
+import {minLength, required} from 'vuelidate/lib/validators'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 import { AtomSpinner } from 'epic-spinners'
@@ -101,7 +100,7 @@ export default {
     data() {
         return {
             secrets: [],
-            email: '',
+            username: '',
             password: '',
             error: '',
             loading: false,
@@ -110,9 +109,8 @@ export default {
     },
 
     validations: {
-        email: {
+        username: {
             required,
-            email,
         },
         password: {
             minLength: minLength(8),
@@ -129,10 +127,10 @@ export default {
     },
 
     methods: {
-        setEmail(value) {
+        setUsername(value) {
             this.error = '';
-            this.email = value
-            this.$v.email.$touch()
+            this.username = value
+            this.$v.username.$touch()
         },
         setPassword(value) {
             this.error = '';
@@ -142,11 +140,13 @@ export default {
         handleLogin() {
             this.loading = true
             axios.get('/sanctum/csrf-cookie').then(response => {
-                axios.post('login', {email: this.email, password: this.password, remember: this.remember}).then(response => {
-                    window.location.href = "/"
+                axios.post('login', {username: this.username, password: this.password, remember: this.remember}).then(response => {
+                    // window.location.href = "/"
+                    console.log(response)
                 }).catch(error => {
                     this.error = "Invalid username or password"
                 }).finally(() => this.loading = false); // credentials didn't match
+            }).catch(err => {
             });
         },
 

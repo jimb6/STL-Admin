@@ -30,8 +30,6 @@ class User extends Authenticatable
         'status' => 'boolean'
     ];
 
-
-
     public static function booted()
     {
         static::addGlobalScope(new ClusterScope);
@@ -96,8 +94,4 @@ class User extends Authenticatable
         return $this->hasMany(BetTransaction::class);
     }
 
-    public function sessions()
-    {
-        return $this->hasMany(Session::class);
-    }
 }
