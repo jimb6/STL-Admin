@@ -24,10 +24,10 @@ class TwilioSmsHelper
      */
     public function __construct($account_sid = '', $auth_token = '', $twilio_number = '', $countryCode = '')
     {
-        if ($countryCode=='')  $this->countryCode = config('twilio.country_code'); else $this->countryCode = $countryCode;
-        if ($account_sid=='')  $this->account_sid = $account_sid = config('twilio.account_sid'); else $this->account_sid = $account_sid;
-        if ($auth_token=='')  $this->account_sid = $auth_token = config('twilio.auth_token'); else $this->auth_token = $auth_token;
-        if ($twilio_number=='')  $this->twilio_number = $twilio_number = config('twilio.twilio_number'); else $this->twilio_number = $twilio_number;
+        if ($countryCode==='')  $this->countryCode = config('twilio.country_code'); else $this->countryCode = $countryCode;
+        if ($account_sid==='')  $this->account_sid = $account_sid = config('twilio.account_sid'); else $this->account_sid = $account_sid;
+        if ($auth_token==='')  $this->account_sid = $auth_token = config('twilio.auth_token'); else $this->auth_token = $auth_token;
+        if ($twilio_number==='')  $this->twilio_number = $twilio_number = config('twilio.twilio_number'); else $this->twilio_number = $twilio_number;
     }
 
     public function sendSms($to, $message)
@@ -37,11 +37,11 @@ class TwilioSmsHelper
             $client->messages->create($this->countryCode.$to,
                 ['from' => $this->twilio_number, 'body' => $message]);
         } catch (ConfigurationException $e) {
-            return response($e, 400);
+            return $e->getMessage();
         } catch (TwilioException $e) {
-            return response($e, 400);
+            return $e->getMessage();
         }
-        return response(true, 200);
+        return true;
     }
 
 

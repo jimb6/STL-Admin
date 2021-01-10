@@ -4,41 +4,21 @@
             <div v-if="notifications.length > 0" v-for="notification in notifications">
                 <Notification :notification="notification"></Notification>
             </div>
-            <v-tabs>
-                <v-tab>Table View</v-tab>
-                <v-tab>Card View</v-tab>
-                <v-tab-item>
-                    <DataTable
-                        :title="title"
-                        :headers="headers"
-                        :contents="contents"
-                        :fillable="fillable"
-                        @storeModel="storeUser($event)"
-                        @updateModel="updateUser($event)"
-                        @destroyModel="destroyUser($event)"
-                        @changeAddress="changeAddress($event)"
-                        @updateStatus="deactivateUser($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-                <v-tab-item>
-                    <Card2
-                        :title="title"
-                        :headers="headers"
-                        :contents="contents"
-                        :fillable="fillable"
-                        @storeModel="storeUser($event)"
-                        @updateModel="updateUser($event)"
-                        @destroyModel="destroyUser($event)"
-                        @changeAddress="changeAddress($event)"
-                        :canAdd="canAdd"
-                        :canEdit="canEdit"
-                        :canDelete="canDelete"
-                    />
-                </v-tab-item>
-            </v-tabs>
+
+            <DataTable
+                :title="title"
+                :headers="headers"
+                :contents="contents"
+                :fillable="fillable"
+                @storeModel="storeUser($event)"
+                @updateModel="updateUser($event)"
+                @destroyModel="destroyUser($event)"
+                @changeAddress="changeAddress($event)"
+                @updateStatus="deactivateUser($event)"
+                :canAdd="canAdd"
+                :canEdit="canEdit"
+                :canDelete="canDelete"
+            />
         </v-container>
     </v-main>
 </template>
@@ -77,11 +57,11 @@ export default {
         ],
         contents: [],
         fillable: [
-            {label: "Roles", field: "roles", value: "", type: "select", options: Array},
+            {label: "Roles", field: "roles", value: "", type: "input-disabled", options: Array},
             {label: "Name", field: "name", value: "", type: "input"},
             {label: "Birthdate", field: "birthdate", value: "", type: "datepicker"},
             {label: "Gender", field: "gender", value: "", type: "select", options: ["Male", "Female", "Others"]},
-            {label: "Contact #", field: "contact_number", value: "", type: "input"},
+            {label: "Contact #", field: "contact_number", value: "", type: "input-phone"},
             {label: "Email", field: "email", value: "", type: "input"},
             {label: "Address", field: "address", value: "", type: "address"},
             {label: "Cluster", field: "cluster", value: "", type: "select", options: Array},
@@ -138,18 +118,17 @@ export default {
         async storeUser(item) {
             console.log(item)
             await axios.post('/api/v1/users', {
-                'role': item.roles,
+                'roles': [this.role],
                 'name': item.name,
                 'birthdate': item.birthdate,
                 'gender': item.gender,
                 'contact_number': item.contact_number,
                 'email': item.email,
                 'cluster_id': item.cluster.id,
-                'address': this.address
+                'address': this.address,
             })
                 .then(response => {
                     this.addNotification(item.name + " added successfully!", "success", "200");
-                    this.sendPasswordSMS(response.data.user, response.data.password)
                     this.displayUsers()
                 })
                 .catch(err => {
@@ -222,20 +201,6 @@ export default {
             const month = date.toLocaleString('default', {month: 'long'});
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
-        },
-
-        async sendPasswordSMS(user, password) {
-            await axios.post('/api/v1/send-default-message', {
-                'message': 'You are now part of STL as ' + user.roles[0].name + '. login your account using your mobile number or email registered. Your default password is '+ password,
-                'send_to': user.contact_number
-            })
-                .then(response => {
-                    console.log(response)
-                    console.log(user, "<<<<<<");
-                    this.addNotification('Password sent to '+ user.name, "success", "200");
-                }).catch(err => {
-                    this.addNotification(err.response.data.message, "error", err.status);
-                })
         },
 
         addNotification(message, type, statusCode) {

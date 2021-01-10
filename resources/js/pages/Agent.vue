@@ -124,8 +124,8 @@ export default {
                 'cluster_id': item.clusterId.id,
                 'address': this.address
             }).then(response => {
+                console.log(response)
                 this.addNotification(item.name + " added successfully!", "success", "200");
-                this.sendPasswordSMS(response.data.user, response.data.password)
                 this.displayAgents()
             }).catch(err => {
                 this.addNotification(err.response.data.message, "error", "400");
@@ -182,20 +182,6 @@ export default {
                     this.contents[item.index].isClosed = !item.isClosed;
                 });
             })
-        },
-
-        async sendPasswordSMS(user, password) {
-            await axios.post('/api/v1/send-default-message', {
-                'message': 'You are now part of STL as ' + user.roles[0].name + '. login your account using your mobile number or email registered. Your default password is ' + password,
-                'send_to': user.contact_number
-            })
-                .then(response => {
-                    console.log(response)
-                    console.log(user, "<<<<<<");
-                    this.addNotification('Password sent to ' + user.name, "success", "200");
-                }).catch(err => {
-                    this.addNotification(err.response.data.message, "error", err.status);
-                })
         },
 
         addNotification(message, type, statusCode) {

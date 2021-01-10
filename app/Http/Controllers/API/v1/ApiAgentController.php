@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\PasswordGenerator;
+use App\Helpers\TwilioSmsHelper;
 use App\Models\Address;
 use App\Models\Cluster;
 use App\Models\User;
@@ -36,7 +37,6 @@ class ApiAgentController extends ApiController
             'address.*' => 'required'
         ]);
 
-        $this->authorize('create-agents', User::class);
         $address = Address::firstOrCreate([
             'street' => $validated['address']['0'],
             'barangay' => $validated['address']['1'],
@@ -44,20 +44,19 @@ class ApiAgentController extends ApiController
             'province' => $validated['address']['3'],
         ]);
 
-        $generated_password = substr(str_shuffle(str_repeat(PasswordGenerator::random(), 5)), 0, 8);
-        $user = User::withoutGlobalScope(StatusScope::class)->firstOrCreate([
-            'name' => $validated['name'],
-            'birthdate' => $validated['birthdate'],
-            'gender' => $validated['gender'],
-            'contact_number' => $validated['contact_number'],
-            'email' => $request->has('email') ? $validated['email'] : '',
-            'password' => Hash::make($generated_password),
-            'cluster_id' => $validated['cluster_id'],
-            'address_id' => $address->id
-        ]);
 
+
+        $generated_password = PasswordGenerator::random();
+        unset($validated['address'], $validated['roles']);
+        if ($request->has('email')) $validated['email'] = $request->get('email');
+        $validated['address_id'] = $address->id;
+        $validated['password'] = Hash::make($generated_password);
+
+        $user = User::withoutGlobalScope(StatusScope::class)->firstOrCreate($validated);
+        $sms = new TwilioSmsHelper('ACf07ba6ddfcf865b96b6f15c6e8e1f892', 'a65a1f4f71eca0147993a6d0314245a5', '+12059538412');
         $user->assignRole('agent');
-        return response(['user' => $user, 'password' => $generated_password], 202);
+        $smsStatus = $sms->sendSms($validated['contact_number'], $generated_password);
+        return response(['user' => $user, 'sms' => $smsStatus], 202);
     }
 
     public function show(Request $request, $user)

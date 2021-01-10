@@ -156,6 +156,7 @@
                                                             v-model="editedItem[item.field]"
                                                             label="Birthdate"
                                                             readonly
+                                                            append-outer-icon="mdi-calendar"
                                                             v-bind="attrs"
                                                             v-on="on"></v-text-field>
                                                     </template>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Helpers\PasswordGenerator;
+use App\Helpers\TwilioSmsHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Cluster;
@@ -40,12 +42,11 @@ class ApiUserController extends Controller
     {
         $this->authorize('create-users', User::class);
         $validated = $request->validate([
-            'role.*' => 'required',
+            'roles' => 'required|array',
             'name' => 'required',
             'birthdate' => 'required|date',
             'gender' => 'required',
             'contact_number' => 'required',
-            'email' => 'email',
             'cluster_id' => 'required',
             'address.*' => 'required'
         ]);
@@ -57,21 +58,18 @@ class ApiUserController extends Controller
             'province' => $validated['address']['3'],
         ]);
 
-        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        $generated_password = substr(str_shuffle(str_repeat($chars, 5)), 0, 8);
-        $user = User::withoutGlobalScope(StatusScope::class)->firstOrCreate([
-            'name' => $validated['name'],
-            'birthdate' => $validated['birthdate'],
-            'gender' => $validated['gender'],
-            'contact_number' => $validated['contact_number'],
-            'email' => $validated['email'],
-            'password' => Hash::make($generated_password),
-            'cluster_id' => $validated['cluster_id'],
-            'address_id' => $address->id
-        ]);
+        $generated_password = PasswordGenerator::random();
+        $roles = $validated['roles'];
+        unset($validated['address'], $validated['roles']);
+        if ($request->has('email')) $validated['email'] = $request->get('email');
+        $validated['address_id'] = $address->id;
+        $validated['password'] = Hash::make($generated_password);
 
-        $user->assignRole($validated['role']['name']);
-        return response(['user' => $user, 'password' => $generated_password], 202);
+        $user = User::create($validated);
+        $sms = new TwilioSmsHelper('ACf07ba6ddfcf865b96b6f15c6e8e1f892', 'a65a1f4f71eca0147993a6d0314245a5', '+12059538412');
+        $sms->sendSms($validated['contact_number'], $generated_password);
+        $user->assignRole($roles);
+        return response(['user' => $user], 202);
     }
 
     public function show(Request $request, $user)
