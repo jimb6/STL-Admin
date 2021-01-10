@@ -189,13 +189,7 @@ class ApiBetTransactionController extends Controller
         return $res;
     }
 
-    public function permutate($list, $index = 0)
-    {
-        if (count($list) - 1 <= $index) return [array_splice($list, 0)];
-        $res = [];
-        for ($i = $index; $i < count($list); $i++) $res = array_merge($res, $this->permutate($this->swap($list, $i, $index), $index + 1));
-        return array_map("unserialize", array_unique(array_map("serialize", $res)));
-    }
+
 
     public function getGeneralBetsReport(Request $request)
     {
@@ -301,6 +295,14 @@ class ApiBetTransactionController extends Controller
         return response(['betTransactions' => $betTransactions], 200);
     }
 
+    public function updatePrintableStatus(Request $request, $id)
+    {
+        $this->authorize('update-bet-transactions', BetTransaction::class);
+        $validated = $request->validate(['printable' => 'required']);
+        BetTransaction::find($id)->update($validated);
+        return response([], 204);
+    }
+
 //    public function permutateNumber($elements, $perm = array(), &$permArray = array())
 //    {
 //        if (empty($elements)) {
@@ -316,4 +318,12 @@ class ApiBetTransactionController extends Controller
 //        }
 //        return $permArray;
 //    }
+
+    public function permutate($list, $index = 0)
+    {
+        if (count($list) - 1 <= $index) return [array_splice($list, 0)];
+        $res = [];
+        for ($i = $index; $i < count($list); $i++) $res = array_merge($res, $this->permutate($this->swap($list, $i, $index), $index + 1));
+        return array_map("unserialize", array_unique(array_map("serialize", $res)));
+    }
 }

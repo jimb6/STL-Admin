@@ -12,6 +12,7 @@
             :excelData="excelData"
             :excelTitle="excelTitle"
             @viewModel="displayBetEntries($event)"
+            @updateStatus="updatePrintableStatus($event)"
         />
     </v-container>
 </template>
@@ -61,7 +62,7 @@ export default {
                 {text: "Total", value: "total"},
                 {text: "Created At", value: "created_at"},
                 {text: "Updated At", value: "updated_at"},
-                {text: "Reprint", value: "reprint"},
+                {text: "Reprint", value: "printable"},
             ]
         },
     },
@@ -85,6 +86,7 @@ export default {
                             sum += parseInt(data[item].bets[i].amount);
                         }
                         this.contents.push({
+                            id: data[item].id,
                             transaction_code: data[item].qr_code,
                             user_name: data[item].user.name,
                             device_code: data[item].qr_code,
@@ -93,7 +95,7 @@ export default {
                             total: sum,
                             created_at: this.getDateToday(new Date(data[item].created_at)),
                             updated_at: this.getDateToday(new Date(data[item].updated_at)),
-                            reprint: data[item].reprint,
+                            printable: data[item].printable,
                         });
                     }
                     console.log(response)
@@ -163,6 +165,19 @@ export default {
 
             let fields = ["combination", "amount"]
             this.excelData.push({items: this.contents, fields: fields})
+        },
+
+        async updatePrintableStatus(item) {
+            axios.put('/api/v1/bet-transaction-printable/' + item.id, {
+                printable: item.printable
+            })
+                .then(response => {
+                    console.log(response);
+                }).catch(err => {
+                this.$nextTick(function () {
+                    this.contents[item.index].printable = !item.printable;
+                });
+            })
         },
 
         async listen() {

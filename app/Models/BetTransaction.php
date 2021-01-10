@@ -18,14 +18,14 @@ class BetTransaction extends Model implements Auditable
     use Searchable;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['user_id', 'qr_code'];
+    protected $fillable = ['user_id', 'qr_code', 'printable'];
 
     protected $searchableFields = ['*'];
 
     protected $table = 'bet_transactions';
 
     protected $casts = [
-        'reprint' => 'boolean'
+        'printable' => 'boolean'
     ];
 
     //  Defining Scopes for Queries

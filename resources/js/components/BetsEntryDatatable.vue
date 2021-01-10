@@ -120,16 +120,16 @@
                 <v-switch
                     :disabled="item.status"
                     color="red"
-                    @change="updateReprintActions(item)"
+                    @change="updatePrintableActions(item)"
                 ></v-switch>
             </template>
 
-            <template v-slot:item.reprint="{ item }">
+            <template v-slot:item.printable="{ item }">
                 <v-switch
-                    :disabled="item.reprint"
-                    v-model="item.reprint"
+                    :disabled="item.printable"
+                    v-model="item.printable"
                     color="white"
-                    @change="updateReprintActions(item)"
+                    @change="updatePrintableActions(item)"
                     :loading="loadingRequest"
                 ></v-switch>
             </template>
@@ -207,8 +207,10 @@ export default {
             this.getDrawPeriods();
         },
 
-        updateReprintActions(action){
-            console.log("REPRINTING....")
+        updatePrintableActions(item){
+            this.editedIndex = this.contents.indexOf(item);
+            item['index'] = this.editedIndex;
+            this.$emit('updateStatus', item);
         },
 
         displayBetEntries() {

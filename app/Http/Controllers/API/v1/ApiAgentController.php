@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Helpers\PasswordGenerator;
 use App\Models\Address;
 use App\Models\Cluster;
 use App\Models\User;
@@ -31,7 +32,6 @@ class ApiAgentController extends ApiController
             'birthdate' => 'required|date',
             'gender' => 'required',
             'contact_number' => 'required',
-            'email' => 'email',
             'cluster_id' => 'required',
             'address.*' => 'required'
         ]);
@@ -44,13 +44,13 @@ class ApiAgentController extends ApiController
             'province' => $validated['address']['3'],
         ]);
 
-        $generated_password = substr(str_shuffle(str_repeat(config('app.key'), 5)), 0, 8);
+        $generated_password = substr(str_shuffle(str_repeat(PasswordGenerator::random(), 5)), 0, 8);
         $user = User::withoutGlobalScope(StatusScope::class)->firstOrCreate([
             'name' => $validated['name'],
             'birthdate' => $validated['birthdate'],
             'gender' => $validated['gender'],
             'contact_number' => $validated['contact_number'],
-            'email' => $validated['email'],
+            'email' => $request->has('email') ? $validated['email'] : '',
             'password' => Hash::make($generated_password),
             'cluster_id' => $validated['cluster_id'],
             'address_id' => $address->id
@@ -109,10 +109,13 @@ class ApiAgentController extends ApiController
 //        $search = $request->get('search', '');
         $agents = User::withoutGlobalScope(StatusScope::class)->with(['cluster', 'address'])
             ->whereHas('roles', function ($query) {
-            $query->where('name', '=', 'agent');
-        })->where('cluster_id', $cluster->id)->get();
+                $query->where('name', '=', 'agent');
+            })->where('cluster_id', $cluster->id)->get();
         return response(['agents' => $agents], 200);
     }
+
+
+
 
 
 }

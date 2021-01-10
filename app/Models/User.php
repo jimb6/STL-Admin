@@ -38,6 +38,13 @@ class User extends Authenticatable
         static::addGlobalScope(new StatusScope);
     }
 
+    public function setEmailAttribute($value) {
+        if ( empty($value) ) { // will check for empty string
+            $this->attributes['email'] = NULL;
+        } else {
+            $this->attributes['email'] = $value;
+        }
+    }
 
     protected function getUpdatedAtAttribute($date)
     {
