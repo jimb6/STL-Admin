@@ -170,13 +170,16 @@ class ApiBetTransactionController extends Controller
         $this->authorize('list-bet-transactions', BetTransaction::class);
         $validated = $request->validate([
             'dates' => 'required|array|min:2|max:2',
-            'draw_periods' => 'required|array'
+            'draw_periods' => 'required|array',
+            'game' => 'required',
         ]);
+
+        if(!$game = Game::where('abbreviation', $validated['game'])->first()) abort(400);
         $validated['dates'][1] .= ' 23:59:59';
         $betTransactions = BetTransaction::whereBetween('created_at', $validated['dates'])
-            ->whereHas('bets', function ($query) use ($validated) {
-                $query->whereIn('draw_period_id', $validated['draw_periods']);
-            })->with('bets', 'user')->get()->sortBy('created_at');
+            ->whereHas('bets', function ($query) use ($game, $validated) {
+                $query->whereIn('draw_period_id', $validated['draw_periods'])->where('game_id', $game->id);
+            })->with('bets', 'user')->orderByDesc('created_at')->get();
 
         return response(['transactions' => $betTransactions], 200);
     }
@@ -286,12 +289,14 @@ class ApiBetTransactionController extends Controller
         $search = $request->get('search', '');
 
         $betTransactions = BetTransaction::with('bets')->whereDate('created_at', $date)
+            ->orderByDesc('created_at')
             ->get();
+//
+//        $betTransactions = $betTransactions->map(function ($item){
+//            $item['game'] = $item['bets'][0]->game->abbreviation;
+//            return $item;
+//        })->groupBy('game');
 
-        $betTransactions = $betTransactions->map(function ($item){
-            $item['game'] = $item['bets'][0]->game->abbreviation;
-            return $item;
-        })->groupBy('game');;
         return response(['betTransactions' => $betTransactions], 200);
     }
 

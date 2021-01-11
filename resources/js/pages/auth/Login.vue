@@ -141,8 +141,7 @@ export default {
             this.loading = true
             axios.get('/sanctum/csrf-cookie').then(response => {
                 axios.post('login', {username: this.username, password: this.password, remember: this.remember}).then(response => {
-                    // window.location.href = "/"
-                    console.log(response)
+                    window.location.href = "/"
                 }).catch(error => {
                     this.error = "Invalid username or password"
                 }).finally(() => this.loading = false); // credentials didn't match

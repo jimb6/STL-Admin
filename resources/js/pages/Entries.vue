@@ -75,7 +75,8 @@ export default {
             console.log(item)
             axios.post('/api/v1/bet-transaction-entries', {
                 dates: item[1],
-                draw_periods: item[0].selected.value
+                draw_periods: item[0].selected.value,
+                game: this.game
             })
                 .then(response => {
                     const data = response.data.transactions;
