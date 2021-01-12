@@ -39,6 +39,7 @@ export default {
         excelHeaders: Array,
         excelData: Array,
         excelTitle: String,
+        reportsUrl: String,
     },
     created() {
     },
@@ -133,14 +134,28 @@ export default {
             }
         },
         downloadExcel() {
-            let a = document.createElement('a');
-            let table = this.table;
-            let name = this.excelTitle;
-            if (!table.nodeType) table = this.$refs.table
-            let ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-            a.href = this.uri + this.base64(this.format(this.template, ctx))
-            a.download = this.excelTitle + '.xls';
-            a.click();
+
+            console.log('EXCEL: ', this.reportsUrl)
+            const url = this.reportsUrl
+            const link = document.createElement('a')
+            link.href = url
+            link.click()
+
+            // let form = document.createElement("form");
+            // form.setAttribute("method", "post");
+            // form.setAttribute("action", url);
+            // document.body.appendChild(form);
+            // form.submit();
+
+            // let a = document.createElement('a');
+            // let table = this.table;
+            // let name = this.excelTitle;
+            // if (!table.nodeType) table = this.$refs.table
+            // let ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+            // a.href = this.uri + this.base64(this.format(this.template, ctx))
+            // a.download = this.excelTitle + '.xls';
+            // a.click();
+
             // let table = this.table;
             // let name = this.excelTitle;
             // if (!table.nodeType) table = this.$refs.table

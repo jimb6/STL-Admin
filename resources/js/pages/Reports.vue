@@ -12,6 +12,7 @@
             :excelHeaders="excelHeaders"
             :excelData="excelData"
             :excelTitle="excelTitle"
+            :reportUrl="reportUrl"
             @displayReports="displayReports($event)"
         />
     </v-container>
@@ -42,6 +43,7 @@ export default {
 
         // Notification
         notifications: [],
+        reportUrl: '',
     }),
     created() {
     },
@@ -133,6 +135,8 @@ export default {
                 .then(response => {
                     const data = response.data.bets;
                     this.contents = [];
+                    this.reportUrl = response.data.report_url
+                    console.log(this.reportUrl)
                     for (let cluster in data) {
                         for (let drawDate in data[cluster]){
                             for(let drawTime in data[cluster][drawDate]){

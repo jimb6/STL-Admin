@@ -28,6 +28,7 @@ import Cluster from "./pages/Cluster";
 import JsonExcel from "vue-json-excel";
 import Collection from "./pages/Collection";
 import Gross from "./pages/Gross";
+import ReportGenerator from "./pages/ReportGenerator";
 // import Permissions from "./mixins/Permissions";
 
 require('./bootstrap');
@@ -64,6 +65,7 @@ const app = new Vue({
     el: '#app',
     router,
     components: {
+        ReportGenerator,
         Gross,
         Collection,
         Cluster,

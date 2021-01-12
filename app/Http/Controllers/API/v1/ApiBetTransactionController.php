@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Events\DashboardEvent;
 use App\Events\NewBetTransactionAdded;
+use App\Exports\GeneralReports;
 use App\Http\Controllers\Controller;
 use App\Models\Bet;
 use App\Models\BetTransaction;
@@ -15,6 +16,7 @@ use App\Models\WinningCombination;
 use App\Scopes\TransactionBaseScope;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class ApiBetTransactionController extends Controller
 {
@@ -181,18 +183,11 @@ class ApiBetTransactionController extends Controller
                 $query->whereIn('draw_period_id', $validated['draw_periods'])->where('game_id', $game->id);
             })->with('bets', 'user')->orderByDesc('created_at')->get();
 
-        return response(['transactions' => $betTransactions], 200);
+        $reportUrl = URL::temporarySignedRoute('reports.bet.entries.generate',
+            now()->addMinutes(30),
+            ['dates' => $validated['dates'], 'draw_periods' => $validated['draw_periods'], 'game' => $validated['game']]);
+        return response(['transactions' => $betTransactions, 'report_url' => $reportUrl], 200);
     }
-
-    public function swap($res, $a, $b)
-    {
-        $tmp = $res[$a];
-        $res[$a] = $res[$b];
-        $res[$b] = $tmp;
-        return $res;
-    }
-
-
 
     public function getGeneralBetsReport(Request $request)
     {
@@ -279,23 +274,25 @@ class ApiBetTransactionController extends Controller
                 });
             });
         });
-
-        return response(['bets' => $bets], 200);
+//        $validated = $request->validate([
+//            'cluster_id' => 'required|array',
+//            'draw_period_id' => 'required|array',
+//            'game' => 'required',
+//            'dates' => 'required|array|max:2|min:2'
+//        ]);
+        $reportUrl = URL::temporarySignedRoute('reports.bets.history.generate',
+            now()->addMinutes(30),
+            ['cluster_id' => $validated['cluster_id'], 'draw_period_id' => $validated['draw_period_id'],
+                'game' => $validated['game'], 'dates' => $validated['dates']]);
+        return response(['bets' => $bets, 'report_url' => $reportUrl], 200);
     }
 
     public function getAgentTransactions(Request $request, $date)
     {
         $this->authorize('list-bet-transactions', BetTransaction::class);
-        $search = $request->get('search', '');
-
         $betTransactions = BetTransaction::with('bets')->whereDate('created_at', $date)
             ->orderByDesc('created_at')
             ->get();
-//
-//        $betTransactions = $betTransactions->map(function ($item){
-//            $item['game'] = $item['bets'][0]->game->abbreviation;
-//            return $item;
-//        })->groupBy('game');
 
         return response(['betTransactions' => $betTransactions], 200);
     }
@@ -323,6 +320,14 @@ class ApiBetTransactionController extends Controller
 //        }
 //        return $permArray;
 //    }
+
+    public function swap($res, $a, $b)
+    {
+        $tmp = $res[$a];
+        $res[$a] = $res[$b];
+        $res[$b] = $tmp;
+        return $res;
+    }
 
     public function permutate($list, $index = 0)
     {

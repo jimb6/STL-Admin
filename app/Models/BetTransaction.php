@@ -42,6 +42,9 @@ class BetTransaction extends Model implements Auditable
             $model->attributes['qr_code'] = date("mdy").
                 '-'.substr(md5(uniqid(mt_rand(), true)), 0, 8);
         });
+        static::created(function (Model $model){
+            $model->attributes['qr_code'] = $model->attributes['id'].'-'.$model->attributes['qr_code'];
+        });
     }
 
     public function scopeToday($query){

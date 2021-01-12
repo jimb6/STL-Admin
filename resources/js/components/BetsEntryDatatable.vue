@@ -1,7 +1,6 @@
 <template>
     <v-container class="cstm-vuetify-table">
         <h2>{{ title }}</h2>
-
         <!-- ENTRIES TABLE -->
         <v-data-table
             :headers="headers"
@@ -26,6 +25,7 @@
                                 class="mr-5 labelNoMargin"
                                 v-model="isRealTime"
                                 label="Realtime"
+                                @change="updateRealtimeStatus"
                                 inset
                             ></v-switch>
 
@@ -81,6 +81,7 @@
                                 :excelHeaders="excelHeaders"
                                 :excelData="excelData"
                                 :excelTitle="excelTitle"
+                                :reportsUrl="reportsUrl"
                             />
 
                             <!-- PDF FILE -->
@@ -89,6 +90,7 @@
                                 :excelHeaders="excelHeaders"
                                 :excelData="excelData"
                                 :excelTitle="excelTitle"
+                                :reportsUrl="reportsUrl"
                             />
                         </div>
                     </div>
@@ -118,7 +120,6 @@
 
             <template v-slot:item.status="{ item }">
                 <v-switch
-                    :disabled="item.status"
                     color="red"
                     @change="updatePrintableActions(item)"
                 ></v-switch>
@@ -126,9 +127,8 @@
 
             <template v-slot:item.printable="{ item }">
                 <v-switch
-                    :disabled="item.printable"
                     v-model="item.printable"
-                    color="white"
+                    color="primary"
                     @change="updatePrintableActions(item)"
                     :loading="loadingRequest"
                 ></v-switch>
@@ -180,6 +180,7 @@ export default {
         excelData: Array,
         excelTitle: String,
         loadingRequest: String,
+        reportsUrl: String,
     },
 
     data: () => ({
@@ -211,6 +212,10 @@ export default {
             this.editedIndex = this.contents.indexOf(item);
             item['index'] = this.editedIndex;
             this.$emit('updateStatus', item);
+        },
+
+        updateRealtimeStatus(item){
+            this.$emit('updateRealtimeStatus', this.isRealTime);
         },
 
         displayBetEntries() {

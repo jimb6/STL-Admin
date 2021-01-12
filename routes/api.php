@@ -144,12 +144,35 @@ Route::prefix('v1/')
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])->name('agents.active');
 
+//        Reports Routes
+
         // Assigning Permissions in every roles
         Route::post('assign-role-permission', function ($request) {
             $role = $request->input('role');
             $role->givePermissionTo(Permission::find($request->input('permission_id')));
             return response([], 200);
         })->name('role.assign.permission');
+    });
+
+Route::prefix('reports/')
+    ->middleware(['auth:sanctum'])
+    ->group(function () {
+
+        Route::get('/users-data', function () {
+//            $url = action([\App\Http\Controllers\ExportController::class, 'export']);
+            $url = URL::temporarySignedRoute('reports.users.generate', now()->addSeconds(60));
+            return response(['url' => $url]);
+        })->name('report.users');
+
+        Route::get('/bet-entries-data', function () {
+            Route::get('/bet-entries-data', function () {
+//            $url = action([\App\Http\Controllers\ExportController::class, 'export']);
+                $url = URL::temporarySignedRoute('reports.users.generate', now()->addSeconds(60));
+                return response(['url' => $url]);
+            })->name('report.users');
+
+            Route::post('bet-transaction-entries', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'showEntriesBasedOnDateRange']);
+        });
     });
 
 

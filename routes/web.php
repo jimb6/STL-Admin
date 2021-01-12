@@ -1,10 +1,14 @@
 <?php
 
 
+use App\Exports\GeneralReports;
+use App\Exports\UsersExport;
 use App\Http\Controllers\HomeController;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/device/unsubscribe/{device}', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'unsubscribe'])
     ->name('device.unsubscribe');
@@ -84,14 +88,40 @@ Route::prefix('admin')
         Route::get('reports', function (Request $request) {
             return view('reports.index');
         })->name('reports.index');
+
+        Route::get('reports/create', function (Request $request) {
+            return view('reports.create');
+        })->name('reports.create');
+
 //        Route::resource('devices', \App\Http\Controllers\API\v1\ApiDeviceController::class);
-
-
         Route::get('user/profile', [\App\Http\Controllers\API\v1\ApiUserController::class, 'showProfile'])->name('user.profile');
         Route::get('settings/app', [\App\Http\Controllers\API\v1\ApiAppSettingsController::class, 'globalSettings'])->name('settings.global');
         Route::get('user/info', function () {
             return Auth::check() ? Auth::user()->toJson() : null;
         })->name('user.info');
 
-        Route::get('test', function (){ return view('test'); });
+        Route::get('test', function () {
+            return view('test');
+        });
+
+
+
     });
+
+Route::prefix('reports')->middleware(['signed', 'auth'])->group(function () {
+    Route::get('users/generate', function (Request $request) {
+        $filename = Carbon::now()->format('Ymdhms') . '-bets-entries.xlsx';
+        return Excel::download(new UsersExport, $filename);
+    })->name('reports.users.generate');
+
+    Route::get('bet-entries/generate', function (Request $request) {
+        $filename = Carbon::now()->format('Ymdhms') . '-users.xlsx';
+        return Excel::download(new GeneralReports($request), $filename);
+    })->name('reports.bet.entries.generate');
+
+    Route::get('bet-reports/generate', function (Request $request) {
+        $filename = Carbon::now()->format('Ymdhms') . '-bets-report.xlsx';
+        return Excel::download(new GeneralReports($request), $filename);
+    })->name('reports.bets.history.generate');
+
+});

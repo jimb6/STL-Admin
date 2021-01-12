@@ -42,6 +42,7 @@ export default {
         excelHeaders: Array,
         excelData: Array,
         excelTitle: String,
+        reportsUrl: String,
     },
     created() {
     },
@@ -120,17 +121,27 @@ export default {
             }
         },
         downloadExcel() {
-            const doc = new jsPDF()
-            doc.text("LIST OF " + this.excelTitle.toUpperCase(), 15, 20)
-            autoTable(doc, {
-                margin: { top: 30 },
-                theme: 'grid',
-                headStyles: {
-                    halign: 'center',
-                    valign: 'middle'
-                },
-                html: '#loremTable' })
-            doc.save(this.excelTitle + '.pdf')
+            axios.get(this.reportsUrl)
+                .then(response => {
+                    console.log(response)
+                    const url = window.URL = response.data.url;
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.click();
+                }).catch(err => {
+                console.log(err)
+            })
+            // const doc = new jsPDF()
+            // doc.text("LIST OF " + this.excelTitle.toUpperCase(), 15, 20)
+            // autoTable(doc, {
+            //     margin: { top: 30 },
+            //     theme: 'grid',
+            //     headStyles: {
+            //         halign: 'center',
+            //         valign: 'middle'
+            //     },
+            //     html: '#loremTable' })
+            // doc.save(this.excelTitle + '.pdf')
         }
     }
 }

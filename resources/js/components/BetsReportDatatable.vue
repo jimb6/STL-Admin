@@ -102,6 +102,7 @@
                                 :excelHeaders="excelHeaders"
                                 :excelData="excelData"
                                 :excelTitle="excelTitle"
+                                :reportsUrl="reportUrl"
                             />
 
                             <!-- PDF FILE -->
@@ -110,6 +111,7 @@
                                 :excelHeaders="excelHeaders"
                                 :excelData="excelData"
                                 :excelTitle="excelTitle"
+                                :reportsUrl="reportUrl"
                             />
                         </div>
                     </div>
@@ -240,6 +242,7 @@ export default {
         excelHeaders: Array,
         excelData: Array,
         excelTitle: String,
+        reportUrl: String,
     },
 
     data: () => ({

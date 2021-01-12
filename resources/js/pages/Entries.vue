@@ -11,7 +11,9 @@
             :excelHeaders="excelHeaders"
             :excelData="excelData"
             :excelTitle="excelTitle"
+            :reportsUrl="reportsUrl"
             @viewModel="displayBetEntries($event)"
+            @updateRealtimeStatus="updateRealtimeStatus($event)"
             @updateStatus="updatePrintableStatus($event)"
         />
     </v-container>
@@ -44,11 +46,14 @@ export default {
 
         drawPeriodFilter: {},
 
+        reportsUrl: ''
+
     }),
 
 
     created() {
         this.getDrawPeriods();
+        this.listen();
     },
 
     computed: {
@@ -81,6 +86,7 @@ export default {
                 .then(response => {
                     const data = response.data.transactions;
                     this.contents = [];
+                    this.reportsUrl = response.data.report_url
                     for (let item in data) {
                         let sum = 0;
                         for (let i in  data[item].bets){
@@ -99,6 +105,7 @@ export default {
                             printable: data[item].printable,
                         });
                     }
+                    console.log("URL:: ", this.reportsUrl)
                     console.log(response)
                 }).catch(err => {
                 console.log(err)
@@ -106,6 +113,19 @@ export default {
         },
 
         // NOTIFICATION
+        // async generateReportUrl(){
+        //     axios.post('/api/reports/bet-transaction-entries', {
+        //         dates: item[1],
+        //         draw_periods: item[0].selected.value,
+        //         game: this.game
+        //     })
+        //         .then(response => {
+        //             this.reportsUrl = response.data.url;
+        //         }).catch(err => {
+        //         console.log(err)
+        //     })
+        // },
+
         addNotification(message, type, statusCode) {
             this.notifications.push({message: message, type: type, statusCode: statusCode});
         },
@@ -154,7 +174,6 @@ export default {
                 console.log(err)
             })
         },
-
         updateExcelFields(type, dates) {
             this.excelHeaders = []
             this.excelData = []
@@ -167,7 +186,6 @@ export default {
             let fields = ["combination", "amount"]
             this.excelData.push({items: this.contents, fields: fields})
         },
-
         async updatePrintableStatus(item) {
             axios.put('/api/v1/bet-transaction-printable/' + item.id, {
                 printable: item.printable
@@ -181,12 +199,21 @@ export default {
             })
         },
 
+        updateRealTimeStatus(item){
+            if(item) this.listen()
+            else this.ignore()
+        },
+
         async listen() {
             Echo.channel('bets.' + this.game)
                 .listen('NewBetTransactionAdded', (data) => {
                     // this.getUpdatedBets();
                     console.log("NEW BET EVENT")
                 })
+        },
+
+        ignore() {
+            Echo.leaveChannel('bets.' + this.game);
         }
     }
 }

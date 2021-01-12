@@ -359,6 +359,11 @@ return [
                     'route' => 'reports.index',
                     'active' => ['admin/agents/collection']
                 ],
+                [
+                    'text' => 'Make me Reports',
+                    'route' => 'reports.create',
+                    'active' => ['admin/agents/collection']
+                ],
             ]
         ],
 
