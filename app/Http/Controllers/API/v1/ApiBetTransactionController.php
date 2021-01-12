@@ -274,12 +274,7 @@ class ApiBetTransactionController extends Controller
                 });
             });
         });
-//        $validated = $request->validate([
-//            'cluster_id' => 'required|array',
-//            'draw_period_id' => 'required|array',
-//            'game' => 'required',
-//            'dates' => 'required|array|max:2|min:2'
-//        ]);
+
         $reportUrl = URL::temporarySignedRoute('reports.bets.history.generate',
             now()->addMinutes(30),
             ['cluster_id' => $validated['cluster_id'], 'draw_period_id' => $validated['draw_period_id'],
@@ -301,7 +296,8 @@ class ApiBetTransactionController extends Controller
     {
         $this->authorize('update-bet-transactions', BetTransaction::class);
         $validated = $request->validate(['printable' => 'required']);
-        BetTransaction::find($id)->update($validated);
+        $betTransactions = BetTransaction::find($id)->whereDate('created_at', Carbon::today())->update($validated);
+        if (!$betTransactions) abort(406);
         return response([], 204);
     }
 

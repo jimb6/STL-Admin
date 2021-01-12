@@ -18,7 +18,7 @@ class BetTransaction extends Model implements Auditable
     use Searchable;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['user_id', 'qr_code', 'printable'];
+    protected $fillable = ['user_id', 'qr_code', 'printable', 'void_status'];
 
     protected $searchableFields = ['*'];
 

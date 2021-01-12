@@ -125,6 +125,13 @@
                 ></v-switch>
             </template>
 
+            <template v-slot:item.void_status="{ item }">
+                <v-switch
+                    color="red"
+                    @change="updateVoidStatus(item)"
+                ></v-switch>
+            </template>
+
             <template v-slot:item.printable="{ item }">
                 <v-switch
                     v-model="item.printable"
@@ -216,6 +223,10 @@ export default {
 
         updateRealtimeStatus(item){
             this.$emit('updateRealtimeStatus', this.isRealTime);
+        },
+
+        updateVoidStatus(item){
+            this.$emit('updateVoidStatus', item);
         },
 
         displayBetEntries() {

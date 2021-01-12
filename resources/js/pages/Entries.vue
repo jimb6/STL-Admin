@@ -13,7 +13,8 @@
             :excelTitle="excelTitle"
             :reportsUrl="reportsUrl"
             @viewModel="displayBetEntries($event)"
-            @updateRealtimeStatus="updateRealtimeStatus($event)"
+            @updateRealtimeStatus="updateRealTimeStatus($event)"
+            @updateVoidStatus="updateVoidStatus($event)"
             @updateStatus="updatePrintableStatus($event)"
         />
     </v-container>
@@ -46,7 +47,8 @@ export default {
 
         drawPeriodFilter: {},
 
-        reportsUrl: ''
+        reportsUrl: '',
+        lastItem: {}
 
     }),
 
@@ -68,6 +70,7 @@ export default {
                 {text: "Created At", value: "created_at"},
                 {text: "Updated At", value: "updated_at"},
                 {text: "Reprint", value: "printable"},
+                {text: "Void", value: "void_status"},
             ]
         },
     },
@@ -77,7 +80,7 @@ export default {
         // FUNCTIONS HERE ==============================================================================================
 
         async displayBetEntries(item) {
-            console.log(item)
+            this.lastItem = item
             axios.post('/api/v1/bet-transaction-entries', {
                 dates: item[1],
                 draw_periods: item[0].selected.value,
@@ -103,6 +106,7 @@ export default {
                             created_at: this.getDateToday(new Date(data[item].created_at)),
                             updated_at: this.getDateToday(new Date(data[item].updated_at)),
                             printable: data[item].printable,
+                            void_status: data[item].void_status
                         });
                     }
                     console.log("URL:: ", this.reportsUrl)
@@ -111,20 +115,6 @@ export default {
                 console.log(err)
             })
         },
-
-        // NOTIFICATION
-        // async generateReportUrl(){
-        //     axios.post('/api/reports/bet-transaction-entries', {
-        //         dates: item[1],
-        //         draw_periods: item[0].selected.value,
-        //         game: this.game
-        //     })
-        //         .then(response => {
-        //             this.reportsUrl = response.data.url;
-        //         }).catch(err => {
-        //         console.log(err)
-        //     })
-        // },
 
         addNotification(message, type, statusCode) {
             this.notifications.push({message: message, type: type, statusCode: statusCode});
@@ -135,12 +125,15 @@ export default {
             date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
             return date;
         },
+
+
         getCurrentDate() {
             let date = new Date();
             const month = date.toLocaleString('default', {month: 'numeric'});
             date = date.getFullYear() + "-" + (month < 10 ? "0" + month : month) + "-" + (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
             return date
         },
+
         getDrawPeriods() {
             axios.get('/api/v1/draw-periods-categorized/' + this.game)
                 .then(response => {
@@ -204,10 +197,14 @@ export default {
             else this.ignore()
         },
 
+        updateVoidStatus(item){
+            console.log("VOID STATUS", item)
+        },
+
         async listen() {
             Echo.channel('bets.' + this.game)
                 .listen('NewBetTransactionAdded', (data) => {
-                    // this.getUpdatedBets();
+                    this.displayBetEntries(this.lastItem);
                     console.log("NEW BET EVENT")
                 })
         },
