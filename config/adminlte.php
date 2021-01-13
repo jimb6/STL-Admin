@@ -253,7 +253,7 @@ return [
             'key' => 'clusters',
             'submenu' => [
                 [
-                    'text' => 'All Bases',
+                    'text' => 'All Clusters',
                     'route' => 'bases.index',
                 ],
             ]
@@ -403,6 +403,7 @@ return [
             'text' => 'Users',
             'icon' => 'fas fa-user-shield',
             'label_color' => 'success',
+            'can' => 'list-users',
             'classes' => '',
             'key' => 'users',
             'submenu' => [

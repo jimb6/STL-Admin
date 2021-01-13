@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Exports\BetEntriesExport;
 use App\Exports\GeneralReports;
 use App\Exports\UsersExport;
 use App\Http\Controllers\HomeController;
@@ -110,18 +111,18 @@ Route::prefix('admin')
 
 Route::prefix('reports')->middleware(['signed', 'auth'])->group(function () {
     Route::get('users/generate', function (Request $request) {
-        $filename = Carbon::now()->format('Ymdhms') . '-bets-entries.xlsx';
+        $filename = Carbon::now()->format('Ymdhms') . '-users.xlsx';
         return Excel::download(new UsersExport, $filename);
     })->name('reports.users.generate');
 
     Route::get('bet-entries/generate', function (Request $request) {
-        $filename = Carbon::now()->format('Ymdhms') . '-users.xlsx';
-        return Excel::download(new GeneralReports($request), $filename);
+        $filename = Carbon::now()->format('Ymdhms') . '-bet-entries.xlsx';
+        return Excel::download(new BetEntriesExport($request), $filename);
     })->name('reports.bet.entries.generate');
 
-    Route::get('bet-reports/generate', function (Request $request) {
-        $filename = Carbon::now()->format('Ymdhms') . '-bets-report.xlsx';
+    Route::get('bet-general-reports/generate', function (Request $request) {
+        $filename = Carbon::now()->format('Ymdhms') . '-general-reports.xlsx';
         return Excel::download(new GeneralReports($request), $filename);
-    })->name('reports.bets.history.generate');
+    })->name('reports.bet.general.generate');
 
 });

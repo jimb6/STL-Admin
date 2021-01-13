@@ -21,6 +21,7 @@
             :excelTitle="excelTitle"
             @displayBetWinningCombinations="displayBetWinningCombinations($event)"
             @storeWinningCombination="storeWinningCombination($event)"
+            @updateWinningCombination="updateWinningCombination($event)"
             @verifyWinningCombination="verifyWinningCombination($event)"
         />
     </v-container>
@@ -111,8 +112,9 @@ export default {
                 'combination': item.combination,
                 'password': item.password,
                 'game': this.game,
-                'drawPeriodId': item.drawPeriodId
+                'draw_period_id': item.drawPeriodId
             }).then(response => {
+                console.log(response)
                 this.displayBetWinningCombinations([this.getCurrentDate(), this.getCurrentDate()]);
             }).catch(err => {
                 this.error = true

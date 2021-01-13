@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
-use Ramsey\Uuid\Uuid;
 
 class BetTransaction extends Model implements Auditable
 {
@@ -32,22 +31,27 @@ class BetTransaction extends Model implements Auditable
 
     public static function booted()
     {
-        static::addGlobalScope(new TransactionBaseScope);
+        $user = auth()->user();
+        if (!$user->hasRole(['super-admin'])) {
+            static::addGlobalScope(new TransactionBaseScope);
+        }
+
     }
 
     public static function boot()
     {
         parent::boot();
         static::creating(function (Model $model) {
-            $model->attributes['qr_code'] = date("mdy").
-                '-'.substr(md5(uniqid(mt_rand(), true)), 0, 8);
+            $model->attributes['qr_code'] = date("mdy") .
+                '-' . substr(md5(uniqid(mt_rand(), true)), 0, 8);
         });
-        static::created(function (Model $model){
-            $model->attributes['qr_code'] = $model->attributes['id'].'-'.$model->attributes['qr_code'];
+        static::created(function (Model $model) {
+            $model->attributes['qr_code'] = $model->attributes['id'] . '-' . $model->attributes['qr_code'];
         });
     }
 
-    public function scopeToday($query){
+    public function scopeToday($query)
+    {
         $query->whereDate('created_at', Carbon::today());
     }
 

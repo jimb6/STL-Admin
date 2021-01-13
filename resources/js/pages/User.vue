@@ -7,8 +7,8 @@
 
             <DataTable
                 :title="title"
-                :headers="headers"
                 :contents="contents"
+                :headers="headers"
                 :fillable="fillable"
                 @storeModel="storeUser($event)"
                 @updateModel="updateUser($event)"
@@ -57,14 +57,15 @@ export default {
         ],
         contents: [],
         fillable: [
-            {label: "Roles", field: "roles", value: "", type: "input-disabled", options: Array},
+            {label: "Roles", field: "roles", value: "", type: "select-disable", options: Array},
             {label: "Name", field: "name", value: "", type: "input"},
             {label: "Birthdate", field: "birthdate", value: "", type: "datepicker"},
             {label: "Gender", field: "gender", value: "", type: "select", options: ["Male", "Female", "Others"]},
             {label: "Contact #", field: "contact_number", value: "", type: "input-phone"},
             {label: "Email", field: "email", value: "", type: "input"},
             {label: "Address", field: "address", value: "", type: "address"},
-            {label: "Cluster", field: "cluster", value: "", type: "select", options: Array},
+            {label: "Cluster", field: "clusterId", value: "", type: "select", options: Array},
+
         ],
         editedItem: {},
         address: Array,
@@ -85,6 +86,7 @@ export default {
         async displayUsers() {
             await axios.get(`/api/v1/users-list/${this.$props.role}`)
                 .then(response => {
+                    console.log(response)
                     let user = {};
                     const data = response.data.users;
                     let count = 0;
@@ -104,8 +106,10 @@ export default {
                                 + ", " + data[item].address.municipality
                                 + ", " + data[item].address.province,
                             cluster: data[item].cluster.name,
+                            clusterId: data[item].cluster,
                             updated_at: data[item].updated_at,
                             isClosed: data[item].status,
+                            roles: data[item].roles
                         }
                         this.contents.push(user);
                     }
@@ -116,7 +120,6 @@ export default {
         },
 
         async storeUser(item) {
-            console.log(item)
             await axios.post('/api/v1/users', {
                 'roles': [this.role],
                 'name': item.name,
@@ -124,7 +127,7 @@ export default {
                 'gender': item.gender,
                 'contact_number': item.contact_number,
                 'email': item.email,
-                'cluster_id': item.cluster.id,
+                'cluster_id': (item.clusterId.id !== null)?item.clusterId.id:item.clusterId,
                 'address': this.address,
             })
                 .then(response => {
@@ -137,8 +140,27 @@ export default {
 
         },
 
-        async updateUser() {
-
+        async updateUser(item) {
+            console.log(item)
+            console.log(this.role)
+            await axios.put('/api/v1/users/' + item.id, {
+                'roles': [this.role],
+                'name': item.name,
+                'birthdate': item.birthdate,
+                'gender': item.gender,
+                'contact_number': item.contact_number,
+                'email': item.email,
+                'cluster_id': (item.clusterId.id !== null)?item.clusterId.id:item.clusterId,
+                'address': this.address,
+            })
+                .then(response => {
+                    console.log(response)
+                    this.displayUsers()
+                })
+                .catch(err => {
+                    console.log(err)
+                    this.addNotification(err.response.data.message, "error", "400");
+                });
         },
 
         async deactivateUser(item) {
@@ -156,7 +178,7 @@ export default {
         },
 
         async destroyUser(item) {
-            const response = await axios.delete('/api/v1/users/' + item.id)
+            await axios.delete('/api/v1/users/' + item.id)
                 .then(response => {
                     this.addNotification(item.name + " deleted successfully!", "success", "200")
                     this.displayUsers();
@@ -184,13 +206,14 @@ export default {
                 .then(response => {
                     let clustersData = response.data.clusters;
                     for (let index in this.fillable) {
-                        if (this.fillable[index].field == 'cluster') {
+                        if (this.fillable[index].field == 'clusterId') {
                             this.fillable[index].options = clustersData;
                         }
                     }
                 }).catch(err => console.log(err))
 
         },
+
 
         changeAddress(address) {
             this.address = address;

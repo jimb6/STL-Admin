@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\BetTransaction;
 use App\Models\DrawPeriod;
 use App\Models\Game;
+use App\Models\WinningBet;
 use App\Models\WinningCombination;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -62,7 +64,7 @@ class ApiWinningCombinationController extends Controller
             return $row->getRelation('gameConfiguration');
         });
         $drawPeriod = DrawPeriod::find($validated['drawPeriodId']);
-        if ( strtotime($drawPeriod->draw_time) > strtotime(Carbon::now()->toTimeString()) ) abort(406);
+        if (strtotime($drawPeriod->draw_time) > strtotime(Carbon::now()->toTimeString())) abort(406);
 
         // CHECK COMBINATION FORMAT
         $mCombination = explode('-', $validated['combination']);
@@ -80,24 +82,26 @@ class ApiWinningCombinationController extends Controller
             'draw_period_id' => $drawPeriod->id,
             'game_id' => $game[0]->id,
         ]);
+
         return response(['winningCombination' => $winningCombination], 202);
     }
 
 
-    public function update(Request $request, WinningCombination $winningCombination)
+    public function update(Request $request, $winningCombination)
     {
         $this->authorize('update-winning-combinations', $winningCombination);
         $validated = $request->validate([
             'password' => 'required',
             'combination' => 'required',
             'game' => 'required',
-            'drawPeriodId' => 'required'
+            'draw_period_id' => 'required'
         ]);
-        $winningCombination->update([
-            'combination' => $validated['combination'],
-            'draw_period_id' => $validated['drawPeriodId'],
-        ]);
-        return response([$winningCombination], 202);
+
+        $winCombination = WinningCombination::find($winningCombination);
+        $this->publishWinners($winCombination);
+        unset($validated['password'], $validated['game']);
+        $winCombination->update($validated);
+        return response([$winCombination], 200);
     }
 
     public function verify(Request $request, $winningCombination)
@@ -106,6 +110,8 @@ class ApiWinningCombinationController extends Controller
         $validated = $request->validate(['password' => 'required']);
         if (!Hash::check($validated['password'], Auth::user()->getAuthPassword())) abort(406);  //Password Validation
         $winningCombination = WinningCombination::find($winningCombination);
+
+        $this->publishWinners($winningCombination);
         $winningCombination->update([
             'verified_at' => Carbon::now(),
         ]);
@@ -118,5 +124,23 @@ class ApiWinningCombinationController extends Controller
         $this->authorize('delete-winning-combinations', $winningCombination);
         $winningCombination->delete();
         return response([], 204);
+    }
+
+
+    private function publishWinners(WinningCombination $winningCombination)
+    {
+        $transactions = BetTransaction::whereHas('bets', function ($query) use ($winningCombination) {
+            $query->where('combination', $winningCombination->combination)
+                ->whereDate('created_at', Carbon::parse($winningCombination->created_at)->format('Y-m-d'));
+        })->get()->map(function ($item) use ($winningCombination) {
+            return ['transaction_code' => $item->qr_code, 'winning_combination_id' => $winningCombination->id];
+        })->toArray();
+
+        $generatedWinner = WinningBet::select('id')
+            ->where('winning_combination_id', $winningCombination->id)
+            ->get()->toArray();
+
+        WinningBet::destroy($generatedWinner);
+        WinningBet::insert($transactions);
     }
 }

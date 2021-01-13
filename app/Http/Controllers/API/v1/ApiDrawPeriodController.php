@@ -15,7 +15,7 @@ class ApiDrawPeriodController extends Controller
     {
         $this->authorize('list-draw-periods', DrawPeriod::class);
         $search = $request->get('search', '');
-        $drawPeriods = DrawPeriod::withoutGlobalScope(StatusScope::class)->search($search)->with('games:description')->get();
+        $drawPeriods = DrawPeriod::search($search)->with('games:description')->get();
         return response(['drawPeriods' => $drawPeriods], 200);
     }
 
@@ -101,8 +101,7 @@ class ApiDrawPeriodController extends Controller
             'status' => 'required|boolean',
         ]);
 
-        DrawPeriod::withoutGlobalScope(StatusScope::class)
-            ->where('id', $drawPeriod)
+        DrawPeriod::where('id', $drawPeriod)
             ->first()
             ->update($validated);
 

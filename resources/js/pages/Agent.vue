@@ -10,7 +10,7 @@
                 :headers="headers"
                 :fillable="fillable"
                 @storeModel="storeAgent($event)"
-                @udpateModel="updateAgent($event)"
+                @updateModel="updateAgent($event)"
                 @destroyModel="destroyAgent($event)"
                 @changeAddress="changeAddress($event)"
                 @updateStatus="deactivateUser($event)"
@@ -133,8 +133,25 @@ export default {
             console.log(item)
 
         },
-        async updateAgent() {
-
+        async updateAgent(item) {
+            console.log('UPDATING...', item)
+            await axios.put('/api/v1/agents/' + item.id, {
+                'name': item.name,
+                'birthdate': item.birthdate,
+                'gender': item.gender,
+                'contact_number': item.contact_number,
+                'email': item.email,
+                'cluster_id': item.clusterId,
+                'address': this.address
+            })
+                .then(response => {
+                    console.log(response)
+                    this.displayAgents();
+                })
+                .catch(err => {
+                    console.log(err)
+                    this.addNotification(item.name + " unsuccessfully deleted!", "error", "400")
+                })
         },
         async destroyAgent(item) {
             await axios.delete('/api/v1/agents/' + item.id)

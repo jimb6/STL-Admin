@@ -71,7 +71,7 @@ Route::prefix('v1/')
         Route::resource('permissions', \App\Http\Controllers\API\v1\ApiPermissionController::class);
         Route::resource('users', \App\Http\Controllers\API\v1\ApiUserController::class);
         Route::resource('clusters', \App\Http\Controllers\API\v1\ApiClusterController::class);
-        Route::resource('commissions', \App\Http\Controllers\API\v1\ApiWinningCombinationController::class);
+        Route::resource('commissions', \App\Http\Controllers\API\v1\ApiCommissionController::class);
 
 //      Devices Route
         Route::get('devices-index', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'index']);

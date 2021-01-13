@@ -7,17 +7,12 @@ use App\Helpers\TwilioSmsHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Cluster;
-use App\Models\DrawPeriod;
 use App\Models\User;
-use App\Scopes\StatusScope;
+use Carbon\Carbon;
 use Faker\Provider\Base;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use Twilio\Exceptions\ConfigurationException;
-use Twilio\Rest\Client;
 
 class ApiUserController extends Controller
 {
@@ -25,7 +20,7 @@ class ApiUserController extends Controller
     {
         $this->authorize('list-users', User::class);
         $search = $request->get('search', '');
-        $users = User::withoutGlobalScope(StatusScope::class)->search($search)->with(['cluster', 'address', 'roles'])->get();
+        $users = User::search($search)->with(['cluster', 'address', 'roles'])->get();
 //
         return response(['users' => $users], 200);
     }
@@ -75,7 +70,7 @@ class ApiUserController extends Controller
     public function show(Request $request, $user)
     {
         $this->authorize('view-users', User::class);
-        $user = User::withoutGlobalScope(StatusScope::class)->where('id', $user)->first();
+        $user = User::where('id', $user)->first();
         return response(['user' => $user], 200);
 //        return view('app.users.show', compact('user'));
     }
@@ -91,22 +86,36 @@ class ApiUserController extends Controller
     public function update(Request $request, $user)
     {
         $this->authorize('update-users', User::class);
-        $validated = $request->validated();
-        if (empty($validated['password'])) {
-            unset($validated['password']);
-        } else {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-        $user = User::withoutGlobalScope(StatusScope::class)->where('id', $user)->first();
+        $validated = $request->validate([
+            'address.*' => 'required',
+            'birthdate' => 'required|date',
+            'contact_number' => 'required',
+            'roles' => 'required|array',
+            'name' => 'required',
+            'gender' => 'required',
+            'cluster_id' => 'required',
+        ]);
+
+        $address = $validated['address'];
+        $address = Address::updateOrCreate(
+            ['street' => $address[0], 'barangay' => $address[1], 'municipality' =>$address[2], 'province'=>$address[3]]
+        );
+
+        $validated['address_id'] = $address->id;
+        $validated['birthdate'] = Carbon::parse($validated['birthdate'])->format('Y-m-d H:i:s');
+        $roles =  $validated['roles'];
+        unset($validated['address'], $validated['roles']);
+
+        $user = User::where('id', $user)->first();
+        $user->syncRoles($roles);
         $user->update($validated);
-        $user->syncRoles($request->roles);
-        return response(['message' => 'User Updated Successfully!'], 202);
+        return response(['message' => $user], 200);
     }
 
     public function destroy(Request $request, $user)
     {
         $this->authorize('delete-users', User::class);
-        $user = User::withoutGlobalScope(StatusScope::class)->where('id', $user)->first();
+        $user = User::where('id', $user)->first();
         $user->delete();
         return response([], 204);
     }
@@ -116,7 +125,7 @@ class ApiUserController extends Controller
     {
         $this->authorize('list-users', User::class);
         $search = $request->get('search', '');
-        $users = User::withoutGlobalScope(StatusScope::class)->search($search)->with(['cluster', 'address', 'roles' => function ($query) use ($role) {
+        $users = User::search($search)->with(['cluster', 'address', 'roles' => function ($query) use ($role) {
             $query->whereIn('name', [$role]);
         }])->get()
             ->reject(function ($value, $key) {
@@ -126,7 +135,8 @@ class ApiUserController extends Controller
     }
 
 
-    public function deactivateUser(Request $request, $id){
+    public function deactivateUser(Request $request, $id)
+    {
         $this->authorize('update-users', User::class);
         $validated = $request->validate([
             'status' => 'required|boolean',
@@ -134,8 +144,7 @@ class ApiUserController extends Controller
 
         if ($request->user()->id == $id) abort(406);
 
-        User::withoutGlobalScope(StatusScope::class)
-            ->where('id', $id)
+        User::where('id', $id)
             ->first()
             ->update($validated);
 

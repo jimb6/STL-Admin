@@ -91,10 +91,6 @@ class BetEntriesExport implements
 
     public function map($entries): array
     {
-//        $sum = 0;
-//        foreach ($entries->bets as $bet){
-//            $sum+=$bet->amount;
-//        }
         return [
             $entries->qr_code,
             $entries->user->name,
@@ -125,10 +121,10 @@ class BetEntriesExport implements
     public function columnFormats(): array
     {
         return [
-            'D' => NumberFormat::FORMAT_DATE_TIME1,
-            'H' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'C' => NumberFormat::FORMAT_DATE_TIME1,
+            'F' => NumberFormat::FORMAT_DATE_DDMMYYYY,
             'G' => NumberFormat::FORMAT_DATE_DDMMYYYY,
-            'F' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            'E' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
         ];
     }
 
@@ -163,18 +159,18 @@ class BetEntriesExport implements
                 // merge cells for full-width
                 $event->sheet->mergeCells(sprintf('A1:%s1', $last_column));
                 $event->sheet->mergeCells(sprintf('A2:%s2', $last_column));
-                $event->sheet->mergeCells(sprintf('A%d:%s%d', $last_row, $last_column, $last_row));
+                $event->sheet->mergeCells(sprintf('A%d:%s%d', $last_row+2, $last_column, $last_row+2));
 
                 // assign cell values
                 $event->sheet->setCellValue('A1', 'Bet Transactions Report');
                 $event->sheet->setCellValue('A2', 'SMALL TOWN LOTTERY FROM DATE - '.implode(', ', array_values($this->request->get('dates'))));
-                $event->sheet->setCellValue(sprintf('A%d', $last_row), 'SECURITY CLASSIFICATION - UNCLASSIFIED [Generated: ...]');
+                $event->sheet->setCellValue(sprintf('A%d', $last_row+2), 'SMALL TOWN LOTTERY - COTABATO CITY');
 
                 // assign cell styles
                 $event->sheet->getStyle('A1:A2')->applyFromArray($style_text_center);
-                $event->sheet->getStyle(sprintf('A%d', $last_row))->applyFromArray($style_text_center);
-
+                $event->sheet->getStyle(sprintf('A%d', $last_row+2))->applyFromArray($style_text_center);
                 $event->sheet->insertNewRowBefore(3, 2);
+
                 $event->sheet->styleCells(
                     'A5:H5',
                     [
@@ -183,6 +179,13 @@ class BetEntriesExport implements
                             'size' => 12,
                             'bold' => true
                         )
+                    ]
+                );
+
+                $event->sheet->styleCells(
+                    'A1:A2',
+                    [
+                        'color' => '#292C3F'
                     ]
                 );
             },

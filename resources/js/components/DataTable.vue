@@ -92,6 +92,15 @@
                                                     return-object/>
 
                                                 <v-select
+                                                    v-if="item.type === 'select-disabled'"
+                                                    v-model="editedItem[item.field]"
+                                                    :items="item.options"
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    :label="item.label"
+                                                    return-object/>
+
+                                                <v-select
                                                     v-if="item.type === 'chips'"
                                                     v-model="editedItem[item.field]"
                                                     :items="item.options"
@@ -468,7 +477,10 @@ export default {
                     let id = this.contents[this.editedIndex].id;
                     this.editedItem["id"] = id;
                 } catch (e) {
+                    console.log(e)
                 }
+
+                console.log(this.contents[this.editedIndex].id, "ID NI HA")
                 this.$emit('updateModel', this.editedItem)
             } else {
                 // SAVE

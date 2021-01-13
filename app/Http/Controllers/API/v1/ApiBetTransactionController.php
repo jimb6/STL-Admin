@@ -275,7 +275,7 @@ class ApiBetTransactionController extends Controller
             });
         });
 
-        $reportUrl = URL::temporarySignedRoute('reports.bets.history.generate',
+        $reportUrl = URL::temporarySignedRoute('reports.bet.general.generate',
             now()->addMinutes(30),
             ['cluster_id' => $validated['cluster_id'], 'draw_period_id' => $validated['draw_period_id'],
                 'game' => $validated['game'], 'dates' => $validated['dates']]);

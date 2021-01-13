@@ -8,6 +8,7 @@ use App\Models\Address;
 use App\Models\Cluster;
 use App\Models\User;
 use App\Scopes\StatusScope;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,7 +17,7 @@ class ApiAgentController extends ApiController
 
     public function index(Request $request)
     {
-        $this->authorize('list-users', User::class);
+        $this->authorize('list-agents', User::class);
 //        $search = $request->get('search', '');
         $agents = User::withoutGlobalScope(StatusScope::class)->with(['cluster', 'address'])
             ->whereHas('roles', function ($query) {
@@ -61,34 +62,45 @@ class ApiAgentController extends ApiController
 
     public function show(Request $request, $user)
     {
-        $this->authorize('view-users', User::class);
+        $this->authorize('view-agents', User::class);
         return response(['user' => $user], 200);
     }
 
     public function update(Request $request, $user)
     {
-        $this->authorize('update-users', User::class);
-        $validated = $request->validated();
-        if (empty($validated['password'])) {
-            unset($validated['password']);
-        } else {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-        $user = User::withoutGlobalScope(StatusScope::class)->where('id', $user)->first()->update($validated);
-        $user->syncRoles($request->roles);
-        return response(['message' => 'User Updated Successfully!'], 202);
+        $this->authorize('update-agents', User::class);
+        $validated = $request->validate([
+            'name' => 'required',
+            'birthdate' => 'required|date',
+            'gender' => 'required',
+            'contact_number' => 'required',
+            'cluster_id' => 'required',
+            'address.*' => 'required'
+        ]);
+
+        $address = $validated['address'];
+        $address = Address::updateOrCreate(
+            ['street' => $address[0], 'barangay' => $address[1], 'municipality' =>$address[2], 'province'=>$address[3]]
+        );
+
+        $validated['address_id'] = $address->id;
+        $validated['birthdate'] = Carbon::parse($validated['birthdate'])->format('Y-m-d H:i:s');
+        unset($validated['address']);
+
+        $user = User::where('id', $user)->first()->update($validated);
+        return response(['message' => $validated], 202);
     }
 
     public function destroy(Request $request, $user)
     {
-        $this->authorize('delete-users', $user);
+        $this->authorize('delete-agents', $user);
         User::withoutGlobalScope(StatusScope::class)->where('id', $user)->first()->delete();
         return response([], 204);
     }
 
     public function activeIndex(Request $request)
     {
-        $this->authorize('list-users', User::class);
+        $this->authorize('list-agents', User::class);
         $agents = User::withoutGlobalScope(StatusScope::class)->whereHas('roles', function ($query) {
             $query->where('name', '=', 'agent');
         })->where('session_status', true)->with(['device'])->get();
@@ -104,7 +116,7 @@ class ApiAgentController extends ApiController
 
     public function agentPerCluster(Request $request, Cluster $cluster)
     {
-        $this->authorize('list-users', User::class);
+        $this->authorize('list-agents', User::class);
 //        $search = $request->get('search', '');
         $agents = User::withoutGlobalScope(StatusScope::class)->with(['cluster', 'address'])
             ->whereHas('roles', function ($query) {

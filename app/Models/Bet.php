@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Scopes\Searchable;
 use App\Scopes\BetScope;
+use App\Scopes\StatusScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,7 +38,9 @@ class Bet extends Model implements Auditable
 
     public static function booted()
     {
-        static::addGlobalScope(new BetScope);
+        if (!auth()->user()->hasRole(['super-admin'])) {
+            static::addGlobalScope(new BetScope);
+        }
     }
 
     public function scopeCurrentDraw()
