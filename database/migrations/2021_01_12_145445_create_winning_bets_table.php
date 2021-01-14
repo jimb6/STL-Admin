@@ -15,7 +15,7 @@ class CreateWinningBetsTable extends Migration
     {
         Schema::create('winning_bets', function (Blueprint $table) {
             $table->id();
-            $table->string('transaction_code')->index();
+            $table->unsignedBigInteger('bet_id')->index();
             $table->unsignedBigInteger('winning_combination_id');
             $table->boolean('status')->default(false);
             $table->timestamps();

@@ -17,7 +17,7 @@ class BetTransaction extends Model implements Auditable
     use Searchable;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['user_id', 'qr_code', 'printable', 'void_status'];
+    protected $fillable = ['user_id', 'qr_code', 'printable', 'is_void'];
 
     protected $searchableFields = ['*'];
 
@@ -79,4 +79,5 @@ class BetTransaction extends Model implements Auditable
         return $this->hasMany(Bet::class)->with('drawPeriod', 'game')
             ->orderBy('amount', 'asc');
     }
+
 }

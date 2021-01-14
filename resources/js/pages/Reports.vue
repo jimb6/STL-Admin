@@ -76,6 +76,7 @@ export default {
                         {text: "Collectible", value: "collectible"},
                         {text: "Validity", value: "valid"},
                     ]
+                    this.displayGeneralReports(clusterType.selected.value, drawPeriodType.selected.value, dates)
                 } else if (clusterType.selected.type === "sub"){
                     this.headers = [
                         {text: "Agent ID", value: "agent_id"},
@@ -91,8 +92,8 @@ export default {
                         {text: "Collectible", value: "collectible"},
                         {text: "Validity", value: "valid"},
                     ]
+
                 }
-                this.displayGeneralReports(clusterType.selected.value, drawPeriodType.selected.value, dates)
             } else if (reportType.selected.text === "Combination"){
                 this.headers = [
                     {text: "Combination", value: "combination"},
@@ -103,83 +104,129 @@ export default {
         },
 
         async displayCombinationReports(clusterId, drawPeriodId, dates) {
-            axios.post('/api/v1/bets-reports/combination', {
-                cluster_id: clusterId,
-                draw_period_id: drawPeriodId,
-                game: this.game,
-                dates: dates
-            })
-                .then(response => {
-                    const data = response.data.bets;
-                    this.contents = [];
-                    for (let item in data) {
-                        this.contents.push({
-                            combination: item,
-                            amount: data[item].sum,
-                        });
-                    }
-                    this.updateExcelFields("combination", dates);
-                    console.log(response.data,"COMBINATION REPORTS")
-                }).catch(err => {
+            if (clusterId.length > 1){
+                axios.post('/api/v1/bets-reports/combination', {
+                    cluster_id: clusterId,
+                    draw_period_id: drawPeriodId,
+                    game: this.game,
+                    dates: dates
+                })
+                    .then(response => {
+                        const data = response.data.bets;
+                        this.contents = [];
+                        for (let item in data) {
+                            this.contents.push({
+                                combination: item,
+                                amount: data[item].sum,
+                            });
+                        }
+                        this.updateExcelFields("combination", dates);
+                        console.log(response.data,"COMBINATION REPORTS")
+                    }).catch(err => {
                     console.log(err)
-            })
+                })
+            }else{
+                axios.post('/api/v1/bets-reports/combination', {
+                    cluster_id: clusterId,
+                    draw_period_id: drawPeriodId,
+                    game: this.game,
+                    dates: dates
+                })
+                    .then(response => {
+                        const data = response.data.bets;
+                        this.contents = [];
+                        for (let item in data) {
+                            this.contents.push({
+                                combination: item,
+                                amount: data[item].sum,
+                            });
+                        }
+                        this.updateExcelFields("combination", dates);
+                        console.log(response.data,"COMBINATION REPORTS")
+                    }).catch(err => {
+                    console.log(err)
+                })
+            }
         },
 
         async displayGeneralReports(clusterId, drawPeriodId, dates) {
-            axios.post('/api/v1/bets-reports/general', {
-                cluster_id: clusterId,
-                draw_period_id: drawPeriodId,
-                game: this.game,
-                dates: dates
-            })
-                .then(response => {
-                    const data = response.data.bets;
-                    this.contents = [];
-                    this.reportUrl = response.data.report_url
-                    console.log(this.reportUrl)
-                    for (let cluster in data) {
-                        for (let drawDate in data[cluster]){
-                            for(let drawTime in data[cluster][drawDate]){
-                                this.contents.push({
-                                    cluster: cluster,
-                                    draw_date: drawDate,
-                                    draw_period: drawTime,
-                                    gross: data[cluster][drawDate][drawTime].transaction_gross,
-                                    commission: data[cluster][drawDate][drawTime].transaction_commission,
-                                    net: data[cluster][drawDate][drawTime].transaction_net,
-                                    hits: data[cluster][drawDate][drawTime].transaction_hits,
-                                    amount_hits: data[cluster][drawDate][drawTime].transaction_amount_hits,
-                                    payout: 0,
-                                    collectible: (data[cluster][drawDate][drawTime].transaction_net - data[cluster][drawDate][drawTime].transaction_amount_hits),
-                                    valid: true,
-                                    // agent_id: data[cluster][drawTime].user.id,
-                                    // agent_name: data[cluster][drawTime].user.name,
-                                });
+            if (clusterId.length > 1){
+                axios.post('/api/v1/bets-reports/general', {
+                    cluster_id: clusterId,
+                    draw_period_id: drawPeriodId,
+                    game: this.game,
+                    dates: dates
+                })
+                    .then(response => {
+                        const data = response.data.bets;
+                        this.contents = [];
+                        this.reportUrl = response.data.report_url
+                        console.log(this.reportUrl)
+                        console.log(response, "RESPONSE <<<<<<<<<<<<<<<<<<")
+                        for (let cluster in data) {
+                            for (let drawDate in data[cluster]){
+                                for(let drawTime in data[cluster][drawDate]){
+                                    this.contents.push({
+                                        cluster: cluster,
+                                        draw_date: drawDate,
+                                        draw_period: drawTime,
+                                        gross: data[cluster][drawDate][drawTime].transaction_gross,
+                                        commission: data[cluster][drawDate][drawTime].transaction_commission,
+                                        net: data[cluster][drawDate][drawTime].transaction_net,
+                                        hits: data[cluster][drawDate][drawTime].transaction_hits,
+                                        amount_hits: data[cluster][drawDate][drawTime].transaction_amount_hits,
+                                        payout: 0,
+                                        collectible: (data[cluster][drawDate][drawTime].transaction_net - data[cluster][drawDate][drawTime].transaction_amount_hits),
+                                        valid: true,
+                                        // agent_id: data[cluster][drawTime].user.id,
+                                        // agent_name: data[cluster][drawTime].user.name,
+                                    });
+                                }
                             }
                         }
-
-                        // {text: "Cluster Name", value: "cluster"},
-                        // {text: "Draw Date", value: "draw_date"},
-                        // {text: "Draw Period", value: "draw_period"},
-                        // {text: "Gross", value: "gross"},
-                        // {text: "Commission", value: "commission"},
-                        // {text: "Net", value: "net"},
-                        // {text: "Hits", value: "hits"},
-                        // {text: "Amount Hits", value: "amount_hits"},
-                        // {text: "Payout", value: "payout"},
-                        // {text: "Collectible", value: "collectible"},
-                        // {text: "Validity", value: "valid"},
-
-                        // {text: "Agent ID", value: "agent"},
-                        // {text: "Agent Name", value: "agent_name"},
-                        // {text: "Device Code", value: "device_code"},
-
-
-                    }
-                    console.log(response.data, "GENERAL REPORTS ", response.data.bets.length)
-                }).catch(err => {
+                        console.log(response.data, "GENERAL REPORTS ", response.data.bets.length)
+                    }).catch(err => {
                     console.log(err)
-            })
+                })
+            }else{
+                axios.post('/api/v1/bets-reports/general', {
+                    cluster_id: clusterId,
+                    draw_period_id: drawPeriodId,
+                    game: this.game,
+                    dates: dates
+                })
+                    .then(response => {
+                        const data = response.data.bets;
+                        this.contents = [];
+                        this.reportUrl = response.data.report_url
+                        console.log(this.reportUrl)
+                        console.log(response, "RESPONSE <<<<<<<<<<<<<<<<<<")
+                        for (let cluster in data) {
+                            for (let drawDate in data[cluster]){
+                                for(let drawTime in data[cluster][drawDate]){
+                                    this.contents.push({
+                                        cluster: cluster,
+                                        draw_date: drawDate,
+                                        draw_period: drawTime,
+                                        gross: data[cluster][drawDate][drawTime].transaction_gross,
+                                        commission: data[cluster][drawDate][drawTime].transaction_commission,
+                                        net: data[cluster][drawDate][drawTime].transaction_net,
+                                        hits: data[cluster][drawDate][drawTime].transaction_hits,
+                                        amount_hits: data[cluster][drawDate][drawTime].transaction_amount_hits,
+                                        payout: 0,
+                                        collectible: (data[cluster][drawDate][drawTime].transaction_net - data[cluster][drawDate][drawTime].transaction_amount_hits),
+                                        valid: true,
+                                        // agent_id: data[cluster][drawTime].user.id,
+                                        // agent_name: data[cluster][drawTime].user.name,
+                                    });
+                                }
+                            }
+                        }
+                        console.log(response.data, "GENERAL REPORTS ", response.data.bets.length)
+                    }).catch(err => {
+                    console.log(err)
+                })
+            }
         },
 
         // NOTIFICATION

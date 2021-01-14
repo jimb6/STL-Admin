@@ -13,7 +13,8 @@
             :sort-by="['amount', 'status']"
             :sort-desc="[true, true]"
             @page-count="pageCount = $event"
-            loading-text="Loading... Please wait">
+            :loading="loadingStatus"
+            loading-text="Loading... Please wait"   >
 
             <!-- V-SLOTS -->
             <template v-slot:item.is_rumbled="{ item }">
@@ -95,6 +96,7 @@ export default {
         page: 1,
         pageCount: 0,
         itemsPerPage: 100,
+        loadingStatus: true,
 
         dialog: false,
         dialogDelete: false,
@@ -126,6 +128,10 @@ export default {
 
     created() {
         this.initialize();
+    },
+
+    updated() {
+        this.loadingStatus = false;
     },
 
     methods: {

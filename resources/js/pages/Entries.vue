@@ -63,14 +63,13 @@ export default {
             return [
                 {text: "Transaction Code", value: "transaction_code"},
                 {text: "Agent Name", value: "user_name"},
-                {text: "Device Code", value: "device_code"},
                 {text: "Draw Period", value: "draw_period"},
                 {text: "Combinations", value: "combinations"},
                 {text: "Total", value: "total"},
                 {text: "Created At", value: "created_at"},
                 {text: "Updated At", value: "updated_at"},
                 {text: "Reprint", value: "printable"},
-                {text: "Void", value: "void_status"},
+                {text: "Void", value: "is_void"},
             ]
         },
     },
@@ -81,6 +80,7 @@ export default {
 
         async displayBetEntries(item) {
             this.lastItem = item
+            console.log(item, "ITEMS")
             axios.post('/api/v1/bet-transaction-entries', {
                 dates: item[1],
                 draw_periods: item[0].selected.value,
@@ -91,22 +91,17 @@ export default {
                     this.contents = [];
                     this.reportsUrl = response.data.report_url
                     for (let item in data) {
-                        let sum = 0;
-                        for (let i in  data[item].bets){
-                            sum += parseInt(data[item].bets[i].amount);
-                        }
                         this.contents.push({
                             id: data[item].id,
                             transaction_code: data[item].qr_code,
-                            user_name: data[item].user.name,
-                            device_code: data[item].qr_code,
-                            draw_period: data[item].bets[0].draw_period.draw_time,
-                            combinations: data[item].bets,
-                            total: sum,
+                            user_name: data[item].name,
+                            draw_period: data[item].draw_time,
+                            combinations: data[item].combinations,
+                            total: data[item].total,
                             created_at: this.getDateToday(new Date(data[item].created_at)),
                             updated_at: this.getDateToday(new Date(data[item].updated_at)),
                             printable: data[item].printable,
-                            void_status: data[item].void_status
+                            void_status: data[item].is_void
                         });
                     }
                     console.log("URL:: ", this.reportsUrl)
@@ -162,7 +157,6 @@ export default {
                         }
                     }
                     this.displayBetEntries([this.drawPeriodFilter, [this.getCurrentDate(), this.getCurrentDate()]]);
-                    console.log(response, "DRAW PERIOD")
                 }).catch(err => {
                 console.log(err)
             })

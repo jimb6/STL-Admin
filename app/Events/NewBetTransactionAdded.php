@@ -20,7 +20,7 @@ class NewBetTransactionAdded implements ShouldBroadcast
 
     public $game;
 
-    public function __construct(Game $game)
+    public function __construct($game)
     {
         $this->game = $game;
     }
@@ -29,7 +29,7 @@ class NewBetTransactionAdded implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new Channel('bets.'.$this->game->abbreviation);
+        return new Channel('bets.'.$this->game);
     }
 
     public function broadcastWith()

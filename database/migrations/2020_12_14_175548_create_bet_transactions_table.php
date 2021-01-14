@@ -18,6 +18,7 @@ class CreateBetTransactionsTable extends Migration
             $table->string('qr_code');
             $table->unsignedBigInteger('user_id');
             $table->boolean('printable');
+            $table->boolean('is_void');
             $table->timestamps();
             $table->softDeletes();
         });

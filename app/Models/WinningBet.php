@@ -14,7 +14,7 @@ class WinningBet extends Model implements Auditable
     use Searchable;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['transaction_code', 'winning_combination_id', 'status'];
+    protected $fillable = ['bet_id', 'winning_combination_id', 'status'];
 
     protected $searchableFields = ['*'];
 
@@ -23,9 +23,9 @@ class WinningBet extends Model implements Auditable
     ];
 
 
-    public function betTransactions()
+    public function bets()
     {
-        return $this->hasMany(BetTransaction::class, 'transaction_code', 'qr_code');
+        return $this->hasMany(Bet::class);
     }
 
     public function winningCombination()

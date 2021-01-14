@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Models\BetTransaction;
+use App\Models\Bet;
 use App\Models\DrawPeriod;
 use App\Models\Game;
 use App\Models\WinningBet;
@@ -129,18 +129,21 @@ class ApiWinningCombinationController extends Controller
 
     private function publishWinners(WinningCombination $winningCombination)
     {
-        $transactions = BetTransaction::whereHas('bets', function ($query) use ($winningCombination) {
-            $query->where('combination', $winningCombination->combination)
-                ->whereDate('created_at', Carbon::parse($winningCombination->created_at)->format('Y-m-d'));
-        })->get()->map(function ($item) use ($winningCombination) {
-            return ['transaction_code' => $item->qr_code, 'winning_combination_id' => $winningCombination->id];
-        })->toArray();
+        //Get All bets with specific draw period, game, date and combination
+        $bets = Bet::where('combination', $winningCombination->combination)
+            ->where('game_id', $winningCombination->game_id)
+            ->where('draw_period_id', $winningCombination->draw_period_id)
+            ->whereDate('created_at', Carbon::parse($winningCombination->created_at)->format('Y-m-d'))
+            ->get()->map(function ($betItem) use ($winningCombination) {
+                return ['bet_id' => $betItem->id, 'winning_combination_id' => $winningCombination->id];
+            })->toArray();
 
+        //Remove all winning bet if exists where combination id equal to updated winning combination id
         $generatedWinner = WinningBet::select('id')
             ->where('winning_combination_id', $winningCombination->id)
             ->get()->toArray();
 
         WinningBet::destroy($generatedWinner);
-        WinningBet::insert($transactions);
+        WinningBet::insert($bets);
     }
 }

@@ -4,14 +4,16 @@
             <template v-slot:activator="{ on, attrs }">
                 <v-btn
                     color="red"
-                    class="text-white"
+                    class="text-white py-1"
                     @click="downloadExcel()"
                     v-bind="attrs"
-                    v-on="on">
-                    <v-icon small>mdi-download</v-icon>
+                    v-on="on"
+                    style="border-radius: 5px"
+                >
+                    <v-icon size="20">mdi-file-pdf</v-icon>
                 </v-btn>
             </template>
-            <span>Download {{ this.excelTitle }} pdf file</span>
+            <span>Download {{ this.excelTitle }} PDF file</span>
         </v-tooltip>
 
         <table ref="table" id="loremTable" v-show="false">

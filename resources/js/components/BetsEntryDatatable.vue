@@ -113,8 +113,8 @@
             </template>
 
             <template v-slot:item.combinations="{ item }">
-                <v-chip v-for="bet in item.combinations" :key="bet.id" dark small class="mr-2 my-2">
-                    <p><span class="mr-2">{{ bet.combination }}</span><b style="font-weight: 700;">- {{ bet.amount }}</b></p>
+                <v-chip v-for="bet in item.combinations.split(',')" dark small class="mr-2 my-2">
+                    <p><span class="mr-2">{{ bet }}</span><b style="font-weight: 700;"></b></p>
                 </v-chip>
             </template>
 
@@ -125,7 +125,7 @@
                 ></v-switch>
             </template>
 
-            <template v-slot:item.void_status="{ item }">
+            <template v-slot:item.is_void="{ item }">
                 <v-switch
                     color="red"
                     @change="updateVoidStatus(item)"

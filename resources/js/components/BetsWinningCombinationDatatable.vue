@@ -13,7 +13,9 @@
             :sort-by="['combination']"
             :sort-desc="[false]"
             @page-count="pageCount = $event"
-            loading-text="Loading... Please wait">
+            :loading="loadingStatus"
+            loading-text="Loading... Please wait"
+        >
 
             <template v-slot:top>
                 <div class="flex-between cstm-table-options my-4 cstm-row col2">
@@ -236,6 +238,7 @@ export default {
         page: 1,
         pageCount: 0,
         itemsPerPage: 100,
+        loadingStatus: true,
 
         //  FILTERS
         dates: [],
@@ -252,6 +255,10 @@ export default {
 
     created() {
         this.initialize();
+    },
+
+    updated() {
+        this.loadingStatus = false;
     },
 
     methods: {

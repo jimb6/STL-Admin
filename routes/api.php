@@ -5,6 +5,7 @@ use App\Models\Bet;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 
@@ -25,17 +26,6 @@ Route::post('v1/agent/login', [\App\Http\Controllers\Auth\LoginController::class
 Route::post('v1/agent/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logoutAgent'])
     ->name('agent.logout');
 
-Route::get('/forgot-password', function (Request $request) {
-    $request->validate(['contact_number' => 'required|max:11']);
-    $status = Password::sendResetLink(
-        $request->only('mobile')
-    );
-
-    return $status === Password::RESET_LINK_SENT
-        ? back()->with(['status' => __($status)])
-        : back()->withErrors(['email' => __($status)]);
-})->middleware('guest')
-    ->name('password.request');
 
 Route::post('/device/subscribe/{cluster_id}', [\App\Http\Controllers\API\v1\ApiDeviceController::class, 'subscribe'])
     ->name('device.subscribe')->middleware('signed');

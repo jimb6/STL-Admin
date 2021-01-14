@@ -11,10 +11,11 @@
             :item-class="getStatusBackground"
             :search="search"
             hide-default-footer
-            :sort-by="['draw_date','draw_period']"
-            :sort-desc="[true, true]"
+            :sort-by="['draw_date','draw_period', 'combination']"
+            :sort-desc="[true, true, false]"
             multi-sort
             @page-count="pageCount = $event"
+            :loading="loadingStatus"
             loading-text="Loading... Please wait">
 
             <template v-slot:top>
@@ -172,6 +173,21 @@
                         </div>
                     </td>
                 </tr>
+                <tr :class="sumSingleField('amount') < 0 ? 'myDanger': 'mySuccess'" style="letter-spacing: 1px;" v-if="reportTypeFilter.selected.value === 'Combination'">
+                    <td v-for="(header,i) in headers" :key="i">
+                        <div v-if="header.value === 'combination'" style="text-transform: uppercase">
+                            Grand Total
+                        </div>
+
+                        <div v-if="header.value === 'amount'">
+                            <b>{{ sumField('amount') }}</b>
+                        </div>
+
+                        <div v-else>
+                            <!-- empty table cells for columns that don't need a sum -->
+                        </div>
+                    </td>
+                </tr>
             </template>
 
             <template v-slot:item.gross="{item}">
@@ -194,6 +210,18 @@
             </template>
             <template v-slot:item.collectible="{item}">
                 <p class="text-right">{{ item.collectible.toFixed(2)  }}</p>
+            </template>
+            <template v-slot:item.valid="{item}">
+                <v-avatar color="green" size="30" v-if="item.valid">
+                    <v-icon dark small>
+                        mdi-check
+                    </v-icon>
+                </v-avatar>
+                <v-avatar color="red" size="30" v-if="!item.valid">
+                    <v-icon dark small>
+                        mdi-close
+                    </v-icon>
+                </v-avatar>
             </template>
 
         </v-data-table>
@@ -251,6 +279,7 @@ export default {
         page: 1,
         pageCount: 0,
         itemsPerPage: 100,
+        loadingStatus: true,
 
         //  FILTERS
         reportTypeFilter: {
@@ -268,6 +297,10 @@ export default {
 
     created() {
         this.initialize();
+    },
+
+    updated() {
+      this.loadingStatus = false;
     },
 
     methods: {
@@ -432,6 +465,9 @@ export default {
 
 .v-list-item p.sub {
     padding-left: 20px;
+}
+span.v-data-table-header__sort-badge {
+    display: none !important;
 }
 </style>
 

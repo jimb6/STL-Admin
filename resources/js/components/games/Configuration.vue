@@ -220,7 +220,9 @@ export default {
                 });
         },
 
-        displayBets(bets) {
+        async displayBets(bets) {
+
+            axios.get('/api/v1/bet-transactions')
             this.contents = [];
             this.total = 0;
             for (let item in bets) {
@@ -250,7 +252,6 @@ export default {
                 this.contents.push(bet)
             }
         },
-
 
         async storeCloseCombination(item) {
 

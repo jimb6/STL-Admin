@@ -12,7 +12,7 @@
             hide-default-footer
             class=""
             @page-count="pageCount = $event"
-            loading
+            :loading="loadingStatus"
             loading-text="Loading... Please wait">
 
             <template v-slot:top>
@@ -381,6 +381,7 @@ export default {
         page: 1,
         pageCount: 0,
         itemsPerPage: 10,
+        loadingStatus: true,
 
         dialog: false,
         dialogDelete: false,
@@ -406,6 +407,10 @@ export default {
 
     created() {
         this.initialize();
+    },
+
+    updated() {
+        this.loadingStatus = false;
     },
 
     methods: {

@@ -91,4 +91,9 @@ class Bet extends Model implements Auditable
         return $this->hasOneThrough(User::class, BetTransaction::class,);
     }
 
+    public function winningBet()
+    {
+        return $this->belongsTo(WinningBet::class);
+    }
+
 }
