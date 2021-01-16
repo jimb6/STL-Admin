@@ -1,55 +1,110 @@
 <template>
-    <v-slide-y-transition>
-        <v-alert v-if="display"
-                 prominent
-                 :type=" notification.type "
-                 transition="fade-transition">
-            <v-row align="center">
-                <v-col class="grow">
-                    {{ notification.message }}
-                </v-col>
-                <v-col class="shrink" v-if="notification.type == 'error'">
+    <div class="text-center">
+        <v-snackbar
+            v-model="display"
+            :color="snackbar.color"
+            :multi-line="snackbar.mode === 'multi-line'"
+            :timeout="snackbar.timeout"
+            :top="snackbar.position === 'top'"
+            right
+            app
+        >
+            <v-layout align-center pr-4>
+                <v-icon class="pr-3" dark large>{{ snackbar.icon }}</v-icon>
+                <v-layout column>
                     <div>
-                        <v-btn color="#ffffff15" depressed>
-                            Send Report
-                        </v-btn>
+                        <strong>{{ snackbar.title }}</strong>
                     </div>
-                </v-col>
-                <v-col class="shrink">
-                    <div>
-                        <v-btn @click="display = false" :color="notification.type" depressed class="close-notification-btn">
-                            <v-icon small>
-                                mdi-close
-                            </v-icon>
-                        </v-btn>
-                    </div>
-                </v-col>
-            </v-row>
-        </v-alert>
-    </v-slide-y-transition>
+                    <div>{{ snackbar.text }}</div>
+                </v-layout>
+            </v-layout>
+            <v-btn v-if="snackbar.timeout === 0" icon @click="snackbar.visible = false">
+                <v-icon>clear</v-icon>
+            </v-btn>
+        </v-snackbar>
+    </div>
 </template>
 
 <script>
 export default {
     name: "Notification",
     props: {
-        notification: Object
+        text: String,
+        type: String,
     },
     data: () => ({
         display: true,
+        multiLine: true,
+        timeout: 3000,
+        snackbar: Object,
     }),
-    created() {
-        this.closeNotification();
+
+    mounted() {
+        this.showSnackbar()
     },
-    methods: {
-        closeNotification(){
-            setTimeout(function(){
-                $(".close-notification-btn").click();
-            }, 3000)
 
-
+    watch: {
+        snackbar: ()=>{
+             this.showSnackbar()
         }
-    }
+    },
+
+
+    methods: {
+        showSnackbar(){
+            switch (this.type) {
+                case "error":
+                    this.snackbar = {
+                        color: "error",
+                        icon: "error",
+                        mode: "multi-line",
+                        position: "bottom",
+                        timeout: this.timeout,
+                        title: "Error",
+                        text: this.text,
+                        visible: true
+                    };
+                    break;
+                case "info":
+                    this.snackbar = {
+                        color: "info",
+                        icon: "info",
+                        mode: "multi-line",
+                        position: "bottom",
+                        timeout: this.timeout,
+                        title: "Information",
+                        text: this.text,
+                        visible: true
+                    };
+                    break;
+                case "success":
+                    this.snackbar = {
+                        color: "success",
+                        // icon: "check_circle",
+                        mode: "multi-line",
+                        position: "bottom",
+                        timeout: this.timeout,
+                        title: "Success",
+                        text: this.text,
+                        visible: true
+                    };
+                    break;
+                case "warning":
+                    this.snackbar = {
+                        color: "warning",
+                        icon: "warning",
+                        mode: "multi-line",
+                        position: "bottom",
+                        timeout: this.timeout,
+                        title: "Warning",
+                        text: this.text,
+                        visible: true
+                    };
+                    break;
+            }
+        }
+    },
+
 }
 </script>
 

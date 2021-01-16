@@ -17,7 +17,7 @@ class CreateCommissionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('cluster_id');
             $table->unsignedBigInteger('game_id');
-            $table->double('commission_rate');
+            $table->double('commission_rate')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

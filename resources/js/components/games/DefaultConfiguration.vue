@@ -11,6 +11,8 @@
                     <v-edit-dialog
                         :return-value.sync="props.item.config"
                         large
+                        persistent
+                        eager
                         @save="save(props.item)"
                         @cancel="cancel"
                         @open="open(props.item)"
@@ -18,7 +20,7 @@
                     >
                         <div>{{ props.item.config }}</div>
                         <template v-slot:input>
-                            <div class="mt-4 title">
+                            <div class="mt-4">
                                 UPDATE {{ props.item.name }}
                             </div>
                             <v-text-field

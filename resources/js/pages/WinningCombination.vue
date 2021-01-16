@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <div v-if="notifications.length > 0" v-for="notification in notifications">
-            <Notification :notification="notification"></Notification>
+            <Notification :text="notification.text" :type="notification.type"></Notification>
         </div>
         <v-alert
             v-show="error"
@@ -75,6 +75,7 @@ export default {
 
         // FUNCTIONS HERE ==============================================================================================
         async displayBetWinningCombinations(dates) {
+            console.log(dates)
             axios.post('/api/v1/winning-combinations', {
                 'game': this.game,
                 'dates': dates
@@ -91,7 +92,9 @@ export default {
                         verifiedAt: data[item].verified_at,
                     });
                 }
-            }).catch(err => console.log(err))
+            }).catch(err => {
+                this.addNotification("Error fetching winning combination.", "error")
+            })
         },
 
         async storeWinningCombination(item) {
@@ -102,7 +105,9 @@ export default {
                 'drawPeriodId': item.drawPeriodId
             }).then(response => {
                 this.displayBetWinningCombinations([this.getCurrentDate(), this.getCurrentDate()]);
+                this.addNotification("Winning combination stored successfully.", "success")
             }).catch(err => {
+                this.addNotification("Error storing winning combination.", "error")
                 this.error = true
             })
         },
@@ -116,7 +121,9 @@ export default {
             }).then(response => {
                 console.log(response)
                 this.displayBetWinningCombinations([this.getCurrentDate(), this.getCurrentDate()]);
+                this.addNotification("Winning combination updated successfully.", "success")
             }).catch(err => {
+                this.addNotification("Error updating winning combination.", "error")
                 this.error = true
             })
         },
@@ -124,18 +131,18 @@ export default {
         async verifyWinningCombination(item) {
             console.log(item)
             if (item.combination !== item.verifiedItem.combination || item.drawPeriodId !== item.verifiedItem.drawPeriodId) {
-                console.log("error")
+                this.addNotification("Error verifying winning combination.", "error")
                 return
             }
-            console.log('asldkjfadklsfklsdfjl')
             axios.put('/api/v1/winning-combinations-verify/' + item.id, {
                 'password': item.password,
             })
                 .then(response => {
                     console.log(response)
                     this.displayBetWinningCombinations([this.getCurrentDate(), this.getCurrentDate()]);
+                    this.addNotification("Combination successfully verified.", "success")
                 }).catch(err => {
-                    console.log(err)
+                this.addNotification("Error verifying winning combination.", "error")
                 this.error = true
             })
 
@@ -156,14 +163,15 @@ export default {
                         }
                     }
                 }).catch(err => {
-                console.log(err)
+                this.addNotification("Error on getting draw periods.", "error")
             })
         },
 
         // NOTIFICATION
-        addNotification(message, type, statusCode) {
-            this.notifications.push({message: message, type: type, statusCode: statusCode});
+        addNotification(message, type) {
+            this.notifications.push({text: message, type: type});
         },
+
         getDateToday(date) {
             date = (date) ? date : new Date();
             const month = date.toLocaleString('default', {month: 'long'});

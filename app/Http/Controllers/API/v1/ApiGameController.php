@@ -138,22 +138,10 @@ class ApiGameController extends Controller
     public function configIndex(Request $request, $abbreviation)
     {
         $this->authorize('list-games', Game::class);
-        $search = $request->get('search', '');
-        $game = Game::where('abbreviation', $abbreviation)
-            ->with(['gameConfiguration', 'controlCombination', 'bets'])
-            ->get();
-        $draw = DrawPeriod::currentDraw()->whereHas('games', function ($query) use ($game) {
-            $query->where('id', $game[0]->id);
+        $config = GameConfiguration::whereHas('game', function ($query) use ($abbreviation) {
+            $query->where('abbreviation', $abbreviation);
         })->first();
-
-        $bets = Bet::currentDraw()->where('game_id', $game[0]->id)->get()
-            ->groupBy('combination')->map(function ($row) {
-                return ['sum' => $row->sum('amount'), 'bets' => $row];
-            });
-
-        $closedNumbers = CloseNumber::all();
-
-        return response(['bets' => $bets, 'game' => $game, 'draw_period' => $draw, 'closed_numbers' => $closedNumbers], 200);
+        return response($config, 200);
     }
 
     public function configUpdate(Request $request, $game)

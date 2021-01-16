@@ -13,12 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class ApiControlledNumberController extends Controller
 {
 
-    public function index()
-    {
-        //
-    }
-
-    public function create()
+    public function index(Request $request)
     {
         //
     }
@@ -46,13 +41,18 @@ class ApiControlledNumberController extends Controller
             'combination' => $request->get('combination'),
             'max_amount' => $request->get('max_amount')
         ]);
+
         broadcast(new NewControlledBetAdded($game));
         return response([], 202);
     }
 
-    public function show($id)
+    public function showByGame(Request $request, $gameAbbreviation)
     {
-        //
+        $this->authorize('create-control-combinations', ControlCombination::class);
+        $controlledCombination = ControlCombination::whereHas('game', function ($query) use ($gameAbbreviation) {
+            $query->where('abbreviation', $gameAbbreviation);
+        })->get();
+        return response($controlledCombination, 200);
     }
 
     public function edit($id)

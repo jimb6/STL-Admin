@@ -84,6 +84,7 @@ Route::prefix('v1/')
         Route::put('close-draw-period/{drawPeriod}', [\App\Http\Controllers\API\v1\ApiDrawPeriodController::class, 'closeDrawPeriod']);
 
 //      Custom Bet Transaction Request
+        Route::get('bet-transactions-realtime/{game}', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'showByGame']);
         Route::post('bet-transaction-entries', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'showEntriesBasedOnDateRange']);
         Route::get('bet-transaction-entries/{date}', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'getAgentTransactions']);
         Route::put('bet-transaction-printable/{id}', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'updatePrintableStatus']);
@@ -100,6 +101,7 @@ Route::prefix('v1/')
         Route::put('games/config/days/{game}', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configDaysUpdate']);
 
 //      Custom Controlled Game Combination Request
+        Route::get('games/control-combination/{abbreviation}', [\App\Http\Controllers\API\v1\ApiControlledNumberController::class, 'showByGame']);
         Route::post('games/control-combination/{game}', [\App\Http\Controllers\API\v1\ApiControlledNumberController::class, 'store']);
         Route::delete('games/control-combination/{combi}', [\App\Http\Controllers\API\v1\ApiControlledNumberController::class, 'destroy']);
         Route::put('games/control-combination/{game}', [\App\Http\Controllers\API\v1\ApiControlledNumberController::class, 'update']);

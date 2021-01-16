@@ -40,10 +40,11 @@ class ApiWinningCombinationController extends Controller
 
         $search = $request->get('search', '');
         $game = Game::where('abbreviation', $validated['game'])->first();
-        $validated['dates'][1] .= ' 23:59:59';
         $winningCombinations = WinningCombination::search($search)
             ->where('game_id', $game->id)
-            ->whereBetween('created_at', $validated['dates'])
+            ->whereBetween('created_at',
+                [Carbon::parse($validated['dates'][0])->startOfDay(),
+                    Carbon::parse($validated['dates'][1])->endOfDay()])
             ->with(['game', 'drawPeriod'])->get();
         return response(['winningCombination' => $winningCombinations], 200);
     }

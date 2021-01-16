@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <div v-if="notifications.length > 0" v-for="notification in notifications">
-            <Notification :notification="notification"></Notification>
+            <Notification :text="notification.text" :type="notification.type"></Notification>
         </div>
         <div class="row">
             <div class="col-9 ">
@@ -27,7 +27,9 @@
             <div class="col-3">
                 <div>
                     <h3 class="cstm-date">{{ this.getDateToday() }}</h3>
-                    <h2 class="cstm-drawPeriod">{{ this.drawPeriodConfig == null? "In Progress":this.getFormattedTime(this.drawPeriodConfig.draw_time)}}</h2>
+                    <h2 class="cstm-drawPeriod">{{
+                            this.drawPeriodConfig === null ? "In Progress " : this.getFormattedTime(this.drawPeriodConfig.draw_time)
+                        }}</h2>
                     <v-expansion-panels
                         v-model="panel"
                         :readonly="readonly"
@@ -112,7 +114,13 @@ export default {
             {label: "Min Number", field: "min_number", value: "", type: "input"},
             {label: "Max Number", field: "max_number", value: "", type: "input"},
             {label: "Has Repetition", field: "has_repetition", value: "", type: "select", options: [true, false]},
-            {label: "Days Availability", field: "days_availability", value: "", type: "chips", options: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]},
+            {
+                label: "Days Availability",
+                field: "days_availability",
+                value: "",
+                type: "chips",
+                options: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+            },
         ],
 
         page: 1,
@@ -173,84 +181,79 @@ export default {
     },
 
     methods: {
-        async index() {
-            await axios.get(`/api/v1/games/config/${this.game}`)
+        index() {
+            this.displayBets()
+            this.displayControlledCombinations()
+            this.displayGameConfigurations()
+        },
+
+        async displayBets() {
+            await axios.get('/api/v1/bet-transactions-realtime/' + this.game)
                 .then(response => {
-                    this.gameConfig = response.data.game[0];
-                    this.drawPeriodConfig = response.data.draw_period
-                    const game = this.gameConfig
-                    const bets = response.data.bets;
+                    console.log(response)
+                    let data = response.data.bets
+                    this.drawPeriodConfig = response.data.draw
                     this.contents = [];
-                    this.controlNumberData = [];
-                    this.daysConfigContents = [];
-                    this.closedNumbers = response.data.closed_numbers
-                    // //For Control Numbers of Game
-                    for (let controlItem in game.control_combination) {
+                    for (let i = 0; i < data.length; i++) {
+                        let status = (data[i].control && data[i].total >= data[i].control) || data[i].total >= data[i].max ? "SOLD OUT" : "OPEN"
+                        status = data[i].closed === 1 ? "CLOSED" : status
+
+                        let bet = {
+                            combinations: data[i].combination,
+                            amount: parseFloat(data[i].total),
+                            status: status,
+                        }
+                        this.contents.push(bet)
+                    }
+                }).catch(err => {
+                    this.addNotification("Error fetching realtime bets.", "error")
+                })
+        },
+
+        async displayControlledCombinations() {
+            await axios.get('/api/v1/games/control-combination/' + this.game)
+                .then(response => {
+                    console.log(response)
+                    let data = response.data
+                    this.controlNumberData = []
+                    for (let i = 0; i < data.length; i++) {
                         let contComb = {
-                            id: game.control_combination[controlItem].id,
-                            combination: game.control_combination[controlItem].combination,
-                            max_amount: game.control_combination[controlItem].max_amount,
+                            id: data[i].id,
+                            combination: data[i].combination,
+                            max_amount: data[i].max_amount,
                         }
                         this.controlNumberData.push(contComb)
                     }
-                    // //For Default Configuration of the Game
-                    this.daysConfigContents = game.game_configuration.days_availability ? game.game_configuration.days_availability : ["NO DAYS AVAILABLE"]
+                }).catch(err => {
+                    this.addNotification("Error fetching realtime bets.", "error")
+                })
+        },
 
+        async displayGameConfigurations() {
+            await axios.get('/api/v1/games/config/' + this.game)
+                .then(response => {
+                    console.log(response)
+                    let data = response.data
+                    // //For Default Configuration of the Game
+                    this.daysConfigContents = data.days_availability ? data.days_availability : ["NO AVAILABLE DAYS"]
                     this.defConfigContents = [
-                        {col_name: "min_per_bet", name: "MIN BET AMOUNT", config: game.game_configuration.min_per_bet},
-                        {col_name: "multiplier", name: "MULTIPLIER", config: game.game_configuration.multiplier},
+                        {col_name: "min_per_bet", name: "MIN BET AMOUNT", config: data.min_per_bet},
+                        {col_name: "multiplier", name: "MULTIPLIER", config: data.multiplier},
                         {
                             col_name: "transaction_limit",
                             name: "SEC NOT DUPLICATE",
-                            config: game.game_configuration.transaction_limit
+                            config: data.transaction_limit
                         },
                         {
                             col_name: "max_per_bet",
                             name: "MAX AMOUNT PER BET",
-                            config: game.game_configuration.max_per_bet
+                            config:data.max_per_bet
                         },
-                        {col_name: "max_sum_bet", name: "MAX HARD BET", config: game.game_configuration.max_sum_bet}
+                        {col_name: "max_sum_bet", name: "MAX HARD BET", config: data.max_sum_bet}
                     ];
-
-                    this.displayBets(bets)
+                }).catch(err => {
+                    console.log(err)
                 })
-
-                .catch(err => {
-                    this.addNotification("Failed to load " + this.title + "s", "error", "400");
-                });
-        },
-
-        async displayBets(bets) {
-
-            axios.get('/api/v1/bet-transactions')
-            this.contents = [];
-            this.total = 0;
-            for (let item in bets) {
-                let isControlled = false
-                let isClosed = false;
-                let maxAmount = 0
-                for (let closeItem in this.closedNumbers) {
-                    if (this.closedNumbers[closeItem].combination == item) {
-                        isClosed = true
-                        break;
-                    }
-                }
-                for (let controlItem in this.gameConfig.control_combination) {
-                    if (this.gameConfig.control_combination[controlItem].combination == item) {
-                        isControlled = true
-                        maxAmount = this.gameConfig.control_combination[controlItem].max_amount
-                        break;
-                    }
-                }
-                let bet = {
-                    combinations: item,
-                    amount: bets[item].sum,
-                    status: isClosed ? 'CLOSED' : bets[item].sum >= this.gameConfig.game_configuration.max_sum_bet ||
-                    (isControlled && bets[item].sum >= maxAmount) ? "SOLD OUT" : "OPEN",
-                }
-                this.total += bets[item].sum
-                this.contents.push(bet)
-            }
         },
 
         async storeCloseCombination(item) {
@@ -262,8 +265,10 @@ export default {
                         this.contents[item.index].isClosed = true;
                         this.contents[item.index].status = "CLOSED";
                     });
+                    this.addNotification("Combination closed.", "success")
                 })
                 .catch(err => {
+                    this.addNotification("Error closing combination.", "error")
                     this.$nextTick(function () {
                         this.contents[item.index].isClosed = !item.isClosed;
                     });
@@ -280,8 +285,10 @@ export default {
                         this.contents[item.index].isClosed = false;
                         this.contents[item.index].status = "OPEN";
                     });
+                    this.addNotification("Combination opened.", "success")
                 })
                 .catch(err => {
+                    this.addNotification("Error opening combination.", "error")
                     this.$nextTick(function () {
                         this.contents[item.index].isClosed = !item.isClosed;
                     });
@@ -289,67 +296,13 @@ export default {
 
         },
 
-        async storeGame(item) {
-            const response = await axios.post('/api/games',
-                {
-                    'description': item.description,
-                    'abbreviation': item.abbreviation,
-                    'multiplier': item.multiplier,
-                    'field_set': item.field_set,
-                    'digit_per_field_set': item.digit_per_field_set,
-                    'min_per_bet': item.min_per_bet,
-                    'max_per_bet': item.max_per_bet,
-                    'has_repetition': item.has_repetition,
-                    'days_availability': item.days_availability,
-                    'is_rumbled': item.is_rumbled,
-                    'max_sum_bet': item.max_sum_bet,
-                    'transaction_limit': item.transaction_limit,
-                    'min_per_field_set': item.min_per_field_set,
-                    'max_per_field_set': item.max_per_field_set,
-                })
-                .then(response => {
-                    this.addNotification(item.description + " added successfully!", "success", "200");
-                })
-                .catch(err => {
-                    this.addNotification(item.description + " unsuccessfully added!", "error", "400");
-                });
-
-            await this.displayGames()
-        },
-
-        async updateGame() {
-
-        },
-
-        async destroyGame(item) {
-            const response = await axios.delete('/api/v1/games/' + item.id)
-                .then(response => {
-                    this.addNotification(item.description + " deleted successfully!", "success", "200")
-                })
-                .catch(err => {
-                    this.addNotification(item.description + " unsuccessfully deleted!", "error", "400")
-                });
-            await this.displayGames();
-        },
-
         // DEFAULT CONFIGURATIONS
         async updateDefaultConfig(item) {
             // this.addNotification(item.col_name + " <> " + item.name + " <> " + item.config, "success", 200);
             axios.put('/api/v1/games/config/default/' + this.game, item).then(response => {
-                this.addNotification("Configuration Changed!", "success", 200);
+                this.addNotification("Configuration updated.", "success")
             }).catch(err => {
-                this.addNotification("Error Occurred !", "error", err.status);
-            })
-        },
-
-        // DAYS AVAILABILITY
-        async updateDaysAvailability(item) {
-            axios.put('/api/v1/games/config/days/' + this.game, {
-                'days': item
-            }).then(response => {
-                this.addNotification("updateControlCombination", "success", 200);
-            }).catch(err => {
-
+                this.addNotification("Error updating configuration!", "error");
             })
         },
 
@@ -360,9 +313,9 @@ export default {
                 'combination': item.combination,
                 'max_amount': item.max_amount
             }).then(response => {
-                this.addNotification("updateControlCombination", "success", 200);
+                this.addNotification("Combination updated.", "success");
             }).catch(err => {
-
+                this.addNotification("Error updating combination", "error");
             })
         },
         async storeControlCombination(item) {
@@ -370,22 +323,23 @@ export default {
                 'combination': item.combination,
                 'max_amount': item.max_amount
             }).then(response => {
-                this.addNotification("storeControlCombination", "success", 200);
+                this.addNotification("Combination stored.", "success");
             }).catch(err => {
+                this.addNotification("Error storing combination.", "error");
             })
         },
         async destroyControlCombination(item) {
             axios.delete('/api/v1/games/control-combination/' + item.id).then(response => {
 
-                this.addNotification("destroyControlCombination", "success", 200);
+                this.addNotification("Error storing combination.", "success");
             }).catch(err => {
-                this.addNotification("Error Occurred !", "error", err.status);
+                this.addNotification("Error deleting combination", "error", err.status);
             })
         },
 
         // NOTIFICATION
-        addNotification(message, type, statusCode) {
-            this.notifications.push({message: message, type: type, statusCode: statusCode});
+        addNotification(message, type) {
+            this.notifications.push({text: message, type: type});
         },
 
         getFormattedTime(time) {
@@ -419,18 +373,20 @@ export default {
         async listen() {
             Echo.channel('bets.' + this.game)
                 .listen('NewBetTransactionAdded', (data) => {
-                    this.getUpdatedBets();
+                    this.displayBets();
                     console.log("NEW BET EVENT")
                 })
             Echo.channel('controlled.combination.' + this.game)
                 .listen('NewControlledBetAdded', (data) => {
-                    this.index()
+                    this.displayControlledCombinations()
+                    this.displayBets()
                     console.log("NEW CONTROLLED BET EVENT")
                 })
 
             Echo.channel('default.config.' + this.game)
                 .listen('GameConfigEvent', (data) => {
-                    this.index()
+                    this.displayGameConfigurations()
+                    this.displayBets()
                     console.log("GAME CONFIG EVENT")
                 })
         }
