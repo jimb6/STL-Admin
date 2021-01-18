@@ -247,7 +247,7 @@ export default {
         },
         sumField(key) {
             // sum data in give key (property)
-            return this.contents.reduce((a, b) => a + (b[key] || 0), 0).toLocaleString('en-US', {style: 'currency', currency: 'PHP',});
+            return "₱ " + this.contents.reduce((a, b) => a + (b[key] || 0), 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
         }
 
 

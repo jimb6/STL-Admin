@@ -1,80 +1,93 @@
 <template>
-    <v-container>
-        <div v-if="notifications.length > 0" v-for="notification in notifications">
-            <Notification :notification="notification"></Notification>
-        </div>
+    <v-main>
+        <v-container>
+            <div class="row">
+                <div class="col-12">
+                    <v-tabs slot="extension"
+                            v-model="tabs"
+                            slider-color="primary"
+                            color="danger"
+                            light
+                    >
+                        <!-- TAB TITLES -->
+                        <v-tab>
+                            <v-icon small class="mr-2">mdi-account</v-icon>
+                            By Agent
+                        </v-tab>
+                        <v-tab>
+                            <v-icon small class="mr-2">mdi-home</v-icon>
+                            By Cluster
+                        </v-tab>
+                        <v-tab>
+                            <v-icon small class="mr-2">mdi-clock</v-icon>
+                            By Draw Period
+                        </v-tab>
+                        <v-tab>
+                            <v-icon small class="mr-2">mdi-gamepad</v-icon>
+                            By Game
+                        </v-tab>
+                        <v-tab>
+                            <v-icon small class="mr-2">mdi-gamepad-circle-left</v-icon>
+                            By Draw Period & Game
+                        </v-tab>
 
-        <BetsGrossDatatable
-            class="singleBetTable"
-            :headers="headers"
-            :contents="contents"
-            :excelHeaders="excelHeaders"
-            :excelData="excelData"
-            :excelTitle="excelTitle"
-            @displayReports="displayReports($event)"
-        />
-    </v-container>
+                        <!-- TAB ITEMS -->
+                        <v-tab-item>
+                            <ByAgent />
+                        </v-tab-item>
+
+                        <v-tab-item>
+                            <ByCluster />
+                        </v-tab-item>
+
+                        <v-tab-item>
+                            <ByDrawPeriod />
+                        </v-tab-item>
+
+                        <v-tab-item>
+                            <ByGame />
+                        </v-tab-item>
+
+                        <v-tab-item>
+                            <ByDrawPeriodGame />
+                        </v-tab-item>
+                    </v-tabs>
+                </div>
+            </div>
+        </v-container>
+    </v-main>
 </template>
 
 <script>
 
 import '@mdi/font/css/materialdesignicons.css'
-import Notification from "../components/Notification";
-import BetsGrossDatatable from "../components/BetsGrossDatatable";
+import ByCluster from "./reports/ByCluster";
+import ByAgent from "./reports/ByAgent";
+import ByDrawPeriod from "./reports/ByDrawPeriod";
+import ByGame from "./reports/ByGame";
+import ByDrawPeriodGame from "./reports/ByDrawPeriodGame";
 
 export default {
     name: "Gross",
     components: {
-        Notification,
-        BetsGrossDatatable
+        ByCluster,
+        ByAgent,
+        ByDrawPeriod,
+        ByGame,
+        ByDrawPeriodGame
     },
     data: () => ({
-        title: "Game Gross",
-        contents: [],
-
-        excelHeaders: [],
-        excelData: [],
-        excelTitle: '',
-
-        // Notification
-        notifications: [],
+        title: "Overall Gross",
+        tabs: '',
     }),
     created() {
+
     },
 
-
     computed: {
-        headers() {
-            return [
-                {text: "Game", value: "cluster"},
-                {text: "Draw Date", value: "draw_date"},
-                {text: "Draw Period", value: "draw_period"},
-                {text: "Gross", value: "gross"},
-                {text: "Commission", value: "commission"},
-                {text: "Net", value: "net"},
-                {text: "Hits", value: "hits"},
-                {text: "Amount Hits", value: "amount_hits"},
-                {text: "Collectible", value: "collectible"},
-            ]
-        }
     },
 
     methods: {
-
-        displayReports(config) {
-            console.log(config)
-        },
-
-        // NOTIFICATION
-        addNotification(message, type, statusCode) {
-            this.notifications.push({message: message, type: type, statusCode: statusCode});
-        },
-        getDateToday(date) {
-            date = (date) ? date : new Date();
-            const month = date.toLocaleString('default', {month: 'long'});
-            date = month + " " + date.getDate() + ", " + date.getFullYear() + " - " + date.toLocaleTimeString();
-            return date;
-        },
 
     }
 }

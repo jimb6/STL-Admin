@@ -242,7 +242,32 @@ return [
             'classes' => '',
         ],
         [
-            'header' => 'App Management',
+            'text' => 'Bets',
+            'key' => 'bets',
+            'can' => 'menu-bets',
+            'icon' => 'fas fa-coins',
+            'label_color' => 'success',
+            'classes' => '',
+            'submenu' => [
+                [
+                    'text' => 'Winning Bets',
+                    'route' => 'bets.winning-bets',
+                    'active' => ['admin/bets/all-games/winning-bets', 'admin/bets/all-games/winning-bets*']
+                ],
+            ]
+        ],
+        [
+            'text' => 'Reports',
+            'icon' => 'fas fa-print',
+            'label_color' => 'success',
+            'classes' => 'xs',
+            'submenu' => [
+                [
+                    'text' => 'Overall Gross',
+                    'route' => 'reports.gross',
+                    'active' => ['admin/reports/overall-gross']
+                ],
+            ]
         ],
         [
             'text' => 'Clusters',
@@ -254,7 +279,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'All Clusters',
-                    'route' => 'bases.index',
+                    'route' => 'clusters.index',
                 ],
             ]
         ],
@@ -273,12 +298,23 @@ return [
                 ],
 
             ]
-
+        ],
+        [
+            'text' => 'Devices',
+            'icon' => 'fas fa-mobile-alt',
+            'label_color' => 'success',
+            'classes' => '',
+            'submenu' => [
+                [
+                    'text' => 'All Devices',
+                    'route' => 'devices.index',
+                    'active' => ['admin/devices']
+                ],
+            ]
         ],
         [
             'text' => 'Booths',
-            'key' => 'boots',
-            // 'url'         => '/#',
+            'key' => 'booths',
             'icon' => 'fas fa-store',
             'label_color' => 'success',
             'classes' => '',
@@ -291,7 +327,6 @@ return [
                 ],
             ]
         ],
-
         [
             'text' => 'Games',
             'key' => 'games',
@@ -311,7 +346,6 @@ return [
             'text' => 'Draw Periods',
             'key' => 'draw-periods',
             'can' => 'menu-draw-periods',
-            // 'url'         => '/#',
             'icon' => 'fas fa-clock',
             'label_color' => 'success',
             'classes' => '',
@@ -320,82 +354,6 @@ return [
                     'text' => 'All Draw Periods',
                     'route' => 'draw_periods.index',
                     'active' => ['admin/draw-periods', 'admin/draw-periods*']
-                ],
-            ]
-        ],
-        ['header' => 'Accounting Management'],
-        [
-            'text' => 'Collections',
-            'icon' => 'fas fa-briefcase',
-            'label_color' => 'success',
-            'can' => 'menu-collections',
-            'classes' => 'xs text-wrap',
-            'submenu' => [
-                [
-                    'text' => 'All Collections',
-                    'route' => 'collections.index',
-                    'active' => ['admin/collections']
-                ],
-            ]
-        ],
-        [
-            'header' => 'Reporting',
-        ],
-        [
-            'text' => 'Reports',
-            // 'url'         => '/#',
-            'icon' => 'fas fa-print',
-            'label_color' => 'success',
-            'classes' => 'xs',
-
-            'submenu' => [
-                [
-                    'text' => 'Overall Gross',
-                    'route' => 'reports.gross',
-                    'active' => ['admin/reports/overall-gross']
-                ],
-                [
-                    'text' => 'Agent Collections',
-                    'route' => 'reports.index',
-                    'active' => ['admin/agents/collection']
-                ],
-                [
-                    'text' => 'Make me Reports',
-                    'route' => 'reports.create',
-                    'active' => ['admin/agents/collection']
-                ],
-            ]
-        ],
-
-        ['header' => 'Settings'],
-        [
-            'text' => 'Account',
-            // 'url'         => '/#',
-            'icon' => 'fas fa-user-lock',
-            'label_color' => 'success',
-            'classes' => '',
-            'submenu' => [
-                [
-                    'text' => 'Profile',
-                    'route' => 'user.profile',
-                ],
-                [
-                    'text' => 'Logout',
-                    'url' => '#',
-                ],
-            ]
-        ],
-        [
-            'text' => 'Devices',
-            // 'url'         => '/#',
-            'icon' => 'fas fa-mobile-alt',
-            'label_color' => 'success',
-            'classes' => '',
-            'submenu' => [
-                [
-                    'text' => 'Registered Devices',
-                    'route' => 'devices.index',
-                    'active' => ['admin/devices']
                 ],
             ]
         ],
@@ -411,45 +369,51 @@ return [
         ],
         [
             'text' => 'Settings',
-            // 'url'         => '/#',
             'icon' => 'fas fa-cogs',
             'label_color' => 'success',
             'can' => 'menu-settings',
             'classes' => '',
             'submenu' => [
                 [
-                    'text' => 'Global Settings',
-                    'route' => 'settings.global',
-                    'active' => ['admin/settings/app']
+                    'text' => 'Permissions',
+                    'route' => 'settings/permissions.index',
+                    'active' => ['admin/settings/permissions'],
                 ],
                 [
-                    'text' => 'Roles & Permissions',
-                    // 'url'         => '/#',
-//                    'icon' => 'fas fa-user-secret',
-                    'label_color' => 'success',
-                    'classes' => '',
-                    'submenu' => [
-                        [
-                            'text' => 'Permissions List',
-                            'route' => 'permissions.index',
-                            'active' => ['admin/permissions'],
-                        ],
-                        [
-                            'text' => 'Roles List',
-                            'route' => 'roles.index',
-                            'active' => ['admin/roles'],
-                        ],
-                    ]
+                    'text' => 'Roles',
+                    'route' => 'settings/roles.index',
+                    'active' => ['admin/settings/roles'],
                 ],
-                [
-                    'text' => 'Push Notifications',
-                    'url' => '/#',
-                ],
-                [
-                    'text' => 'Mail',
-                    'url' => '/#',
-                ],
+//                [
+//                    'text' => 'Global Settings',
+//                    'route' => 'settings.global',
+//                    'active' => ['admin/settings/app']
+//                ],
+//                [
+//                    'text' => 'Push Notifications',
+//                    'url' => '/#',
+//                ],
+//                [
+//                    'text' => 'Mail',
+//                    'url' => '/#',
+//                ],
 
+            ]
+        ],
+        [
+            'text' => 'Account',
+            'icon' => 'fas fa-user-lock',
+            'label_color' => 'success',
+            'classes' => '',
+            'submenu' => [
+                [
+                    'text' => 'Profile',
+                    'route' => 'user.profile',
+                ],
+                [
+                    'text' => 'Logout',
+                    'url' => '#',
+                ],
             ]
         ],
     ],

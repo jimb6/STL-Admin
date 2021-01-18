@@ -50,14 +50,13 @@ class AppServiceProvider extends ServiceProvider
             $gameItem = Game::all()->map(function (Game $game) use ($icons) {
                 return [
                     'text' => strtoupper($game['abbreviation']),
-                    'route' => ['games.abbreviation.config', ['abbreviation' => $game['abbreviation']]],
-                    'active' => ['admin/games/categorize/'.$game['abbreviation']],
-                    'icon' => 'fas fa-dice-five',
-                    'icon_color' => 'success',
+                    'route' => ['bets.game', ['game' => $game['abbreviation']]],
+                    'active' => ['admin/bets/'.$game['abbreviation']],
+                    'class' => 'pl-3',
                 ];
             });
 
-            $event->menu->addIn('games', ...$gameItem);
+            $event->menu->addIn('bets', ...$gameItem);
         });
     }
 }

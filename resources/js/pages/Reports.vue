@@ -106,7 +106,7 @@ export default {
 
         async displayCombinationReports(clusterId, drawPeriodId, dates) {
             if (clusterId.length > 1) {
-                axios.post('/api/v1/bets-reports/combination', {
+                await axios.post('/api/v1/bets-reports/combination', {
                     cluster_id: clusterId,
                     draw_period_id: drawPeriodId,
                     game: this.game,
@@ -127,7 +127,7 @@ export default {
                     console.log(err)
                 })
             } else {
-                axios.post('/api/v1/bets-reports/combination', {
+                await axios.post('/api/v1/bets-reports/combination', {
                     cluster_id: clusterId,
                     draw_period_id: drawPeriodId,
                     game: this.game,

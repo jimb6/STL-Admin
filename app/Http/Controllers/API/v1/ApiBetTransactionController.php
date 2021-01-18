@@ -308,7 +308,7 @@ class ApiBetTransactionController extends Controller
 
     public function getGeneralBetsReport(Request $request)
     {
-        $this->authorize('list-bet-transactions', Bet::class);
+        $this->authorize('list-bet-transactions', BetTransaction::class);
         $validated = $request->validate([
             'cluster_id' => 'required|array|min:1',
             'draw_period_id' => 'required|array|min:1',
@@ -318,13 +318,6 @@ class ApiBetTransactionController extends Controller
 
         $day1 = Carbon::parse($validated['dates'][0])->startOfDay();
         $day2 = Carbon::parse($validated['dates'][1])->endOfDay();
-
-//        $game = Game::with('gameConfiguration')->where('abbreviation', $validated['game'])->first();
-//        $commission = DB::table('commissions as c')
-//            ->select(DB::raw('SUM(c.commission_rate) as sum, cl.name'))
-//            ->join('clusters as cl', 'c.cluster_id', '=', 'cl.id')
-//            ->where('game_id', $game->id)
-//            ->groupBy('cluster_id')->get();
 
         if (count($validated['cluster_id']) == 1) {
             $general_reports = DB::select("
@@ -406,14 +399,12 @@ class ApiBetTransactionController extends Controller
              ORDER BY draw_date DESC, draw_time DESC;");
         }
 
-
-//
         $reportUrl = URL::temporarySignedRoute('reports.bet.general.generate',
             now()->addMinutes(30),
             ['cluster_id' => $validated['cluster_id'], 'draw_period_id' => $validated['draw_period_id'],
                 'game' => $validated['game'], 'dates' => $validated['dates']]);
 
-        return response(['generalReports' => $general_reports, 'report_url' => $reportUrl, 'test_output' => $validated['dates']], 200);
+        return response(['generalReports' => $general_reports, 'report_url' => $reportUrl], 200);
     }
 
     public function getAgentTransactions(Request $request, $date)
@@ -454,6 +445,221 @@ class ApiBetTransactionController extends Controller
     private function validateDrawPeriod()
     {
 
+    }
 
+    // Reports
+    public function getReports(Request $request) {
+        $this->authorize('list-bet-transactions', BetTransaction::class);
+        $validated = $request->validate([
+            'report_type' => 'required',
+            'cluster_id' => 'required|array|min:1',
+            'dates' => 'required|array|max:2|min:2'
+        ]);
+
+
+        $cluster_ids = join(',', $validated['cluster_id']);
+        $day1 = Carbon::parse($validated['dates'][0])->startOfDay();
+        $day2 = Carbon::parse($validated['dates'][1])->endOfDay();
+        $reports = '';
+        $game_abbreviations = '';
+        $reportUrl = '';
+
+        switch ($validated['report_type']) {
+            case 'byCluster':
+                $reports = DB::select("
+                    SELECT cl2.name as cluster_name,
+                           GROUP_CONCAT(DISTINCT g2.abbreviation) as game_names,
+                           SUM(IF(gross, gross, 0)) as gross,
+                           SUM(IF(commission, commission, 0)) as commission,
+                           SUM(IF(net, net, 0)) as net,
+                           SUM(IF(hits, hits, 0)) as hits,
+                           SUM(IF(amount_hits, amount_hits, 0)) as amount_hits,
+                           SUM(IF(collectible, collectible, 0)) as collectible
+                    FROM draw_period_game dpg LEFT OUTER JOIN (
+                        SELECT GROUP_CONCAT(DISTINCT bt_bets.game_id) as game_id,
+                               GROUP_CONCAT(DISTINCT bt_bets.dp_id) as dp_id,
+                               cl.name as cl_name,
+                               cl.id as cl_id,
+                               abbreviation                                                                                                               as game_name,
+                               draw_time                                                                                                                  as draw_period,
+                               SUM(amount)                                                                                                                as gross,
+                               IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0)                                                             as commission,
+                               SUM(amount)-IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0)                                                 as net,
+                               SUM(IF(bt_bets.bet_id = wb.bet_id, amount, 0))                                                                             as hits,
+                               SUM(IF(bt_bets.bet_id = wb.bet_id, amount * bt_bets.multiplier, 0))                                                        as amount_hits,
+                               SUM(amount)-IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0) - SUM(IF(bt_bets.bet_id = wb.bet_id, amount * bt_bets.multiplier, 0))  as collectible
+                        FROM users u
+                             INNER JOIN (
+                                SELECT bt.user_id, g.abbreviation, dp.draw_time, b.amount, g.id as game_id, b.id as bet_id, gc.multiplier, dp.id as dp_id
+                                FROM bet_transactions bt
+                                    LEFT JOIN bets b on bt.id = b.bet_transaction_id AND bt.created_at BETWEEN '{$day1}' AND '{$day2}'
+                                    LEFT JOIN games g on b.game_id = g.id
+                                    LEFT JOIN game_configurations gc on gc.game_id = g.id
+                                    LEFT JOIN draw_periods dp on b.draw_period_id = dp.id
+                                ORDER BY b.id
+                             ) as bt_bets on bt_bets.user_id = u.id
+                            INNER JOIN clusters cl on cl.id = u.cluster_id AND cl.id in ({$cluster_ids})
+                            LEFT JOIN commissions c on cl.id = c.cluster_id AND c.game_id = bt_bets.game_id
+                            LEFT JOIN winning_bets wb on wb.bet_id = bt_bets.bet_id
+                        GROUP BY abbreviation, draw_time, cl.id
+                      ) as reports on reports.game_id =  dpg.game_id AND reports.dp_id = dpg.draw_period_id
+                    LEFT JOIN games g2 on dpg.game_id = g2.id
+                    LEFT JOIN draw_periods dp2 on dpg.draw_period_id = dp2.id
+                    RIGHT OUTER JOIN clusters cl2 on cl2.id = reports.cl_id
+                    GROUP BY cl2.id
+                ");
+                break;
+            case 'byAgent':
+                $games_query = DB::select("
+                    SELECT
+                      GROUP_CONCAT(DISTINCT CONCAT( 'SUM(case when bet_transaction.abbreviation=''', g.abbreviation , ''' THEN bet_transaction.amount END) AS `', g.abbreviation , '`')) as 'game_query',
+                      GROUP_CONCAT(DISTINCT g.abbreviation) as game_abbreviation
+                    FROM games g
+                ")[0];
+                $game_abbreviations = $games_query->game_abbreviation;
+                $reports = DB::select("
+                    SELECT u.name as agent_name, GROUP_CONCAT(DISTINCT d.device_code) as device_code, {$games_query->game_query} , sum(bet_transaction.amount) as total_gross
+                    FROM users u
+                             LEFT OUTER JOIN devices d on u.id = d.user_id
+                             LEFT OUTER JOIN (
+                                                SELECT bt.user_id, amount, g.abbreviation
+                                                FROM bet_transactions bt, bets b, games g
+                                                WHERE bt.id = b.bet_transaction_id
+                                                AND g.id = b.game_id
+                                                AND g.id in (SELECT g2.id FROM games g2)
+                                                AND bt.created_at BETWEEN '{$day1}' AND '{$day2}'
+                                             ) as bet_transaction on u.id = bet_transaction.user_id
+                             INNER JOIN clusters c on u.cluster_id = c.id AND c.id in ({$cluster_ids})
+                    GROUP BY u.id;");
+                break;
+            case 'byDrawPeriod':
+                $reports = DB::select("
+                    SELECT dp2.draw_time as draw_period,
+                           GROUP_CONCAT(DISTINCT g2.abbreviation) as game_name,
+                           SUM(IF(gross, gross, 0)) as gross,
+                           SUM(IF(commission, commission, 0)) as commission,
+                           SUM(IF(net, net, 0)) as net,
+                           SUM(IF(hits, hits, 0)) as hits,
+                           SUM(IF(amount_hits, amount_hits, 0)) as amount_hits,
+                           SUM(IF(collectible, collectible, 0)) as collectible
+                    FROM draw_period_game dpg LEFT OUTER JOIN (
+                        SELECT GROUP_CONCAT(DISTINCT bt_bets.game_id) as game_id,
+                               GROUP_CONCAT(DISTINCT bt_bets.dp_id) as dp_id,
+                               abbreviation                                                                                                               as game_name,
+                               draw_time                                                                                                                  as draw_period,
+                               SUM(amount)                                                                                                                as gross,
+                               IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0)                                                             as commission,
+                               SUM(amount)-IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0)                                                 as net,
+                               SUM(IF(bt_bets.bet_id = wb.bet_id, amount, 0))                                                                             as hits,
+                               SUM(IF(bt_bets.bet_id = wb.bet_id, amount * bt_bets.multiplier, 0))                                                        as amount_hits,
+                               SUM(amount)-IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0) - SUM(IF(bt_bets.bet_id = wb.bet_id, amount * bt_bets.multiplier, 0))  as collectible
+                        FROM users u
+                             INNER JOIN (
+                                SELECT bt.user_id, g.abbreviation, dp.draw_time, b.amount, g.id as game_id, b.id as bet_id, gc.multiplier, dp.id as dp_id
+                                FROM bet_transactions bt
+                                    LEFT JOIN bets b on bt.id = b.bet_transaction_id AND bt.created_at BETWEEN '{$day1}' AND '{$day2}'
+                                    LEFT JOIN games g on b.game_id = g.id
+                                    LEFT JOIN game_configurations gc on gc.game_id = g.id
+                                    LEFT JOIN draw_periods dp on b.draw_period_id = dp.id
+                                ORDER BY b.id
+                             ) as bt_bets on bt_bets.user_id = u.id
+                            INNER JOIN clusters cl on cl.id = u.cluster_id AND cl.id in ({$cluster_ids})
+                            LEFT JOIN commissions c on cl.id = c.cluster_id AND c.game_id = bt_bets.game_id
+                            LEFT JOIN winning_bets wb on wb.bet_id = bt_bets.bet_id
+                        GROUP BY abbreviation, draw_time
+                      ) as reports on reports.game_id =  dpg.game_id AND reports.dp_id = dpg.draw_period_id
+                    LEFT JOIN games g2 on dpg.game_id = g2.id
+                    LEFT JOIN draw_periods dp2 on dpg.draw_period_id = dp2.id
+                    GROUP BY dp2.id
+                ");
+                break;
+            case 'byGame':
+                $reports = DB::select("
+                    SELECT g2.abbreviation as game_name,
+                           GROUP_CONCAT(DISTINCT dp2.draw_time) as draw_period,
+                           SUM(IF(gross, gross, 0)) as gross,
+                           SUM(IF(commission, commission, 0)) as commission,
+                           SUM(IF(net, net, 0)) as net,
+                           SUM(IF(hits, hits, 0)) as hits,
+                           SUM(IF(amount_hits, amount_hits, 0)) as amount_hits,
+                           SUM(IF(collectible, collectible, 0)) as collectible
+                    FROM draw_period_game dpg LEFT OUTER JOIN (
+                        SELECT GROUP_CONCAT(DISTINCT bt_bets.game_id) as game_id,
+                               GROUP_CONCAT(DISTINCT bt_bets.dp_id) as dp_id,
+                               abbreviation                                                                                                               as game_name,
+                               draw_time                                                                                                                  as draw_period,
+                               SUM(amount)                                                                                                                as gross,
+                               IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0)                                                             as commission,
+                               SUM(amount)-IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0)                                                 as net,
+                               SUM(IF(bt_bets.bet_id = wb.bet_id, amount, 0))                                                                             as hits,
+                               SUM(IF(bt_bets.bet_id = wb.bet_id, amount * bt_bets.multiplier, 0))                                                        as amount_hits,
+                               SUM(amount)-IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0) - SUM(IF(bt_bets.bet_id = wb.bet_id, amount * bt_bets.multiplier, 0))  as collectible
+                        FROM users u
+                             INNER JOIN (
+                                SELECT bt.user_id, g.abbreviation, dp.draw_time, b.amount, g.id as game_id, b.id as bet_id, gc.multiplier, dp.id as dp_id
+                                FROM bet_transactions bt
+                                    LEFT JOIN bets b on bt.id = b.bet_transaction_id AND bt.created_at BETWEEN '{$day1}' AND '{$day2}'
+                                    LEFT JOIN games g on b.game_id = g.id
+                                    LEFT JOIN game_configurations gc on gc.game_id = g.id
+                                    LEFT JOIN draw_periods dp on b.draw_period_id = dp.id
+                                ORDER BY b.id
+                             ) as bt_bets on bt_bets.user_id = u.id
+                            INNER JOIN clusters cl on cl.id = u.cluster_id AND cl.id in ({$cluster_ids})
+                            LEFT JOIN commissions c on cl.id = c.cluster_id AND c.game_id = bt_bets.game_id
+                            LEFT JOIN winning_bets wb on wb.bet_id = bt_bets.bet_id
+                        GROUP BY abbreviation, draw_time
+                      ) as reports on reports.game_id =  dpg.game_id AND reports.dp_id = dpg.draw_period_id
+                    LEFT JOIN games g2 on dpg.game_id = g2.id
+                    LEFT JOIN draw_periods dp2 on dpg.draw_period_id = dp2.id
+                    GROUP BY g2.id
+                ");
+                break;
+            case 'byDrawPeriodGame':
+                $reports = DB::select("
+                    SELECT dp2.draw_time as draw_period,
+                           g2.abbreviation as game_name,
+                           IF(gross, gross, 0) as gross,
+                           IF(commission, commission, 0) as commission,
+                           IF(net, net, 0) as net,
+                           IF(hits, hits, 0) as hits,
+                           IF(amount_hits, amount_hits, 0) as amount_hits,
+                           IF(collectible, collectible, 0) as collectible
+                    FROM draw_period_game dpg LEFT OUTER JOIN (
+                        SELECT GROUP_CONCAT(DISTINCT bt_bets.game_id) as game_id,
+                               GROUP_CONCAT(DISTINCT bt_bets.dp_id) as dp_id,
+                               abbreviation                                                                                                               as game_name,
+                               draw_time                                                                                                                  as draw_period,
+                               SUM(amount)                                                                                                                as gross,
+                               IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0)                                                             as commission,
+                               SUM(amount)-IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0)                                                 as net,
+                               SUM(IF(bt_bets.bet_id = wb.bet_id, amount, 0))                                                                             as hits,
+                               SUM(IF(bt_bets.bet_id = wb.bet_id, amount * bt_bets.multiplier, 0))                                                        as amount_hits,
+                               SUM(amount)-IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0) - SUM(IF(bt_bets.bet_id = wb.bet_id, amount * bt_bets.multiplier, 0))  as collectible
+                        FROM users u
+                             INNER JOIN (
+                                SELECT bt.user_id, g.abbreviation, dp.draw_time, b.amount, g.id as game_id, b.id as bet_id, gc.multiplier, dp.id as dp_id
+                                FROM bet_transactions bt
+                                    LEFT JOIN bets b on bt.id = b.bet_transaction_id AND bt.created_at BETWEEN '{$day1}' AND '{$day2}'
+                                    LEFT JOIN games g on b.game_id = g.id
+                                    LEFT JOIN game_configurations gc on gc.game_id = g.id
+                                    LEFT JOIN draw_periods dp on b.draw_period_id = dp.id
+                                ORDER BY b.id
+                             ) as bt_bets on bt_bets.user_id = u.id
+                            INNER JOIN clusters cl on cl.id = u.cluster_id AND cl.id in ({$cluster_ids})
+                            LEFT JOIN commissions c on cl.id = c.cluster_id AND c.game_id = bt_bets.game_id
+                            LEFT JOIN winning_bets wb on wb.bet_id = bt_bets.bet_id
+                        GROUP BY abbreviation, draw_time
+                      ) as reports on reports.game_id =  dpg.game_id AND reports.dp_id = dpg.draw_period_id
+                    LEFT JOIN games g2 on dpg.game_id = g2.id
+                    LEFT JOIN draw_periods dp2 on dpg.draw_period_id = dp2.id
+                ");
+                break;
+        }
+
+//        $reportUrl = URL::temporarySignedRoute('reports.bet.general.generate', now()->addMinutes(30),
+//            ['cluster_id' => $validated['cluster_id'], 'draw_period_id' => $validated['draw_period_id'],
+//                'game' => $validated['game'], 'dates' => $validated['dates']]);
+
+        return response(['reports' => $reports, 'report_url' => $reportUrl, 'game_abbreviations' => $game_abbreviations],200);
     }
 }

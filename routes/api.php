@@ -88,6 +88,7 @@ Route::prefix('v1/')
         Route::post('bet-transaction-entries', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'showEntriesBasedOnDateRange']);
         Route::get('bet-transaction-entries/{date}', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'getAgentTransactions']);
         Route::put('bet-transaction-printable/{id}', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'updatePrintableStatus']);
+        Route::post('reports/overall-gross', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'getReports']);
 
 //        Custom Bets Request
         Route::get('bets/{game}/{draw}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'index']);
@@ -113,6 +114,8 @@ Route::prefix('v1/')
 //      Custom Game Configuration Mobile Route Request
         Route::get('games/mobile-config/today/', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configMobileIndex']);
 
+//        Custom Game Route request
+        Route::get('games/winners/{date}', [\App\Http\Controllers\API\v1\ApiWinningBetController::class, 'showByDate']);
 
 //        Custom User Request
         Route::put('deactivate-user/{id}', [\App\Http\Controllers\API\v1\ApiUserController::class, 'deactivateUser']);
@@ -145,6 +148,10 @@ Route::prefix('v1/')
             return response([], 200);
         })->name('role.assign.permission');
     });
+
+
+
+
 
 Route::prefix('reports/')
     ->middleware(['auth:sanctum'])

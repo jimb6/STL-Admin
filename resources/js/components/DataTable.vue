@@ -259,6 +259,9 @@
                 </v-icon>
             </template>
 
+            <template v-slot:item.draw_period="{ item }">
+                {{ new Date('1/1/2021 ' + item.draw_period).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3") }}
+            </template>
             <template v-slot:item.draw_time="{ item }">
                 {{ new Date('1/1/2021 ' + item.draw_time).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3") }}
             </template>
@@ -306,6 +309,19 @@
                     color="primary"
                     inset
                 ></v-switch>
+            </template>
+
+            <template v-slot:item.claimed="{item}">
+                <v-avatar color="green" size="30" v-if="item.claimed">
+                    <v-icon dark small>
+                        mdi-check
+                    </v-icon>
+                </v-avatar>
+                <v-avatar color="red" size="30" v-if="!item.claimed">
+                    <v-icon dark small>
+                        mdi-close
+                    </v-icon>
+                </v-avatar>
             </template>
 
             <template v-slot:item.isClosed="{ item }">
