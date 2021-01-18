@@ -484,6 +484,14 @@ input.datepicker {
     color: #fff;
 }
 
+/* NOTIFICATION */
+.cstm-notification {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    z-index: 10000;
+}
+
 /* THEME */
 button#cstm-theme {
     height: 100% !important;

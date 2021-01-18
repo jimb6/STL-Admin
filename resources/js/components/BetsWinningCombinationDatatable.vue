@@ -127,7 +127,7 @@
                                     <v-btn outlined color="blue" @click="close">
                                         Cancel
                                     </v-btn>
-                                    <v-btn color="blue" class="text-white" @click="saveItem">
+                                    <v-btn color="blue" class="text-white" @click="saveItem()">
                                         Save
                                     </v-btn>
                                 </v-card-actions>
@@ -156,7 +156,7 @@
                 <v-icon class="mr-2" v-if="item.verifiedAt" color="green">
                     mdi-thumb-up-outline
                 </v-icon>
-                <v-icon class="mr-2" @click="editItem(item)">
+                <v-icon class="mr-2" @click="editItem(item)" v-show="( new Date(item.drawDate).toLocaleDateString() === new Date().toLocaleDateString() )">
                     mdi-pencil
                 </v-icon>
             </template>
@@ -255,6 +255,7 @@ export default {
 
     created() {
         this.initialize();
+        this.dates = [this.getCurrentDate(), this.getCurrentDate()]
     },
 
     updated() {
@@ -263,8 +264,6 @@ export default {
 
     methods: {
         initialize() {
-            this.dates = [this.getCurrentDate(), this.getCurrentDate()]
-
             for (let index in this.fillable) {
                 this.editedItem[this.fillable[index].field] = this.fillable[index].value
                 this.defaultItem[this.fillable[index].field] = this.fillable[index].value
@@ -298,7 +297,8 @@ export default {
                 // VERIFY AND UPDATE
                 if (Object.keys(this.verifiedItem).length === 0 && this.verifiedItem.constructor === Object) {
                     this.editedItem["id"] = this.contents[this.editedIndex].id;
-                    this.$emit('updateWinningCombination', this.editedItem)
+                    this.editedItem['dates'] = this.dates;
+                    this.$emit('updateWinningCombination', this.editedItem);
                 } else {
                     this.editedItem["id"] = this.contents[this.editedIndex].id;
                     this.editedItem['verifiedItem'] = this.verifiedItem;
@@ -314,9 +314,8 @@ export default {
 
         // CRUD OPERATIONS
         displayBetWinningCombinations() {
-            console.log( "DISPLAY BET WINNING COMBINATIONS" );
-        if(this.dates !== null && this.dates.length > 1)
-            this.$emit('displayBetWinningCombinations', this.dates)
+            if(this.dates !== null && this.dates.length > 1)
+                this.$emit('displayBetWinningCombinations', this.dates)
         },
 
         getCurrentDate() {
@@ -351,9 +350,7 @@ export default {
             } else if (item.status === "CLOSED") {
                 this.$emit("destroyCloseCombination", item);
             }
-
-        }
-
+        },
 
     },
 

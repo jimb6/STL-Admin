@@ -271,6 +271,7 @@ export default {
         excelData: Array,
         excelTitle: String,
         reportUrl: String,
+        loadingStatus: Boolean,
     },
 
     data: () => ({
@@ -279,7 +280,6 @@ export default {
         page: 1,
         pageCount: 0,
         itemsPerPage: 100,
-        loadingStatus: true,
 
         //  FILTERS
         reportTypeFilter: {
@@ -297,10 +297,6 @@ export default {
 
     created() {
         this.initialize();
-    },
-
-    updated() {
-      this.loadingStatus = false;
     },
 
     methods: {

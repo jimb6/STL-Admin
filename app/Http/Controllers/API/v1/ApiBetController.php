@@ -7,6 +7,7 @@ use App\Models\Bet;
 use App\Models\CloseNumber;
 use App\Models\Game;
 use App\Scopes\BetScope;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -114,8 +115,10 @@ class ApiBetController extends Controller
             'dates' => 'required|array|max:2|min:2'
         ]);
 
-        $validated['dates'][1] .= ' 23:59:59';
-        $bets = Bet::whereBetween('created_at', $validated['dates'])
+        $day1 = Carbon::parse($validated['dates'][0])->startOfDay();
+        $day2 = Carbon::parse($validated['dates'][1])->endOfDay();
+
+        $bets = Bet::whereBetween('created_at', [$day1, $day2])
             ->whereIn('draw_period_id', $validated['draw_period_id'])
             ->with(['betTransaction.user' => function ($query) use ($validated) {
                 $query->whereIn('cluster_id', $validated['cluster_id']);

@@ -13,6 +13,7 @@
             :excelData="excelData"
             :excelTitle="excelTitle"
             :reportUrl="reportUrl"
+            :loadingStatus="loadingStatus"
             @displayReports="displayReports($event)"
         />
     </v-container>
@@ -40,6 +41,7 @@ export default {
         excelHeaders: [],
         excelData: [],
         excelTitle: '',
+        loadingStatus: true,
 
         // Notification
         notifications: [],
@@ -105,6 +107,11 @@ export default {
         },
 
         async displayCombinationReports(clusterId, drawPeriodId, dates) {
+
+            this.$nextTick(()=>{
+                this.loadingStatus = true;
+            });
+
             if (clusterId.length > 1) {
                 await axios.post('/api/v1/bets-reports/combination', {
                     cluster_id: clusterId,
@@ -122,6 +129,10 @@ export default {
                             });
                         }
                         this.updateExcelFields("combination", dates);
+
+                        this.$nextTick(()=>{
+                            this.loadingStatus = false;
+                        });
                         console.log(response.data, "COMBINATION REPORTS")
                     }).catch(err => {
                     console.log(err)

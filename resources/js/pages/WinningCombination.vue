@@ -1,15 +1,8 @@
 <template>
     <v-container>
-        <div v-if="notifications.length > 0" v-for="notification in notifications">
-            <Notification :text="notification.text" :type="notification.type"></Notification>
+        <div v-if="notifications.length > 0" v-for="notification in notifications" class="cstm-notification">
+            <Notification :notification="notification"></Notification>
         </div>
-        <v-alert
-            v-show="error"
-            dense
-            border="left"
-            type="error">
-            Hoy yagpataka kaw.!
-        </v-alert>
         <BetsWinningCombinationDatatable
             class="singleBetTable"
             :title="game"
@@ -63,7 +56,6 @@ export default {
         excelHeaders: [],
         excelData: [],
         excelTitle: '',
-        error: false,
 
     }),
     created() {
@@ -104,11 +96,10 @@ export default {
                 'game': this.game,
                 'drawPeriodId': item.drawPeriodId
             }).then(response => {
-                this.displayBetWinningCombinations([this.getCurrentDate(), this.getCurrentDate()]);
+                // this.displayBetWinningCombinations([this.getCurrentDate(), this.getCurrentDate()]);
                 this.addNotification("Winning combination stored successfully.", "success")
             }).catch(err => {
                 this.addNotification("Error storing winning combination.", "error")
-                this.error = true
             })
         },
 
@@ -119,12 +110,11 @@ export default {
                 'game': this.game,
                 'draw_period_id': item.drawPeriodId
             }).then(response => {
-                console.log(response)
-                this.displayBetWinningCombinations([this.getCurrentDate(), this.getCurrentDate()]);
+                console.log(response, 'UPDATE WINNING COMBINATION')
+                this.displayBetWinningCombinations(item.dates);
                 this.addNotification("Winning combination updated successfully.", "success")
             }).catch(err => {
                 this.addNotification("Error updating winning combination.", "error")
-                this.error = true
             })
         },
 
@@ -139,11 +129,10 @@ export default {
             })
                 .then(response => {
                     console.log(response)
-                    this.displayBetWinningCombinations([this.getCurrentDate(), this.getCurrentDate()]);
+                    // this.displayBetWinningCombinations([this.getCurrentDate(), this.getCurrentDate()]);
                     this.addNotification("Combination successfully verified.", "success")
                 }).catch(err => {
                 this.addNotification("Error verifying winning combination.", "error")
-                this.error = true
             })
 
         },
@@ -169,7 +158,7 @@ export default {
 
         // NOTIFICATION
         addNotification(message, type) {
-            this.notifications.push({text: message, type: type});
+            this.notifications.push({message: message, type: type});
         },
 
         getDateToday(date) {
