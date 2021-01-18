@@ -17,7 +17,7 @@
                         :reportUrl="reportUrl"
                         :reportType="reportType"
                         :gameAbbreviations="gameAbbreviations"
-                        @displayReports="displayGrossByDraw"
+                        @displayReports="displayGrossByDrawPeriod"
                     />
                 </div>
             </div>
@@ -30,13 +30,13 @@ import Notification from "../../components/Notification";
 import GrossDatatable from "../../components/GrossDatatable";
 
 export default {
-    name: "ByDraw",
+    name: "ByDrawPeriod",
     components: {
         Notification,
         GrossDatatable
     },
     data: () => ({
-        title: "Gross By Draw",
+        title: "Gross By Draw Period",
         headers: [
             {text: "Draw Period", value: "draw_period"},
             {text: "Game", value: "game_name"},
@@ -54,7 +54,7 @@ export default {
         excelData: [],
         excelTitle: '',
         reportUrl: '',
-        reportType: 'byDraw',
+        reportType: 'byDrawPeriod',
 
         // Notification
         notifications: [],
@@ -63,7 +63,7 @@ export default {
     },
 
     methods: {
-        async displayGrossByDraw(item) {
+        async displayGrossByDrawPeriod(item) {
 
             await axios.post('/api/v1/reports/overall-gross', {
                 report_type: this.reportType,
