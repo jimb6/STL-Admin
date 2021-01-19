@@ -32,8 +32,10 @@ class User extends Authenticatable
 
     public static function booted()
     {
-        static::addGlobalScope(new ClusterScope);
-        static::addGlobalScope(new StatusScope);
+        if (Auth::check() && !Auth::user()->hasRole(['super-admin'])) {
+            static::addGlobalScope(new ClusterScope);
+            static::addGlobalScope(new StatusScope);
+        }
     }
 
     public function setEmailAttribute($value) {

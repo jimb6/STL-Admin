@@ -13,6 +13,7 @@ use App\Models\Game;
 use App\Models\GameConfiguration;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
@@ -319,6 +320,9 @@ class ApiBetTransactionController extends Controller
         $day1 = Carbon::parse($validated['dates'][0])->startOfDay();
         $day2 = Carbon::parse($validated['dates'][1])->endOfDay();
 
+        if (Auth::check()) $user = Auth::user();
+        else return abort(401);
+
         if (count($validated['cluster_id']) == 1) {
             $general_reports = DB::select("
                 SELECT
@@ -410,9 +414,22 @@ class ApiBetTransactionController extends Controller
     public function getAgentTransactions(Request $request, $date)
     {
         $this->authorize('list-bet-transactions', BetTransaction::class);
-        $betTransactions = BetTransaction::with('bets')->whereDate('created_at', $date)
-            ->orderByDesc('created_at')
-            ->get();
+        if (!$user = $request->user()->hasRole('agent')) return abort(401);
+//        $user = $request->user();
+        $betTransactions = DB::table('bet_transactions as bt')
+            ->select(DB::raw("bt.id, TIME(bt.created_at) as trans_time, dp.draw_time as draw_period,
+                                    g.abbreviation as game_name, b.combination, b.amount, bt.qr_code"))
+            ->where('bt.user_id', $user->id)
+            ->whereDate(DB::raw('DATE(bt.created_at)'), $date)
+            ->leftJoin('bets as b', 'b.bet_transaction_id', '=', 'bt.id')
+            ->leftJoin('draw_periods as dp', 'b.draw_period_id', '=', 'dp.id')
+            ->leftJoin('games as g', 'b.game_id', '=', 'g.id')
+            ->orderByDesc('bt.created_at')
+            ->get()->groupBy('id');
+
+//        $betTransactions = BetTransaction::with('bets')->whereDate('created_at', $date)
+//            ->orderByDesc('created_at')
+//            ->get();
 
         return response(['betTransactions' => $betTransactions], 200);
     }
@@ -448,7 +465,8 @@ class ApiBetTransactionController extends Controller
     }
 
     // Reports
-    public function getReports(Request $request) {
+    public function getReports(Request $request)
+    {
         $this->authorize('list-bet-transactions', BetTransaction::class);
         $validated = $request->validate([
             'report_type' => 'required',
@@ -660,6 +678,6 @@ class ApiBetTransactionController extends Controller
 //            ['cluster_id' => $validated['cluster_id'], 'draw_period_id' => $validated['draw_period_id'],
 //                'game' => $validated['game'], 'dates' => $validated['dates']]);
 
-        return response(['reports' => $reports, 'report_url' => $reportUrl, 'game_abbreviations' => $game_abbreviations],200);
+        return response(['reports' => $reports, 'report_url' => $reportUrl, 'game_abbreviations' => $game_abbreviations], 200);
     }
 }

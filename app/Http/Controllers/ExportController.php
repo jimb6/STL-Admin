@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\GeneralReports;
+use App\Exports\CombinationReport;
 use App\Exports\UsersExport;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
@@ -20,6 +20,6 @@ class ExportController extends Controller
     function exportBetEntries(Request $request)
     {
         $filename = Carbon::now()->format('Ymdhms') . '-bet-entries.xlsx';
-        return Excel::download(new GeneralReports($request), $filename);
+        return Excel::download(new CombinationReport($request), $filename);
     }
 }

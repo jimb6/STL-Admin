@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Bet extends Model implements Auditable
@@ -38,7 +39,7 @@ class Bet extends Model implements Auditable
 
     public static function booted()
     {
-        if (!auth()->user()->hasRole(['super-admin'])) {
+        if (Auth::check() && !Auth::user()->hasRole(['super-admin'])) {
             static::addGlobalScope(new BetScope);
         }
     }

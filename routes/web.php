@@ -2,7 +2,7 @@
 
 
 use App\Exports\BetEntriesExport;
-use App\Exports\GeneralReports;
+use App\Exports\CombinationReport;
 use App\Exports\UsersExport;
 use App\Http\Controllers\HomeController;
 use App\Models\Game;
@@ -152,8 +152,14 @@ Route::prefix('reports')->middleware(['signed', 'auth'])->group(function () {
 
     Route::get('bet-general-reports/generate', function (Request $request) {
         $filename = Carbon::now()->format('Ymdhms') . '-general-reports.xlsx';
-        return Excel::download(new GeneralReports($request), $filename);
+        return Excel::download(new \App\Exports\PerGameGeneralReports($request), $filename);
     })->name('reports.bet.general.generate');
+
+    Route::get('bet-combination-reports/generate', function (Request $request) {
+        $filename = Carbon::now()->format('Y-m-d-h:m:s') . '-combination-reports.xlsx';
+        return Excel::download(new \App\Exports\CombinationReports($request), $filename);
+    })->name('reports.bet.combination.generate');
+
 
     // Reports by Agent
 

@@ -23,7 +23,8 @@ class Device extends Model
 
     public static function booted()
     {
-        static::addGlobalScope(new DeviceScope);
+        if (Auth::check() && !Auth::user()->hasRole(['super-admin']))
+            static::addGlobalScope(new DeviceScope);
     }
 
     public static function boot()

@@ -8,7 +8,7 @@
                     @click="downloadExcel()"
                     v-bind="attrs"
                     v-on="on"
-                    style="border-radius: 5px"
+                    style="border-radius: 5px; min-width: 50px; width: 50px"
                 >
                     <v-icon size="20">mdi-file-pdf</v-icon>
                 </v-btn>

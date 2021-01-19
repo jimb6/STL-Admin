@@ -4,9 +4,10 @@ namespace App\Models;
 
 use App\Models\Scopes\Searchable;
 use App\Scopes\ClusterScope;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 
 class Booth extends Model
 {
@@ -20,7 +21,9 @@ class Booth extends Model
 
     protected static function booted()
     {
-        static::addGlobalScope(new ClusterScope);
+        if (Auth::check() && !Auth::user()->hasRole(['super-admin'])) {
+            static::addGlobalScope(new ClusterScope);
+        }
     }
 
     public function base()
@@ -28,7 +31,7 @@ class Booth extends Model
         return $this->belongsTo(Cluster::class);
     }
 
-    public function  address()
+    public function address()
     {
         return $this->belongsTo(Address::class);
     }

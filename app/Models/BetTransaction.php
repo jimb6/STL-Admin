@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class BetTransaction extends Model implements Auditable
@@ -31,8 +32,7 @@ class BetTransaction extends Model implements Auditable
 
     public static function booted()
     {
-        $user = auth()->user();
-        if (!$user->hasRole(['super-admin'])) {
+        if (Auth::check() && !Auth::user()->hasRole(['super-admin'])) {
             static::addGlobalScope(new TransactionBaseScope);
         }
 
@@ -41,12 +41,13 @@ class BetTransaction extends Model implements Auditable
     public static function boot()
     {
         parent::boot();
-        static::creating(function (Model $model) {
-            $model->attributes['qr_code'] = date("mdy") .
-                '-' . substr(md5(uniqid(mt_rand(), true)), 0, 8);
-        });
+//        static::creating(function (Model $model) {
+//            $model->attributes['qr_code'] = date("mdy") .
+//                '-' . substr(md5(uniqid(mt_rand(), true)), 0, 8);
+//        });
         static::created(function (Model $model) {
             $model->attributes['qr_code'] = $model->attributes['id'] . '-' . $model->attributes['qr_code'];
+            $model->update();
         });
     }
 

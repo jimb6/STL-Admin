@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\StatusScope;
+use Illuminate\Support\Facades\Auth;
 
 class Agent extends User
 {
@@ -11,7 +12,7 @@ class Agent extends User
 
     public static function booted()
     {
-        if (!auth()->user()->hasRole(['super-admin'])) {
+        if (Auth::check() && !Auth::user()->hasRole(['super-admin'])) {
             static::addGlobalScope(new StatusScope);
         }
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Helpers\PasswordGenerator;
 use App\Helpers\TwilioSmsHelper;
 use App\Models\Address;
+use App\Models\Agent;
 use App\Models\Cluster;
 use App\Models\User;
 use App\Scopes\StatusScope;
@@ -125,7 +126,19 @@ class ApiAgentController extends ApiController
         return response(['agents' => $agents], 200);
     }
 
+    public function deactivateAgent(Request $request, $id)
+    {
+        $this->authorize('update-users', User::class);
+        $validated = $request->validate([
+            'status' => 'required|boolean',
+        ]);
 
+        if ($request->user()->id == $id) abort(406);
+
+        $user = Agent::find($id)->update($validated);
+
+        return response($user, 200);
+    }
 
 
 

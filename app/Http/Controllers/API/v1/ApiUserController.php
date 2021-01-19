@@ -144,11 +144,9 @@ class ApiUserController extends Controller
 
         if ($request->user()->id == $id) abort(406);
 
-        User::where('id', $id)
-            ->first()
-            ->update($validated);
+        $user = User::find($id)->update($validated);
 
-        return response([$validated], 200);
+        return response($user, 200);
     }
 
 }

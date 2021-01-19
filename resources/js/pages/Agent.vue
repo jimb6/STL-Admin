@@ -187,7 +187,8 @@ export default {
         },
 
         async deactivateUser(item) {
-            axios.put('/api/v1/deactivate-user/' + item.id, {
+            console.log(item, "DEACTIVATE <<<<<<<<<")
+            axios.put('/api/v1/deactivate-agent/' + item.id, {
                 status: item.isClosed
             })
                 .then(response => {

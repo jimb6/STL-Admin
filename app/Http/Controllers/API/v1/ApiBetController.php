@@ -9,7 +9,8 @@ use App\Models\Game;
 use App\Scopes\BetScope;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 
 class ApiBetController extends Controller
 {
@@ -118,21 +119,37 @@ class ApiBetController extends Controller
         $day1 = Carbon::parse($validated['dates'][0])->startOfDay();
         $day2 = Carbon::parse($validated['dates'][1])->endOfDay();
 
-        $bets = Bet::whereBetween('created_at', [$day1, $day2])
-            ->whereIn('draw_period_id', $validated['draw_period_id'])
-            ->with(['betTransaction.user' => function ($query) use ($validated) {
-                $query->whereIn('cluster_id', $validated['cluster_id']);
-            }, 'game' => function($query) use ($validated) {
-                $query->where('abbreviation', $validated['game']);
-            }, 'drawPeriod'])
+        $bets = DB::table('bets as b')
+            ->select(DB::raw('b.combination as combination, SUM(b.amount) as amount'))
+            ->whereIn('b.draw_period_id', $validated['draw_period_id'])
+            ->leftJoin('bet_transactions as bt', 'bt.id', '=', 'b.bet_transaction_id')
+            ->leftJoin('users as u', 'u.id', '=', 'bt.user_id')
+            ->whereIn('u.cluster_id', $validated['cluster_id'])
+            ->leftJoin('draw_periods as dp', 'dp.id', '=', 'b.draw_period_id')
+            ->leftJoin('games as g', 'g.id', '=', 'b.game_id')
+            ->where('abbreviation', $validated['game'])
+            ->groupBy('b.combination')
             ->get();
-        $bets = $bets->reject(function ($item, $key){
-            return $item['game'] == null;
-        });
-        $bets = $bets->groupBy('combination')->map(function ($row) {
-            return ['sum' => $row->sum('amount'), 'bets' => $row];
-        });
 
-        return response(['bets' => $bets], 200);
+//        $bets = Bet::whereBetween('created_at', [$day1, $day2])
+//            ->whereIn('draw_period_id', $validated['draw_period_id'])
+//            ->with(['betTransaction.user' => function ($query) use ($validated) {
+//                $query->whereIn('cluster_id', $validated['cluster_id']);
+//            }, 'game' => function($query) use ($validated) {
+//                $query->where('abbreviation', $validated['game']);
+//            }, 'drawPeriod'])
+//            ->get();
+//        $bets = $bets->reject(function ($item, $key){
+//            return $item['game'] == null;
+//        });
+//        $bets = $bets->groupBy('combination')->map(function ($row) {
+//            return ['sum' => $row->sum('amount'), 'bets' => $row];
+//        });
+
+        $reportUrl = URL::temporarySignedRoute('reports.bet.combination.generate', now()->addMinutes(30),
+            ['cluster_id' => $validated['cluster_id'], 'draw_period_id' => $validated['draw_period_id'],
+                'game' => $validated['game'], 'dates' => $validated['dates']]);
+
+        return response(['bets' => $bets, 'reports_url' => $reportUrl], 200);
     }
 }

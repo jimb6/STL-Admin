@@ -119,6 +119,7 @@ Route::prefix('v1/')
 
 //        Custom User Request
         Route::put('deactivate-user/{id}', [\App\Http\Controllers\API\v1\ApiUserController::class, 'deactivateUser']);
+        Route::put('deactivate-agent/{id}', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'deactivateAgent']);
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])
             ->name('agents.active');

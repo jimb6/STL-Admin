@@ -108,57 +108,37 @@ export default {
 
         async displayCombinationReports(clusterId, drawPeriodId, dates) {
 
-            this.$nextTick(()=>{
+            this.$nextTick(() => {
                 this.loadingStatus = true;
             });
 
-            if (clusterId.length > 1) {
-                await axios.post('/api/v1/bets-reports/combination', {
-                    cluster_id: clusterId,
-                    draw_period_id: drawPeriodId,
-                    game: this.game,
-                    dates: dates
-                })
-                    .then(response => {
-                        const data = response.data.bets;
-                        this.contents = [];
-                        for (let item in data) {
-                            this.contents.push({
-                                combination: item,
-                                amount: data[item].sum,
-                            });
-                        }
-                        this.updateExcelFields("combination", dates);
-
-                        this.$nextTick(()=>{
-                            this.loadingStatus = false;
+            await axios.post('/api/v1/bets-reports/combination', {
+                cluster_id: clusterId,
+                draw_period_id: drawPeriodId,
+                game: this.game,
+                dates: dates
+            })
+                .then(response => {
+                    console.log(response)
+                    this.reportUrl = response.data.reports_url
+                    const data = response.data.bets;
+                    this.contents = [];
+                    for (let item in data) {
+                        this.contents.push({
+                            combination: data[item].combination,
+                            amount: data[item].amount,
                         });
-                        console.log(response.data, "COMBINATION REPORTS")
-                    }).catch(err => {
+                    }
+                    this.updateExcelFields("combination", dates);
+
+                    this.$nextTick(() => {
+                        this.loadingStatus = false;
+                    });
+                    console.log(response.data, "COMBINATION REPORTS")
+                }).catch(err => {
                     console.log(err)
                 })
-            } else {
-                await axios.post('/api/v1/bets-reports/combination', {
-                    cluster_id: clusterId,
-                    draw_period_id: drawPeriodId,
-                    game: this.game,
-                    dates: dates
-                })
-                    .then(response => {
-                        const data = response.data.bets;
-                        this.contents = [];
-                        for (let item in data) {
-                            this.contents.push({
-                                combination: item,
-                                amount: data[item].sum,
-                            });
-                        }
-                        this.updateExcelFields("combination", dates);
-                        console.log(response.data, "COMBINATION REPORTS")
-                    }).catch(err => {
-                    console.log(err)
-                })
-            }
+
         },
 
         async displayGeneralReports(clusterId, drawPeriodId, dates) {
