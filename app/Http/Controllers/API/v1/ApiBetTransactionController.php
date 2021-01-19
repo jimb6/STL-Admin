@@ -417,7 +417,7 @@ class ApiBetTransactionController extends Controller
         if (!$user = $request->user()->hasRole('agent')) return abort(401);
 //        $user = $request->user();
         $betTransactions = DB::table('bet_transactions as bt')
-            ->select(DB::raw("bt.id, TIME(bt.created_at) as trans_time, dp.draw_time as draw_period,
+            ->select(DB::raw("bt.id, bt.printable, TIME(bt.created_at) as trans_time, dp.draw_time as draw_period,
                                     g.abbreviation as game_name, b.combination, b.amount, bt.qr_code"))
             ->where('bt.user_id', $user->id)
             ->whereDate(DB::raw('DATE(bt.created_at)'), $date)
