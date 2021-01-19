@@ -373,6 +373,7 @@ export default {
         getDrawPeriods() {
             axios.get('/api/v1/draw-periods-categorized/' + this.title)
                 .then(response => {
+                    console.log(response.data.drawPeriods, '<<<< DRAW PERIOD')
                     let drawPeriods = response.data.drawPeriods
                     if (drawPeriods.length > 1){
                         let ids = []

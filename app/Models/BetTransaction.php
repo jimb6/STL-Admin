@@ -41,14 +41,14 @@ class BetTransaction extends Model implements Auditable
     public static function boot()
     {
         parent::boot();
-//        static::creating(function (Model $model) {
-//            $model->attributes['qr_code'] = date("mdy") .
-//                '-' . substr(md5(uniqid(mt_rand(), true)), 0, 8);
-//        });
-        static::created(function (Model $model) {
-            $model->attributes['qr_code'] = $model->attributes['id'] . '-' . $model->attributes['qr_code'];
-            $model->update();
+        static::creating(function (Model $model) {
+            $model->attributes['qr_code'] = date("mdy") .
+                '-' . substr(md5(uniqid(mt_rand(), true)), 0, 8);
         });
+//        static::created(function (Model $model) {
+//            $model->attributes['qr_code'] = $model->attributes['id'] . '-' . $model->attributes['qr_code'];
+//            $model->update();
+//        });
     }
 
     public function scopeToday($query)

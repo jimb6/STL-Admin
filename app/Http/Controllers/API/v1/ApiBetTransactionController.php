@@ -216,6 +216,7 @@ class ApiBetTransactionController extends Controller
     {
         $this->authorize('view-bet-transactions', BetTransaction::class);
         $game = Game::where('abbreviation', $game)->first();
+
         $drawPeriod = DrawPeriod::currentDraw()->whereHas('games', function ($query) use ($game) {
             $query->where('id', $game->id);
         })->first();
@@ -223,7 +224,8 @@ class ApiBetTransactionController extends Controller
         $betTransactions = [];
         if ($drawPeriod) {
             $betTransactions = DB::table('bets as b')
-                ->select(DB::raw('COUNT(*) as count, SUM(b.amount) as total, MAX(config.max_sum_bet) as max, b.combination, MAX(cc.max_amount) as control, IF(cn.combination, true, false) as closed, dp.draw_time'))
+                ->select(DB::raw('COUNT(*) as count, SUM(b.amount) as total, MAX(config.max_sum_bet) as max, b.combination, MAX(cc.max_amount) as control,
+                IF(cn.combination, true, false) as closed, dp.draw_time'))
                 ->whereDate('b.created_at', Carbon::today()->toDateString())
                 ->where('b.game_id', $game->id)
                 ->where('b.draw_period_id', $drawPeriod->id)
@@ -414,17 +416,18 @@ class ApiBetTransactionController extends Controller
     public function getAgentTransactions(Request $request, $date)
     {
         $this->authorize('list-bet-transactions', BetTransaction::class);
-        if (!$user = $request->user()->hasRole('agent')) return abort(401);
+        if (!$user = $request->user()) return abort(401);
+        if (!$user->hasRole('agent')) return abort(401);
 //        $user = $request->user();
         $betTransactions = DB::table('bet_transactions as bt')
-            ->select(DB::raw("bt.id, bt.printable, TIME(bt.created_at) as trans_time, dp.draw_time as draw_period,
+            ->select(DB::raw("bt.id, bt.printable, bt.created_at as trans_time, dp.draw_time as draw_period,
                                     g.abbreviation as game_name, b.combination, b.amount, bt.qr_code"))
             ->where('bt.user_id', $user->id)
             ->whereDate(DB::raw('DATE(bt.created_at)'), $date)
             ->leftJoin('bets as b', 'b.bet_transaction_id', '=', 'bt.id')
             ->leftJoin('draw_periods as dp', 'b.draw_period_id', '=', 'dp.id')
             ->leftJoin('games as g', 'b.game_id', '=', 'g.id')
-            ->orderByDesc('bt.created_at')
+            ->orderByDesc('bt.id')
             ->get()->groupBy('id');
 
 //        $betTransactions = BetTransaction::with('bets')->whereDate('created_at', $date)

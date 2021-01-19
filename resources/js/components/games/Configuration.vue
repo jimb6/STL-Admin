@@ -191,6 +191,7 @@ export default {
             await axios.get('/api/v1/bet-transactions-realtime/' + this.game)
                 .then(response => {
                     console.log(response)
+                    console.log(response.data, '<<<<')
                     let data = response.data.bets
                     this.drawPeriodConfig = response.data.draw
                     this.contents = [];
