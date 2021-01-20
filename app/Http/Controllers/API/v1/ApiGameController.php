@@ -4,14 +4,11 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Events\GameConfigEvent;
 use App\Http\Controllers\Controller;
-use App\Models\Bet;
-use App\Models\CloseNumber;
-use App\Models\DrawPeriod;
 use App\Models\Game;
 use App\Models\GameConfiguration;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ApiGameController extends Controller
 {
@@ -19,7 +16,9 @@ class ApiGameController extends Controller
     {
         $this->authorize('list-games', Game::class);
         $search = $request->get('search', '');
-        $games = Game::with(['drawPeriods', 'controlCombination', 'bets', 'gameConfiguration'])->get();
+//        $games = Game::with(['drawPeriods', 'controlCombination', 'bets', 'gameConfiguration'])->get();
+        $games = DB::table('games')->get();
+
         return response(['games' => $games], 200);
     }
 
@@ -164,7 +163,7 @@ class ApiGameController extends Controller
         return response([$gameConfig], 200);
     }
 
-    public function configMobileIndex(Request $request)
+    public function currentAvailableGames(Request $request)
     {
         $this->authorize('list-games', Game::class);
         $search = $request->get('search', '');
@@ -177,6 +176,16 @@ class ApiGameController extends Controller
             ->reject(function ($row) use ($currentDay) {
                 return !in_array($currentDay, $row['gameConfiguration']->days_availability);
             })->sortBy('id');
+        return response(['games' => $games], 200);
+    }
+
+    public function mobileRequestGames(Request $request)
+    {
+        $this->authorize('list-games', Game::class);
+        $search = $request->get('search', '');
+//        $games = Game::with(['drawPeriods', 'controlCombination', 'bets', 'gameConfiguration'])->get();
+        $games = DB::table('games')->get();
+
         return response(['games' => $games], 200);
     }
 

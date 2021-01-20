@@ -27,6 +27,7 @@ class CreateGameConfigurationsTable extends Migration
             $table->double('max_per_bet');
             $table->integer('min_per_field_set');
             $table->integer('max_per_field_set');
+            $table->boolean('in_exact_order')->default(1);
             $table->json('days_availability')->nullable();
             $table->softDeletes();
             $table->timestamps();

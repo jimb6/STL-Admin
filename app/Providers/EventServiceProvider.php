@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Events\BetTransactionAdded;
 use App\Events\NewDeviceAdded;
+use App\Models\WinningBet;
+use App\Observers\WinningBetObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -19,7 +21,6 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
-            BetTransactionAdded::class,
             NewDeviceAdded::class,
         ],
     ];
@@ -32,5 +33,6 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        WinningBet::observe(WinningBetObserver::class);
     }
 }

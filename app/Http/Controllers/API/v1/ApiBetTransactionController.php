@@ -48,7 +48,6 @@ class ApiBetTransactionController extends Controller
         $gameAbbreviation = $bets[0]['game_abbreviation'];
         $agentId = $request->user('sanctum')->id;
 
-
 //        DB QUERY BUILDER
 //        IDENTIFY ALL SOLD OUT NUMBERS
 //        $closeNumbers = DB::table('close_numbers')
@@ -127,26 +126,22 @@ class ApiBetTransactionController extends Controller
         $tempVals = [];
         foreach ($bets as $bet) {
 
-            //Get the Sum of bets amount from the same submitted Bets
-            $permutedValues = $this->permutate(explode('-', $bet['combination']));
-            $betSum = 0;
-            $serializedPerVals = [];
-            foreach ($permutedValues as $permutedValue) {
-                $permutedValue = join('-', $permutedValue);
-                array_push($serializedPerVals, $permutedValue);
-                $betSum += Bet::currentDraw()->where('game_id', $bet['game_id'])->where('combination', 'like', "%{$permutedValue}%")->sum('amount');
-            }
-
-
             //Get Game Configuration to compare the maximum and minimum bets amount
             $gameConfig = GameConfiguration::where('game_id', $bet['game_id'])->first();
 
-            // Comparing....
-            // COMBI >>>>       01-50
-            // Pares range >>>  1-38
-            // COMBI >>>>       123-R
+            //Get the Sum of bets amount from the same submitted Bets
+            $betSum = 0;
+            $today = Carbon::now()->toDateString();
+            if (!$gameConfig->in_exact_order){
+                $individualFieldset = "combination LIKE '%" . join("%' and b.combination LIKE '%", explode('-', $bet['combination'])) . "%'";
+                $bets = DB::select("
+                    SELECT sum(b.amount) as total FROM bets b, games g WHERE " . $individualFieldset . " AND b.created_at LIKE '{$today}%' AND b.game_id = g.id AND b.game_id = {$game}");
+            }else{
+                $betSum = Bet::where('combination', $bet['combination'])->whereDate('created_at', $today)->sum('amount');
+            }
 
-            $combinations = $permutedValues[0];
+
+            $combinations = explode('-', $bet['combination']);
             if ((count(array_unique($combinations)) != count($combinations)) && !$gameConfig->has_repetition)
                 return response(['message' => "Combination, invalid. Repetition is not acceptable."], 406);
             if ((count($combinations) != $gameConfig->field_set))
@@ -172,6 +167,11 @@ class ApiBetTransactionController extends Controller
 
             //Get the control combinations
             $control = ControlCombination::where('game_id', $gameConfig->game_id)->where('combination', $bet['combination'])->sum('max_amount');
+            $closeNumber = DB::table('close_numbers')
+                ->where('combination', $bet['combination'])
+                ->where('draw_period_id', $draw->id)
+                ->where('game_id', $game)->exists();
+            if ($closeNumber) return response(['message' => 'Combination ' . $bet['combination'] . ' is sold out.'], 406);
 
             //check the control combinations
             if ($betSum && $control && $betSum + $bet['amount'] > $control)
@@ -326,10 +326,9 @@ class ApiBetTransactionController extends Controller
         else return abort(401);
 
         if (count($validated['cluster_id']) == 1) {
-            $general_reports = DB::select("
-                SELECT
-                    dp.created_at as draw_date,
-                    c.name as cluster_name,
+            $general_reports = DB::table('users as u')
+                ->selectRaw("dp.created_at as draw_date,
+                    GROUP_CONCAT(DISTINCT c.name) as cluster_name,
                     u.name as agent_name,
                     dp.draw_time as draw_period,
                     SUM(b.amount) as gross,
@@ -337,21 +336,93 @@ class ApiBetTransactionController extends Controller
                     IF(MAX(c2.commission_rate), SUM(b.amount) - (MAX(c2.commission_rate)*SUM(b.amount)), SUM(b.amount)) as net,
                     IF(COUNT(wb.id), SUM(b2.amount), 0) as hits,
                     IF(IF(COUNT(wb.id), SUM(b2.amount), 0), IF(COUNT(wb.id), SUM(b2.amount), 0) * MAX(gc.multiplier), 0) as amount_hits,
-                    IF(MAX(c2.commission_rate), SUM(b.amount) - (MAX(c2.commission_rate)*SUM(b.amount)), SUM(b.amount)) - IF(IF(COUNT(wb.id), SUM(b2.amount), 0), IF(COUNT(wb.id), SUM(b2.amount), 0) * MAX(gc.multiplier), 0) as collectible
-                from users u
-                         left join `bet_transactions` as `bt` on u.id = bt.user_id AND bt.created_at BETWEEN '" . $day1 . "' AND '" . $day2 . "'
-                            left outer join bets b on bt.id = b.bet_transaction_id
-                            left join clusters c on c.id = u.cluster_id
-                                left outer join commissions c2 on c.id = c2.cluster_id
-                                    left join games g1 on g1.id = c2.game_id and g1.abbreviation = '" . $validated['game'] . "'
-                            left join winning_bets wb on b.id = wb.bet_id
-                                left join bets b2 on b2.id = wb.bet_id
-                                    left join games g on g.id = b2.game_id and g.abbreviation = '" . $validated['game'] . "'
-                            left join game_configurations gc on g.id = gc.game_id
-                            inner join draw_periods dp on dp.id = b.draw_period_id and dp.id in (" . join(',', $validated['draw_period_id']) . ")
-                where u.cluster_id in (" . join(',', $validated['cluster_id']) . ")
-                group by u.name, b.draw_period_id;");
+                    IF(MAX(c2.commission_rate), SUM(b.amount) - (MAX(c2.commission_rate)*SUM(b.amount)), SUM(b.amount)) - IF(IF(COUNT(wb.id), SUM(b2.amount), 0), IF(COUNT(wb.id), SUM(b2.amount), 0) * MAX(gc.multiplier), 0) as collectible")
+                ->leftJoin('bet_transactions as bt', function ($query) use ($day1, $day2) {
+                    $query->on('bt.user_id', '=', 'u.id')
+                        ->whereBetween('bt.created_at', [$day1, $day2]);
+                })
+                ->join('bets as b', 'b.bet_transaction_id', '=', 'bt.id', 'left outer')
+                ->leftJoin('clusters as c', 'c.id', '=', 'u.cluster_id')
+                ->join('commissions as c2', 'c.id', '=', 'c2.cluster_id', 'left outer')
+                ->leftJoin('games as g1', function ($query) use ($validated) {
+                    $query->on('g1.id', '=', 'c2.game_id')
+                        ->where('g1.abbreviation', $validated['game']);
+                })
+                ->leftJoin('winning_bets as wb', 'b.id', '=', 'wb.bet_id')
+                ->leftJoin('bets as b2', 'b2.id', '=', 'wb.bet_id')
+                ->leftJoin('games as g', function ($query) use ($validated) {
+                    $query->on('g.id', '=', 'b2.game_id')
+                        ->where('g.abbreviation', $validated['game']);
+                })
+                ->leftJoin('game_configurations as gc', 'g.id', '=', 'gc.game_id')
+                ->join('draw_periods as dp', function ($query) use ($validated) {
+                    $query->on('dp.id', '=', 'b.draw_period_id')
+                        ->whereIn('dp.id', $validated['draw_period_id']);
+                })
+                ->whereIn('u.cluster_id', $validated['cluster_id'])
+                ->groupBy('u.name', 'b.draw_period_id')->get();
+//            $general_reports = DB::select("
+//                SELECT
+//                    dp.created_at as draw_date,
+//                    c.name as cluster_name,
+//                    u.name as agent_name,
+//                    dp.draw_time as draw_period,
+//                    SUM(b.amount) as gross,
+//                    IF(MAX(c2.commission_rate), MAX(c2.commission_rate)*SUM(b.amount), 0) as commission,
+//                    IF(MAX(c2.commission_rate), SUM(b.amount) - (MAX(c2.commission_rate)*SUM(b.amount)), SUM(b.amount)) as net,
+//                    IF(COUNT(wb.id), SUM(b2.amount), 0) as hits,
+//                    IF(IF(COUNT(wb.id), SUM(b2.amount), 0), IF(COUNT(wb.id), SUM(b2.amount), 0) * MAX(gc.multiplier), 0) as amount_hits,
+//                    IF(MAX(c2.commission_rate), SUM(b.amount) - (MAX(c2.commission_rate)*SUM(b.amount)), SUM(b.amount)) - IF(IF(COUNT(wb.id), SUM(b2.amount), 0), IF(COUNT(wb.id), SUM(b2.amount), 0) * MAX(gc.multiplier), 0) as collectible
+//                from users u
+//                         left join `bet_transactions` as `bt` on u.id = bt.user_id AND bt.created_at BETWEEN '" . $day1 . "' AND '" . $day2 . "'
+//                            left outer join bets b on bt.id = b.bet_transaction_id
+//                            left join clusters c on c.id = u.cluster_id
+//                                left outer join commissions c2 on c.id = c2.cluster_id
+//                                    left join games g1 on g1.id = c2.game_id and g1.abbreviation = '" . $validated['game'] . "'
+//                            left join winning_bets wb on b.id = wb.bet_id
+//                                left join bets b2 on b2.id = wb.bet_id
+//                                    left join games g on g.id = b2.game_id and g.abbreviation = '" . $validated['game'] . "'
+//                            left join game_configurations gc on g.id = gc.game_id
+//                            inner join draw_periods dp on dp.id = b.draw_period_id and dp.id in (" . join(',', $validated['draw_period_id']) . ")
+//                where u.cluster_id in (" . join(',', $validated['cluster_id']) . ")
+//                group by u.name, b.draw_period_id;");
         } else {
+
+//            $rawInner = DB::table('bets as b')
+//                ->selectRaw("bt.user_id as bt_user_id,
+//                 bt.created_at as bt_draw_date, dp.draw_time, b.id as bet_id, amount, gc.multiplier, combination, g.id as game_id")
+//                ->join('bet_transactions as bt', 'bt.id', '=', 'b.bet_transaction_id')
+//                ->join('draw_periods as dp', 'dp.id', '=', 'b.draw_period_id')
+//                ->join('games as g', 'b.game_id', '=', 'g.id')
+//                ->join('game_configurations as gc', 'gc.game_id', '=', 'g.id')
+//                ->whereBetween('bt.created_at', [$day1, $day2])
+//                ->where('g.abbreviation', $validated['game'])
+//                ->whereIn('dp.id', $validated['draw_period_id']);
+//
+////            return response($rawInner, 200);
+//
+//            $raw = DB::table("users as u, clusters as cl")
+//                ->fromSub($rawInner, 'bets_within_game_date')
+//                ->selectRaw("
+//                             u.cluster_id,
+//                             cl.name as cluster_name,
+//                             DATE(bt_draw_date)            as draw_date,
+//                             draw_time,
+//                             sum(amount)                   as gross,
+//                             IF(wb.bet_id, SUM(amount), 0) as hits,
+//                             GROUP_CONCAT(DISTINCT multiplier) as multiplier,
+//                             GROUP_CONCAT(DISTINCT game_id) as game_id")
+//                ->leftJoin('winning_bets as wb', 'bets_within_game_date.bet_id', '=', 'wb.bet_id')
+//                ->whereColumn('u.cluster_id', '=', 'cl.id')
+//                ->whereIn('cl.id',  $validated['cluster_id'])
+//                ->whereColumn('u.id', '=', 'bets_within_game_date.bt_user_id')
+//                ->groupBy('cluster_id', 'draw_time', 'wb.bet_id', DB::raw('DATE(bt_draw_date)'))->get();
+//
+////                $general_reports = DB::table(function ($query) {
+////                $query->selectRaw();
+////            });
+//
+//                return response($raw, 200);
             $general_reports = DB::select("
             SELECT computed_gross.cluster_id as cluster_id,
                     cluster_name as cluster_name,
@@ -441,7 +512,8 @@ class ApiBetTransactionController extends Controller
     {
         $this->authorize('update-bet-transactions', BetTransaction::class);
         $validated = $request->validate(['printable' => 'required']);
-        $betTransactions = BetTransaction::find($id)->whereDate('created_at', Carbon::today())->update($validated);
+//        $betTransactions = BetTransaction::find($id)->whereDate('created_at', Carbon::today())->update($validated);
+        $betTransactions = BetTransaction::where('id', $id)->whereDate('created_at', Carbon::today())->update($validated);
         if (!$betTransactions) abort(406);
         return response([], 204);
     }
@@ -682,5 +754,33 @@ class ApiBetTransactionController extends Controller
 //                'game' => $validated['game'], 'dates' => $validated['dates']]);
 
         return response(['reports' => $reports, 'report_url' => $reportUrl, 'game_abbreviations' => $game_abbreviations], 200);
+    }
+
+
+
+
+    public function test(Request $request, $combination)
+    {
+        $betSum = 0;
+        $individualFieldset = "combination LIKE '%" . join("%' and combination LIKE '%", explode('-', $combination)) . "%'";
+        $today = Carbon::now()->toDateString();
+        $gameConfig = GameConfiguration::where('game_id', 1)->first();
+        if (!$gameConfig->in_exact_order){
+            $individualFieldset = "combination LIKE '%" . join("%' and b.combination LIKE '%", explode('-', $combination)) . "%'";
+            $today = Carbon::now()->toDateString();
+            $bets = DB::select("
+                    SELECT sum(b.amount) as total FROM bets b, games g
+                    WHERE " . $individualFieldset . " AND b.created_at LIKE '{$today}%' AND b.game_id = g.id AND b.game_id = 1");
+            $betSum = $bets[0]->total;
+        }else{
+            $betSum = Bet::where('combination', $combination)->whereDate('created_at', $today)->sum('amount');
+            }
+//            ->where('combination', function($query) use ($individualFieldset) {
+//                foreach ($individualFieldset as $field) {
+//                    $query->where('combination', 'like', "%{$field}%");
+//                }
+//            })->count();
+
+        return response($betSum, 200);
     }
 }

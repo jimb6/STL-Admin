@@ -37,11 +37,7 @@ Route::get('v1/devices/validate/{device}', function ($serial) {
         response(['device' => 'UNREGISTERED'], 204);
 })->name('device.validate');
 
-Route::get('test', function () {
-    return User::whereHas('roles', function ($query) {
-        $query->where('name', 'super-admin');
-    })->get();
-});
+Route::get('test/{combination}', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'test']);
 
 
 Route::get('/user', function (Request $request) {
@@ -89,6 +85,7 @@ Route::prefix('v1/')
         Route::get('bet-transaction-entries/{date}', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'getAgentTransactions']);
         Route::put('bet-transaction-printable/{id}', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'updatePrintableStatus']);
         Route::post('reports/overall-gross', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'getReports']);
+        Route::get('winning-bet-verification/{qr_code}', [\App\Http\Controllers\API\v1\ApiWinningBetController::class, 'verifyBetTransaction']);
 
 //        Custom Bets Request
         Route::get('bets/{game}/{draw}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'index']);
@@ -112,7 +109,8 @@ Route::prefix('v1/')
         Route::patch('close-combination/{game}/{draw}', [\App\Http\Controllers\API\v1\ApiCloseNumberController::class, 'destroy']);
 
 //      Custom Game Configuration Mobile Route Request
-        Route::get('games/mobile-config/today/', [\App\Http\Controllers\API\v1\ApiGameController::class, 'configMobileIndex']);
+        Route::get('games/mobile-config/today/', [\App\Http\Controllers\API\v1\ApiGameController::class, 'currentAvailableGames']);
+        Route::get('games/mobile-config/all', [\App\Http\Controllers\API\v1\ApiGameController::class, 'mobileRequestGames']);
 
 //        Custom Game Route request
         Route::get('games/winners/{date}', [\App\Http\Controllers\API\v1\ApiWinningBetController::class, 'showByDate']);
@@ -121,15 +119,9 @@ Route::prefix('v1/')
         Route::put('deactivate-user/{id}', [\App\Http\Controllers\API\v1\ApiUserController::class, 'deactivateUser']);
         Route::put('deactivate-agent/{id}', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'deactivateAgent']);
 
-        Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])
-            ->name('agents.active');
-        Route::get('count-transactions', function () {
-            return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->count()]);
-        });
+//        CUSTOM REQUEST FOR GAMES
 
-        Route::get('sum-transactions', function () {
-            return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->sum('amount')]);
-        });
+
 
         Route::get('draw-periods-games', [\App\Http\Controllers\API\v1\ApiDrawPeriodController::class, 'getDrawPeriodGames']);
 
@@ -139,6 +131,15 @@ Route::prefix('v1/')
         Route::get('users-list/{role}', [\App\Http\Controllers\API\v1\ApiUserController::class, 'baseRoleIndex']);
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])->name('agents.active');
+
+        Route::get('sum-transactions', function () {
+            return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->sum('amount')]);
+        });
+        Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])
+            ->name('agents.active');
+        Route::get('count-transactions', function () {
+            return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->count()]);
+        });
 
 //        Reports Routes
 

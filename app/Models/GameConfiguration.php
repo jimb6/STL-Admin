@@ -26,7 +26,8 @@ class GameConfiguration extends Model
     protected $casts = [
         'days_availability' => 'array',
         'has_repetition' => 'boolean',
-        'is_rumbled' => 'boolean'
+        'is_rumbled' => 'boolean',
+        'in_exact_order' => 'boolean'
     ];
 
     protected $table = 'game_configurations';
