@@ -37,7 +37,7 @@ Route::get('v1/devices/validate/{device}', function ($serial) {
         response(['device' => 'UNREGISTERED'], 204);
 })->name('device.validate');
 
-Route::get('test/{combination}', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'test']);
+Route::post('test', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'test']);
 
 
 Route::get('/user', function (Request $request) {
@@ -86,6 +86,8 @@ Route::prefix('v1/')
         Route::put('bet-transaction-printable/{id}', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'updatePrintableStatus']);
         Route::post('reports/overall-gross', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'getReports']);
         Route::get('winning-bet-verification/{qr_code}', [\App\Http\Controllers\API\v1\ApiWinningBetController::class, 'verifyBetTransaction']);
+        Route::get('winning-bets/agent/{date}', [\App\Http\Controllers\API\v1\ApiWinningBetController::class, 'showByAgent']);
+        Route::get('bet-transactions-mobile-reports/{date}', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'showAgentReportByDrawPeriodGame']);
 
 //        Custom Bets Request
         Route::get('bets/{game}/{draw}', [\App\Http\Controllers\API\v1\ApiBetController::class, 'index']);

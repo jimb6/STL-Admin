@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BetTransaction;
 use App\Models\User;
 use App\Models\WinningBet;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,7 @@ class ApiWinningBetController extends Controller
 
     public function index()
     {
-        //
+
     }
 
 
@@ -101,32 +102,68 @@ class ApiWinningBetController extends Controller
 
     public function verifyBetTransaction(Request $request, $code)
     {
-        $this->authorize('verify-bet-transactions', BetTransaction::class);
+        $this->authorize('update-bet-transactions', BetTransaction::class);
+        $user = $request->user();
         if (!$code2 = DB::table('bet_transactions as bt')
             ->select(DB::raw("bt.id"))
             ->leftJoin('bets as b', 'bt.id', '=', 'b.bet_transaction_id')
             ->leftJoin('game_configurations as gc', 'b.game_id', '=', 'gc.game_id')
             ->where('bt.qr_code', $code)
-            ->first()) return response(["message" => "Can't validate the betting transaction."]);
-
-        $verified = DB::table('winning_bets as wb')
-            ->select(DB::raw("wb.status, wb.created_at, b.combination, b.amount"))
-            ->rightJoin('bets as b', function ($query) use ($code2) {
-                $query->whereColumn('b.id', '=', 'wb.bet_id')
-                    ->where('b.bet_transaction_id', '=', $code2->id);
-            })
-            ->whereNotNull('wb.id')
-            ->get();
+            ->first()) return response(["message" =>  [(object)["winning_bet_status" => "Can't validate the betting transaction."]]], 406);
 
         $verified = DB::table('bet_transactions as bt')
-            ->select(DB::raw("bt.id, b.amount, b.combination, wb.status, b.amount * gc.multiplier as payable"))
+            ->select(DB::raw("wb.id as winning_id, bt.id, b.amount, b.combination, wb.status,
+                                    wb.created_at as win_date, dp.draw_time, g.abbreviation as game_name,
+                                    bt.qr_code, b.amount * gc.multiplier as payable"))
             ->leftJoin('bets as b', 'bt.id', '=', 'b.bet_transaction_id')
+            ->leftJoin('draw_periods as dp', 'dp.id', '=', 'b.draw_period_id')
+            ->leftJoin('games as g', 'g.id', '=', 'b.game_id')
             ->leftJoin('game_configurations as gc', 'b.game_id', '=', 'gc.game_id')
             ->rightJoin('winning_bets as wb', 'wb.bet_id', '=', 'b.id')
             ->where('bt.qr_code', $code)
+            ->where('bt.user_id', $user->id)
             ->get();
+        if (!$verified->isNotEmpty()) return response(["message" =>  [(object)["winning_bet_status" => "There is no winning bet for transaction code {$code}"]]], 406);
 
-        if (!$verified->isNotEmpty()) return response(["message" => "There is no winning bet for transaction code {$code}"]);
+        $mResponse = [];
+        for ($i=0; $i<count($verified); $i++) {
+            if( $verified[$i]->status ) {
+                $verified[$i]->winning_bet_status = "Claimed";
+                continue;
+            }
+            if ($status = WinningBet::where('id', $verified[$i]->winning_id)->update(['status'=> true])){
+                $verified[$i]->status = $status;
+                $verified[$i]->date_claimed = Carbon::now(config('app.timezone'))->format('F j, Y');
+                $verified[$i]->win_date = Carbon::parse($verified[$i]->win_date, config('app.timezone'))->format('F j, Y');
+                $verified[$i]->time_claimed = Carbon::now(config('app.timezone'))->format('g:i A');
+                $verified[$i]->draw_time = Carbon::parse($verified[$i]->draw_time, config('app.timezone'))->format('g:i A');
+                $verified[$i]->winning_bet_status = "Verified";
+            }
+        }
+
         return response(["message" => $verified], 200);
+    }
+
+    public function showByAgent(Request $request, $date)
+    {
+        $this->authorize('list-winning-combinations', WinningBet::class);
+        if (!$user = $request->user()) return abort(401);
+        if (!$user->hasRole('agent')) return abort(401);
+//        $user = $request->user();
+        $betTransactions = DB::table('bet_transactions as bt')
+            ->select(DB::raw("bt.id, gc.multiplier, wb.status, bt.created_at as trans_time, dp.draw_time as draw_period,
+                                    g.abbreviation as game_name, b.combination, b.amount, bt.qr_code"))
+            ->where('bt.user_id', $user->id)
+            ->whereDate(DB::raw('DATE(bt.created_at)'), $date)
+            ->leftJoin('bets as b', 'b.bet_transaction_id', '=', 'bt.id')
+            ->join('winning_bets as wb', 'wb.bet_id', '=', 'b.id')
+            ->leftJoin('draw_periods as dp', 'b.draw_period_id', '=', 'dp.id')
+            ->leftJoin('games as g', 'b.game_id', '=', 'g.id')
+            ->leftJoin('game_configurations as gc', 'gc.game_id', '=', 'g.id')
+            ->orderByDesc('bt.id')
+            ->get()->groupBy('id');
+
+        return response(['betTransactions' => $betTransactions], 200);
+
     }
 }

@@ -132,11 +132,11 @@ class ApiBetTransactionController extends Controller
             //Get the Sum of bets amount from the same submitted Bets
             $betSum = 0;
             $today = Carbon::now()->toDateString();
-            if (!$gameConfig->in_exact_order){
+            if (!$gameConfig->in_exact_order) {
                 $individualFieldset = "combination LIKE '%" . join("%' and b.combination LIKE '%", explode('-', $bet['combination'])) . "%'";
                 $bets = DB::select("
                     SELECT sum(b.amount) as total FROM bets b, games g WHERE " . $individualFieldset . " AND b.created_at LIKE '{$today}%' AND b.game_id = g.id AND b.game_id = {$game}");
-            }else{
+            } else {
                 $betSum = Bet::where('combination', $bet['combination'])->whereDate('created_at', $today)->sum('amount');
             }
 
@@ -501,6 +501,21 @@ class ApiBetTransactionController extends Controller
             ->orderByDesc('bt.id')
             ->get()->groupBy('id');
 
+//        foreach ($betTransactions as $betTransaction){
+//            WinningBet::find($betTransaction->winning_id)->update(['status' => true]);
+//        }
+//
+//        $betTransactions = DB::table('bet_transactions as bt')
+//            ->select(DB::raw("wb.id as winning_id, bt.id, bt.printable, bt.created_at as trans_time, dp.draw_time as draw_period,
+//                                    g.abbreviation as game_name, b.combination, b.amount, bt.qr_code"))
+//            ->where('bt.user_id', $user->id)
+//            ->whereDate(DB::raw('DATE(bt.created_at)'), $date)
+//            ->leftJoin('bets as b', 'b.bet_transaction_id', '=', 'bt.id')
+//            ->leftJoin('draw_periods as dp', 'b.draw_period_id', '=', 'dp.id')
+//            ->leftJoin('games as g', 'b.game_id', '=', 'g.id')
+//            ->orderByDesc('bt.id')
+//            ->get()->groupBy('id');
+
 //        $betTransactions = BetTransaction::with('bets')->whereDate('created_at', $date)
 //            ->orderByDesc('created_at')
 //            ->get();
@@ -534,10 +549,6 @@ class ApiBetTransactionController extends Controller
         return array_map("unserialize", array_unique(array_map("serialize", $res)));
     }
 
-    private function validateDrawPeriod()
-    {
-
-    }
 
     // Reports
     public function getReports(Request $request)
@@ -759,28 +770,52 @@ class ApiBetTransactionController extends Controller
 
 
 
-    public function test(Request $request, $combination)
+    public function showAgentReportByDrawPeriodGame(Request $request, $date)
     {
-        $betSum = 0;
-        $individualFieldset = "combination LIKE '%" . join("%' and combination LIKE '%", explode('-', $combination)) . "%'";
-        $today = Carbon::now()->toDateString();
-        $gameConfig = GameConfiguration::where('game_id', 1)->first();
-        if (!$gameConfig->in_exact_order){
-            $individualFieldset = "combination LIKE '%" . join("%' and b.combination LIKE '%", explode('-', $combination)) . "%'";
-            $today = Carbon::now()->toDateString();
-            $bets = DB::select("
-                    SELECT sum(b.amount) as total FROM bets b, games g
-                    WHERE " . $individualFieldset . " AND b.created_at LIKE '{$today}%' AND b.game_id = g.id AND b.game_id = 1");
-            $betSum = $bets[0]->total;
-        }else{
-            $betSum = Bet::where('combination', $combination)->whereDate('created_at', $today)->sum('amount');
-            }
-//            ->where('combination', function($query) use ($individualFieldset) {
-//                foreach ($individualFieldset as $field) {
-//                    $query->where('combination', 'like', "%{$field}%");
-//                }
-//            })->count();
 
-        return response($betSum, 200);
+        $user = $request->user('sanctum') ? $request->user('sanctum') : abort(401);
+        $formattedDate = Carbon::parse($date)->startOfDay();
+        $betTransactions = DB::select("
+                    SELECT dp2.draw_time as draw_period,
+                           g2.abbreviation as game_name,
+                           IF(gross, gross, 0) as gross,
+                           IF(commission, commission, 0) as commission,
+                           IF(net, net, 0) as net,
+                           IF(hits, hits, 0) as hits,
+                           IF(amount_hits, amount_hits, 0) as amount_hits,
+                           IF(collectible, collectible, 0) as collectible
+                    FROM draw_period_game dpg LEFT OUTER JOIN (
+                        SELECT GROUP_CONCAT(DISTINCT bt_bets.game_id) as game_id,
+                               GROUP_CONCAT(DISTINCT bt_bets.dp_id) as dp_id,
+                               abbreviation                                                                                                               as game_name,
+                               draw_time                                                                                                                  as draw_period,
+                               SUM(amount)                                                                                                                as gross,
+                               IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0)                                                             as commission,
+                               SUM(amount)-IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0)                                                 as net,
+                               SUM(IF(bt_bets.bet_id = wb.bet_id, amount, 0))                                                                             as hits,
+                               SUM(IF(bt_bets.bet_id = wb.bet_id, amount * bt_bets.multiplier, 0))                                                        as amount_hits,
+                               SUM(amount)-IF(COUNT(c.commission_rate), SUM(c.commission_rate*amount), 0) - SUM(IF(bt_bets.bet_id = wb.bet_id, amount * bt_bets.multiplier, 0))  as collectible
+                        FROM users u
+                             INNER JOIN (
+                                SELECT bt.user_id, g.abbreviation, dp.draw_time, b.amount, g.id as game_id, b.id as bet_id, gc.multiplier, dp.id as dp_id
+                                FROM bet_transactions bt
+                                    LEFT JOIN bets b on bt.id = b.bet_transaction_id AND DATE(bt.created_at) = DATE('{$formattedDate}')
+                                    LEFT JOIN games g on b.game_id = g.id
+                                    LEFT JOIN game_configurations gc on gc.game_id = g.id
+                                    LEFT JOIN draw_periods dp on b.draw_period_id = dp.id
+                                ORDER BY b.id
+                             ) as bt_bets on bt_bets.user_id = u.id AND u.id = {$user->id}
+                            INNER JOIN clusters cl on cl.id = u.cluster_id AND cl.id in ({$user->cluster_id})
+                            LEFT JOIN commissions c on cl.id = c.cluster_id AND c.game_id = bt_bets.game_id
+                            LEFT JOIN winning_bets wb on wb.bet_id = bt_bets.bet_id
+                        GROUP BY abbreviation, draw_time
+                      ) as reports on reports.game_id =  dpg.game_id AND reports.dp_id = dpg.draw_period_id
+                    LEFT JOIN games g2 on dpg.game_id = g2.id
+                    LEFT JOIN draw_periods dp2 on dpg.draw_period_id = dp2.id
+                    ORDER BY  dp2.draw_time
+                ");
+
+        return response(['message' => $betTransactions], 200);
     }
+
 }
