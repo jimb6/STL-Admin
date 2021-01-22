@@ -1,28 +1,26 @@
 <template>
-    <v-main>
-        <v-container>
-            <div v-if="notifications.length > 0" v-for="notification in notifications">
-                <Notification :notification="notification"></Notification>
-            </div>
+    <div>
+        <div v-if="notifications.length > 0" v-for="notification in notifications">
+            <Notification :notification="notification"></Notification>
+        </div>
 
-            <div class="row">
-                <div class="col-12">
-                    <GrossDatatable
-                        :title="title"
-                        :headers="headers"
-                        :contents="contents"
-                        :excelHeaders="excelHeaders"
-                        :excelData="excelData"
-                        :excelTitle="excelTitle"
-                        :reportUrl="reportUrl"
-                        :reportType="reportType"
-                        :gameAbbreviations="gameAbbreviations"
-                        @displayReports="displayGrossByCluster"
-                    />
-                </div>
+        <div class="row">
+            <div class="col-12">
+                <GrossDatatable
+                    :title="title"
+                    :headers="headers"
+                    :contents="contents"
+                    :excelHeaders="excelHeaders"
+                    :excelData="excelData"
+                    :excelTitle="excelTitle"
+                    :reportUrl="reportUrl"
+                    :reportType="reportType"
+                    :gameAbbreviations="gameAbbreviations"
+                    @displayReports="displayGrossByCluster"
+                />
             </div>
-        </v-container>
-    </v-main>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -66,7 +64,7 @@ export default {
 
     methods: {
         async displayGrossByCluster(item) {
-
+            console.log(item, "ITEMMMMMMM")
             await axios.post('/api/v1/reports/overall-gross', {
                 report_type: this.reportType,
                 cluster_id: item.cluster_id,

@@ -20,7 +20,7 @@ export default {
   },
   mounted() {
     const dates = this.chartData.map(d => d.date);
-    const totals = this.chartData.map(d => d.total);
+    const totals = this.chartData.map(d => d.gross);
 
     const {
       borderColor,
@@ -31,15 +31,23 @@ export default {
 
     this.renderChart(
       {
+          type: 'line',
         labels: dates,
         datasets: [
           {
             label: this.label,
             data: totals,
-            borderColor: borderColor,
-            pointBorderColor: pointBorderColor,
-            pointBackgroundColor: pointBackgroundColor,
-            backgroundColor: backgroundColor
+            borderColor: "#ffffff",
+
+
+            backgroundColor: "#2196F3dd",
+            pointBackgroundColor: "#4e5468",
+            pointBorderColor: "#ffffff",
+            pointBorderWidth: 3,
+            pointHitRadius: 5,
+            radius: 5,
+            pointHoverBorderWidth: 4,
+            hoverRadius: 8,
           }
         ]
       },

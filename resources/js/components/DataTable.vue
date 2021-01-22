@@ -1,5 +1,5 @@
 <template>
-    <v-container class="cstm-vuetify-table">
+    <div class="cstm-vuetify-table">
         <h2>{{ title }}s Table</h2>
 
 
@@ -356,9 +356,7 @@
                 ></v-pagination>
             </div>
         </div>
-
-
-    </v-container>
+    </div>
 
 </template>
 

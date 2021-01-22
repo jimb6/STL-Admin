@@ -1,26 +1,10 @@
 <template>
     <div>
-        <v-tabs>
-            <v-tab>Table View</v-tab>
-            <v-tab>Card View</v-tab>
-
-            <v-tab-item>
-                <DataTable
-                    :title="title"
-                    :contents="contents"
-                    :headers="headers"
-                    :fillable="fillable"/>
-            </v-tab-item>
-            <v-tab-item>
-                <Card2
-                    :title="title"
-                    :contents="contents"
-                    :headers="headers"
-                    :fillable="fillable"
-                />
-            </v-tab-item>
-        </v-tabs>
-
+        <DataTable
+            :title="title"
+            :contents="contents"
+            :headers="headers"
+            :fillable="fillable"/>
     </div>
 </template>
 

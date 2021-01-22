@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <div>
         <div v-if="notifications.length > 0" v-for="notification in notifications">
             <Notification :notification="notification"></Notification>
         </div>
@@ -16,7 +16,7 @@
             :loadingStatus="loadingStatus"
             @displayReports="displayReports($event)"
         />
-    </v-container>
+    </div>
 </template>
 
 <script>
@@ -82,7 +82,6 @@ export default {
 
                 } else if (clusterType.selected.type === "sub") {
                     this.headers = [
-                        {text: "Agent ID", value: "agent_id"},
                         {text: "Agent Name", value: "agent_name"},
                         {text: "Draw Date", value: "draw_date"},
                         {text: "Draw Period", value: "draw_period"},

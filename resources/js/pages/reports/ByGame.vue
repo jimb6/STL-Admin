@@ -1,28 +1,21 @@
 <template>
-    <v-main>
-        <v-container>
-            <div v-if="notifications.length > 0" v-for="notification in notifications">
-                <Notification :notification="notification"></Notification>
-            </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <GrossDatatable
-                        :title="title"
-                        :headers="headers"
-                        :contents="contents"
-                        :excelHeaders="excelHeaders"
-                        :excelData="excelData"
-                        :excelTitle="excelTitle"
-                        :reportUrl="reportUrl"
-                        :reportType="reportType"
-                        :gameAbbreviations="gameAbbreviations"
-                        @displayReports="displayGrossByGame"
-                    />
-                </div>
-            </div>
-        </v-container>
-    </v-main>
+    <div>
+        <div v-if="notifications.length > 0" v-for="notification in notifications">
+            <Notification :notification="notification"></Notification>
+        </div>
+        <GrossDatatable
+            :title="title"
+            :headers="headers"
+            :contents="contents"
+            :excelHeaders="excelHeaders"
+            :excelData="excelData"
+            :excelTitle="excelTitle"
+            :reportUrl="reportUrl"
+            :reportType="reportType"
+            :gameAbbreviations="gameAbbreviations"
+            @displayReports="displayGrossByGame"
+        />
+    </div>
 </template>
 
 <script>

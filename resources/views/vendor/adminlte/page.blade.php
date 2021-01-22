@@ -46,14 +46,20 @@
                 <div class="{{ config('adminlte.classes_content') ?: $def_container_class }}">
                     @yield('content')
                 </div>
+                <div class="cstm-footer">
+                    <h5>STL Palaro</h5>
+                    <p>© Copyright {{ date("Y") }}. All Rights Reserved</p>
+                    <a class="backToTop" href="#app"><i class="fas fa-long-arrow-alt-up"></i></a>
+                </div>
             </div>
         </div>
+
         </v-app>
 
         {{-- Footer --}}
-        @hasSection('footer')
-            @include('adminlte::partials.footer.footer')
-        @endif
+{{--        @hasSection('footer')--}}
+{{--            @include('adminlte::partials.footer.footer')--}}
+{{--        @endif--}}
 
         {{-- Right Control Sidebar --}}
         @if(config('adminlte.right_sidebar'))

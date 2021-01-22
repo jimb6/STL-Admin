@@ -1,27 +1,23 @@
 <template>
-    <v-main>
-        <v-container>
-            <div v-if="notifications.length > 0" v-for="notification in notifications">
-                <Notification :notification="notification"></Notification>
-            </div>
-
-            <DataTable
-                :title="title"
-                :headers="headers"
-                :contents="contents"
-                :fillable="fillable"
-                @storeModel="storeDrawPeriod($event)"
-                @updateModel="updateDrawPeriod($event)"
-                @destroyModel="destroyDrawPeriod($event)"
-                @updateStatus="closeDrawPeriod($event)"
-                :canAdd="canAdd"
-                :canEdit="canEdit"
-                :canDelete="canDelete"
-                :loadingRequest="loadingRequest"
-            />
-
-        </v-container>
-    </v-main>
+    <div>
+        <div v-if="notifications.length > 0" v-for="notification in notifications">
+            <Notification :notification="notification"></Notification>
+        </div>
+        <DataTable
+            :title="title"
+            :headers="headers"
+            :contents="contents"
+            :fillable="fillable"
+            @storeModel="storeDrawPeriod($event)"
+            @updateModel="updateDrawPeriod($event)"
+            @destroyModel="destroyDrawPeriod($event)"
+            @updateStatus="closeDrawPeriod($event)"
+            :canAdd="canAdd"
+            :canEdit="canEdit"
+            :canDelete="canDelete"
+            :loadingRequest="loadingRequest"
+        />
+    </div>
 </template>
 
 <script>

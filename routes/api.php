@@ -5,6 +5,7 @@ use App\Models\Bet;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
@@ -19,6 +20,7 @@ use Spatie\Permission\Models\Permission;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 
 //Auth::routes();
 Route::post('v1/agent/login', [\App\Http\Controllers\Auth\LoginController::class, 'loginAgent'])
@@ -134,13 +136,36 @@ Route::prefix('v1/')
 
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])->name('agents.active');
 
+
+        Route::get('thirtydays-bet-gross', [\App\Http\Controllers\API\v1\ApiBetTransactionController::class, 'showThirtyDayGross']);
+
         Route::get('sum-transactions', function () {
-            return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->sum('amount')]);
+            if (!Auth::check()) abort(401);
+            $user = Auth::user();
+            if ($user->hasRole('super-admin')) {
+                return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->sum('amount')]);
+            }
+            return response(['transaction' =>  DB::table('bets', 'b')
+                ->leftJoin('bet_transactions as bt', 'bt.id', '=', 'b.bet_transaction_id')
+                ->leftJoin('users as u', 'u.id', '=', 'bt.user_id')
+                ->whereDate('bt.created_at', Carbon::today()->startOfDay())
+                ->where('u.cluster_id', $user->cluster_id)->sum('b.amount')], 200);
         });
         Route::get('/agents/active/all', [\App\Http\Controllers\API\v1\ApiAgentController::class, 'activeIndex'])
             ->name('agents.active');
+
         Route::get('count-transactions', function () {
-            return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->count()]);
+            if (!Auth::check()) abort(401);
+            $user = Auth::user();
+            if ($user->hasRole('super-admin')) {
+                return response(['transaction' => Bet::whereDate('created_at', Carbon::today())->count()]);
+            }
+            return response(['transaction' =>
+                DB::table('bets', 'b')
+                    ->leftJoin('bet_transactions as bt', 'bt.id', '=', 'b.bet_transaction_id')
+                    ->leftJoin('users as u', 'u.id', '=', 'bt.user_id')
+                    ->whereDate('bt.created_at', Carbon::today()->startOfDay())
+                    ->where('u.cluster_id', $user->cluster_id)->count()], 200);
         });
 
 //        Reports Routes

@@ -95,9 +95,15 @@ class ApiClusterController extends Controller
     }
 
     public function getClusterWithCommissions(Request $request){
-        $this->authorize('list-clusters', Cluster::class);
+//        $this->authorize('list-clusters', Cluster::class);
         $search = $request->get('search', '');
-        $clusters = Cluster::search($search)->with(['commissions'])->get();
+
+        if (Auth::check() && !Auth::user()->hasRole('super-admin')){
+            $clusters = Cluster::where('id', Auth::user()->cluster_id)->with(['commissions'])->get();
+        }else{
+            $clusters = Cluster::search($search)->with(['commissions'])->get();
+        }
+
 
         $groupedId = $clusters->mapToGroups(function ($item, $key) {
             return

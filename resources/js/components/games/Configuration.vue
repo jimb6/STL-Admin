@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <div>
         <div v-if="notifications.length > 0" v-for="notification in notifications">
             <Notification :text="notification.text" :type="notification.type"></Notification>
         </div>
@@ -68,7 +68,7 @@
             </div>
 
         </div>
-    </v-container>
+    </div>
 </template>
 
 <script>
@@ -409,5 +409,8 @@ h2.cstm-drawPeriod {
     text-transform: uppercase;
     font-weight: 600;
     padding-bottom: unset;
+}
+.v-expansion-panels {
+    width: calc(100% - 10px);
 }
 </style>

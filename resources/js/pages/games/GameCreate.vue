@@ -1,26 +1,24 @@
 <template>
-    <v-main>
-        <v-container>
-            <div v-if="notifications.length > 0" v-for="notification in notifications">
-                <Notification :notification="notification"></Notification>
-            </div>
-            <DataTable
-                :title="title"
-                :headers="headers"
-                :contents="contents"
-                :fillable="fillable"
-                @storeModel="storeGame($event)"
-                @updateModel="updateGame($event)"
-                @destroyModel="destroyGame($event)"
-                :canAdd="canAdd"
-                :canEdit="canEdit"
-                :canDelete="canDelete"
-                :excelHeaders="excelHeaders"
-                :excelData="excelData"
-                :excelTitle="title"
-            />
-        </v-container>
-    </v-main>
+    <div>
+        <div v-if="notifications.length > 0" v-for="notification in notifications">
+            <Notification :notification="notification"></Notification>
+        </div>
+        <DataTable
+            :title="title"
+            :headers="headers"
+            :contents="contents"
+            :fillable="fillable"
+            @storeModel="storeGame($event)"
+            @updateModel="updateGame($event)"
+            @destroyModel="destroyGame($event)"
+            :canAdd="canAdd"
+            :canEdit="canEdit"
+            :canDelete="canDelete"
+            :excelHeaders="excelHeaders"
+            :excelData="excelData"
+            :excelTitle="title"
+        />
+    </div>
 </template>
 
 <script>

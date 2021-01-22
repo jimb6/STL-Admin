@@ -221,22 +221,46 @@ class ApiBetTransactionController extends Controller
             $query->where('id', $game->id);
         })->first();
 
+        if (Auth::check()) $user = Auth::user();
+        else return abort(401);
+
         $betTransactions = [];
         if ($drawPeriod) {
-            $betTransactions = DB::table('bets as b')
-                ->select(DB::raw('COUNT(*) as count, SUM(b.amount) as total, MAX(config.max_sum_bet) as max, b.combination, MAX(cc.max_amount) as control,
+            if ($user->hasRole('super-admin')) {
+                $betTransactions = DB::table('bets as b')
+                    ->select(DB::raw('COUNT(*) as count, SUM(b.amount) as total, MAX(config.max_sum_bet) as max, b.combination, MAX(cc.max_amount) as control,
                 IF(cn.combination, true, false) as closed, dp.draw_time'))
-                ->whereDate('b.created_at', Carbon::today()->toDateString())
-                ->where('b.game_id', $game->id)
-                ->where('b.draw_period_id', $drawPeriod->id)
-                ->join('game_configurations as config', function ($query) {
-                    $query->on('b.game_id', '=', 'config.game_id');
-                })
-                ->leftJoin('control_combinations as cc', 'cc.combination', '=', 'b.combination')
-                ->leftJoin('close_numbers as cn', 'cn.combination', '=', 'b.combination')
-                ->leftJoin('draw_periods as dp', 'dp.id', '=', 'b.draw_period_id')
-                ->groupBy('b.combination', 'b.draw_period_id')
-                ->orderByDesc('total')->get();
+                    ->whereDate('b.created_at', Carbon::today()->toDateString())
+                    ->where('b.game_id', $game->id)
+                    ->where('b.draw_period_id', $drawPeriod->id)
+                    ->join('game_configurations as config', function ($query) {
+                        $query->on('b.game_id', '=', 'config.game_id');
+                    })
+                    ->leftJoin('control_combinations as cc', 'cc.combination', '=', 'b.combination')
+                    ->leftJoin('close_numbers as cn', 'cn.combination', '=', 'b.combination')
+                    ->leftJoin('draw_periods as dp', 'dp.id', '=', 'b.draw_period_id')
+                    ->groupBy('b.combination', 'b.draw_period_id')
+                    ->orderByDesc('total')->get();
+            } else {
+                $betTransactions = DB::table('bets as b')
+                    ->select(DB::raw('COUNT(*) as count, SUM(b.amount) as total, MAX(config.max_sum_bet) as max, b.combination, MAX(cc.max_amount) as control,
+                IF(cn.combination, true, false) as closed, dp.draw_time'))
+                    ->whereDate('b.created_at', Carbon::today(config('app.timezone'))->toDateString())
+                    ->where('b.game_id', $game->id)
+                    ->where('b.draw_period_id', $drawPeriod->id)
+                    ->join('game_configurations as config', function ($query) {
+                        $query->on('b.game_id', '=', 'config.game_id');
+                    })
+                    ->leftJoin('control_combinations as cc', 'cc.combination', '=', 'b.combination')
+                    ->leftJoin('close_numbers as cn', 'cn.combination', '=', 'b.combination')
+                    ->leftJoin('draw_periods as dp', 'dp.id', '=', 'b.draw_period_id')
+                    ->join('bet_transactions as bt', 'bt.id', '=', 'b.bet_transaction_id')
+                    ->join('users as u', 'u.id', '=', 'bt.user_id')
+                    ->where('u.cluster_id', $user->cluster_id)
+                    ->groupBy('b.combination', 'b.draw_period_id')
+                    ->orderByDesc('total')->get();
+            }
+
         }
 
         return response(['bets' => $betTransactions, 'draw' => $drawPeriod], 200);
@@ -274,29 +298,57 @@ class ApiBetTransactionController extends Controller
         ]);
 
         if (!$game = Game::where('abbreviation', $validated['game'])->first()) abort(400);
+        $user = Auth::check() ? Auth::user() : abort(401);
 
-        $betTransactions = DB::table('bet_transactions as bt')
-            ->select(DB::raw('SUM(b.amount) as total, GROUP_CONCAT(DISTINCT concat(b.combination,\'=\',b.amount)) as combinations,
+        if ($user->hasRole('super-admin')) {
+            $betTransactions = DB::table('bet_transactions as bt')
+                ->select(DB::raw('SUM(b.amount) as total, GROUP_CONCAT(DISTINCT concat(b.combination,\'=\',b.amount)) as combinations,
             bt.id, bt.qr_code, bt.is_void, bt.printable, bt.created_at, bt.updated_at, u.name, dp.draw_time, bt.deleted_at, bt.is_void'))
-            ->whereBetween('bt.created_at',
-                [Carbon::parse($validated['dates'][0])->startOfDay(),
-                    Carbon::parse($validated['dates'][1])->endOfDay()])
-            ->whereExists(function ($query) use ($game, $validated) {
-                $query->select(DB::raw('amount, combination'))
-                    ->from('bets')
-                    ->whereColumn('bets.bet_transaction_id', 'bt.id')
-                    ->where('bets.game_id', $game->id)
-                    ->whereIn('bets.draw_period_id', $validated['draw_periods']);
-            })
-            ->join('bets as b', function ($join) {
-                $join->on('bt.id', '=', 'b.bet_transaction_id')
-                    ->join('draw_periods as dp', 'b.draw_period_id', '=', 'dp.id');
-            })
-            ->join('users as u', 'bt.user_id', '=', 'u.id')
-            ->orderByDesc('bt.created_at')
-            ->where('bt.is_void', '=', false)
-            ->groupBy('b.bet_transaction_id', 'u.name', 'b.draw_period_id')
-            ->get();
+                ->whereBetween('bt.created_at',
+                    [Carbon::parse($validated['dates'][0], config('app.timezone'))->startOfDay(),
+                        Carbon::parse($validated['dates'][1], config('app.timezone'))->endOfDay()])
+                ->whereExists(function ($query) use ($game, $validated) {
+                    $query->select(DB::raw('amount, combination'))
+                        ->from('bets')
+                        ->whereColumn('bets.bet_transaction_id', 'bt.id')
+                        ->where('bets.game_id', $game->id)
+                        ->whereIn('bets.draw_period_id', $validated['draw_periods']);
+                })
+                ->join('bets as b', function ($join) {
+                    $join->on('bt.id', '=', 'b.bet_transaction_id')
+                        ->join('draw_periods as dp', 'b.draw_period_id', '=', 'dp.id');
+                })
+                ->join('users as u', 'bt.user_id', '=', 'u.id')
+                ->orderByDesc('bt.created_at')
+                ->where('bt.is_void', '=', false)
+                ->groupBy('b.bet_transaction_id', 'u.name', 'b.draw_period_id')
+                ->get();
+
+        } else {
+            $betTransactions = DB::table('bet_transactions as bt')
+                ->select(DB::raw('SUM(b.amount) as total, GROUP_CONCAT(DISTINCT concat(b.combination,\'=\',b.amount)) as combinations,
+            bt.id, bt.qr_code, bt.is_void, bt.printable, bt.created_at, bt.updated_at, u.name, dp.draw_time, bt.deleted_at, bt.is_void'))
+                ->whereBetween('bt.created_at',
+                    [Carbon::parse($validated['dates'][0], config('app.timezone'))->startOfDay(),
+                        Carbon::parse($validated['dates'][1], config('app.timezone'))->endOfDay()])
+                ->whereExists(function ($query) use ($game, $validated) {
+                    $query->select(DB::raw('amount, combination'))
+                        ->from('bets')
+                        ->whereColumn('bets.bet_transaction_id', 'bt.id')
+                        ->where('bets.game_id', $game->id)
+                        ->whereIn('bets.draw_period_id', $validated['draw_periods']);
+                })
+                ->join('bets as b', function ($join) {
+                    $join->on('bt.id', '=', 'b.bet_transaction_id')
+                        ->join('draw_periods as dp', 'b.draw_period_id', '=', 'dp.id');
+                })
+                ->join('users as u', 'bt.user_id', '=', 'u.id')
+                ->where('u.cluster_id', $user->cluster_id)
+                ->orderByDesc('bt.created_at')
+                ->where('bt.is_void', '=', false)
+                ->groupBy('b.bet_transaction_id', 'u.name', 'b.draw_period_id')
+                ->get();
+        }
 
 //        $betTransactions = BetTransaction::whereBetween('created_at', [Carbon::parse($validated['dates'][0])->startOfDay(), Carbon::parse($validated['dates'][1])->endOfDay()])
 //            ->whereHas('bets', function ($query) use ($game, $validated) {
@@ -319,8 +371,8 @@ class ApiBetTransactionController extends Controller
             'dates' => 'required|array|max:2|min:2'
         ]);
 
-        $day1 = Carbon::parse($validated['dates'][0])->startOfDay();
-        $day2 = Carbon::parse($validated['dates'][1])->endOfDay();
+        $dayStart = Carbon::parse($validated['dates'][0])->startOfDay();
+        $dayEnd = Carbon::parse($validated['dates'][1])->endOfDay();
 
         if (Auth::check()) $user = Auth::user();
         else return abort(401);
@@ -337,9 +389,9 @@ class ApiBetTransactionController extends Controller
                     IF(COUNT(wb.id), SUM(b2.amount), 0) as hits,
                     IF(IF(COUNT(wb.id), SUM(b2.amount), 0), IF(COUNT(wb.id), SUM(b2.amount), 0) * MAX(gc.multiplier), 0) as amount_hits,
                     IF(MAX(c2.commission_rate), SUM(b.amount) - (MAX(c2.commission_rate)*SUM(b.amount)), SUM(b.amount)) - IF(IF(COUNT(wb.id), SUM(b2.amount), 0), IF(COUNT(wb.id), SUM(b2.amount), 0) * MAX(gc.multiplier), 0) as collectible")
-                ->leftJoin('bet_transactions as bt', function ($query) use ($day1, $day2) {
+                ->leftJoin('bet_transactions as bt', function ($query) use ($dayStart, $dayEnd) {
                     $query->on('bt.user_id', '=', 'u.id')
-                        ->whereBetween('bt.created_at', [$day1, $day2]);
+                        ->whereBetween('bt.created_at', [$dayStart, $dayEnd]);
                 })
                 ->join('bets as b', 'b.bet_transaction_id', '=', 'bt.id', 'left outer')
                 ->leftJoin('clusters as c', 'c.id', '=', 'u.cluster_id')
@@ -455,7 +507,7 @@ class ApiBetTransactionController extends Controller
                                    combination,
                                    g.id as game_id
                             FROM bets b, bet_transactions bt, draw_periods dp, games g, game_configurations gc
-                            WHERE bt.created_at BETWEEN '" . $day1 . "' AND '" . $day2 . "'
+                            WHERE bt.created_at BETWEEN '" . $dayStart . "' AND '" . $dayEnd . "'
                               AND gc.game_id = g.id
                               AND g.abbreviation = '" . $validated['game'] . "'
                               AND b.game_id = g.id
@@ -533,23 +585,6 @@ class ApiBetTransactionController extends Controller
         return response([], 204);
     }
 
-    private function swap($res, $a, $b)
-    {
-        $tmp = $res[$a];
-        $res[$a] = $res[$b];
-        $res[$b] = $tmp;
-        return $res;
-    }
-
-    private function permutate($list, $index = 0)
-    {
-        if (count($list) - 1 <= $index) return [array_splice($list, 0)];
-        $res = [];
-        for ($i = $index; $i < count($list); $i++) $res = array_merge($res, $this->permutate($this->swap($list, $i, $index), $index + 1));
-        return array_map("unserialize", array_unique(array_map("serialize", $res)));
-    }
-
-
     // Reports
     public function getReports(Request $request)
     {
@@ -560,6 +595,8 @@ class ApiBetTransactionController extends Controller
             'dates' => 'required|array|max:2|min:2'
         ]);
 
+        $user = Auth::check() ? Auth::user() : abort(401);
+        $isSuperAdmin = $user->hasRole('super-admin') ? 'RIGHT OUTER' : 'INNER';
 
         $cluster_ids = join(',', $validated['cluster_id']);
         $day1 = Carbon::parse($validated['dates'][0])->startOfDay();
@@ -609,7 +646,7 @@ class ApiBetTransactionController extends Controller
                       ) as reports on reports.game_id =  dpg.game_id AND reports.dp_id = dpg.draw_period_id
                     LEFT JOIN games g2 on dpg.game_id = g2.id
                     LEFT JOIN draw_periods dp2 on dpg.draw_period_id = dp2.id
-                    RIGHT OUTER JOIN clusters cl2 on cl2.id = reports.cl_id
+                    $isSuperAdmin  JOIN clusters cl2 on cl2.id = reports.cl_id
                     GROUP BY cl2.id
                 ");
                 break;
@@ -767,9 +804,6 @@ class ApiBetTransactionController extends Controller
         return response(['reports' => $reports, 'report_url' => $reportUrl, 'game_abbreviations' => $game_abbreviations], 200);
     }
 
-
-
-
     public function showAgentReportByDrawPeriodGame(Request $request, $date)
     {
 
@@ -817,5 +851,31 @@ class ApiBetTransactionController extends Controller
 
         return response(['message' => $betTransactions], 200);
     }
+
+    public function showThirtyDayGross()
+    {
+        $this->authorize('list-bet-transactions', BetTransaction::class);
+        return DB::table('bets', 'b')
+            ->selectRaw("SUM(b.amount) as gross, DATE(b.created_at) as date")
+            ->groupByRaw('DATE(b.created_at)')
+            ->get();
+    }
+
+    private function swap($res, $a, $b)
+    {
+        $tmp = $res[$a];
+        $res[$a] = $res[$b];
+        $res[$b] = $tmp;
+        return $res;
+    }
+
+    private function permutate($list, $index = 0)
+    {
+        if (count($list) - 1 <= $index) return [array_splice($list, 0)];
+        $res = [];
+        for ($i = $index; $i < count($list); $i++) $res = array_merge($res, $this->permutate($this->swap($list, $i, $index), $index + 1));
+        return array_map("unserialize", array_unique(array_map("serialize", $res)));
+    }
+
 
 }

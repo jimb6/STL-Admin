@@ -9,6 +9,7 @@ use App\Models\Game;
 use App\Scopes\BetScope;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
@@ -116,11 +117,16 @@ class ApiBetController extends Controller
             'dates' => 'required|array|max:2|min:2'
         ]);
 
-        $day1 = Carbon::parse($validated['dates'][0])->startOfDay();
-        $day2 = Carbon::parse($validated['dates'][1])->endOfDay();
+        if (Auth::check() && !Auth::user()->hasRole('super-admin')){
+            $validated['cluster_id'] = [Auth::user()->cluster_id];
+        }
+
+        $dayStart = Carbon::parse($validated['dates'][0])->startOfDay();
+        $dayEnd = Carbon::parse($validated['dates'][1])->endOfDay();
 
         $bets = DB::table('bets as b')
             ->select(DB::raw('b.combination as combination, SUM(b.amount) as amount'))
+            ->whereBetween('b.created_at', [$dayStart, $dayEnd])
             ->whereIn('b.draw_period_id', $validated['draw_period_id'])
             ->leftJoin('bet_transactions as bt', 'bt.id', '=', 'b.bet_transaction_id')
             ->leftJoin('users as u', 'u.id', '=', 'bt.user_id')
@@ -130,21 +136,6 @@ class ApiBetController extends Controller
             ->where('abbreviation', $validated['game'])
             ->groupBy('b.combination')
             ->get();
-
-//        $bets = Bet::whereBetween('created_at', [$day1, $day2])
-//            ->whereIn('draw_period_id', $validated['draw_period_id'])
-//            ->with(['betTransaction.user' => function ($query) use ($validated) {
-//                $query->whereIn('cluster_id', $validated['cluster_id']);
-//            }, 'game' => function($query) use ($validated) {
-//                $query->where('abbreviation', $validated['game']);
-//            }, 'drawPeriod'])
-//            ->get();
-//        $bets = $bets->reject(function ($item, $key){
-//            return $item['game'] == null;
-//        });
-//        $bets = $bets->groupBy('combination')->map(function ($row) {
-//            return ['sum' => $row->sum('amount'), 'bets' => $row];
-//        });
 
         $reportUrl = URL::temporarySignedRoute('reports.bet.combination.generate', now()->addMinutes(30),
             ['cluster_id' => $validated['cluster_id'], 'draw_period_id' => $validated['draw_period_id'],

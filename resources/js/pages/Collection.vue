@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <div>
         <div v-if="notifications.length > 0" v-for="notification in notifications">
             <Notification :notification="notification"></Notification>
         </div>
@@ -17,7 +17,7 @@
             @updateVoidStatus="updateVoidStatus($event)"
             @updateStatus="updatePrintableStatus($event)"
         />
-    </v-container>
+    </div>
 </template>
 
 <script>

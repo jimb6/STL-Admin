@@ -12,6 +12,31 @@
     --myWarning: #FB8C00;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
+/* BODY CONTENT */
+.content-header {
+    padding: unset;
+}
+.content-wrapper>.content {
+    padding: unset;
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 115px;
+}
+.content-wrapper .container-fluid {
+    padding: unset;
+}
+.content-wrapper .container-fluid>div{
+    padding: 30px;
+}
+.content-wrapper .container-fluid>div.full {
+    padding: unset;
+    overflow: hidden;
+}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
@@ -48,6 +73,7 @@
 
 body {
     font-family: "Poppins", sans-serif !important;
+    overflow: hidden;
 }
 p {
     margin-bottom: unset;
@@ -116,13 +142,16 @@ ul.navbar-nav {
 .content-wrapper {
     background: #ffffff;
 }
+.content-wrapper {
+    padding-bottom: unset !important;
+}
 
 /*.content-wrapper.dark {*/
 /*    background: #1d3557;*/
 /*}*/
 
 .content-wrapper>.content {
-    /*padding: 0 1.5rem;*/
+
 }
 .dark p{
     color: #fff !important;
@@ -188,20 +217,6 @@ li.nav-header {
     background: transparent !important;
     color: #fff !important;
     font-weight: 600 !important;
-}
-.copyright {
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    padding: 10px !important;
-    background: rgba(0,0,0,.05);
-}
-.copyright p {
-    color: #fff;
-    font-size: 12px;
-    font-weight: 200;
-    text-align: center;
-    margin: 0 !important;
 }
 
 
@@ -570,4 +585,40 @@ button#cstm-theme:hover {
 }
 .darkTheme button.v-icon {
     color: var(--lightGray) !important;
+}
+
+/* FOOTER */
+.cstm-footer {
+    padding: 30px;
+    background: var(--darkGray);
+    text-align: center;
+    color: var(--lightGray);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+.cstm-footer p {
+    font-weight: 200;
+    font-size: 14px;
+}
+.cstm-footer h5 {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.cstm-footer .backToTop {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 30px;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid var(--lightGray);
+    color: var(--lightGray);
+    line-height: 40px;
+    transition-duration: 500ms;
+}
+.cstm-footer .backToTop:hover {
+    background: rgba(255,255,255,.2);
 }

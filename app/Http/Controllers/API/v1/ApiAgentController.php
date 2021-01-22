@@ -7,10 +7,13 @@ use App\Helpers\TwilioSmsHelper;
 use App\Models\Address;
 use App\Models\Agent;
 use App\Models\Cluster;
+use App\Models\Device;
 use App\Models\User;
 use App\Scopes\StatusScope;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class ApiAgentController extends ApiController
@@ -36,7 +39,8 @@ class ApiAgentController extends ApiController
             'gender' => 'required',
             'contact_number' => 'required',
             'cluster_id' => 'required',
-            'address.*' => 'required'
+            'address.*' => 'required',
+            'device_code' => ['required_if:' => $request->user('sanctum')->hasRole('tech-support')]
         ]);
 
         $address = Address::firstOrCreate([
@@ -47,7 +51,6 @@ class ApiAgentController extends ApiController
         ]);
 
 
-
         $generated_password = PasswordGenerator::random();
         unset($validated['address'], $validated['roles']);
         if ($request->has('email')) $validated['email'] = $request->get('email');
@@ -56,6 +59,13 @@ class ApiAgentController extends ApiController
 
         $user = User::withoutGlobalScope(StatusScope::class)->firstOrCreate($validated);
         $sms = new TwilioSmsHelper('ACf07ba6ddfcf865b96b6f15c6e8e1f892', 'a65a1f4f71eca0147993a6d0314245a5', '+12059538412');
+        if ($request->has('device_code')){
+            $device = Device::where('device_code', $validated['device_code'])->first();
+            if ($device->user_id) return abort(400);
+            $device->user_id = $user->id;
+            $device->save();
+        }
+
         $user->assignRole('agent');
         $smsStatus = $sms->sendSms($validated['contact_number'], $generated_password);
         return response(['user' => $user, 'sms' => $smsStatus], 202);
@@ -81,7 +91,7 @@ class ApiAgentController extends ApiController
 
         $address = $validated['address'];
         $address = Address::updateOrCreate(
-            ['street' => $address[0], 'barangay' => $address[1], 'municipality' =>$address[2], 'province'=>$address[3]]
+            ['street' => $address[0], 'barangay' => $address[1], 'municipality' => $address[2], 'province' => $address[3]]
         );
 
         $validated['address_id'] = $address->id;
@@ -102,10 +112,31 @@ class ApiAgentController extends ApiController
     public function activeIndex(Request $request)
     {
         $this->authorize('list-agents', User::class);
-        $agents = User::withoutGlobalScope(StatusScope::class)->whereHas('roles', function ($query) {
-            $query->where('name', '=', 'agent');
-        })->where('session_status', true)->with(['device'])->get();
 
+        $user = Auth::check() ? Auth::user() : abort(401);
+        if ($user->hasRole('super-admin')) {
+
+            $agents = DB::table('model_has_roles', 'mhr')
+                ->selectRaw('u.name, c.name as cluster, d.device_code, u.contact_number, u.updated_at')
+                ->join('users as u', 'mhr.model_id', '=', 'u.id')
+                ->leftJoin('roles as r', 'mhr.role_id', '=', 'r.id')
+                ->leftJoin('clusters as c', 'c.id', '=', 'u.cluster_id')
+                ->join('devices as d', 'd.user_id', '=', 'u.id')
+                ->where('r.name', '=', 'agent')
+                ->where('u.session_status', true)
+                ->get();
+        } else {
+            $agents = DB::table('model_has_roles', 'mhr')
+                ->selectRaw('u.name, c.name as cluster, d.device_code, u.contact_number, u.updated_at')
+                ->join('users as u', 'mhr.model_id', '=', 'u.id')
+                ->leftJoin('roles as r', 'mhr.role_id', '=', 'r.id')
+                ->leftJoin('clusters as c', 'c.id', '=', 'u.cluster_id')
+                ->join('devices as d', 'd.user_id', '=', 'u.id')
+                ->where('r.name', '=', 'agent')
+                ->where('u.session_status', true)
+                ->where('u.cluster_id', $user->cluster_id)
+                ->get();
+        }
         $totalAgents = User::withoutGlobalScope(StatusScope::class)->with(['user' => function ($query) {
             $query->whereHas('roles', function ($query) {
                 $query->where('name', '=', 'agent');
@@ -139,7 +170,5 @@ class ApiAgentController extends ApiController
 
         return response($user, 200);
     }
-
-
 
 }

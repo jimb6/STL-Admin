@@ -180,7 +180,7 @@ class LoginController extends Controller
     {
         $user = $request->user();
         if ($user->hasRole('agent')) {
-            abort(406);
+            abort(401);
         }
         Auth::logoutOtherDevices($request->password);
         $accessToken = $user->createToken($request->get('username'))->plainTextToken;

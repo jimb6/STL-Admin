@@ -1,56 +1,52 @@
 <template>
-    <v-main>
-        <v-container>
-            <div v-if="notifications.length > 0" v-for="notification in notifications">
-                <Notification :notification="notification"></Notification>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <v-tabs slot="extension"
-                            v-model="tabs"
-                            slider-color="primary"
-                            color="danger"
-                            light
-                    >
-                        <!-- TAB TITLES -->
-                        <v-tab>
-                            <v-icon small class="mr-2">mdi-settings</v-icon>
-                            Config / Monitoring
-                        </v-tab>
-                        <v-tab>
-                            <v-icon small class="mr-2">mdi-sitemap</v-icon>
-                            Entries
-                        </v-tab>
-                        <v-tab>
-                            <v-icon small class="mr-2">mdi-trophy</v-icon>
-                            Winning Combinations
-                        </v-tab>
-                        <v-tab>
-                            <v-icon small class="mr-2">mdi-file</v-icon>
-                            Reports
-                        </v-tab>
+    <div>
+        <div v-if="notifications.length > 0" v-for="notification in notifications">
+            <Notification :notification="notification"></Notification>
+        </div>
+        <div>
+            <v-tabs slot="extension"
+                    v-model="tabs"
+                    slider-color="primary"
+                    color="danger"
+                    light
+            >
+                <!-- TAB TITLES -->
+                <v-tab>
+                    <v-icon small class="mr-2">mdi-settings</v-icon>
+                    Config / Monitoring
+                </v-tab>
+                <v-tab>
+                    <v-icon small class="mr-2">mdi-sitemap</v-icon>
+                    Entries
+                </v-tab>
+                <v-tab>
+                    <v-icon small class="mr-2">mdi-trophy</v-icon>
+                    Winning Combinations
+                </v-tab>
+                <v-tab>
+                    <v-icon small class="mr-2">mdi-file</v-icon>
+                    Reports
+                </v-tab>
 
-                        <!-- TAB ITEMS -->
-                        <v-tab-item>
-                            <Configuration :game="this.game"/>
-                        </v-tab-item>
+                <!-- TAB ITEMS -->
+                <v-tab-item>
+                    <Configuration :game="this.game"/>
+                </v-tab-item>
 
-                        <v-tab-item>
-                            <Entries :game="this.game"/>
-                        </v-tab-item>
+                <v-tab-item>
+                    <Entries :game="this.game"/>
+                </v-tab-item>
 
-                        <v-tab-item>
-                            <WinningCombination :game="this.game" />
-                        </v-tab-item>
+                <v-tab-item>
+                    <WinningCombination :game="this.game" />
+                </v-tab-item>
 
-                        <v-tab-item>
-                            <Reports :game="this.game"/>
-                        </v-tab-item>
-                    </v-tabs>
-                </div>
-            </div>
-        </v-container>
-    </v-main>
+                <v-tab-item>
+                    <Reports :game="this.game"/>
+                </v-tab-item>
+            </v-tabs>
+        </div>
+    </div>
 </template>
 
 <script>

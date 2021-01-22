@@ -1,18 +1,16 @@
 <template>
-    <v-main>
-        <v-container>
-            <BetsDatatable
-                :title="title"
-                :contents="contents"
-                :headers="headers"
-                :fillable="fillable"
-                @displayModel="displayBets($event)"
-                :canAdd="canAdd"
-                :canEdit="canEdit"
-                :canDelete="canDelete"
-            />
-        </v-container>
-    </v-main>
+    <div>
+        <BetsDatatable
+            :title="title"
+            :contents="contents"
+            :headers="headers"
+            :fillable="fillable"
+            @displayModel="displayBets($event)"
+            :canAdd="canAdd"
+            :canEdit="canEdit"
+            :canDelete="canDelete"
+        />
+    </div>
 </template>
 
 <script>

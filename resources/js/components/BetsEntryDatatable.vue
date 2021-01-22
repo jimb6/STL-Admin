@@ -113,7 +113,7 @@
             </template>
 
             <template v-slot:item.combinations="{ item }">
-                <v-chip v-for="bet in item.combinations.split(',')" dark small class="mr-2 my-2">
+                <v-chip v-for="(bet, index) in item.combinations.split(',')" :key="index" dark small class="mr-2 my-2">
                     <p><span class="mr-2">{{ bet }}</span><b style="font-weight: 700;"></b></p>
                 </v-chip>
             </template>

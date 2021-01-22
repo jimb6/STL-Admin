@@ -324,18 +324,25 @@ export default {
             axios.get('/api/v1/cluster-categorized')
                 .then(response => {
 
+                    console.log(response)
                     let clusters = response.data.clusters
                     let clustersId = response.data.clustersId
+
+                    let withoutCommission = clustersId['without-commission']?clustersId['without-commission']:[]
+                    let withCommission = clustersId['with-commission']?clustersId['with-commission']:[]
+
+                    let withoutCommissionId = clustersId['without-commission']?clustersId['without-commission']:[]
+                    let withCommissionId = clustersId['with-commission']?clustersId['with-commission']:[]
 
                     this.clusterFilter = {
                         selected: {
                             text: "All",
-                            value: clustersId['without-commission'].concat(clustersId['with-commission']),
+                            value: withoutCommission.concat(withCommission),
                             type: "super"
                         },
                         options: [{
                             text: "All",
-                            value: clustersId['without-commission'].concat(clustersId['with-commission']),
+                            value: withoutCommissionId.concat(withCommissionId),
                             type: "super"
                         }],
                     }

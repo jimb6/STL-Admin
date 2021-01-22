@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <div>
         <div v-if="notifications.length > 0" v-for="notification in notifications" class="cstm-notification">
             <Notification :notification="notification"></Notification>
         </div>
@@ -17,7 +17,7 @@
             @updateWinningCombination="updateWinningCombination($event)"
             @verifyWinningCombination="verifyWinningCombination($event)"
         />
-    </v-container>
+    </div>
 </template>
 
 <script>

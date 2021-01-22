@@ -6,10 +6,8 @@ use App\Models\Scopes\Searchable;
 use App\Scopes\ClusterScope;
 use App\Scopes\StatusScope;
 use Carbon\Carbon;
-use DateTimeInterface;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -38,12 +36,18 @@ class User extends Authenticatable
         }
     }
 
-    public function setEmailAttribute($value) {
-        if ( empty($value) ) { // will check for empty string
+    public function setEmailAttribute($value)
+    {
+        if (empty($value)) { // will check for empty string
             $this->attributes['email'] = NULL;
         } else {
             $this->attributes['email'] = $value;
         }
+    }
+
+    public function getAllPermissionsAttribute()
+    {
+        return $this->getPermissionNames();
     }
 
     protected function getUpdatedAtAttribute($date)

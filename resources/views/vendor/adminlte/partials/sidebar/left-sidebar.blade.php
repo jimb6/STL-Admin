@@ -25,11 +25,6 @@
         </nav>
     </div>
 
-    <div class="copyright">
-        <p>© <?php echo date("Y"); ?> STL. All Rights Reserved</p>
-        <p>by InteRSYstem Digital Solution</p>
-    </div>
-
 </aside>
 
 

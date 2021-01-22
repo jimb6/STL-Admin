@@ -1,9 +1,9 @@
 <template>
-    <v-main>
+    <div>
         <div v-if="notifications.length > 0" v-for="notification in notifications">
             <Notification :notification="notification"></Notification>
         </div>
-        <v-container>
+        <div>
             <DataTable
                 :title="title"
                 :contents="contents"
@@ -38,8 +38,8 @@
                                 level="L"/>
                 </div>
             </div>
-        </v-container>
-    </v-main>
+        </div>
+    </div>
 </template>
 
 <script>

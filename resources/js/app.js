@@ -7,6 +7,7 @@ import Vuelidate from 'vuelidate'
 import router from "./routes";
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+import Permissions from './mixins/Permissions';
 // Vue.mixin(Permissions);
 // COMPONENT IMPORTS
 import Dashboard from "./pages/Dashboard";
@@ -30,6 +31,7 @@ import Collection from "./pages/Collection";
 import Gross from "./pages/Gross";
 import ReportGenerator from "./pages/ReportGenerator";
 import WinningBet from "./pages/WinningBet";
+import DefaultDashboard from "./pages/DefaultDashboard";
 // import Permissions from "./mixins/Permissions";
 
 require('./bootstrap');
@@ -59,6 +61,7 @@ const options = {
 
 // VUE USES
 Vue.use(VueProgressBar, options, axios, Vuelidate, Vuetify, VueRouter)
+Vue.mixin(Permissions);
 
 const app = new Vue({
     theme: {dark: true},
@@ -66,6 +69,7 @@ const app = new Vue({
     el: '#app',
     router,
     components: {
+        DefaultDashboard,
         WinningBet,
         ReportGenerator,
         Gross,

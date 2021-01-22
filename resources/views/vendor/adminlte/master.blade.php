@@ -134,9 +134,8 @@
        'csrfToken' => csrf_token(),
        'apiToken' => Auth::user()->api_token ?? null,
    ]) !!};
-
         @auth
-            window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
+        window.Permissions = {!! json_encode(Auth::user()->getPermissionNames(), true) !!};
         @else
             window.Permissions = [];
         @endauth

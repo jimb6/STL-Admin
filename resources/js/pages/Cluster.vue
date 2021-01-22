@@ -1,6 +1,5 @@
 <template>
-    <v-main>
-        <v-container>
+    <div>
             <DataTable
                 :title="title"
                 :headers="headers"
@@ -15,8 +14,7 @@
                 :excelData="excelData"
                 :excelTitle="title"
             />
-        </v-container>
-    </v-main>
+    </div>
 </template>
 
 <script>

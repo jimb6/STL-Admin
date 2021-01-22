@@ -16,8 +16,8 @@ class ApiGameController extends Controller
     {
         $this->authorize('list-games', Game::class);
         $search = $request->get('search', '');
-//        $games = Game::with(['drawPeriods', 'controlCombination', 'bets', 'gameConfiguration'])->get();
-        $games = DB::table('games')->get();
+        $games = Game::with(['drawPeriods', 'controlCombination', 'bets', 'gameConfiguration'])->get();
+//        $games = DB::table('games')->leftJoin('draw_periods', '')->get();
 
         return response(['games' => $games], 200);
     }
