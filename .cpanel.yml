@@ -1,5 +1,0 @@
----
-deployment:
-  tasks:
-    - export DEPLOYPATH=/home/idsdvo/repositories/STL-Admin/public
-    - /bin/cp -R images $DEPLOYPATH
