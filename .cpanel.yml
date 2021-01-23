@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/idsdvo/public_html/cotabato/
+    - /bin/cp -R public $DEPLOYPATH
