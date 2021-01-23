@@ -15,6 +15,8 @@
             :reportUrl="reportUrl"
             :loadingStatus="loadingStatus"
             @displayReports="displayReports($event)"
+            :hasExcelReport="true"
+            :hasPdfReport="true"
         />
     </div>
 </template>

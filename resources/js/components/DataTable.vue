@@ -28,12 +28,14 @@
                                         Add New {{ title }}
                                     </v-btn>
                                     <Excel
+                                        v-if="hasExcelReport"
                                         class="mr-2"
                                         :excelHeaders="excelHeaders"
                                         :excelData="excelData"
                                         :excelTitle="excelTitle"
                                     />
                                     <Pdf
+                                        v-if="hasPdfReport"
                                         :excelHeaders="excelHeaders"
                                         :excelData="excelData"
                                         :excelTitle="excelTitle"
@@ -388,6 +390,9 @@ export default {
         dynamicFillable: String,
         withPassword: Boolean,
         loadingRequest: String,
+
+        hasExcelReport: Boolean,
+        hasPdfReport: Boolean,
     },
 
     data: () => ({

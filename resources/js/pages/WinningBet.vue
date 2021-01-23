@@ -23,6 +23,7 @@
                         @change="displayWinningBets"
                         elevation="5"
                         width="100%"
+                        class="inline-date"
                     ></v-date-picker>
                 </div>
             </div>
@@ -124,5 +125,7 @@ export default {
 </script>
 
 <style scoped>
-
+.darkTheme h4 {
+    color: #dddddd;
+}
 </style>

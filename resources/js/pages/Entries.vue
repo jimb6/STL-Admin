@@ -16,6 +16,8 @@
             @updateRealtimeStatus="updateRealTimeStatus($event)"
             @updateVoidStatus="updateVoidStatus($event)"
             @updateStatus="updatePrintableStatus($event)"
+            :hasExcelReport="true"
+            :hasPdfReport="true"
         />
     </div>
 </template>

@@ -79,6 +79,7 @@
 
                             <!-- EXCEL FILE -->
                             <Excel
+                                v-if="hasExcelReport"
                                 class="mr-2"
                                 :excelHeaders="excelHeaders"
                                 :excelData="excelData"
@@ -88,6 +89,7 @@
 
                             <!-- PDF FILE -->
                             <Pdf
+                                v-if="hasPdfReport"
                                 alt="Download pdf file"
                                 :excelHeaders="excelHeaders"
                                 :excelData="excelData"
@@ -219,6 +221,9 @@ export default {
         reportUrl: String,
         reportType: String,
         gameAbbreviations: Array,
+
+        hasExcelReport: Boolean,
+        hasPdfReport: Boolean,
     },
 
     data: () => ({

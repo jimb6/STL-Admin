@@ -16,6 +16,8 @@
             @storeWinningCombination="storeWinningCombination($event)"
             @updateWinningCombination="updateWinningCombination($event)"
             @verifyWinningCombination="verifyWinningCombination($event)"
+            :hasExcelReport="true"
+            :hasPdfReport="true"
         />
     </div>
 </template>

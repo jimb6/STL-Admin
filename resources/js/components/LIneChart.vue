@@ -40,7 +40,7 @@ export default {
             borderColor: "#ffffff",
 
 
-            backgroundColor: "#2196F3dd",
+            backgroundColor: "#2196F3",
             pointBackgroundColor: "#4e5468",
             pointBorderColor: "#ffffff",
             pointBorderWidth: 3,

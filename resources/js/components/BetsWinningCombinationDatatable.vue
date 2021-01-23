@@ -34,6 +34,7 @@
 
                                     <!-- EXCEL FILE -->
                                     <Excel
+                                        v-if="hasExcelReport"
                                         class="mr-2"
                                         :excelHeaders="excelHeaders"
                                         :excelData="excelData"
@@ -42,6 +43,7 @@
 
                                     <!-- PDF FILE -->
                                     <Pdf
+                                        v-if="hasPdfReport"
                                         class="mr-5"
                                         alt="Download pdf file"
                                         :excelHeaders="excelHeaders"
@@ -230,6 +232,9 @@ export default {
         excelHeaders: Array,
         excelData: Array,
         excelTitle: String,
+
+        hasExcelReport: Boolean,
+        hasPdfReport: Boolean,
     },
 
     data: () => ({
